@@ -1,11 +1,11 @@
 <?php
-$host = 'database-1.c5qwuo6qo0y3.us-east-2.rds.amazonaws.com';
-$db   = 'new_craigslist_db';
-$user = 'admin';
-$pass = 'Imtheman198627*';
+$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
+$username = "admin";
+$password = "Bagflea3!";
+$dbname = "CraigslistDB";
 $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$servername;dbname=$dbname;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -13,19 +13,19 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    $pdo = new PDO($dsn, $username, $password, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
-$message = ''; // Variable to store the feedback message
-$message_type = ''; // Variable to store the type of message (success or error)
+$message = ''; // Variable to store feedback message
+$message_type = ''; // Type of message (success or error)
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
-    $date_joined = date('Y-m-d'); // Get current date
+    $date_joined = date('Y-m-d'); // Current date
 
     // Validation
     if (empty($name) || empty($email) || empty($password)) {
@@ -39,19 +39,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message_type = 'error';
     } else {
         try {
-            // Check if the email already exists in the database
-            $stmt = $pdo->prepare("SELECT * FROM user WHERE email = ?");
+            // Check if email already exists
+            $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
             $stmt->execute([$email]);
             if ($stmt->rowCount() > 0) {
                 $message = "Email is already registered. Please try logging in.";
                 $message_type = 'error';
             } else {
-                // Insert the new user into the database
+                // Insert new user
                 $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
                 $stmt->execute([$name, $email, password_hash($password, PASSWORD_DEFAULT), $date_joined]);
                 $message = "Registration successful! You can now log in to create a listing.";
                 $message_type = 'success';
-                // Clear the form values (optional)
+
+                // Clear form values
                 $_POST['name'] = '';
                 $_POST['email'] = '';
                 $_POST['password'] = '';
@@ -88,23 +89,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="registration">
         <h2>Create an Account</h2>
 
-        <!-- Display the message if it is set -->
         <?php if (!empty($message)) : ?>
             <div class="message-box <?php echo $message_type; ?>">
-                <p><?php echo $message; ?></p>
+                <p><?php echo htmlspecialchars($message); ?></p>
             </div>
         <?php endif; ?>
 
         <form action="register.php" method="POST">
-            <!-- Name input field -->
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES); ?>" required>
 
-            <!-- Email input field -->
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" class="input-field" value="<?php echo htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>" required>
 
-            <!-- Password input field with guidelines -->
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" class="input-field" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
                 title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
@@ -118,10 +115,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <footer>
         <p>&copy; 2024 Craigslist 2.0 | All rights reserved</p>
     </footer>
-
-    <script>
-        // Script to ensure password match on the client side (if applicable)
-        // Add your password validation script if needed
-    </script>
 </body>
 </html>
