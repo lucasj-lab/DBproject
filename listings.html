@@ -16,6 +16,8 @@
                 .then(data => {
                     if (data.error) {
                         document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                    } else if (data.message) {
+                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
                     } else {
                         displayListings(data);
                     }
@@ -34,7 +36,8 @@
                 const listingDiv = document.createElement("div");
                 listingDiv.className = "listing-item";
 
-                const image = listing.Image_URL ? listing.Image_URL : "no_image.png";
+                // Set a placeholder image if Image_URL is missing
+                const image = listing.Image_URL || "no_image.png";
                 listingDiv.innerHTML = `
                     <img src="${image}" alt="Listing Image">
                     <h3>${listing.Title}</h3>
@@ -59,20 +62,5 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="post_ad.html">New Listing</a></li>
                 <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
+                <li><a href="registration.html">Register</a></li>
                 <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div id="listings" class="listing-grid">
-        <p>Loading listings...</p>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Craigslist 2.0 | All rights reserved</p>
-    </footer>
-</body>
-</html>
-
-

@@ -1,21 +1,26 @@
 <?php
+// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Database connection parameters
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
 $username = "admin";
-$password = "Bagflea3!"; 
+$password = "Bagflea3!";
 $dbname = "CraigslistDB";
 
-// Create connection
+// Create a new connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+// Check the connection
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+    // Send JSON response if the connection fails
+    header('Content-Type: application/json');
+    echo json_encode(["error" => "Connection failed: " . $conn->connect_error]);
+    exit();
 }
 
+// Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
 
 // Fetch all listings with user, category, and image data
@@ -36,20 +41,20 @@ $sql = "
 ";
 $result = $conn->query($sql);
 
+// Prepare listings array
 $listings = [];
 if ($result && $result->num_rows > 0) {
-    // Store all listings in an array
     while ($row = $result->fetch_assoc()) {
         $listings[] = $row;
     }
+} else {
+    // Send a message if no listings found
+    $listings = ["message" => "No listings available."];
 }
 
-// Output listings in JSON format
+// Output the listings in JSON format
 header('Content-Type: application/json');
 echo json_encode($listings);
 
 $conn->close();
 ?>
-
-
-
