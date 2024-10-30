@@ -1,0 +1,281 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4; /* Off-white background */
+    color: #333;
+}
+
+/* Header Styles */
+header {
+    background-color: #000;
+    color: #ffc72c;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    color: #ffc72c;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 1rem;
+}
+
+nav ul li a {
+    color: #ffc72c;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #ffc72c;
+    color: #000;
+    border-radius: 5px;
+    transform: scale(1.05); /* Slight scale on hover */
+}
+
+/* Hero Section */
+.hero {
+    background: url('your-banner-image.jpg') no-repeat center center/cover;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content h2 {
+    color: #000;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 0 #ffc72c, -2px -2px 0 #ffc72c;
+}
+
+.hero-content p {
+    margin-bottom: 20px;
+}
+
+.hero-content form {
+    display: flex;
+    margin-top: 20px;
+}
+
+.hero-content input[type="text"] {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.hero-content button {
+    padding: 0.8rem;
+    background-color: #000;
+    color: #ffc72c;
+    border: none;
+    border-radius: 5px;
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-content button:hover {
+    background-color: #ffc72c;
+    color: #000;
+    transform: scale(1.05); /* Subtle scale effect on hover */
+}
+
+/* Categories Section */
+.categories {
+    background-color: #fff;
+    padding: 2rem;
+    text-align: center;
+}
+
+.categories h3 {
+    font-size: 2rem;
+    color: #000;
+    margin-bottom: 2rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.category-item {
+    background-color: #ffc72c;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.category-item a {
+    color: #000;
+    font-size: 1.2rem;
+    text-decoration: none;
+    padding: 0.5rem;
+    display: block;
+}
+
+.category-item:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+.category-item a:hover {
+    color: #ffc72c;
+}
+
+/* Post Ad Form */
+.post-ad {
+    background-color: #fff;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-ad label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.post-ad input, .post-ad select, .post-ad textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.post-ad button {
+    padding: 0.8rem;
+    background-color: #000;
+    color: #ffc72c;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.post-ad button:hover {
+    background-color: #ffc72c;
+    color: #000;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .post-ad, .about {
+        max-width: 90%;
+    }
+}
+
+/* Listing Grid & Item */
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.listing-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.listing-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.listing-item h3 {
+    color: #ffd700;
+    margin: 10px 0;
+}
+
+.listing-item p {
+    color: #333;
+}
+
+.listing-item:hover {
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    background-color: #000;
+    color: #ffc72c;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+footer .footer-links a {
+    color: #ffc72c;
+    text-decoration: none;
+    margin: 0 1rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+footer .footer-links a:hover {
+    background-color: #ffc72c;
+    color: #000;
+    border-radius: 5px;
+    transform: scale(1.05);
+}
+
+
+
+

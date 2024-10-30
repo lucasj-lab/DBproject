@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><?php echo htmlspecialchars($listing['Title']); ?></h1>
+    </header>
+    <div class="listing-details">
+        <?php if (!empty($listing['Image_URL'])): ?>
+            <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+        <?php endif; ?>
+        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+        <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+        <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+        <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+        <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+    </div>
+    <footer>
+        <a href="view_listings.php">Back to Listings</a>
+    </footer>
+</body>
+</html>

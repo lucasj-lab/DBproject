@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Listings</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchListings();
+        });
+
+        function fetchListings() {
+            fetch('fetch_listings.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        displayListings(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching listings:', error);
+                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
+                });
+        }
+
+        function displayListings(listings) {
+            const listingsContainer = document.getElementById("listings");
+            listingsContainer.innerHTML = "";  // Clear previous content
+
+            listings.forEach(listing => {
+                const listingDiv = document.createElement("div");
+                listingDiv.className = "listing-item";
+
+                const image = listing.Image_URL ? listing.Image_URL : "no_image.png";
+                listingDiv.innerHTML = `
+                    <img src="${image}" alt="Listing Image">
+                    <h3>${listing.Title}</h3>
+                    <p>Price: $${listing.Price}</p>
+                    <p>Posted by: ${listing.User_Name}</p>
+                    <p>Category: ${listing.Category_Name}</p>
+                    <p>Location: ${listing.City}, ${listing.State}</p>
+                    <p>Posted on: ${listing.Date_Posted}</p>
+                    <a href="view_listing.php?id=${listing.Listing_ID}">View Listing</a>
+                `;
+
+                listingsContainer.appendChild(listingDiv);
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>All Listings</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="post_ad.html">New Listing</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="listings" class="listing-grid">
+        <p>Loading listings...</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Craigslist 2.0 | All rights reserved</p>
+    </footer>
+</body>
+</html>
+
+
