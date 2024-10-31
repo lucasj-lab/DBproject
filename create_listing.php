@@ -1,11 +1,13 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+header('Content-Type: application/json');
 
 // Database connection parameters
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
 $username = "admin";
-$password = "Bagflea3!"; 
+$password = "Bagflea3!";
 $dbname = "CraigslistDB";
 
 // Create connection
@@ -13,7 +15,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(['success' => false, 'message' => "Connection failed: " . $conn->connect_error]));
 }
 
 // Function to get Category_ID from Category table
@@ -30,13 +32,18 @@ function getCategoryID($conn, $categoryName) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_email = $_POST['user_email'];
-    $category = $_POST['category'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
-    $state = $_POST['state'];
-    $city = $_POST['city'] ?? $_POST['city-input'];
+    $user_email = $_POST['user_email'] ?? '';
+    $category = $_POST['category'] ?? '';
+    $title = $_POST['title'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $price = $_POST['price'] ?? 0;
+    $state = $_POST['state'] ?? '';
+    $city = $_POST['city'] ?? '';
+
+    if (empty($user_email) || empty($category) || empty($title) || empty($description) || empty($price)) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+        exit();
+    }
 
     // Get the User_ID using the email
     $stmt = $conn->prepare("SELECT User_ID FROM user WHERE Email = ?");
@@ -99,4 +106,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
-
