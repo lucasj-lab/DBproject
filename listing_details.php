@@ -13,6 +13,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$listing = null; // Default listing variable
+
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['id'])) {
     $listing_id = intval($_GET['id']);
@@ -40,18 +42,7 @@ if (isset($_GET['id'])) {
         exit;
     } elseif ($result->num_rows > 0) {
         $listing = $result->fetch_assoc();
-    } else {
-        // If no listing is found, redirect to a not-found page or show an error
-        header("Location: not_found.html");
-        exit;
     }
-} else {
-    // If no ID is passed, redirect to a generic error page or show a message
-    header("Location: error.html");
-    exit;
-}
-
-// Close the database connection
+} 
 $conn->close();
 ?>
-
