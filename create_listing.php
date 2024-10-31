@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
 
                 // Return success message
-                echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href="user_listings.php">Click here to view your listings.</a>']);
+                echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href='fetch_listings.php'> Click here to view your listings.</a>']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
             }
