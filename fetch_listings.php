@@ -1,7 +1,7 @@
 <?php
 // Enable error reporting
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 1); 
 
 // Database connection parameters
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";

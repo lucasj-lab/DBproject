@@ -44,7 +44,7 @@ $conn->close();
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="post_ad.html">New Listing</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
                 <li><a href="listings.html">View All Listings</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="logout.php">Logout</a></li>
@@ -68,7 +68,7 @@ $conn->close();
                 <?php endforeach; ?>
             </ul>
         <?php else : ?>
-            <p>You have no listings. <a href="post_ad.html">Create one here</a>.</p>
+            <p>You have no listings. <a href="create_listing.html">Create one here</a>.</p>
         <?php endif; ?>
     </div>
 
