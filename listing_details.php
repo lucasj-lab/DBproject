@@ -1,10 +1,12 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Database connection
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
 $username = "admin";
-$password = "Bagflea3!"; 
+$password = "Bagflea3!";
 $dbname = "CraigslistDB";
-
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
@@ -33,7 +35,10 @@ if (isset($_GET['id'])) {
     ";
 
     $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
+    if ($result === false) {
+        echo "Query error: " . $conn->error;
+        exit;
+    } elseif ($result->num_rows > 0) {
         $listing = $result->fetch_assoc();
     } else {
         // If no listing is found, redirect to a not-found page or show an error
@@ -48,7 +53,5 @@ if (isset($_GET['id'])) {
 
 // Close the database connection
 $conn->close();
-
-// Include the HTML template
-include 'listing_details_template.html';
 ?>
+
