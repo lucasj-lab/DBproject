@@ -1,5 +1,6 @@
-<?php
-session_start();
+<?php 
+session_start();  // Start session at the top of the file
+
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
 $username = "admin";
 $password = "Bagflea3!";
@@ -17,11 +18,10 @@ try {
     die("Database connection failed: " . htmlspecialchars($e->getMessage()));
 }
 
-// Validate and sanitize input fields
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
-    $password = $_POST['password']; // Use hash before saving to DB
+    $password = $_POST['password'];
     $date_joined = date('Y-m-d');
 
     if (empty($name) || empty($email) || empty($password)) {

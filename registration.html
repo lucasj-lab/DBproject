@@ -23,14 +23,17 @@
     <div class="registration">
         <h2>Create an Account</h2>
 
-        <!-- Display any success or error messages from the PHP script -->
+        <!-- Display success or error messages -->
         <?php
         session_start();
-        if (isset($_SESSION['message'])): ?>
-            <div class="message-box <?php echo ($_SESSION['message_type'] == 'success') ? 'success' : 'error'; ?>">
-                <p><?php echo $_SESSION['message']; ?></p>
+        if (isset($_SESSION['message'])) : ?>
+            <div class="message-box <?= ($_SESSION['message_type'] === 'success') ? 'success' : 'error'; ?>">
+                <p><?= $_SESSION['message']; ?></p>
             </div>
-            <?php unset($_SESSION['message']); ?>
+            <?php 
+            unset($_SESSION['message']);
+            unset($_SESSION['message_type']); 
+            ?>
         <?php endif; ?>
 
         <form action="register.php" method="POST">
@@ -41,8 +44,9 @@
             <input type="email" id="email" name="email" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-                title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
+            <input type="password" id="password" name="password" required 
+                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                   title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
 
             <button type="submit">Register</button>
         </form>
