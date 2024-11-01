@@ -15,7 +15,7 @@ body {
 /* Header Styles */
 header {
     background-color: #000;
-    color: #cab988;
+    color: #27237c;
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -23,7 +23,7 @@ header {
 }
 
 header h1 {
-    color: #cab988;
+    color: #27237c;
     font-weight: bold;
     font-size: 1.8rem;
 }
@@ -38,7 +38,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #cab988;
+    color: #27237c;
     text-decoration: none;
     font-weight: bold;
     padding: 0.5rem;
@@ -46,7 +46,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #cab988;
+    background-color: #27237c;
     color: #000;
     border-radius: 5px;
     transform: scale(1.05);
@@ -96,7 +96,7 @@ input[type="number"] {
 form button {
     padding: 0.2rem 1.2rem;
     background-color: #000;
-    color: #cab988;
+    color: #27237c;
     border: none;
     border-radius: 5px;
     font-size: 1.1rem;
@@ -105,7 +105,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #cab988;
+    background-color: #27237c;
     color: #000;
     transform: scale(1.05);
 }
@@ -163,7 +163,7 @@ form button:hover {
     color: #000;
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    text-shadow: 2px 2px 0 #cab988, -2px -2px 0 #cab988;
+    text-shadow: 2px 2px 0 #27237c, -2px -2px 0 #27237c;
 }
 
 .hero-content p {
@@ -185,7 +185,7 @@ form button:hover {
 .hero-content button {
     padding: 0.8rem;
     background-color: #000;
-    color: #cab988;
+    color: #27237c;
     border: none;
     border: 1px solid #ccc; /* Add this line for a visible border */
     margin-left: 0.5rem;
@@ -195,7 +195,7 @@ form button:hover {
 }
 
 .hero-content button:hover {
-    background-color: #cab988;
+    background-color: #27237c;
     color: #000;
     transform: scale(1.05);
 }
@@ -220,7 +220,7 @@ form button:hover {
 }
 
 .category-item {
-    background-color: #cab988;
+    background-color: #27237c;
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -242,7 +242,7 @@ form button:hover {
 }
 
 .category-item a:hover {
-    color: #cab988;
+    color: #27237c;
 }
 
 /* Responsive Design */
@@ -273,13 +273,13 @@ form button:hover {
 /* Footer */
 footer {
     background-color: #000;
-    color: #cab988;
+    color: #27237c;
     text-align: center;
     padding: 1.5rem 0;
 }
 
 footer .footer-links a {
-    color: #cab988;
+    color: #27237c;
     text-decoration: none;
     margin: 0 1rem;
     padding: 0.5rem;
@@ -287,7 +287,7 @@ footer .footer-links a {
 }
 
 footer .footer-links a:hover {
-    background-color: #cab988;
+    background-color: #27237c;
     color: #000;
     border-radius: 5px;
     transform: scale(1.05);
