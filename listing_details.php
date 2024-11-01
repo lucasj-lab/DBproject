@@ -100,7 +100,7 @@ $conn->close();
         <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
         <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
         <br>
-        <a href="listings.html">Back to Listings</a> 
+        <a href="listings.html" class="pill-button">Back to Listings</a>
         </br>
     </main>
 
