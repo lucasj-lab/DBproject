@@ -58,7 +58,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Browse <?php echo htmlspecialchars($category); ?> Listings</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <header>
