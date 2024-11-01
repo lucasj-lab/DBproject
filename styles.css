@@ -74,10 +74,11 @@ nav ul li a:hover {
 }
 
 .listing-details {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    justify-items: start;
 }
 /* Listing Item */
 .listing-item {
