@@ -34,7 +34,7 @@
 
             listings.forEach(listing => {
                 const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
+                listingDiv.className = "listing-details";
 
                 // Set a placeholder image if Image_URL is missing
                 const image = listing.Image_URL || "no_image.png";
@@ -46,7 +46,7 @@
                     <p>Category: ${listing.Category_Name}</p>
                     <p>Location: ${listing.City}, ${listing.State}</p>
                     <p>Posted on: ${listing.Date_Posted}</p>
-                    <a href="view_listing.php?id=${listing.Listing_ID}">View Listing</a>
+                    <a href="listing_details.php?id=${listing.Listing_ID}">View Listing</a>
                 `;
 
                 listingsContainer.appendChild(listingDiv);
