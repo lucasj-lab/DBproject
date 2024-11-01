@@ -42,17 +42,20 @@
                 listingDiv.className = "listing-item";
 
                 const image = listing.Image_URL || "no_image.png"; // Placeholder image
-                listingDiv.innerHTML = `
-                    <img src="${image}" alt="Listing Image" class="listing-image">
-                    <h3>${listing.Title}</h3>
-                    <p>${listing.Description}</p>
-                    <p>Price: $${listing.Price}</p>
-                    <p>Posted by: ${listing.User_Name}</p>
-                    <p>Category: ${listing.Category_Name}</p>
-                    <p>Location: ${listing.City}, ${listing.State}</p>
-                    <p>Posted on: ${listing.Date_Posted}</p>
-                    <a href="listing_details.php?id=${listing.Listing_ID}">View Listing</a>
-                `;
+listingDiv.innerHTML = `
+    <img src="${image}" alt="Listing Image" class="listing-image">
+    <h3>${listing.Title}</h3>
+    <p>${listing.Description}</p>
+    <p>Price: $${listing.Price}</p>
+    <p>Posted by: ${listing.User_Name}</p>
+    <p>Category: ${listing.Category_Name}</p>
+    <p>Location: ${listing.City}, ${listing.State}</p>
+    <p>Posted on: ${listing.Date_Posted}</p>
+    <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
+        View Listing
+    </button>
+`;
+
 
                 listingsContainer.appendChild(listingDiv);
             });
