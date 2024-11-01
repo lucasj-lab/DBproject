@@ -3,30 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post an Ad</title>
+    <title>Create New Listing</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <header>
-        <h1>Create New Listing</h1>
+        <div class="logo">
+            <h1>Create New Listing</h1>
+        </div>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="create_listing.html">New Listing</a></li>
-		        <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="register.html">Register</a></li>
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
+        <!-- Hamburger menu icon for mobile view -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <!-- Mobile dropdown menu for smaller screens -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
     </header>
 
     <div class="post-ad">
         <h2>Post Your Ad</h2>
-        <p> Please <a href="register.html">register</a> to create a new listing.</p>
-        <form action="create_listing.php" method="POST"> <!-- Set action to PHP script -->
- 	
-            <label for="title">User Email:</label>
+        <p>Please <a href="register.html">register</a> to create a new listing.</p>
+        <form id="listing-form" action="create_listing.php" method="POST"> <!-- Set action to PHP script -->
+            <label for="user_email">User Email:</label>
             <input type="text" id="user_email" name="user_email" required>
 
             <label for="category">Category:</label>
@@ -44,10 +58,8 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4" required></textarea>
 
-           <!-- Price input field -->
-           <label for="price">Price:</label>
-           <input type="number" step="0.01" id="price" name="price" class="input-field" required>
-
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" id="price" name="price" class="input-field" required>
 
             <label for="state">Select State:</label>
             <select id="state" name="state" onchange="updateCities()" required>
@@ -103,6 +115,8 @@
                 <option value="WI">Wisconsin</option>
                 <option value="WY">Wyoming</option>
             </select>
+                <!-- Other states omitted for brevity -->
+            </select>
 
             <label for="city">Select City:</label>
             <div>
@@ -110,13 +124,11 @@
                     <option value="">--Select City--</option>
                     <!-- Cities will be populated based on state selection -->
                 </select>
-                <input type="text" id="city-input" name="city-input" placeholder="Type your city here if it is not listed" oninput="clearDropdown()" />
+                <input type="text" id="city-input" name="city-input" placeholder="Type your city here if not listed" oninput="clearDropdown()" />
             </div>
 
-    <!-- File upload input -->
-    <label for="images">Upload Images:</label>
-    <input type="file" id="images" name="images[]" multiple>
-
+            <label for="images">Upload Images:</label>
+            <input type="file" id="images" name="images[]" multiple>
 
             <button type="submit">Submit</button>
         </form>
@@ -131,6 +143,12 @@
     </footer>
 
     <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobileMenu");
+            mobileMenu.classList.toggle("active");
+        }
+
+        <script>
         const citiesByState = {
             'AL': ['Birmingham', 'Montgomery', 'Huntsville', 'Mobile', 'Tuscaloosa'],
             'AK': ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'],
@@ -194,6 +212,10 @@
             cityDropdown.innerHTML = '<option value="">--Select City--</option>';
             cityInput.value = ""; // Clear the input field
 
+
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+            cityInput.value = "";
+
             if (selectedState) {
                 const cities = citiesByState[selectedState] || [];
                 cities.forEach(city => {
@@ -209,7 +231,6 @@
             const cityDropdown = document.getElementById('city-dropdown');
             const cityInput = document.getElementById('city-input');
 
-            // Show input field if dropdown is empty or if user starts typing
             if (cityDropdown.value === "") {
                 cityInput.style.display = "block";
             } else {
@@ -219,17 +240,12 @@
 
         function clearDropdown() {
             const cityDropdown = document.getElementById('city-dropdown');
-            // Clear the dropdown when user types in the input field
-            cityDropdown.value = ""; 
-            toggleInput(); // Call to toggle input visibility
+            cityDropdown.value = "";
+            toggleInput();
         }
 
-	
-        // Your existing JavaScript for city dropdown...
-
-        // Function to handle form submission
         document.getElementById('listing-form').onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
             const formData = new FormData(this);
             fetch('create_listing.php', {
@@ -238,29 +254,30 @@
             })
             .then(response => response.json())
             .then(data => {
-                const messageDiv = document.getElementById('message');
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
                 messageDiv.style.display = 'block';
 
                 if (data.success) {
                     messageDiv.style.color = 'green';
                     messageDiv.textContent = 'Listing created successfully!';
-                    this.reset(); // Clear the form
+                    this.reset();
                 } else {
                     messageDiv.style.color = 'red';
                     messageDiv.textContent = data.message || 'Failed to create listing.';
                 }
+                document.body.prepend(messageDiv);
             })
             .catch(error => {
                 console.error('Error:', error);
-                const messageDiv = document.getElementById('message');
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
                 messageDiv.style.display = 'block';
                 messageDiv.style.color = 'red';
                 messageDiv.textContent = 'An error occurred while creating the listing.';
+                document.body.prepend(messageDiv);
             });
         };
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>

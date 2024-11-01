@@ -84,6 +84,11 @@ nav ul li a:hover {
     box-shadow: 0.2rem 0.2rem 0.5rem var(--shadow-color);
 }
 
+/* Show menu when .active is toggled */
+.mobile-menu.active {
+    display: block;
+}
+
 .mobile-menu ul {
     display: flex;
     flex-direction: column;
