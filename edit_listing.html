@@ -11,14 +11,10 @@
         <h1>Edit Listing</h1>
     </header>
 
-    <?php 
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-    include 'edit_listing_logic.php'; 
-    ?>
+    <?php include 'edit_listing_logic.php'; ?>
 
     <div class="edit-listing">
-        <?php if (isset($error_message)) : ?>
+        <?php if (!empty($error_message)) : ?>
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>
 
@@ -27,7 +23,7 @@
             <input type="text" name="title" value="<?php echo htmlspecialchars($title ?? ''); ?>" required>
 
             <label for="description">Description:</label>
-           <input type= "text" name="description" value="<?php echo htmlspecialchars($description ?? ''); ?>" required>
+            <textarea name="description" required><?php echo htmlspecialchars($description ?? ''); ?></textarea>
 
             <label for="price">Price:</label>
             <input type="number" name="price" value="<?php echo htmlspecialchars($price ?? ''); ?>" required>

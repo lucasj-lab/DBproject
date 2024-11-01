@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if listing_id is provided
+// Check if listing_id is provided in the URL
 if (!isset($_GET['listing_id'])) {
     die("No listing ID provided.");
 }
@@ -28,7 +28,11 @@ $listing_id = intval($_GET['listing_id']);
 $user_id = $_SESSION['user_id'];
 $error_message = "";
 
-// Handle form submission for updating listing
+// Initialize variables to avoid undefined errors
+$title = $description = "";
+$price = 0.0;
+
+// Handle form submission for updating the listing
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
@@ -38,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updateStmt->bind_param("ssdii", $title, $description, $price, $listing_id, $user_id);
 
     if ($updateStmt->execute()) {
-        header("Location: account.php");  // Redirect after update
+        header("Location: account.php");  // Redirect after successful update
         exit();
     } else {
         $error_message = "Error updating listing.";
@@ -46,20 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updateStmt->close();
 }
 
-// Initialize variables to avoid undefined errors
-$title = $description = "";
-$price = 0.0;
+// Fetch listing details if not a POST request
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    $stmt = $conn->prepare("SELECT Title, Description, Price FROM listings WHERE Listing_ID = ? AND User_ID = ?");
+    $stmt->bind_param("ii", $listing_id, $user_id);
+    $stmt->execute();
+    $stmt->bind_result($title, $description, $price);
 
-// Fetch listing details
-$stmt = $conn->prepare("SELECT Title, Description, Price FROM listings WHERE Listing_ID = ? AND User_ID = ?");
-$stmt->bind_param("ii", $listing_id, $user_id);
-$stmt->execute();
-$stmt->bind_result($title, $description, $price);
+    // Check if a result was returned
+    if (!$stmt->fetch()) {
+        $error_message = "Listing not found or you do not have permission to edit this listing.";
+    }
 
-if (!$stmt->fetch()) {
-    $error_message = "Listing not found or you do not have permission to edit this listing.";
+    $stmt->close();
 }
 
-$stmt->close();
 $conn->close();
 ?>
