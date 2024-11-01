@@ -63,7 +63,7 @@ $conn->close();
                         <p><?php echo htmlspecialchars($listing['Description']); ?></p>
                         <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
                         <p>Date Posted: <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
-                        <a href="edit_listing.html?listing_id=<?php echo $listing['Listing_ID']; ?>">Edit</a>
+                        <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>">Edit</a>
                     </li>
                 <?php endforeach; ?>
             </ul>
