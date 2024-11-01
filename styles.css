@@ -104,15 +104,37 @@ nav ul li a:hover {
     font-weight: bold;
 }
 
-/* Input Fields and Buttons */
+/* Centered h2 Heading */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 1rem;
+    color: var(--primary-color);
+}
+
+/* Form Styles */
+form {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Uniform Input Field Styling */
 input[type="text"],
+input[type="email"],
+input[type="password"],
 input[type="number"],
 textarea,
 select,
 button {
     width: 100%;
+    max-width: 500px; /* Ensures all inputs are the same width */
     padding: 0.8rem;
-    margin-bottom: 1.5rem;
+    margin: 0.5rem auto; /* Space between elements */
     border: 1px solid var(--border-color);
     border-radius: 30px; /* Pill shape */
     font-size: 1rem;
@@ -123,6 +145,8 @@ button {
 }
 
 input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
 input[type="number"]:focus,
 textarea:focus,
 select:focus {
@@ -130,7 +154,7 @@ select:focus {
     box-shadow: 0.3rem -0.3rem 0.6rem var(--hover-shadow-color);
 }
 
-/* Button Styling */
+/* Form Button Styling */
 button {
     padding: 0.8rem 1.2rem;
     background-color: var(--primary-color);
@@ -145,70 +169,6 @@ button:hover {
     background-color: var(--secondary-color);
     color: #000;
     transform: scale(1.05);
-}
-
-/* Form Styles */
-form {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Categories Section */
-section.categories {
-    background-color: var(--background-color);
-    padding: 2rem;
-    text-align: center;
-}
-
-section.categories h3 {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    font-weight: bold;
-}
-
-/* Grid layout for categories */
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    max-width: 600px;
-    margin: 0 auto; /* Center the grid container */
-    padding: 1rem;
-}
-
-/* Styling for individual category items */
-.category-item {
-    background-color: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.category-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Link Styling */
-.category-item a {
-    color: var(--primary-color);
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.category-item a:hover {
-    color: var(--secondary-color);
 }
 
 /* Responsive Design */
@@ -233,12 +193,135 @@ section.categories h3 {
         display: block;
     }
 
-    .category-grid {
-        grid-template-columns: 1fr;
-    }
-
     #search-results,
     .category-grid {
         grid-template-columns: repeat(1, 1fr);
     }
+    /* Categories Section */
+.categories {
+    background-color: #fff;
+    padding: 2rem;
+    text-align: center;
+}
+
+.categories h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    align-content: center;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+}
+
+.category-item {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Categories Section */
+section.categories {
+    background-color: #fff;
+    padding: 2rem;
+    text-align: center;
+}
+
+section.categories h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+
+/* Wrapper for 2x2 layout within a centered box */
+.category-wrapper {
+    max-width: 800px;
+    margin: 0 auto; /* Centers the entire wrapper */
+    padding: 2rem;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.category-item {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.category-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-item img {
+    max-width: 80px;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.category-item h3, .category-item p, .category-item a {
+    margin: 0.5rem 0;
+    color: var(--primary-color);
+}
+
+.category-item h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.category-item p {
+    color: var(--text-color);
+}
+
+.category-item a {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.category-item a:hover {
+    color: var(--secondary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-wrapper {
+        padding: 1rem;
+    }
+}
+
+
 }
