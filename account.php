@@ -53,6 +53,17 @@ $conn->close();
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>
+
+    <!-- User Icon - Displays if user is logged in -->
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <div class="user-icon">
+            <a href="dashboard.php">
+                <img src="path/to/user-icon.png" alt="User Dashboard" title="Go to Dashboard">
+                <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+            </a>
+        </div>
+    <?php endif; ?>
+
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
     <div class="mobile-menu" id="mobileMenu">
         <ul>
@@ -93,11 +104,11 @@ $conn->close();
 </div>
 
 <footer>
-        <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-    </footer>
+    <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+</footer>
 </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+    <h2>Your Listings</h2>
+    
+    <?php if (!empty($listings)): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($listings as $listing): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($listing['title']); ?></td>
+                        <td><?php echo htmlspecialchars($listing['description']); ?></td>
+                        <td><?php echo htmlspecialchars($listing['price']); ?></td>
+                        <td>
+                            <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a> |
+                            <a href="delete_listing.php?id=<?php echo $listing['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>You have no listings yet.</p>
+    <?php endif; ?>
+</body>
+</html>
