@@ -40,10 +40,11 @@
         <h2>Post Your Ad</h2>
         <p>Please <a href="register.html">register</a> to create a new listing.</p>
         <form id="listing-form" action="create_listing.php" method="POST">
-            <label for="user_email">User Email:</label>
-            <input type="text" id="user_email" name="user_email" required>
 
-            <label for="category">Category:</label>
+
+            <input type="text" id="user_email" name="user_email" placeholder="Description" required>
+
+
             <select id="category" name="category" required>
                 <option value="">--Select Category--</option>
                 <option value="Auto">Auto</option>
