@@ -119,6 +119,14 @@ h3 {
     color: var(--primary-color);
 }
 
+p {
+        text-align: center;
+        font-size: 2rem;
+        margin-top: 1rem;
+        color: var(--primary-color);
+    }
+
+
 /* Form Styles */
 form {
     max-width: 600px;
