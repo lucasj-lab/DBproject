@@ -209,6 +209,7 @@ button:hover {
     color: var(--primary-color);
     margin-bottom: 1.5rem;
     font-weight: bold;
+    align-content: center;
 }
 
 .category-grid {
@@ -244,15 +245,24 @@ section.categories h2 {
     font-weight: bold;
 }
 
-section.categories .category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-    margin-top: 1.5rem;
+/* Wrapper for 2x2 layout within a centered box */
+.category-wrapper {
+    max-width: 800px;
+    margin: 0 auto; /* Centers the entire wrapper */
+    padding: 2rem;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-section.categories .category-item {
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.category-item {
     background-color: #f9f9f9;
     padding: 1.5rem;
     border-radius: 15px;
@@ -264,12 +274,12 @@ section.categories .category-item {
     align-items: center;
 }
 
-section.categories .category-item:hover {
+.category-item:hover {
     transform: scale(1.05);
     box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.15);
 }
 
-section.categories .category-item img {
+.category-item img {
     max-width: 80px;
     height: auto;
     margin-bottom: 1rem;
@@ -277,37 +287,41 @@ section.categories .category-item img {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-section.categories .category-item h3 {
-    font-size: 1.25rem;
+.category-item h3, .category-item p, .category-item a {
+    margin: 0.5rem 0;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+}
+
+.category-item h3 {
+    font-size: 1.25rem;
     font-weight: bold;
 }
 
-section.categories .category-item a {
+.category-item p {
+    color: var(--text-color);
+}
+
+.category-item a {
     color: var(--primary-color);
-    font-size: 1rem;
-    text-decoration: none;
-    margin-top: 0.5rem;
     font-weight: bold;
+    text-decoration: none;
     transition: color 0.3s ease;
 }
 
-section.categories .category-item a:hover {
+.category-item a:hover {
     color: var(--secondary-color);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    section.categories .category-grid {
-        grid-template-columns: 1fr 1fr;
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-wrapper {
+        padding: 1rem;
     }
 }
 
-@media (max-width: 480px) {
-    section.categories .category-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
 }
