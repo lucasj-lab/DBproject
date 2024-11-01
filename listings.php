@@ -55,6 +55,7 @@ if ($result && $result->num_rows > 0) {
 // Output the listings in JSON format
 header('Content-Type: application/json');
 echo json_encode($listings);
+echo json_encode(["status" => "Script ran without errors"]);
 
 $conn->close();
 ?>

@@ -10,7 +10,7 @@
             fetchListings();
         });
 
-        function Listings() {
+        function fetchListings() {
             fetch('listings.php')
                 .then(response => {
                     if (!response.ok) {
@@ -42,7 +42,6 @@
                 const listingDiv = document.createElement("div");
                 listingDiv.className = "listing-item";
 
-                // Set a placeholder image if Image_URL is missing
                 const image = listing.Image_URL || "no_image.png";
                 listingDiv.innerHTML = `
                     <img src="${image}" alt="Listing Image" class="listing-image">
@@ -58,11 +57,18 @@
                 listingsContainer.appendChild(listingDiv);
             });
         }
+
+        // Hamburger menu toggle function
+        function toggleMobileMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
     </script>
 </head>
 <body>
     <header>
-        <h1>All Listings</h1>
+        <div class="logo">
+            <h1>All Listings</h1>
+        </div>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -72,6 +78,18 @@
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
+        <!-- Hamburger menu icon for mobile view -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <!-- Mobile dropdown menu for smaller screens -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
     </header>
 
     <main>
