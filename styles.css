@@ -233,7 +233,7 @@ input[type="number"],
 textarea,
 select,
 button {
-    width: 70%;
+    width: 80%;
     max-width: 500px; /* Ensures all inputs are the same width */
     padding: 0.8rem;
     margin: 0.5rem auto; /* Space between elements */
