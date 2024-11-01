@@ -63,59 +63,40 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($listing['Title']); ?></title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <header>
-        <h1><?php echo htmlspecialchars($listing['Title']); ?></h1>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
-    </header>
 
-    <main class="listing-details">
+<header>
+    <h1>Listing Details</h1>
+</header>
+
+<main>
+    <!-- Form wrapper for centered listing details -->
+    <form class="listing-details-form">
         <?php if (!empty($listing['Image_URL'])): ?>
             <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
         <?php endif; ?>
+        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
         <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
         <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
         <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
         <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
         <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
-        <br>
-        <a href="listings.html" class="pill-button">Back to Listings</a>
-        </br>
-    </main>
 
+        <!-- Back to Listings button -->
+        <a href="listings.html" class="pill-button back-to-listings">Back to Listings</a>
+    </form>
+</main>
 
-    <footer>   
+<footer>   
         <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
         <div class="footer-links">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>
         </div>
     </footer>
-    <script>
-        function toggleMobileMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
-        }
-    </script>
+
 </body>
 </html>
