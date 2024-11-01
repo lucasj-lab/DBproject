@@ -39,7 +39,7 @@
     <div class="post-ad">
         <h2>Post Your Ad</h2>
         <p>Please <a href="register.html">register</a> to create a new listing.</p>
-        <form id="listing-form" action="create_listing.php" method="POST"> <!-- Set action to PHP script -->
+        <form id="listing-form" action="create_listing.php" method="POST">
             <label for="user_email">User Email:</label>
             <input type="text" id="user_email" name="user_email" required>
 
@@ -115,14 +115,10 @@
                 <option value="WI">Wisconsin</option>
                 <option value="WY">Wyoming</option>
             </select>
-                <!-- Other states omitted for brevity -->
-            </select>
-
             <label for="city">Select City:</label>
             <div>
                 <select id="city-dropdown" name="city" onchange="toggleInput()" required>
                     <option value="">--Select City--</option>
-                    <!-- Cities will be populated based on state selection -->
                 </select>
                 <input type="text" id="city-input" name="city-input" placeholder="Type your city here if not listed" oninput="clearDropdown()" />
             </div>
@@ -207,11 +203,6 @@
             const cityDropdown = document.getElementById('city-dropdown');
             const cityInput = document.getElementById('city-input');
             const selectedState = stateSelect.value;
-
-            // Clear current options in city dropdown
-            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-            cityInput.value = ""; // Clear the input field
-
 
             cityDropdown.innerHTML = '<option value="">--Select City--</option>';
             cityInput.value = "";
