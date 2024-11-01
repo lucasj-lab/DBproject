@@ -65,6 +65,40 @@ nav ul li a:hover {
     transform: scale(1.05);
 }
 
+/* Listings Grid */
+#listings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Listing Item */
+.listing-item {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    text-align: center;
+}
+
+.listing-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.listing-item h3 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.listing-item p {
+    color: var(--text-color);
+}
+
 /* Hamburger Menu for Mobile */
 .hamburger {
     display: none;
@@ -213,6 +247,7 @@ button:hover {
         grid-template-columns: repeat(1, 1fr);
         text-align: center;
     }
+
     /* Categories Section */
 .categories {
     background-color: #fff;
