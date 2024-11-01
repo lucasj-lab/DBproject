@@ -61,14 +61,35 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($listing['Title']); ?></title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1><?php echo htmlspecialchars($listing['Title']); ?></h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
     </header>
-    <div class="listing-details">
+
+    <main class="listing-details">
         <?php if (!empty($listing['Image_URL'])): ?>
             <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
         <?php endif; ?>
@@ -78,9 +99,17 @@ $conn->close();
         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
         <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
         <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
-    </div>
+    </main>
+
     <footer>
         <a href="listings.html">Back to Listings</a>
+        <p>&copy; 2024 Rookieslist 2.0 | All rights reserved</p>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
+    </script>
 </body>
 </html>
