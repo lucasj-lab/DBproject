@@ -102,10 +102,13 @@ $conn->close();
     </main>
 
     <footer>
-        <a href="listings.html">Back to Listings</a>
-        <p>&copy; 2024 Rookieslist 2.0 | All rights reserved</p>
+        <a href="listings.html">Back to Listings</a>    
+        <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
     </footer>
-
     <script>
         function toggleMobileMenu() {
             document.getElementById("mobileMenu").classList.toggle("active");
