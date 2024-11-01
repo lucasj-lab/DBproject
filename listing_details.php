@@ -1,19 +1,21 @@
 <?php
+// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database connection
+// Database connection parameters
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
 $username = "admin";
 $password = "Bagflea3!";
 $dbname = "CraigslistDB";
 
+// Create a new connection
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-$listing = null; // Default listing variable
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['id'])) {
@@ -42,7 +44,43 @@ if (isset($_GET['id'])) {
         exit;
     } elseif ($result->num_rows > 0) {
         $listing = $result->fetch_assoc();
+    } else {
+        echo "No listing found for ID: $listing_id";
+        exit;
     }
-} 
+} else {
+    echo "No listing ID provided in URL.";
+    exit;
+}
+
+// Close the database connection
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><?php echo htmlspecialchars($listing['Title']); ?></h1>
+    </header>
+    <div class="listing-details">
+        <?php if (!empty($listing['Image_URL'])): ?>
+            <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+        <?php endif; ?>
+        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+        <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+        <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+        <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+        <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+    </div>
+    <footer>
+        <a href="listings.html">Back to Listings</a>
+    </footer>
+</body>
+</html>
