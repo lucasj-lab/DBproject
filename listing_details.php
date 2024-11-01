@@ -99,10 +99,13 @@ $conn->close();
         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
         <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
         <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+        <br>
+        <a href="listings.html">Back to Listings</a> 
+        </br>
     </main>
 
-    <footer>
-        <a href="listings.html">Back to Listings</a>    
+
+    <footer>   
         <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
         <div class="footer-links">
             <a href="#">Privacy Policy</a>
