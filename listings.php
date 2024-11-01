@@ -1,7 +1,7 @@
 <?php
 // Enable error reporting
 error_reporting(E_ALL);
-ini_set('display_errors', 1); 
+ini_set('display_errors', 1);
 
 // Database connection parameters
 $servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
@@ -14,16 +14,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check the connection
 if ($conn->connect_error) {
+    // Send JSON response if the connection fails
     echo json_encode(["error" => "Connection failed: " . $conn->connect_error]);
     exit();
-} else {
-    echo json_encode(["status" => "Connected to the database successfully."]);
 }
-
-// You may temporarily add this for testing:
-echo json_encode(["debug_message" => "Fetched listings query ran"]);
-
-
 
 // Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
@@ -53,14 +47,13 @@ if ($result && $result->num_rows > 0) {
         $listings[] = $row;
     }
 } else {
-    // Return an array with a message if no listings are found
+    // If no listings are found
     $listings = ["message" => "No listings available."];
 }
 
 // Output the listings in JSON format
 header('Content-Type: application/json');
 echo json_encode($listings);
-echo json_encode(["status" => "Script ran without errors"]);
 
 $conn->close();
 ?>
