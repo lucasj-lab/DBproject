@@ -11,28 +11,29 @@
         });
 
         function fetchListings() {
-            fetch('listings.php')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Fetched data:", data); // Debugging line
-                    if (data.error) {
-                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-                    } else if (data.message) {
-                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-                    } else {
-                        displayListings(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
-                });
-        }
+    fetch('listings.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched data:", data); // Debugging line
+            if (data.error) {
+                document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+            } else if (data.message) {
+                document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+            } else {
+                displayListings(data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching listings:', error);
+            document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
+        });
+}
+
 
         function displayListings(listings) {
             const listingsContainer = document.getElementById("listings");

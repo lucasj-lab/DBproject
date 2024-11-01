@@ -14,11 +14,16 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check the connection
 if ($conn->connect_error) {
-    // Send JSON response if the connection fails
-    header('Content-Type: application/json');
     echo json_encode(["error" => "Connection failed: " . $conn->connect_error]);
     exit();
+} else {
+    echo json_encode(["status" => "Connected to the database successfully."]);
 }
+
+// You may temporarily add this for testing:
+echo json_encode(["debug_message" => "Fetched listings query ran"]);
+
+
 
 // Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
