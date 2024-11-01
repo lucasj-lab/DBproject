@@ -1,14 +1,16 @@
 /* Color Variables */
 :root {
-    --primary-color: #1a73e8;
-    --accent-color: #fbbc04;
-    --background-color: #f4f4f4;
-    --text-color: #333;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --hover-shadow-color: rgba(26, 115, 232, 0.4);
+    --primary-color: #1a73e8; /* Accessible blue */
+    --secondary-color: #fbbc04; /* Gold accent */
+    --background-color: #f5f5f5; /* Light gray background */
+    --text-color: #333; /* Dark gray text */
+    --border-color: #ccc; /* Light border color */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    --hover-shadow-color: rgba(26, 115, 232, 0.4); /* Stronger shadow for hover */
+    --focus-border-color: #1a73e8; /* Blue border on focus */
 }
 
-/* General Styles */
+/* General Reset and Styles */
 * {
     margin: 0;
     padding: 0;
@@ -30,6 +32,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 header h1 {
@@ -56,171 +59,110 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    color: #000;
     border-radius: 5px;
     transform: scale(1.05);
 }
 
-/* Uniform Input Field Styling */
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form textarea,
-form select {
+/* Hamburger Menu for Mobile */
+.hamburger {
+    display: none;
+    font-size: 1.8rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0.2rem 0.2rem 0.5rem var(--shadow-color);
+}
+
+.mobile-menu.active {
+    display: block;
+}
+
+.mobile-menu ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.mobile-menu ul li {
+    margin-bottom: 1rem;
+}
+
+.mobile-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Input Fields and Buttons */
+input[type="text"],
+input[type="number"],
+textarea,
+select,
+button {
     width: 100%;
-    max-width: 400px; /* Ensures inputs are the same size */
     padding: 0.8rem;
     margin-bottom: 1.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 30px; /* Pill shape */
     font-size: 1rem;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
+    background-color: #fff;
 }
 
-form input[type="number"]::-webkit-inner-spin-button,
-form input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--focus-border-color);
+    box-shadow: 0.3rem -0.3rem 0.6rem var(--hover-shadow-color);
 }
 
-/* Pill-Shaped Search Button */
-form .search-button,
-.hero-content button {
-    padding: 0.8rem 1.5rem;
+/* Button Styling */
+button {
+    padding: 0.8rem 1.2rem;
     background-color: var(--primary-color);
     color: #fff;
     border: none;
-    border-radius: 30px; /* Creates pill shape */
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-form .search-button:hover,
-.hero-content button:hover {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
+button:hover {
+    background-color: var(--secondary-color);
+    color: #000;
     transform: scale(1.05);
 }
 
-/* Search Results Grid */
-#search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Creates rows and columns */
-    gap: 20px;
-    padding: 20px;
-}
-
-/* Search Result Item */
-.listing-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f8f8f8;
-    text-align: center;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    transition: transform 0.3s ease;
-}
-
-.listing-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.listing-item h3 {
-    color: var(--accent-color);
-    margin: 10px 0;
-}
-
-.listing-item p {
-    color: var(--text-color);
-}
-
-.listing-item:hover {
-    transform: scale(1.05);
-}
-
-/* Hero Section */
-.hero {
-    background: url('your-banner-image.jpg') no-repeat center center/cover;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.hero-content h2 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    text-shadow: 2px 2px 0 var(--accent-color), -2px -2px 0 var(--accent-color);
-}
-
-.hero-content p {
-    margin-bottom: 20px;
-}
-
-.hero-content form {
-    display: flex;
-    margin-top: 20px;
-}
-
-.hero-content input[type="text"] {
-    padding: 0.8rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-}
-
-.hero-content button {
-    padding: 0.8rem;
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    border: none;
-    border-radius: 5px;
-    margin-left: 0.5rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.hero-content button:hover {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
-    transform: scale(1.05);
-}
-
-/* Footer */
-footer {
-    background-color: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: 1.5rem 0;
-}
-
-.footer-links a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 1rem;
-    padding: 0.5rem;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.footer-links a:hover {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
-    border-radius: 5px;
-    transform: scale(1.05);
+/* Form Styles */
+form {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
     nav ul {
         display: none;
     }
@@ -229,7 +171,16 @@ footer {
         display: block;
     }
 
+    .mobile-menu {
+        display: none;
+    }
+
     .mobile-menu.active {
         display: block;
+    }
+
+    #search-results,
+    .category-grid {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
