@@ -73,9 +73,41 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+<header>
+    <div class="logo">
         <h1>Edit Listing</h1>
-    </header>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+    <!-- Hamburger menu icon for mobile view -->
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <!-- Mobile dropdown menu for smaller screens -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- JavaScript function for mobile menu toggle -->
+<script>
+    function toggleMobileMenu() {
+        document.getElementById("mobileMenu").classList.toggle("active");
+    }
+</script>
 
     <div class="edit-listing">
         <?php if (!empty($error_message)) : ?>

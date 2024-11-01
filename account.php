@@ -39,18 +39,39 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+<header>
+    <div class="logo">
         <h1>My Account</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </nav>
+    <!-- Hamburger menu icon for mobile view -->
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <!-- Mobile dropdown menu for smaller screens -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- JavaScript function for mobile menu toggle -->
+<script>
+    function toggleMobileMenu() {
+        document.getElementById("mobileMenu").classList.toggle("active");
+    }
+</script>
 
     <div class="listings">
         <h2>Your Listings</h2>
