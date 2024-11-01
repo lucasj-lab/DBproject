@@ -48,7 +48,7 @@ if ($result && $result->num_rows > 0) {
         $listings[] = $row;
     }
 } else {
-    // Send a message if no listings found
+    // Return an array with a message if no listings are found
     $listings = ["message" => "No listings available."];
 }
 
