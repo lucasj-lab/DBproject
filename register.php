@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['message_type'] = 'error';
         }
     }
-    header("Location: registration.html");
+    header("Location: register.html");
     exit();
 }
 ?>

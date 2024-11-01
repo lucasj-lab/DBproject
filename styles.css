@@ -149,7 +149,7 @@ nav ul li a:hover {
 }
 
 /* Post Ad Form */
-.post-ad {
+.create-listing {
     background-color: #fff;
     padding: 2rem;
     margin: 2rem auto;
@@ -158,13 +158,13 @@ nav ul li a:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.post-ad label {
+.create-listing label {
     display: block;
     margin-bottom: 0.5rem;
     color: #000;
 }
 
-.post-ad input, .post-ad select, .post-ad textarea {
+.create-listing input, .create-listing select, .create-listing textarea {
     width: 100%;
     padding: 0.8rem;
     margin-bottom: 1.5rem;
@@ -173,7 +173,7 @@ nav ul li a:hover {
     font-size: 1rem;
 }
 
-.post-ad button {
+.create-listing button {
     padding: 0.8rem;
     background-color: #000;
     color: #ffc72c;
@@ -184,7 +184,7 @@ nav ul li a:hover {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.post-ad button:hover {
+.create-listing button:hover {
     background-color: #ffc72c;
     color: #000;
     transform: scale(1.05);
@@ -210,7 +210,7 @@ nav ul li a:hover {
         font-size: 1.8rem;
     }
 
-    .post-ad, .about {
+    .create-listing, .about {
         max-width: 90%;
     }
 }

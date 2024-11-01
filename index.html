@@ -18,7 +18,7 @@
                 <li><a href="create_listing.html">New Listing</a></li>
                 <li><a href="listings.html">View All Listings</a></li>
                 <li><a href="login.html">Login</a></li>
-                <li><a href="registration.html">Register</a></li>
+                <li><a href="register.html">Register</a></li>
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
@@ -28,9 +28,18 @@
     <section class="hero">
         <div class="hero-content">
             <h2>Find Everything You Need</h2>
-            <p>Join us today! <a href="registration.html">Register</a> to start posting your listings.</p>
-            <form action="search_results.html" method="GET">
-                <input type="text" name="search" placeholder="Search for listings...">
+            <p>Join us today! <a href="register.html">Register</a> to start posting your listings.</p>
+            <h2>Search Listings</h2>
+            <form action="search_listings.php" method="get">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" placeholder="Search by title">
+            
+                <label for="min_price">Min Price:</label>
+                <input type="number" id="min_price" name="min_price" step="0.01" placeholder="Minimum price">
+            
+                <label for="max_price">Max Price:</label>
+                <input type="number" id="max_price" name="max_price" step="0.01" placeholder="Maximum price">
+            
                 <button type="submit">Search</button>
             </form>
         </div>
