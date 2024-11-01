@@ -52,16 +52,16 @@
                 <option value="Other">Other</option>
             </select>
 
-            <label for="title">Ad Title:</label>
-            <input type="text" id="title" name="title" required>
+    
+            <input type="text" id="title" name="title" placeholder="Title" required>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
+        
+            <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
 
-            <label for="price">Price:</label>
-            <input type="number" step="0.01" id="price" name="price" class="input-field" required>
 
-            <label for="state">Select State:</label>
+            <input type="number" step="0.01" id="price" name="price" class="input-field" placeholder="Price" required>
+
+    
             <select id="state" name="state" onchange="updateCities()" required>
                 <option value="">--Select State--</option>
                 <option value="AL">Alabama</option>
@@ -72,7 +72,6 @@
                 <!-- Add other states as needed -->
             </select>
 
-            <label for="city">Select City:</label>
             <div>
                 <select id="city-dropdown" name="city" onchange="toggleInput()" required>
                     <option value="">--Select City--</option>
