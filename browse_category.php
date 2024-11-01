@@ -72,15 +72,16 @@ $conn->close();
         <?php if (!empty($listings)): ?>
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
-                    <div class="listing-item">
+                    <form class="listing-item" action="listing_details.php" method="GET">
+                        <input type="hidden" name="id" value="<?php echo $listing['Listing_ID']; ?>">
                         <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image">
                         <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
                         <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
                         <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                         <p>Location: <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
                         <p>Posted on: <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
-                        <a href="listing_details.php?id=<?php echo $listing['Listing_ID']; ?>">View Listing</a>
-                    </div>
+                        <button type="submit" class="pill-button">View Listing</button>
+                    </form>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
@@ -89,7 +90,12 @@ $conn->close();
     </main>
 
     <footer>
-        <p>&copy; 2024 Craigslist 2.0 | All rights reserved.</p>
+        <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
     </footer>
 </body>
 </html>
+
