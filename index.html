@@ -55,20 +55,24 @@
     <section class="browse-categories">
         <h3>Browse Categories</h3>
         <form id="category-form" action="browse_category.php" method="GET">
-        <div class="category-grid">
-            <div class="category-item">
-                <a href="browse_category.php?category=Auto">Auto</a>
+            <div class="category-grid">
+                <form action="browse_category.php" method="GET" class="category-item">
+                    <input type="hidden" name="category" value="Auto">
+                    <button type="submit" class="pill-button">Auto</button>
+                </form>
+                <form action="browse_category.php" method="GET" class="category-item">
+                    <input type="hidden" name="category" value="Electronics">
+                    <button type="submit" class="pill-button">Electronics</button>
+                </form>
+                <form action="browse_category.php" method="GET" class="category-item">
+                    <input type="hidden" name="category" value="Furniture">
+                    <button type="submit" class="pill-button">Furniture</button>
+                </form>
+                <form action="browse_category.php" method="GET" class="category-item">
+                    <input type="hidden" name="category" value="Other">
+                    <button type="submit" class="pill-button">Other</button>
+                </form>
             </div>
-            <div class="category-item">
-                <a href="browse_category.php?category=Electronics">Electronics</a>
-            </div>
-            <div class="category-item">
-                <a href="browse_category.php?category=Furniture">Furniture</a>
-            </div>
-            <div class="category-item">
-                <a href="browse_category.php?category=Other">Other</a>
-            </div>
-        </div>
         </form>
     </section>
     <!-- Footer Section -->
