@@ -11,29 +11,27 @@
         });
 
         function fetchListings() {
-    fetch('listings.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Fetched data:", data); // Debugging line
-            if (data.error) {
-                document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-            } else if (data.message) {
-                document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-            } else {
-                displayListings(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching listings:', error);
-            document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
-        });
-}
-
+            fetch('listings.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                    } else if (data.message) {
+                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                    } else {
+                        displayListings(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching listings:', error);
+                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
+                });
+        }
 
         function displayListings(listings) {
             const listingsContainer = document.getElementById("listings");
@@ -43,10 +41,11 @@
                 const listingDiv = document.createElement("div");
                 listingDiv.className = "listing-item";
 
-                const image = listing.Image_URL || "no_image.png";
+                const image = listing.Image_URL || "no_image.png"; // Placeholder image
                 listingDiv.innerHTML = `
                     <img src="${image}" alt="Listing Image" class="listing-image">
                     <h3>${listing.Title}</h3>
+                    <p>${listing.Description}</p>
                     <p>Price: $${listing.Price}</p>
                     <p>Posted by: ${listing.User_Name}</p>
                     <p>Category: ${listing.Category_Name}</p>
@@ -59,7 +58,6 @@
             });
         }
 
-        // Hamburger menu toggle function
         function toggleMobileMenu() {
             document.getElementById("mobileMenu").classList.toggle("active");
         }
@@ -71,7 +69,7 @@
             <h1>All Listings</h1>
         </div>
         <nav>
-            <ul>
+            <ul class="desktop-menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="create_listing.html">New Listing</a></li>
                 <li><a href="login.html">Login</a></li>
@@ -79,8 +77,10 @@
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
+
         <!-- Hamburger menu icon for mobile view -->
         <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+
         <!-- Mobile dropdown menu for smaller screens -->
         <div class="mobile-menu" id="mobileMenu">
             <ul>
@@ -102,5 +102,115 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
+
+    <!-- Add styles and hamburger CSS -->
+    <style>
+        /* General Reset and Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .desktop-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .desktop-menu li {
+            margin-left: 1rem;
+        }
+
+        .desktop-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1a73e8;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+        }
+
+        .mobile-menu ul li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .desktop-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
+
+        /* Listings Section */
+        .listing-item {
+            background-color: #fff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .listing-item h3 {
+            margin: 0.5rem 0;
+        }
+    </style>
 </body>
 </html>
