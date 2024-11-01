@@ -133,55 +133,6 @@ nav ul li a:hover {
     justify-items: start;
 }
 
-/* Center the form on the screen */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
-/* Form styling for centered card effect */
-.listing-details-form {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-    text-align: right; /* Right-align all text content */
-}
-
-.listing-details-form h3 {
-    margin-top: 1rem;
-    text-align: right; /* Optional: ensure heading is also right-aligned */
-}
-
-.listing-details-form img {
-    max-width: 100%;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-}
-
-/* Back to Listings pill button */
-.pill-button.back-to-listings {
-    display: inline-block;
-    padding: 0.5rem 1.5rem;
-    margin-top: 1.5rem;
-    background-color: #1a73e8;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    text-align: center; /* Center the button text */
-}
-
-.pill-button.back-to-listings:hover {
-    background-color: #0f5bbd; /* Darker shade for hover */
-}
 
 
 .listing-item img {
