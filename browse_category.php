@@ -52,7 +52,7 @@ $conn->close();
     <header>
         <h1>Listings in <?php echo htmlspecialchars($category ?? ''); ?> Category</h1>
         <nav>
-            <a href="index.html">Back to Home</a>
+            <a href="index.html" class="pill-button">Back to Home</a>
         </nav>
     </header>
 
@@ -67,7 +67,7 @@ $conn->close();
                         <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
                         <p>Posted by: <?php echo htmlspecialchars($listing['User_Name'] ?? ''); ?></p>
                         <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
-                        <p>Posted on: <?php echo htmlspecialchars($listing['Date_Posted'] ?? ''); ?></p>
+                        <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p> 
                         <button type="submit" class="pill-button">View Listing</button>
                     </form>
                 <?php endforeach; ?>
