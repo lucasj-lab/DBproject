@@ -88,3 +88,20 @@ $conn->close();
 
 </body>
 </html>
+<p id="date-posted" data-date="2024-11-01T14:30:00Z">Posted on: </p>
+
+<script>
+    // Get the raw date from the data attribute
+    const dateElement = document.getElementById('date-posted');
+    const rawDate = dateElement.getAttribute('data-date');
+
+    // Convert to a Date object
+    const date = new Date(rawDate);
+
+    // Format the date (e.g., Friday, November 1st, 2024, 2:30 PM)
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleString('en-US', options);
+
+    // Update the element’s text
+    dateElement.textContent += formattedDate;
+</script>
