@@ -75,8 +75,10 @@
                     <p>Posted by: ${listing.User_Name}</p>
                     <p>Category: ${listing.Category_Name}</p>
                     <p>Location: ${listing.City}, ${listing.State}</p>
-                    <p>Posted on: ${listing.Date_Posted}</p>
-                    <a href="listing_details.php?id=${listing.Listing_ID}">View Listing</a>
+                   <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
+                   <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
+                    View Listing
+                   </button>
                 `;
 
                 listingsContainer.appendChild(listingDiv);
