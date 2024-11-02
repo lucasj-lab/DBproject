@@ -113,7 +113,7 @@ nav ul li a:hover {
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Creates a responsive row layout */
-    gap: 20px; /* Space between items */
+    gap: 10px; /* Space between items */
 }
 
 
@@ -152,7 +152,7 @@ nav ul li a:hover {
     display: inline-block;
     background-color: #1a73e8;
     color: #fff;
-    border-radius: 30px;
+    border-radius: 10px;
     border: none;
     font-size: 1rem;
     font-weight: normal;
@@ -737,5 +737,30 @@ footer p {
 
     .user-icon span {
         font-size: 12px; /* Smaller text */
+    }
+}
+.category-grid {
+    display: grid;
+    gap: 20px;
+}
+
+/* 4 columns on large screens */
+@media (min-width: 1024px) {
+    .category-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 2 columns on medium screens */
+@media (max-width: 1023px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1 column on small screens */
+@media (max-width: 600px) {
+    .category-grid {
+        grid-template-columns: 1fr;
     }
 }
