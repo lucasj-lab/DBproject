@@ -56,7 +56,7 @@ $conn->close();
 
     <script>
     // Get the raw date from the data attribute
-    const dateElement = document.getElementById('date-posted');
+    const dateElement = document.getElementById('Date-Posted');
     const rawDate = dateElement.getAttribute('data-date');
 
     // Convert to a Date object
