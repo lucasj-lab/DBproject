@@ -110,27 +110,12 @@ nav ul li a:hover {
     padding: 20px;
 }
 
-
 #category-form {
-<<<<<<< HEAD
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Creates a responsive row layout */
-    gap: 20px; /* Adds space between grid items */
-    justify-content: start; /* Aligns items to the left */
-    align-items: center; /* Vertically centers items in each cell */
-}
-
-
-=======
-}
-
->>>>>>> 1cf0809cdc3c55ac5eaa894d641b02d9f53feff8
-section.browse-categories
-{
- display: grid;
- justify-content: ;
- margin: 50px;
- align-items: normal;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    justify-content: start;
+    align-items: center;
 }
 
 
