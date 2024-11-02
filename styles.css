@@ -111,6 +111,24 @@ nav ul li a:hover {
 }
 
 
+#category-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Creates a responsive row layout */
+    gap: 20px; /* Adds space between grid items */
+    justify-content: start; /* Aligns items to the left */
+    align-items: center; /* Vertically centers items in each cell */
+}
+
+
+section.browse-categories
+{
+ display: grid;
+ justify-content: ;
+ margin: 50px;
+ align-items: normal;
+}
+
+
 /* Listings Container */
 .listings-container {
     display: grid;
