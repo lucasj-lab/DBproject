@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require 'database_connection.php'; 
+require 'database_connection.php';
 
 // Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
@@ -24,6 +24,7 @@ $sql = "
     ORDER BY 
         listings.Date_Posted DESC
 ";
+
 $result = $conn->query($sql);
 
 // Prepare listings array
