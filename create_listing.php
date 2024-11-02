@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = $_POST['price'];
     $state = $_POST['state'];
     $city = $_POST['city'] ?? $_POST['city-input'];
+    
 
     // Get the User_ID using the email
     $stmt = $conn->prepare("SELECT User_ID FROM user WHERE Email = ?");
