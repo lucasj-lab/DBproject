@@ -2,19 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database connection parameters
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!"; 
-$dbname = "CraigslistDB";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'database_connection.php'; 
 
 // Function to get Category_ID from Category table
 function getCategoryID($conn, $categoryName) {

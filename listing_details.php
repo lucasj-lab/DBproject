@@ -3,19 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database connection parameters
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!";
-$dbname = "CraigslistDB";
-
-// Create a new connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'database_connection.php'; 
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['id'])) {

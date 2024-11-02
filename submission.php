@@ -1,24 +1,7 @@
 <?php
 session_start(); // Start session to access user information
 
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!";
-$dbname = "CraigslistDB";
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$servername;dbname=$dbname;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $username, $password, $options);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
-}
+require 'database_connection.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

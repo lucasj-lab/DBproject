@@ -4,20 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!";
-$dbname = "CraigslistDB";
-
-// Database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    $_SESSION['message'] = "Connection failed: " . $conn->connect_error;
-    $_SESSION['message_type'] = "error";
-    header("Location: login.html");
-    exit();
-}
+require 'database_connection.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];

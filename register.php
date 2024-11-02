@@ -3,23 +3,7 @@
 session_start();
 ob_start();
 
-// Database connection settings
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!";
-$dbname = "CraigslistDB";
-
-$dsn = "mysql:host=$servername;dbname=$dbname;charset=utf8mb4";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-];
-
-try {
-    $pdo = new PDO($dsn, $username, $password, $options);
-} catch (PDOException $e) {
-    die("Database connection failed: " . htmlspecialchars($e->getMessage()));
-}
+require 'database_connection.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

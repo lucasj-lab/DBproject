@@ -6,17 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Database connection parameters
-$servername = "database-1-instance-1.cpgoq8m2kfkd.us-east-1.rds.amazonaws.com";
-$username = "admin";
-$password = "Bagflea3!";
-$dbname = "CraigslistDB";
-
-// Connect to the database
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'database_connection.php'; 
 
 // Check if listing_id is provided in the URL
 if (!isset($_GET['listing_id'])) {
