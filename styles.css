@@ -754,7 +754,7 @@ footer p {
 /* 2 columns on medium screens */
 @media (max-width: 1023px) {
     .category-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 
