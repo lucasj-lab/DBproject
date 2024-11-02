@@ -31,8 +31,7 @@ $sql = "
         listings.Date_Posted DESC
 ";
 
-    
-<?php
+
 // Database query preparation
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $searchTerm, $searchTerm);
