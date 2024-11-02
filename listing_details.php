@@ -71,7 +71,7 @@ $conn->close();
         <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
         <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-        <p><strong>Date Posted:</strong> <?= htmlspecialchars($formattedDate['Formated_Date']); ?></p>
+        <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($formattedDate['Formated_Date']); ?></p>
 
 
         <!-- Back to Listings button -->
