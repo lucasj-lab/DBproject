@@ -111,6 +111,18 @@ nav ul li a:hover {
 }
 
 
+#category-form {
+}
+
+section.browse-categories
+{
+ display: grid;
+ justify-content: ;
+ margin: 50px;
+ align-items: normal;
+}
+
+
 /* Listings Container */
 .listings-container {
     display: grid;
