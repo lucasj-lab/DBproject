@@ -27,20 +27,18 @@ $sql = "
 
 $result = $conn->query($sql);
 
-// Prepare listings array
+// Prepare listings for display
 $listings = [];
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $listings[] = $row;
-    }
-} else {
-    // If no listings are found
-    $listings = ["message" => "No listings available."];
+while ($row = $result->fetch_assoc()) {
+    // Format the date using PHP DateTime
+    $datePosted = new DateTime($row['Date_Posted']);
+    $formattedDate = $datePosted->format('l, F jS, Y'); // Example: Friday, November 1st, 2024
+
+    // Add the formatted date to the row array
+    $row['Formatted_Date'] = $formattedDate;
+    $listings[] = $row;
 }
 
-// Output the listings in JSON format
-header('Content-Type: application/json');
-echo json_encode($listings);
-
+$stmt->close();
 $conn->close();
 ?>

@@ -51,7 +51,7 @@ listingDiv.innerHTML = `
     <p>Posted by: ${listing.User_Name}</p>
     <p>Category: ${listing.Category_Name}</p>
     <p>Location: ${listing.City}, ${listing.State}</p>
-     <p>Posted on: <?php echo htmlspecialchars($formattedDate); ?></p> <!-- Display formatted date -->
+   <p>Posted on: <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p> <!-- Display formatted date -->
     <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
         View Listing
     </button>
