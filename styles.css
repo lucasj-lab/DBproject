@@ -110,12 +110,10 @@ nav ul li a:hover {
     padding: 20px;
 }
 
-#category-form {
+.category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    justify-content: start;
-    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Creates a responsive row layout */
+    gap: 20px; /* Space between items */
 }
 
 
