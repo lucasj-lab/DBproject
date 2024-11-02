@@ -95,17 +95,18 @@ $conn->close();
     <?php if (!empty($listings[0]['Listing_ID'])) : ?>
         <?php foreach ($listings as $listing) : ?>
             <div class="listing-item">
-                <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
-                <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                <p>Price: $<?= htmlspecialchars($listing['Price']); ?></p>
-                <p>Posted by: <?= htmlspecialchars($listing['User_Name']); ?></p>
-                <p>Category: <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                <p>Location: <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-                <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? ); ?></p> <!-- Display formatted date with fallback -->
-                <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                    View Listing
-                </button>
-            </div>
+    <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
+    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+    <p>Price: $<?= htmlspecialchars($listing['Price']); ?></p>
+    <p>Posted by: <?= htmlspecialchars($listing['User_Name']); ?></p>
+    <p>Category: <?= htmlspecialchars($listing['Category_Name']); ?></p>
+    <p>Location: <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
+    <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p> <!-- Display formatted date with fallback -->
+    <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+        View Listing
+    </button>
+</div>
+
         <?php endforeach; ?>
     <?php else : ?>
         <p><?= htmlspecialchars($listings['message']); ?></p>
