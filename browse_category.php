@@ -1,10 +1,13 @@
-<?php
+<?php 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Include the database connection
 require 'database_connection.php';
+
+// Check if category is set in the GET request
+$category = $_GET['category'] ?? ''; // Set $category from URL or default to an empty string
 
 // Prepare and execute a query to fetch listings by category name
 $stmt = $conn->prepare("
@@ -42,12 +45,12 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Browse <?php echo htmlspecialchars($category); ?> Listings</title>
+    <title>Browse <?php echo htmlspecialchars($category ?? ''); ?> Listings</title>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <header>
-        <h1>Listings in <?php echo htmlspecialchars($category); ?> Category</h1>
+        <h1>Listings in <?php echo htmlspecialchars($category ?? ''); ?> Category</h1>
         <nav>
             <a href="index.html">Back to Home</a>
         </nav>
@@ -58,19 +61,19 @@ $conn->close();
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
-                        <input type="hidden" name="id" value="<?php echo $listing['Listing_ID']; ?>">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($listing['Listing_ID'] ?? ''); ?>">
                         <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image">
-                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                        <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                        <p>Location: <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-                        <p>Posted on: <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+                        <h3><?php echo htmlspecialchars($listing['Title'] ?? ''); ?></h3>
+                        <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
+                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name'] ?? ''); ?></p>
+                        <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
+                        <p>Posted on: <?php echo htmlspecialchars($listing['Date_Posted'] ?? ''); ?></p>
                         <button type="submit" class="pill-button">View Listing</button>
                     </form>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>No listings found in the <?php echo htmlspecialchars($category); ?> category.</p>
+            <p>No listings found in the <?php echo htmlspecialchars($category ?? ''); ?> category.</p>
         <?php endif; ?>
     </main>
 
@@ -83,4 +86,3 @@ $conn->close();
     </footer>
 </body>
 </html>
-
