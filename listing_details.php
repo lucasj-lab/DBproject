@@ -45,16 +45,8 @@ if (isset($_GET['id'])) {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
-    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
-</head>
 
-    <script>
+<script>
     // Get the raw date from the data attribute
     const dateElement = document.getElementById('Date-Posted');
     const rawDate = dateElement.getAttribute('data-date');
@@ -70,6 +62,16 @@ $conn->close();
     dateElement.textContent += formattedDate;
 </script>
 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+</head>
     
 <body>
 

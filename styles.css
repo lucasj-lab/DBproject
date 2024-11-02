@@ -23,7 +23,37 @@ img.listing-image {
     display: block;        /* Removes extra space below the image */
     border-radius: 8px;
   }
-  
+
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5; /* adjust to your background preference */
+}
+
+.hero-content {
+    text-align: center;
+}
+
+.content-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* spacing between h2 and p */
+}
+
+.content-group p {
+    text-align: center;
+    margin: 0;
+    font-size: 1rem; /* adjust as needed */
+}
+
+.content-group h2 {
+    font-size: 2rem; /* adjust as needed */
+    margin: 0;
+}
+
 
 body {
     font-family: Arial, sans-serif;
@@ -314,6 +344,16 @@ button:hover {
         display: block;
     }
 
+
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5; /* adjust to your background preference */
+}
+
+    
     #search-results,
     .category-grid {
         grid-template-columns: repeat(1, 1fr);

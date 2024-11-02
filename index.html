@@ -1,94 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rookielist</title>
-    <link rel="stylesheet" href="styles.css"> <!-- External CSS file -->
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css">
+    <!-- External CSS file -->
+  </head>
+  <body>
     <!-- Header Section -->
     <header>
-        <div class="logo">
-            <h1>Rookielist 2.0</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <!-- Hamburger menu icon for mobile view -->
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-        <!-- Mobile dropdown menu for smaller screens -->
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
+      <div class="logo">
+        <h1>Rookielist 2.0</h1>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li>
+            <a href="create_listing.html">New Listing</a>
+          </li>
+          <li>
+            <a href="listings.html">View All Listings</a>
+          </li>
+          <li>
+            <a href="login.html">Login</a>
+          </li>
+          <li>
+            <a href="register.html">Register</a>
+          </li>
+          <li>
+            <a href="about.html">About</a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Hamburger menu icon for mobile view -->
+      <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+      <!-- Mobile dropdown menu for smaller screens -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul>
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li>
+            <a href="create_listing.html">New Listing</a>
+          </li>
+          <li>
+            <a href="listings.html">View All Listings</a>
+          </li>
+          <li>
+            <a href="login.html">Login</a>
+          </li>
+          <li>
+            <a href="register.html">Register</a>
+          </li>
+          <li>
+            <a href="about.html">About</a>
+          </li>
+        </ul>
+      </div>
     </header>
-    
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h2>Find Everything You Need</h2>
-            <p>Join us today! <a href="register.html">Register</a> to start posting your listings.</p>
-            <form action="search_listings.php" method="get">
-                <input type="text" id="title" name="title" placeholder="Search">
-            
-                <button type="submit">Search</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="browse-categories">
-        <h2>Browse Categories</h2>
-        <form id="category-form" action="browse_category.php" method="GET">
-            <div class="category-grid">
-            </form>
-                <form action="browse_category.php" method="GET" class="category-item">
-                    <input type="hidden" name="category" value="Auto">
-                    <button type="submit" class="pill-button">Auto</button>
-                </form>
-                <form action="browse_category.php" method="GET" class="category-item">
-                    <input type="hidden" name="category" value="Electronics">
-                    <button type="submit" class="pill-button">Electronics</button>
-                </form>
-                <form action="browse_category.php" method="GET" class="category-item">
-                    <input type="hidden" name="category" value="Furniture">
-                    <button type="submit" class="pill-button">Furniture</button>
-                </form>
-                <form action="browse_category.php" method="GET" class="category-item">
-                    <input type="hidden" name="category" value="Other">
-                    <button type="submit" class="pill-button">Other</button>
-                </form>
+            <div class="content-group">
+                <h2>Find Everything You Need</h2>
+                <p>Join us today! <a href="register.html">Register</a> to start posting your listings.</p>
             </div>
-        </form>
-    </section>
-    <!-- Footer Section -->
-    <footer>
-        <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
         </div>
-    </footer>
-
-    <script>
-        function toggleMobileMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
-        }
-    </script>
-
-</body>
-</html>
+    </section>
+    
+<form action="search_listings.php" method="get">
+  <input type="text" id="title" name="title" placeholder="Search">
+  <button type="submit">Search</button>
+</form>
+<!-- Categories Section -->
+<section class="browse-categories">
+  <h2>Browse Categories</h2>
+  <form id="category-form" action="browse_category.php" method="GET">
+    <div class="category-grid">
+  </form>
+  <form action="browse_category.php" method="GET" class="category-item">
+    <input type="hidden" name="category" value="Auto">
+    <button type="submit" class="pill-button">Auto</button>
+  </form>
+  <form action="browse_category.php" method="GET" class="category-item">
+    <input type="hidden" name="category" value="Electronics">
+    <button type="submit" class="pill-button">Electronics</button>
+  </form>
+  <form action="browse_category.php" method="GET" class="category-item">
+    <input type="hidden" name="category" value="Furniture">
+    <button type="submit" class="pill-button">Furniture</button>
+  </form>
+  <form action="browse_category.php" method="GET" class="category-item">
+    <input type="hidden" name="category" value="Other">
+    <button type="submit" class="pill-button">Other</button>
+  </form>
+</div></form></section>
+<!-- Footer Section -->
+<footer>
+  <p>&copy;2024 Rookielist 2.0 | All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </div>
+</footer>
+<script>
+  function toggleMobileMenu() {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  }
+</script>
+</body></html>

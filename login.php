@@ -33,15 +33,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login</h2>
-    <?php if (isset($error_message)): ?>
-        <p><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
