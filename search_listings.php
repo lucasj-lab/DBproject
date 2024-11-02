@@ -102,9 +102,9 @@ $conn->close();
                         <p>Category: <?= htmlspecialchars($listing['Category_Name']); ?></p>
                         <p>Location: <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
                         <p>Posted on: <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p> <!-- Display formatted date -->
-                        <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
-        View Listing
-    </button>
+                        <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?php echo isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                         View Listing
+                        </button>
                     </div>
                 <?php endforeach; ?>
             <?php else : ?>
