@@ -9,17 +9,39 @@
 <body>
     <!-- Header -->
     <header>
-        <h1>About Craigslist 2.0</h1>
+        <h1>About Rookies List 2.0</h1>
+        <!-- Desktop Navigation -->
         <nav>
             <ul>
-              <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="create_listing.html">New Listing</a></li>
-		<li><a href="listings.html">View All Listings</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        
+        <!-- Hamburger Icon for Mobile -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        
+        <!-- Mobile Dropdown Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
     </header>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobileMenu");
+            mobileMenu.classList.toggle("active");
+        }
+    </script>
 
     <!-- About Content -->
     <section class="about">
