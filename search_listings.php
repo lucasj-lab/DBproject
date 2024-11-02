@@ -101,7 +101,7 @@ $conn->close();
                 <p>Posted by: <?= htmlspecialchars($listing['User_Name']); ?></p>
                 <p>Category: <?= htmlspecialchars($listing['Category_Name']); ?></p>
                 <p>Location: <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-                <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p> <!-- Display formatted date with fallback -->
+                <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? ); ?></p> <!-- Display formatted date with fallback -->
                 <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
                     View Listing
                 </button>
