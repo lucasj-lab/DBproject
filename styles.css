@@ -126,6 +126,19 @@ nav ul li a:hover {
     text-decoration: none;
 }
 
+a.pill-button.back-to-listings {
+    margin: auto;
+    display: inline-block;      /* Ensures the anchor behaves like a button */
+    padding: 10px 20px;         /* Adds padding around the text */
+    background-color: #1a73e8;  /* Button background color */
+    color: white;               /* Text color */
+    text-decoration: none;      /* Removes underline */
+    font-weight: bold;          /* Makes text bold */
+    border-radius: 50px;        /* Rounds the button for a pill shape */
+    text-align: center;         /* Centers text if the button expands */
+    transition: background-color 0.3s;
+  }
+
 .pill-button:hover {
     background-color: #fbbc04;
     color: #000;
