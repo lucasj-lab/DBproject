@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require 'database_connection.php';
+require 'database_connection.php'; 
 
 // Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
@@ -24,8 +24,24 @@ $sql = "
     ORDER BY 
         listings.Date_Posted DESC
 ";
-
 $result = $conn->query($sql);
+
+// Prepare listings array
+$listings = [];
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $listings[] = $row;
+    }
+} else {
+    // If no listings are found
+    $listings = ["message" => "No listings available."];
+}
+
+// Output the listings in JSON format
+header('Content-Type: application/json');
+echo json_encode($listings);
+
+$conn->close();
 
 // Prepare listings for display
 $listings = [];
