@@ -31,6 +31,13 @@ $sql = "
         listings.Date_Posted DESC
 ";
 
+        // Format the date using PHP DateTime
+        $datePosted = new DateTime($row['Date_Posted']);
+        $formattedDate = $datePosted->format('l, F jS, Y'); // Example: Friday, November 1st, 2024
+    
+        // Add the formatted date to the row array
+        $row['Formatted_Date'] = $formattedDate;
+        $listings[] = $row;
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $searchTerm, $searchTerm);
 $stmt->execute();
