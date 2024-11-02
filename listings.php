@@ -42,19 +42,4 @@ header('Content-Type: application/json');
 echo json_encode($listings);
 
 $conn->close();
-
-// Prepare listings for display
-$listings = [];
-while ($row = $result->fetch_assoc()) {
-    // Format the date using PHP DateTime
-    $datePosted = new DateTime($row['Date_Posted']);
-    $formattedDate = $datePosted->format('l, F jS, Y'); // Example: Friday, November 1st, 2024
-
-    // Add the formatted date to the row array
-    $row['Formatted_Date'] = $formattedDate;
-    $listings[] = $row;
-}
-
-$stmt->close();
-$conn->close();
 ?>
