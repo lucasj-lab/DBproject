@@ -31,30 +31,42 @@ $sql = "
         listings.Date_Posted DESC
 ";
 
-        // Format the date using PHP DateTime
-        $datePosted = new DateTime($row['Date_Posted']);
-        $formattedDate = $datePosted->format('l, F jS, Y'); // Example: Friday, November 1st, 2024
     
-        // Add the formatted date to the row array
-        $row['Formatted_Date'] = $formattedDate;
-        $listings[] = $row;
+<?php
+// Database query preparation
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $searchTerm, $searchTerm);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Initialize the listings array
 $listings = [];
+
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        // Format the Date_Posted field
+        if (!empty($row['Date_Posted'])) {
+            $datePosted = new DateTime($row['Date_Posted']);
+            $formattedDate = $datePosted->format('l, F jS, Y'); // e.g., "Friday, November 1st, 2024"
+        } else {
+            $formattedDate = "Date not available";
+        }
+        
+        // Add the formatted date to the row array
+        $row['Formatted_Date'] = $formattedDate;
+        
+        // Add the modified row to the listings array
         $listings[] = $row;
     }
 } else {
     $listings = ["message" => "No listings found for your search."];
 }
 
+// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
