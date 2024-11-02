@@ -112,6 +112,7 @@ nav ul li a:hover {
 
 
 #category-form {
+<<<<<<< HEAD
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Creates a responsive row layout */
     gap: 20px; /* Adds space between grid items */
@@ -120,6 +121,10 @@ nav ul li a:hover {
 }
 
 
+=======
+}
+
+>>>>>>> 1cf0809cdc3c55ac5eaa894d641b02d9f53feff8
 section.browse-categories
 {
  display: grid;
