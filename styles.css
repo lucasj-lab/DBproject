@@ -269,7 +269,7 @@ form {
     margin: 2rem auto;
     padding: 1.5rem;
     background-color: #ffffff;
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
@@ -284,7 +284,7 @@ select,
 button {
     width: 80%;
     max-width: 500px; /* Ensures all inputs are the same width */
-    padding: 0.8rem;
+    padding: 0.5rem;
     margin: 0.5rem auto; /* Space between elements */
     border: 1px solid var(--border-color);
     border-radius: 15px; /* Pill shape */
@@ -307,7 +307,7 @@ select:focus {
 
 /* Form Button Styling */
 button {
-    padding: 0.8rem 1.2rem;
+    padding: 0.5rem 1rem;
     background-color: var(--primary-color);
     color: #fff;
     border: none;
