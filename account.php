@@ -59,7 +59,7 @@ $conn->close();
         <div class="user-icon">
             <a href="dashboard.php">
                 <img src="path/to/user-icon.png" alt="User Dashboard" title="Go to Dashboard">
-                <span><?php echo htmlspecialchars($_SESSION['user_id']); ?></span>
+                <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
             </a>
         </div>
     <?php endif; ?>
