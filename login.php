@@ -13,11 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    // Check if user exists and verify password
-    if ($user && password_verify($password, $user['password'])) {
+    // Check if user exists and if password field is set
+    if ($user && isset($user['password']) && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['UserID'];
         $_SESSION['is_admin'] = $user['is_admin'];
-        
+
         // Redirect based on admin status
         if ($user['is_admin'] == 1) {
             header("Location: admin_dashboard.php"); // Redirect to admin dashboard
@@ -45,4 +45,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if (isset($error_message)): ?>
         <p><?php echo htmlspecialchars($error_message); ?></p>
     <?php endif; ?>
-
