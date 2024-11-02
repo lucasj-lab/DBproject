@@ -608,3 +608,69 @@ footer p {
         align-items: center;
     }
 }
+
+
+/* User icon in the navigation bar */
+.user-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* User icon image */
+.user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* User icon text */
+.user-icon span {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Link styling for the user icon */
+.user-icon a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsive styling for mobile devices */
+@media (max-width: 768px) {
+    .user-icon {
+        top: 15px;
+        left: 15px;
+        flex-direction: column; /* Stack icon and name vertically on smaller screens */
+        align-items: center;
+    }
+
+    .user-icon img {
+        width: 30px; /* Reduce icon size on smaller screens */
+        height: 30px;
+    }
+
+    .user-icon span {
+        font-size: 14px; /* Reduce font size */
+        margin-top: 4px;
+    }
+}
+
+/* Further adjustments for very small screens (e.g., 480px and below) */
+@media (max-width: 480px) {
+    .user-icon {
+        left: 10px; /* Adjust spacing as needed */
+    }
+
+    .user-icon img {
+        width: 24px; /* Smaller icon */
+        height: 24px;
+    }
+
+    .user-icon span {
+        font-size: 12px; /* Smaller text */
+    }
+}
