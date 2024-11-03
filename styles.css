@@ -1020,6 +1020,7 @@ button[type="submit"]:hover {
     padding: 0;
     border-radius: 10px;
     width: 50px; /* Makes the button a small square, not a circle */
+    font-weight: lighter;
 }
 
 /* Arrow icon inside the button */
