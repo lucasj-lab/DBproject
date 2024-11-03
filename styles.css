@@ -810,8 +810,8 @@ nav ul li a {
 .user-icon {
     width: 40px;
     height: 40px;
-    background-color: #1a73e8; /* Icon background color */
-    color: #fff; /* Text color */
+    background-color: #ffffff; /* Icon background color */
+    color: #1a73e8; /* Text color */
     border-radius: 50%; /* Make it circular */
     display: flex;
     align-items: center;
