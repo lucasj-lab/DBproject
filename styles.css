@@ -262,7 +262,7 @@ h3 {
 }
 
 p {
-       
+       text-align: center;
         font-size: 1rem;
         margin-top: 1rem;
         color: var(#000);
@@ -760,12 +760,6 @@ footer p {
     }
 }
 
-/* 2 columns on medium screens */
-@media (max-width: 1023px) {
-    .category-grid {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
 
 /* 1 column on small screens */
 @media (max-width: 600px) {
