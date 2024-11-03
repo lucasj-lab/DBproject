@@ -94,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <button type="submit">Log In</button>
         </div>
     </form>
+    
     <style>
         /* General Reset and Styles */
         * {
