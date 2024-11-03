@@ -929,3 +929,52 @@ button {
     font-size: 1rem;
     cursor: pointer;
 }
+
+
+/* Styles specifically for the listing form group */
+.listing-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.listing-form-group input[type="text"],
+.listing-form-group input[type="number"],
+.listing-form-group input[type="file"],
+.listing-form-group select,
+.listing-form-group textarea,
+.listing-form-group button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Styling specifically for the city dropdown and input */
+.listing-city-group {
+    display: flex;
+    gap: 10px;
+}
+
+.listing-city-group select,
+.listing-city-group input[type="text"] {
+    flex: 1;
+}
+
+/* Submit button styling */
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
