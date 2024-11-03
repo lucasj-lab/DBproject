@@ -135,6 +135,10 @@ nav ul li a:hover {
     transition: transform 0.3s ease;
 }
 
+.listing-item p {
+    text-align: justify;
+  }
+
 .listing-item:hover {
     transform: scale(1.05);
 }
@@ -791,7 +795,7 @@ header {
 .logo h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: #ffffff;
 }
 
 nav ul {
