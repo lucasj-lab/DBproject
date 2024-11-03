@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'database_connection.php';
+require 'database_connection.php'; // Ensure this includes your MySQLi connection setup with $conn
 
 // Ensure only admins can access this page
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
@@ -9,14 +9,15 @@ if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
 }
 
 // Fetch all users
-$stmt = $conn->prepare("SELECT id, username, email, date_joined, is_admin FROM users");
+$stmt = $conn->prepare("SELECT id, username, email, date_joined, is_admin FROM user");
 $stmt->execute();
 $users = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Fetch all listings
-$stmt = $conn->prepare("SELECT listings.id, title, description, price, date_posted, users.username 
-                        FROM listings JOIN users ON listings.user_id = users.id");
+// Fetch all listings with user info
+$stmt = $conn->prepare("SELECT listings.id, title, description, price, date_posted, user.username 
+                        FROM listings 
+                        JOIN user ON listings.user_id = user.id");
 $stmt->execute();
 $listings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
