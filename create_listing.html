@@ -86,7 +86,8 @@
                 </div>
     
                 <label for="images">Upload Images:</label>
-                <input type="file" id="images" name="images[]" multiple>
+                <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
+                
     
                 <button type="submit">Submit</button>
             </div>
@@ -193,7 +194,30 @@
                 document.body.prepend(messageDiv);
             });
         };
-    </script>
+
+        function previewImages() {
+    const previewContainer = document.getElementById('preview-container');
+    previewContainer.innerHTML = ''; // Clear any previous previews
+    const files = document.getElementById('images').files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileReader = new FileReader();
+
+        fileReader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.style.width = '100px';
+            img.style.margin = '5px';
+            previewContainer.appendChild(img);
+        };
+
+        fileReader.readAsDataURL(file);
+    }
+}
+
+document.getElementById('images').addEventListener('change', previewImages);
+</script>
 
 <style>
     /* General Reset and Styles */

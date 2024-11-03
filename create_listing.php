@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require 'database_connection.php'; 
+require 'database_connection.php';
 
 // Function to get Category_ID from Category table
 function getCategoryID($conn, $categoryName) {
@@ -17,6 +17,18 @@ function getCategoryID($conn, $categoryName) {
     }
 }
 
+// Check if Imagick is installed and define the conversion function if it is
+if (class_exists('Imagick')) {
+    function convertToJpeg($inputPath, $outputPath) {
+        $imagick = new Imagick($inputPath);
+        $imagick->setImageFormat('jpeg');
+        $imagick->writeImage($outputPath);
+        $imagick->destroy();
+    }
+} else {
+    echo "Warning: Imagick is not installed, HEIC/HEIF images may not be supported.";
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_email = $_POST['user_email'];
     $category = $_POST['category'];
@@ -25,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = $_POST['price'];
     $state = $_POST['state'];
     $city = $_POST['city'] ?? $_POST['city-input'];
-    
 
     // Get the User_ID using the email
     $stmt = $conn->prepare("SELECT User_ID FROM user WHERE Email = ?");
@@ -58,13 +69,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
 
                     foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                        $imageName = basename($_FILES['images']['name'][$key]);
-                        $targetFilePath = $uploadDirectory . $imageName;
+                        $originalFileName = basename($_FILES['images']['name'][$key]);
+                        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+                        $uniqueImageName = uniqid() . '_' . pathinfo($originalFileName, PATHINFO_FILENAME);
 
-                        if (move_uploaded_file($tmpName, $targetFilePath)) {
-                            $imageUrl = $targetFilePath;
+                        // Check for HEIC or HEIF format and convert if needed
+                        if (($fileExtension === 'heic' || $fileExtension === 'heif') && class_exists('Imagick')) {
+                            $convertedFilePath = $uploadDirectory . $uniqueImageName . '.jpg';
+                            convertToJpeg($tmpName, $convertedFilePath);
+                            $imageUrl = $convertedFilePath;
+                        } else {
+                            // Save original format
+                            $targetFilePath = $uploadDirectory . $uniqueImageName . '.' . $fileExtension;
+                            if (move_uploaded_file($tmpName, $targetFilePath)) {
+                                $imageUrl = $targetFilePath;
+                            }
+                        }
 
-                            // Insert image data into images table
+                        // Insert image data into the database
+                        if (isset($imageUrl)) {
                             $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
                             $imgStmt = $conn->prepare($imageSql);
                             $imgStmt->bind_param("si", $imageUrl, $listing_id);
@@ -75,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // Return success message
                 echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
-
             } else {
                 echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
             }
@@ -89,4 +111,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
-
