@@ -986,7 +986,7 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
-/* Container to control layout */
+/* Container for layout */
 .search-container {
     position: relative;
     display: inline-block;
@@ -996,32 +996,34 @@ button[type="submit"]:hover {
 /* Style the search input */
 .search-input {
     width: 100%;
-    padding: 10px 40px 10px 15px; /* Right padding for the button */
+    padding: 10px 25px 10px 15px; /* Right padding for the button */
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 20px; /* Optional rounded corners */
+    border-radius: 5px; /* Optional rounded corners */
     outline: none;
 }
 
-/* Style the button with an arrow */
+/* Style the button with a small square and an arrow */
 .search-btn {
     position: absolute;
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
+    width: 12px;
+    height: 12px;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 10px;
+    padding: 0;
+    border-radius: 2px; /* Makes the button a small square, not a circle */
 }
 
-/* Style the arrow icon */
+/* Arrow icon inside the button */
 .arrow {
-    font-size: 16px;
+    font-size: 10px; /* Smaller font size for the arrow */
 }
