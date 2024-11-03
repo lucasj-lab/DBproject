@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Redirect after form submission
-    header("Location: register.php");
+    header("Location: register.login.php");
     exit();
 }
 ob_end_flush();
