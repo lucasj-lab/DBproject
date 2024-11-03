@@ -280,6 +280,11 @@ form {
     text-align: center;
 }
 
+form.listing-details-form p {
+    text-align: justify;
+  }
+
+
 form.category-item {
     width: -webkit-fill-available;
     background-color: white
