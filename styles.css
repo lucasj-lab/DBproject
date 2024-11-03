@@ -1035,3 +1035,9 @@ button[type="submit"]:hover {
     font-weight: bold;
     margin-bottom: 1rem;
 }
+
+.error {
+    color: red;
+    margin: 10px 0;
+    text-align: center;
+}
