@@ -53,10 +53,15 @@
         </div>
     </section>
     
-<form action="search_listings.php" method="get">
-  <input type="text" id="title" name="title" placeholder="Search">
-  <button type="submit">Search</button>
-</form>
+    <form action="search_listings.php" method="get" class="search-form">
+      <div class="search-container">
+        <input type="text" id="title" name="title" placeholder="Search" class="search-input" required>
+        <button type="submit" class="search-btn">
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </form>
+    
 <!-- Categories Section -->
 <section class="browse-categories">
   <h2>Browse Categories</h2>

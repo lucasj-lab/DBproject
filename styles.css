@@ -313,7 +313,6 @@ button {
     max-width: 500px; /* Ensures all inputs are the same width */
     padding: 0.5rem;
     margin: 0.5rem auto; /* Space between elements */
-    border: 1px solid var(--border-color);
     border-radius: 10px; /* Pill shape */
     font-size: 1rem;
     outline: none;
@@ -981,8 +980,48 @@ button[type="submit"] {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: -webkit-fill-available;
+    max-width: 280px;
 }
 
 button[type="submit"]:hover {
     background-color: #0056b3;
+}
+/* Container to control layout */
+.search-container {
+    position: relative;
+    display: inline-block;
+    width: 100%; /* Adjust width as needed */
+}
+
+/* Style the search input */
+.search-input {
+    width: 100%;
+    padding: 10px 40px 10px 15px; /* Right padding for the button */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Optional rounded corners */
+    outline: none;
+}
+
+/* Style the button with an arrow */
+.search-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style the arrow icon */
+.arrow {
+    font-size: 16px;
 }
