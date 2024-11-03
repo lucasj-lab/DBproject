@@ -994,7 +994,7 @@ button[type="submit"] {
 .search-btn {
 
     position: absolute;
-    top: 60%;
+    top: 84%;
     right: 10px;
     transform: translateY(-100%);
     background-color: #007bff;
