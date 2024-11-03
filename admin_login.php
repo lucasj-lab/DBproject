@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <header>
         <div class="logo">
-            <h1>Log In</h1>
+            <h1>Admin Log In</h1>
         </div>
     
         <!-- Desktop Navigation Menu -->
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </header>
 <body>
-    <h2>Log In</h2>
+    <h2>Admin</h2>
 
     <!-- Display error message if login fails -->
     <?php if (isset($error_message)): ?>
