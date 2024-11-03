@@ -1,7 +1,5 @@
-<?php
+<?php 
 session_start();
-
-// Redirect to login if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -9,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require 'database_connection.php';
 
-// Get user listings
 $user_id = $_SESSION['user_id'];
 $stmt = $conn->prepare("SELECT Listing_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
 $stmt->bind_param("i", $user_id);
@@ -28,76 +25,27 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-    <div class="logo">
-        <h1>My Account</h1>
+    <?php include 'header.php'; ?>
+
+    <div class="listings">
+        <h2>Your Listings</h2>
+        <?php if (!empty($listings)) : ?>
+            <ul>
+                <?php foreach ($listings as $listing) : ?>
+                    <li class="listing-item">
+                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+                        <p><?php echo htmlspecialchars($listing['Description']); ?></p>
+                        <p>$<?php echo htmlspecialchars($listing['Price']); ?></p>
+                        <p><?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+                        <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>">Edit</a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else : ?>
+            <p>You have no listings. <a href="create_listing.html">Create one here</a>.</p>
+        <?php endif; ?>
     </div>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="logout.php">Logout</a></li>
-        </ul>
-    </nav>
 
-    <!-- User Icon - Displays if user is logged in -->
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <div class="user-icon">
-            <a href="dashboard.php">
-                <img src="path/to/user-icon.png" alt="User Dashboard" title="Go to Dashboard">
-                <span><?php echo htmlspecialchars($_SESSION['user_id']); ?></span>
-            </a>
-        </div>
-    <?php endif; ?>
-
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="logout.php">Logout</a></li>
-        </ul>
-    </div>
-</header>
-
-<!-- JavaScript for mobile menu toggle -->
-<script>
-    function toggleMobileMenu() {
-        document.getElementById("mobileMenu").classList.toggle("active");
-    }
-</script>
-
-<div class="listings">
-    <h2 style="text-align: center;">Your Listings</h2>
-
-    <?php if (!empty($listings)) : ?>
-        <ul>
-            <?php foreach ($listings as $listing) : ?>
-                <li class="listing-item">
-                    <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                    <p><?php echo htmlspecialchars($listing['Description']); ?></p>
-                    <p><?php echo htmlspecialchars($listing['Price']); ?></p>
-                    <p><?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
-                    <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
-
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else : ?>
-        <p>You have no listings. <a href="create_listing.html">Create one here</a>.</p>
-    <?php endif; ?>
-</div>
-
-<footer>
-    <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
-    <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-    </div>
-</footer>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
