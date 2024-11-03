@@ -158,8 +158,8 @@ nav ul li a:hover {
     font-weight: normal;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 1rem;
     text-decoration: none;
+    width:-webkit-fill-available;
 }
 
 a.pill-button.back-to-listings {
