@@ -285,6 +285,11 @@ form {
     text-align: center;
 }
 
+form.category-item {
+    margin-top: auto;
+  }
+  
+
 form.listing-details-form p {
     text-align: justify;
   }
@@ -971,7 +976,7 @@ button[type="submit"] {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 12px;
+    padding: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
