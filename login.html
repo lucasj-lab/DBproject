@@ -68,16 +68,19 @@
         <?php endif; ?>
 
         <form action="login.php" method="POST">
-            <!-- Email input field -->
-
-            <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email address" required>
-
-            <!-- Password input field -->
+            <!-- Grouped input fields -->
+            <div class="log-in-fields">
+                <!-- Email input field -->
+                <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email address" required>
         
-            <input type="password" id="password" name="password" class="input-field" placeholder="Password" required>
-
-            <button type="submit">Log In</button>
+                <!-- Password input field -->
+                <input type="password" id="password" name="password" class="input-field" placeholder="Password" required>
+        
+                <!-- Login button -->
+                <button type="submit">Log In</button>
+            </div>
         </form>
+        
 
         <p>Don't have an account? <a href="register.html">Register here</a>.</p>
     </div>

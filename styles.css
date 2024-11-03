@@ -888,3 +888,23 @@ nav ul li a {
 .mobile-menu.active {
     display: block;
 }
+
+
+.log-in-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between inputs */
+    max-width: 300px;
+    margin: 0 auto; /* Center alignment */
+}
+
+.input-field {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+button {
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}
