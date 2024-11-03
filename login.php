@@ -1,14 +1,15 @@
-<?php if (isset($_SESSION['message'])): ?>
+<?php
+session_start();
+ob_start();
+require 'database_connection.php'; // Ensure this file initializes $conn for MySQLi connection
+
+// Display session messages, if any
+if (isset($_SESSION['message'])): ?>
     <div class="alert <?= $_SESSION['message_type']; ?>">
         <?= $_SESSION['message']; ?>
         <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
     </div>
-<?php endif; ?>
-
-
-<?php
-session_start();
-require 'database_connection.php'; // Ensure this file initializes $conn for MySQLi connection
+<?php endif;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -36,11 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $_SESSION['message'] = "Invalid email or password.";
         $_SESSION['message_type'] = 'error';
-        header("Location: login.html");
+        header("Location: login.php"); // Redirect to login page to display the error
         exit();
     }
 
     $stmt->close();
     $conn->close();
 }
-?>
+
+ob_end_flush();
