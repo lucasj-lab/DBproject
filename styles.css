@@ -781,7 +781,6 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    background-color: #f8f9fa;
 }
 
 .logo h1 {
@@ -825,7 +824,7 @@ nav ul li a {
 }
 
 .user-icon:hover {
-    background-color: #155bb5; /* Darken on hover */
+    background-color: #ffffff; /* Darken on hover */
 }
 
 /* Hamburger Menu for Mobile */
@@ -842,7 +841,7 @@ nav ul li a {
     position: absolute;
     top: 60px; /* Adjust based on header height */
     right: 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     width: 100%;
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
