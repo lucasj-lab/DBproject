@@ -1027,7 +1027,7 @@ button[type="submit"]:hover {
 .arrow {
     font-size: 10px; /* Smaller font size for the arrow */
 }
-.session-message {
+.session {
     background-color: #1a73e8;
     color: white;
     padding: 0.5rem;

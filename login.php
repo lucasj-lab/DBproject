@@ -21,6 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'];
         
+
+          // Set the success message
+    $_SESSION['message'] = "You have successfully logged in.";
+    $_SESSION['message_type'] = 'success';
+    
         // Redirect based on admin status
         header("Location: " . ($user['is_admin'] ? "admin_dashboard.php" : "user_dashboard.php"));
         exit();
