@@ -3,37 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file for styling -->
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
+    </script>
 </head>
 <body>
-    <h1>Welcome to Your Dashboard</h1>
-    <h2>Your Listings</h2>
-    
-    <?php if (!empty($listings)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($listings as $listing): ?>
+    <!-- Header Section with Full Navigation Menu and User Icon -->
+    <header>
+        <div class="logo">
+            <h1>User Dashboard</h1>
+        </div>
+
+        <!-- Desktop Navigation Menu -->
+        <nav>
+            <ul class="desktop-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- User Icon for Dashboard Access -->
+        <div class="user-icon">
+            <a href="user_dashboard.php">U</a> <!-- "U" as placeholder for the user icon -->
+        </div>
+
+        <!-- Hamburger Menu Icon for Mobile View -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1>Welcome to Your Dashboard</h1>
+        <h2>Your Listings</h2>
+        
+        <?php if (!empty($listings)): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($listing['title']); ?></td>
-                        <td><?php echo htmlspecialchars($listing['description']); ?></td>
-                        <td><?php echo htmlspecialchars($listing['price']); ?></td>
-                        <td>
-                            <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a> |
-                            <a href="delete_listing.php?id=<?php echo $listing['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                        </td>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>You have no listings yet.</p>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($listings as $listing): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($listing['title']); ?></td>
+                            <td><?php echo htmlspecialchars($listing['description']); ?></td>
+                            <td><?php echo htmlspecialchars($listing['price']); ?></td>
+                            <td>
+                                <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a> |
+                                <a href="delete_listing.php?id=<?php echo $listing['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>You have no listings yet.</p>
+        <?php endif; ?>
+    </main>
 </body>
 </html>

@@ -76,31 +76,40 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Search Results</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <!-- Hamburger menu for mobile view -->
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
-    </header>
+<header>
+    <h1>Search Results</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- User Icon for User Dashboard -->
+    <div class="user-icon">
+        <a href="user_dashboard.php">U</a> <!-- "U" for user; replace with initials or preferred character -->
+    </div>
+
+    <!-- Hamburger menu icon for mobile view -->
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+
+    <!-- Mobile dropdown menu for smaller screens -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </div>
+</header>
+
 
     <script>
         function toggleMobileMenu() {
