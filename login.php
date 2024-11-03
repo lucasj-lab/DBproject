@@ -1,20 +1,28 @@
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert <?= $_SESSION['message_type']; ?>">
+        <?= $_SESSION['message']; ?>
+        <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
+    </div>
+<?php endif; ?>
+
+
 <?php
 session_start();
-require 'database_connection.php'; // Ensure this includes your database connection as $conn
+require 'database_connection.php'; // Ensure this file initializes $conn for MySQLi connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
     // Prepare and execute the query to fetch user details by email
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    // Check if user exists and if password field is set
-    if ($user && isset($user['password']) && password_verify($password, $user['password'])) {
+    // Check if user exists and if the password matches
+    if ($user && password_verify($password, $user['Password'])) {
         $_SESSION['user_id'] = $user['UserID'];
         $_SESSION['is_admin'] = $user['is_admin'];
 
@@ -26,7 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         exit();
     } else {
-        $error_message = "Invalid email or password.";
+        $_SESSION['message'] = "Invalid email or password.";
+        $_SESSION['message_type'] = 'error';
+        header("Location: login.html");
+        exit();
     }
 
     $stmt->close();

@@ -1,13 +1,19 @@
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert <?= $_SESSION['message_type']; ?>">
+        <?= $_SESSION['message']; ?>
+        <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
+    </div>
+<?php endif; ?>
+
+
 <?php
-// Start session and output buffering at the top of the file
 session_start();
 ob_start();
 
-require 'database_connection.php';
+require 'database_connection.php'; // Ensure this file initializes $conn for MySQLi connection
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Use isset to check if form fields are set, and trim the inputs
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
@@ -24,24 +30,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['message'] = "Password must be at least 8 characters long.";
         $_SESSION['message_type'] = 'error';
     } else {
-        try {
-            // Check if email is already registered
-            $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
-            $stmt->execute([$email]);
-            if ($stmt->rowCount() > 0) {
-                $_SESSION['message'] = "Email is already registered.";
-                $_SESSION['message_type'] = 'error';
-            } else {
-                // Insert new user
-                $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$name, $email, password_hash($password, PASSWORD_DEFAULT), $date_joined]);
+        // Check if email is already registered
+        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $_SESSION['message'] = "Email is already registered.";
+            $_SESSION['message_type'] = 'error';
+        } else {
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->bind_param("ssss", $name, $email, $hashed_password, $date_joined);
+
+            if ($stmt->execute()) {
                 $_SESSION['message'] = "Registration successful! You can now log in.";
                 $_SESSION['message_type'] = 'success';
+            } else {
+                $_SESSION['message'] = "Registration failed: " . $stmt->error;
+                $_SESSION['message_type'] = 'error';
             }
-        } catch (PDOException $e) {
-            $_SESSION['message'] = "Error: " . htmlspecialchars($e->getMessage());
-            $_SESSION['message_type'] = 'error';
         }
+
+        $stmt->close();
     }
 
     // Redirect after form submission
@@ -49,6 +62,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit();
 }
 
-// Flush the output buffer
 ob_end_flush();
 ?>
