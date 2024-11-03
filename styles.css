@@ -285,10 +285,6 @@ form {
     text-align: center;
 }
 
-form.category-item {
-    margin-top: auto;
-  }
-  
 
 form.listing-details-form p {
     text-align: justify;
@@ -309,13 +305,8 @@ input[type="number"],
 textarea,
 select,
 button {
-   
-    max-width: 500px; /* Ensures all inputs are the same width */
-    padding: 0.5rem;
-    margin: 0.5rem auto; /* Space between elements */
     border-radius: 10px; /* Pill shape */
     font-size: 1rem;
-    outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
     background-color: #fff;
@@ -327,7 +318,7 @@ input[type="password"]:focus,
 input[type="number"]:focus,
 textarea:focus,
 select:focus {
-    border-color: var(--focus-border-color);
+  
     box-shadow: 0.3rem -0.3rem 0.6rem var(--hover-shadow-color);
 }
 
@@ -344,8 +335,7 @@ button {
 
 button:hover {
     background-color: var(--secondary-color);
-    color: #000;
-    transform: scale(1.05);
+    color: #ffffff;
 }
 
 /* Responsive Design */
@@ -982,9 +972,6 @@ button[type="submit"] {
 
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3;
-}
 
 /* Container for layout */
 .search-container {
@@ -1005,6 +992,7 @@ button[type="submit"]:hover {
 
 /* Style the button with a small square and an arrow */
 .search-btn {
+
     position: absolute;
     top: 60%;
     right: 10px;
@@ -1023,11 +1011,9 @@ button[type="submit"]:hover {
     font-weight: lighter;
 }
 
-/* Arrow icon inside the button */
-.arrow {
-    font-size: 10px; /* Smaller font size for the arrow */
-}
-.session {
+
+
+.session-message {
     background-color: #1a73e8;
     color: white;
     padding: 0.5rem;
