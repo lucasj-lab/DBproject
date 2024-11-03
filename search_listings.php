@@ -117,21 +117,21 @@ $conn->close();
         }
     </script>
 
-    <main>
+<main>
     <section id="listings">
     <?php if (!empty($listings[0]['Listing_ID'])) : ?>
         <?php foreach ($listings as $listing) : ?>
             <div class="listing-item">
-    <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
-    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-    <p>Price: $<?= htmlspecialchars($listing['Price']); ?></p>
-    <p>Posted by: <?= htmlspecialchars($listing['User_Name']); ?></p>
-    <p>Category: <?= htmlspecialchars($listing['Category_Name']); ?></p>
-    <p>Location: <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-    <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p> <!-- Display formatted date with fallback -->
-    <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-        View Listing
-    </button>
+                <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
+                <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+                <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+                <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
+                <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
+                <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
+                <p><strong>Posted on:</strong> <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
+                <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                    View Listing
+                </button>
 </div>
 
         <?php endforeach; ?>
@@ -142,7 +142,123 @@ $conn->close();
     </main>
 
     <footer>
-        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
     </footer>
+
+    
+    <!-- Add styles and hamburger CSS -->
+    <style>
+        /* General Reset and Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo h1 {
+            margin-left: 3em;
+            font-size: 1.8rem;
+
+        }
+
+        .desktop-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .desktop-menu li {
+            margin-left: 1rem;
+        }
+
+        .desktop-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1a73e8;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+        }
+
+        .mobile-menu ul li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .desktop-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
+
+        /* Listings Section */
+        .listing-item {
+            background-color: #fff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .listing-item h3 {
+            margin: 0.5rem 0;
+        }
+    </style>
 </body>
 </html>
