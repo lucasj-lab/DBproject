@@ -979,13 +979,13 @@ button[type="submit"] {
     padding: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: -webkit-fill-available;
-    max-width: 280px;
+
 }
 
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
+
 /* Container for layout */
 .search-container {
     position: relative;
@@ -1006,19 +1006,20 @@ button[type="submit"]:hover {
 /* Style the button with a small square and an arrow */
 .search-btn {
     position: absolute;
-    top: 50%;
+    top: 60%;
     right: 10px;
-    transform: translateY(-50%);
+    transform: translateY(-100%);
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    display: flex;
+    display:inline-block;
     align-items: center;
     justify-content: center;
     font-size: 10px;
     padding: 0;
-    border-radius: px; /* Makes the button a small square, not a circle */
+    border-radius: 10px;
+    width: 50px; /* Makes the button a small square, not a circle */
 }
 
 /* Arrow icon inside the button */
