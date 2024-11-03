@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $_SESSION['message'] = "Invalid email or password.";
         $_SESSION['message_type'] = 'error';
-        header("Location: login.php");
+        header("Location: index.html");
         exit();
     }
 
