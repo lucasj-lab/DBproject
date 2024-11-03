@@ -1,16 +1,7 @@
 <?php
 session_start();
 ob_start();
-
-require 'database_connection.php'; // Ensure this file initializes $conn for MySQLi connection
-
-// Display session messages, if any
-if (isset($_SESSION['message'])): ?>
-    <div class="alert <?= $_SESSION['message_type']; ?>">
-        <?= $_SESSION['message']; ?>
-        <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
-    </div>
-<?php endif;
+require 'database_connection.php'; // Initializes $conn for MySQLi connection
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
@@ -57,8 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Redirect after form submission
-    header("Location: register.php"); // Redirect to register page to display the message
+    header("Location: register.php");
     exit();
 }
-
 ob_end_flush();
