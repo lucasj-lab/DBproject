@@ -42,6 +42,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Admin Login</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
+<header>
+        <div class="logo">
+            <h1>Log In</h1>
+        </div>
+    
+        <!-- Desktop Navigation Menu -->
+        <nav>
+            <ul class="desktop-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">Create Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </nav>
+    
+        <!-- User Icon -->
+        <div class="user-icon">
+            <a href="user_dashboard.php">U</a> <!-- "U" as placeholder, replace with initials if needed -->
+        </div>
+    
+        <!-- Hamburger Menu Icon for Mobile View -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    
+        <!-- Mobile Dropdown Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">Create Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </div>
+    </header>
 <body>
     <h2>Log In</h2>
 
