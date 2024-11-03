@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    // Verify password and initialize session if login is successful
-    if ($user && password_verify($password, $user['password'])) {
+    // Check if the user exists and if the password matches
+    if ($user && isset($user['password']) && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'];
