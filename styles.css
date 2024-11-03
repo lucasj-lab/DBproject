@@ -280,6 +280,12 @@ form {
     text-align: center;
 }
 
+form.category-item {
+    width: -webkit-fill-available;
+    background-color: white
+  }
+
+
 /* Uniform Input Field Styling */
 input[type="text"],
 input[type="email"],
@@ -391,7 +397,7 @@ button:hover {
 
 form.category-item {
     width: -webkit-fill-available;
-    background-color: #639ae1;
+    background-color: #ffffff;
   }
 
 form.category-item {
