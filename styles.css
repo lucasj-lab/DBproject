@@ -1027,3 +1027,12 @@ button[type="submit"] {
     margin: 10px 0;
     text-align: center;
 }
+
+
+
+.category-image {
+    width: 100px; /* Set desired width */
+    height: auto;
+    margin-bottom: 8px;
+    display: block;
+}
