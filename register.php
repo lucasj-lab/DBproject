@@ -4,13 +4,13 @@ ob_start();
 require 'database_connection.php'; // Initializes $conn for MySQLi connection
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = isset($_POST['username']) ? htmlspecialchars(trim($_POST['username'])) : '';
+    $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
     $date_joined = date('Y-m-d');
 
     // Basic validation
-    if (empty($username) || empty($email) || empty($password)) {
+    if (empty($name) || empty($email) || empty($password)) {
         $_SESSION['message'] = "All fields are required.";
         $_SESSION['message_type'] = 'error';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -31,9 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['message_type'] = 'error';
         } else {
             // Insert new user
-            $stmt = $conn->prepare("INSERT INTO user (Username, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bind_param("ssss", $username, $email, $hashed_password, $date_joined);
+            $stmt->bind_param("ssss", $name, $email, $hashed_password, $date_joined);
 
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Registration successful! You can now log in.";

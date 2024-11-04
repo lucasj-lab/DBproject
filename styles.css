@@ -1035,4 +1035,7 @@ button[type="submit"] {
     height: auto;
     margin-bottom: 8px;
     display: block;
+    border-radius: 15px;
 }
+
+
