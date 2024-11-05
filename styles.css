@@ -1030,6 +1030,7 @@ button[type="submit"] {
     position: relative;
     display: inline-block;
     width: 100%;
+    z-index: 1;
     /* Adjust width as needed */
 }
 
@@ -1039,7 +1040,6 @@ button[type="submit"] {
     padding: 10px 25px 10px 15px;
     /* Right padding for the button */
     font-size: 16px;
-    border: 1px solid #ccc;
     border-radius: 5px;
     /* Optional rounded corners */
     outline: none;
