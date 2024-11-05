@@ -1039,3 +1039,17 @@ button[type="submit"] {
 }
 
 
+.about {
+    width: 100%;               /* Ensures the section spans full width */
+    padding: 20px;             /* Adds padding around the section */
+    box-sizing: border-box;    /* Includes padding within width */
+    display: flex;             /* Centers the content */
+    justify-content: center;   /* Center aligns the content horizontally */
+}
+
+.about p {
+    max-width: 600px;          /* Sets a maximum width for the paragraph */
+    margin: 0 auto;            /* Centers the paragraph within the section */
+    line-height: 1.6;          /* Improves readability */
+    padding: 10px;             /* Adds padding within the paragraph */
+}
