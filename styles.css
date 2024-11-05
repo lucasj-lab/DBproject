@@ -829,7 +829,7 @@ nav ul li a {
 }
 
 .user-icon:hover {
-    background-color: #ffffff; /* Darken on hover */
+    background-color: #333; /* Darken on hover */
 }
 
 /* Hamburger Menu for Mobile */
@@ -859,10 +859,11 @@ nav ul li a {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    align-items: flex-end;
 }
 
 .mobile-menu ul li a {
-    color: hsl(0, 0%, 100%);
+    color: #1a73e8;
     text-decoration: none;
     font-weight: bold;
 }
