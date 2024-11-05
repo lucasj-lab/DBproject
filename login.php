@@ -8,7 +8,7 @@ require 'database_connection.php';
 
 $error_message = ""; // Initialize error message variable
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST")
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
@@ -20,21 +20,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        
-        // Ensure password field is not null
-        if ($user['Password'] && password_verify($password, $user['Password'])) {
+        if (password_verify($password, $user['Password'])) {
             $_SESSION['user_id'] = $user['User_ID'];
-            echo "Login successful!";
-            // Redirect or proceed
+            $_SESSION['message'] = "Login successful!";
+            $_SESSION['message_type'] = 'success';
+            header("Location: dashboard.php"); // Redirect to the dashboard or another page
+            exit();
         } else {
-            echo "Incorrect password.";
+            $_SESSION['message'] = "Incorrect password.";
+            $_SESSION['message_type'] = 'error';
         }
-    } else {
-        echo "Email not found.";
-    }
-    
 
-    $stmt->close();
 }
 ?>
 
