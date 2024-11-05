@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require 'database_connection.php'; 
+require 'database_connection.php';
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['id'])) {
@@ -66,39 +66,41 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($listing['Title']); ?></title>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
-    
+
 <body>
 
-<header>
-    <h1>Listing Details</h1>
-</header>
+    <header>
+        <h1>Listing Details</h1>
+    </header>
 
-<main>
-    <!-- Form wrapper for centered listing details -->
-    <form class="listing-details-form">
-        <?php if (!empty($listing['Image_URL'])): ?>
-            <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
-        <?php endif; ?>
-        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-        <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-        <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-        <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-        <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+    <main>
+        <!-- Form wrapper for centered listing details -->
+        <form class="listing-details-form">
+            <?php if (!empty($listing['Image_URL'])): ?>
+                <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+            <?php endif; ?>
+            <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+            <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+            <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?>
+            </p>
+            <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
 
-        <!-- Back to Listings button -->
-        <a href="listings.html" class="pill-button back-to-listings">Back to Listings</a>
-    </form>
-</main>
+            <!-- Back to Listings button -->
+            <a href="listings.html" class="pill-button back-to-listings">Back to Listings</a>
+        </form>
+    </main>
 
-<footer>
+    <footer>
         <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
         <div class="footer-links">
             <a href="#">Privacy Policy</a>
@@ -107,6 +109,5 @@ $conn->close();
     </footer>
 
 </body>
+
 </html>
-
-

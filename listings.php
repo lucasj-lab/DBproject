@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require 'database_connection.php'; 
+require 'database_connection.php';
 
 // Set charset to UTF-8 for proper encoding
 $conn->set_charset("utf8");
@@ -33,7 +33,7 @@ if ($result && $result->num_rows > 0) {
         // Format the date using PHP DateTime
         $datePosted = new DateTime($row['Date_Posted']);
         $formattedDate = $datePosted->format('l, F jS, Y'); // Example: Friday, November 1st, 2024
-    
+
         // Add the formatted date to the row array
         $row['Formatted_Date'] = $formattedDate;
         $listings[] = $row;

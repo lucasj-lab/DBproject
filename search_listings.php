@@ -4,7 +4,7 @@ session_start();
 
 // Enable error reporting
 error_reporting(E_ALL);
-ini_set('display_errors', 1); 
+ini_set('display_errors', 1);
 
 require 'database_connection.php';
 
@@ -50,10 +50,10 @@ if ($result->num_rows > 0) {
         } else {
             $formattedDate = "Date not available";
         }
-        
+
         // Add the formatted date to the row array
         $row['Formatted_Date'] = $formattedDate;
-        
+
         // Add the modified row to the listings array
         $listings[] = $row;
     }
@@ -69,46 +69,48 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<header>
-    <h1>Search Results</h1>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
+    <header>
+        <h1>Search Results</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.php">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
 
-    <!-- User Icon for User Dashboard -->
-    <div class="user-icon">
-        <a href="user_dashboard.php">U</a> <!-- "U" for user; replace with initials or preferred character -->
-    </div>
+        <!-- User Icon for User Dashboard -->
+        <div class="user-icon">
+            <a href="user_dashboard.php">U</a> <!-- "U" for user; replace with initials or preferred character -->
+        </div>
 
-    <!-- Hamburger menu icon for mobile view -->
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <!-- Hamburger menu icon for mobile view -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
-    <!-- Mobile dropdown menu for smaller screens -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </div>
-</header>
+        <!-- Mobile dropdown menu for smaller screens -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.php">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
 
 
     <script>
@@ -117,28 +119,31 @@ $conn->close();
         }
     </script>
 
-<main>
-    <section id="listings">
-    <?php if (!empty($listings[0]['Listing_ID'])) : ?>
-        <?php foreach ($listings as $listing) : ?>
-            <div class="listing-item">
-                <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
-                <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
-                <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-                <p><strong>Posted on:</strong> <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
-                <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                    View Listing
-                </button>
-</div>
+    <main>
+        <section id="listings">
+            <?php if (!empty($listings[0]['Listing_ID'])): ?>
+                <?php foreach ($listings as $listing): ?>
+                    <div class="listing-item">
+                        <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
+                        <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+                        <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+                        <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
+                        <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
+                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
+                            <?= htmlspecialchars($listing['State']); ?></p>
+                        <p><strong>Posted on:</strong>
+                            <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
+                        <button type="button" class="pill-button"
+                            onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                            View Listing
+                        </button>
+                    </div>
 
-        <?php endforeach; ?>
-    <?php else : ?>
-        <p><?= htmlspecialchars($listings['message']); ?></p>
-    <?php endif; ?>
-</section>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p><?= htmlspecialchars($listings['message']); ?></p>
+            <?php endif; ?>
+        </section>
     </main>
 
     <footer>
@@ -149,7 +154,7 @@ $conn->close();
         </div>
     </footer>
 
-    
+
     <!-- Add styles and hamburger CSS -->
     <style>
         /* General Reset and Styles */
@@ -255,10 +260,11 @@ $conn->close();
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .listing-item h3 {
             margin: 0.5rem 0;
         }
     </style>
 </body>
+
 </html>

@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'];
-        
+
         // Redirect based on admin status
         header("Location: " . ($user['is_admin'] ? "admin_dashboard.php" : "user_dashboard.php"));
         exit();
@@ -34,12 +34,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <?php include 'header.php'; ?>
 
@@ -52,7 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <form action="" method="POST">
         <div class="log-in-fields">
-            <input type="email" name="email" placeholder="Enter your email address" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
+            <input type="email" name="email" placeholder="Enter your email address"
+                value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Log In</button>
         </div>
@@ -60,4 +63,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <?php include 'footer.php'; ?>
 </body>
+
 </html>

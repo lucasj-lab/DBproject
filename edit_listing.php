@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require 'database_connection.php'; 
+require 'database_connection.php';
 
 // Check if listing_id is provided in the URL
 if (!isset($_GET['listing_id'])) {
@@ -56,51 +56,53 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<header>
-    <div class="logo">
-        <h1>Edit Listing</h1>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
-    <!-- Hamburger menu icon for mobile view -->
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    <!-- Mobile dropdown menu for smaller screens -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">Create Listings</a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </div>
-</header>
 
-<!-- JavaScript function for mobile menu toggle -->
-<script>
-    function toggleMobileMenu() {
-        document.getElementById("mobileMenu").classList.toggle("active");
-    }
-</script>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Edit Listing</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.php">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+        <!-- Hamburger menu icon for mobile view -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <!-- Mobile dropdown menu for smaller screens -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">Create Listings</a></li>
+                <li><a href="login.html">Log In</a></li>
+                <li><a href="signup.php">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- JavaScript function for mobile menu toggle -->
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById("mobileMenu").classList.toggle("active");
+        }
+    </script>
 
     <div class="edit-listing">
-        <?php if (!empty($error_message)) : ?>
+        <?php if (!empty($error_message)): ?>
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>
 
@@ -126,4 +128,5 @@ $conn->close();
         </div>
     </footer>
 </body>
+
 </html>

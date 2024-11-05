@@ -7,7 +7,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <header>
     <div class="logo">
-        <h1><?php echo isset($_SESSION['is_admin']) && $_SESSION['is_admin'] ? "Admin Dashboard" : "User Dashboard"; ?></h1>
+        <h1><?php echo isset($_SESSION['is_admin']) && $_SESSION['is_admin'] ? "Admin Dashboard" : "User Dashboard"; ?>
+        </h1>
     </div>
     <nav class="desktop-menu">
         <ul>
@@ -32,7 +33,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
     <!-- Hamburger Menu for Mobile View -->
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    
+
     <!-- Mobile Dropdown Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <ul>

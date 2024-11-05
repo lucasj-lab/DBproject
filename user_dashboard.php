@@ -24,11 +24,13 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <?php include 'header.php'; ?>
 
@@ -58,7 +60,8 @@ $conn->close();
                             <td><?php echo htmlspecialchars($listing['date_posted']); ?></td>
                             <td>
                                 <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a> |
-                                <a href="delete_listing.php?id=<?php echo $listing['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                                <a href="delete_listing.php?id=<?php echo $listing['id']; ?>"
+                                    onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -71,4 +74,5 @@ $conn->close();
 
     <?php include 'footer.php'; ?>
 </body>
+
 </html>

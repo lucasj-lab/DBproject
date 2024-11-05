@@ -1,12 +1,14 @@
 <!-- display_listings.php -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Listings</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
+
 <body>
     <header>
         <h1>All Listings</h1>
@@ -15,7 +17,7 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="create_listing.html">New Listing</a></li>
                 <li><a href="login.html">Log In</a></li>
-                <li><a href="signup.html">Sign up</a></li>
+                <li><a href="signup.php">Sign up</a></li>
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
@@ -86,4 +88,5 @@
         }
     </script>
 </body>
+
 </html>
