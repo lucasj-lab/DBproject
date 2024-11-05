@@ -3,7 +3,7 @@
 $servername = "database-1-instance-1.ctkqko2k074a.us-east-2.rds.amazonaws.com";
 $username = "admin";
 $password = "Butterball3!";
-$dbname = "project-DB";
+$dbname = "projectDB";
 
 // Create a MySQLi connection
 $conn = new mysqli($servername, $username, $password, $dbname);
