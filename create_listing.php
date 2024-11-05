@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to create a listing.");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST")
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $stmt->error;
     }
-}
 
     $stmt->close();
     $conn->close();
@@ -136,3 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt->close();
 }
+
+$conn->close();
+?>
