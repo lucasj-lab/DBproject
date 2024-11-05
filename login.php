@@ -13,29 +13,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
     // Prepare and execute the query to fetch user details by email
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-
-    // Check if the user exists and if the password matches
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['name'] = $user['name'];
-        $_SESSION['is_admin'] = $user['is_admin'];
-
-
-        // Set the success message
-        $_SESSION['message'] = "You have successfully logged in.";
-        $_SESSION['message_type'] = 'success';
-
-        // Redirect based on admin status
-        header("Location: " . ($user['is_admin'] ? "admin_dashboard.php" : "user_dashboard.php"));
-        exit();
+    
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        
+        // Ensure password field is not null
+        if ($user['Password'] && password_verify($password, $user['Password'])) {
+            $_SESSION['user_id'] = $user['User_ID'];
+            echo "Login successful!";
+            // Redirect or proceed
+        } else {
+            echo "Incorrect password.";
+        }
     } else {
-        $error_message = "Invalid email or password.";
+        echo "Email not found.";
     }
+    
 
     $stmt->close();
 }
