@@ -931,6 +931,7 @@ nav ul li a {
 /* Active Mobile Menu */
 .mobile-menu.active {
     display: block;
+    width:fit-content;
 }
 
 
