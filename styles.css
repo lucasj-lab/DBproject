@@ -881,6 +881,14 @@ nav ul li a {
 
 }
 
+/* Style for the user icon with light green outline if logged in */
+.user-icon.logged-in a {
+    border: 2px solid lightgreen;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+
 /* Mobile Menu */
 .mobile-menu {
     display: none;
@@ -1119,4 +1127,16 @@ button[type="submit"] {
     /* Improves readability */
     padding: 10px;
     /* Adds padding within the paragraph */
+}
+
+/* Hide arrows in number input fields on Chrome, Safari, Edge, and Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide arrows in number input fields on Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }

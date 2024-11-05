@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to create a listing.");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST")
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
 
     $stmt->close();
-    $conn->close();
+}
 
 // Function to get Category_ID from Category table
 function getCategoryID($conn, $categoryName) {
@@ -65,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $state = $_POST['state'];
     $city = $_POST['city'] ?? $_POST['city-input'];
 
-    // Get the User_ID using the email
     $stmt = $conn->prepare("SELECT User_ID FROM user WHERE Email = ?");
     $stmt->bind_param("s", $user_email);
     $stmt->execute();
@@ -75,20 +74,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_result($user_id);
         $stmt->fetch();
 
-        // Get the Category_ID using the function
         $category_id = getCategoryID($conn, $category);
 
         if ($category_id === false) {
             echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
         } else {
-            // Insert new listing
             $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
             $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
             
             if ($stmt->execute()) {
-                $listing_id = $stmt->insert_id; // Get the ID of the new listing
+                $listing_id = $stmt->insert_id;
 
-                // Check if images were uploaded
                 if (!empty($_FILES['images']['name'][0])) {
                     $uploadDirectory = 'uploads/';
                     if (!is_dir($uploadDirectory)) {
@@ -100,20 +96,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
                         $uniqueImageName = uniqid() . '_' . pathinfo($originalFileName, PATHINFO_FILENAME);
 
-                        // Check for HEIC or HEIF format and convert if needed
                         if (($fileExtension === 'heic' || $fileExtension === 'heif') && class_exists('Imagick')) {
                             $convertedFilePath = $uploadDirectory . $uniqueImageName . '.jpg';
                             convertToJpeg($tmpName, $convertedFilePath);
                             $imageUrl = $convertedFilePath;
                         } else {
-                            // Save original format
                             $targetFilePath = $uploadDirectory . $uniqueImageName . '.' . $fileExtension;
                             if (move_uploaded_file($tmpName, $targetFilePath)) {
                                 $imageUrl = $targetFilePath;
                             }
                         }
 
-                        // Insert image data into the database
                         if (isset($imageUrl)) {
                             $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
                             $imgStmt = $conn->prepare($imageSql);
@@ -123,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 }
 
-                // Return success message
                 echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
@@ -138,3 +130,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Listing</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Hide arrows in number input fields */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Create New Listing</h1>
+        </div>
+        <nav>
+            <ul class="desktop-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.php">New Listing</a></li>
+                <li><a href="listings.php">View All Listings</a></li>
+                <li><a href="login.php">Log In</a></li>
+                <li><a href="signup.php">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="post-ad">
+        <h2>Post Your Ad</h2>
+        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+            <select id="category" name="category" required>
+                <option value="">--Select Category--</option>
+                <option value="Auto">Auto</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="text" id="title" name="title" placeholder="Title" required>
+            <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+            <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+            <select id="state" name="state" onchange="updateCities()" required>
+                <option value="">--Select State--</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+            </select>
+            <div class="listing-city-group">
+                <select id="city-dropdown" name="city" onchange="toggleInput()" required>
+                    <option value="">--Select City--</option>
+                </select>
+                <input type="text" id="city-input" name="city-input" placeholder="Type your city here if not listed" oninput="clearDropdown()" />
+            </div>
+            <label for="images">Upload Images:</label>
+            <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
+    </footer>
+</body>
+</html>
