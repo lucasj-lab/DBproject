@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
             $_SESSION['user_id'] = $user['User_ID'];
             $_SESSION['message'] = "Login successful!";
             $_SESSION['message_type'] = 'success';
-            header("Location: dashboard.php"); // Redirect to the dashboard or another page
+            header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
             exit();
         } else {
             $_SESSION['message'] = "Incorrect password.";

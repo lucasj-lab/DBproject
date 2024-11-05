@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT username, email, date_joined FROM user WHERE id = ?");
+$stmt = $conn->prepare("SELECT name, email, date_joined FROM user WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
@@ -35,7 +35,7 @@ $conn->close();
     <?php include 'header.php'; ?>
 
     <main>
-        <h1>Welcome, <?php echo htmlspecialchars($user['username']); ?></h1>
+        <h1>Welcome, <?php echo htmlspecialchars($user['name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
         <p><strong>Member Since:</strong> <?php echo htmlspecialchars($user['date_joined']); ?></p>
 
