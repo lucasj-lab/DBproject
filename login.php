@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
     <?php endif; ?>
 
-    <form action="" method="POST">
+    <form action="login.php" method="POST">
         <div class="log-in-fields">
             <input type="email" name="email" placeholder="Enter your email address"
                 value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
