@@ -3,19 +3,22 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+// Set default values for session variables to avoid undefined index warnings
+$isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
+$username = $_SESSION['username'] ?? 'User'; // Defaults to 'User' if 'username' is not set
 ?>
 
 <header>
     <div class="logo">
-        <h1><?php echo isset($_SESSION['is_admin']) && $_SESSION['is_admin'] ? "Admin Dashboard" : "User Dashboard"; ?>
-        </h1>
+        <h1><?php echo $isAdmin ? "Admin Dashboard" : "User Dashboard"; ?></h1>
     </div>
     <nav class="desktop-menu">
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="create_listing.html">New Listing</a></li>
             <li><a href="listings.html">View All Listings</a></li>
-            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+            <?php if ($isAdmin): ?>
                 <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
             <?php else: ?>
                 <li><a href="user_dashboard.php">User Dashboard</a></li>
@@ -26,8 +29,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
     <!-- User Icon -->
     <div class="user-icon">
-        <a href="<?php echo $_SESSION['is_admin'] ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>">
-            <?php echo isset($_SESSION['username']) ? substr($_SESSION['username'], 0, 1) : 'U'; ?>
+        <a href="<?php echo $isAdmin ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>">
+            <?php echo substr($username, 0, 1); // Display the first letter of the username or 'U' ?>
         </a>
     </div>
 
@@ -40,7 +43,7 @@ if (session_status() == PHP_SESSION_NONE) {
             <li><a href="index.html">Home</a></li>
             <li><a href="create_listing.html">New Listing</a></li>
             <li><a href="listings.html">View All Listings</a></li>
-            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+            <?php if ($isAdmin): ?>
                 <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
             <?php else: ?>
                 <li><a href="user_dashboard.php">User Dashboard</a></li>
