@@ -122,7 +122,7 @@ ob_end_flush();
                 <input type="password" id="password" name="password" placeholder="Password" required
                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                        title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
-                <button type="submit">Register</button>
+                <button type="submit">Sign up</button>
             </div>
         </form>
         
