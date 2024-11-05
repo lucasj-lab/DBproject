@@ -73,7 +73,7 @@ $conn->close();
             <li><a href="create_listing.html">New Listing</a></li>
             <li><a href="listings.html">View All Listings</a></li>
             <li><a href="login.html">Login</a></li>
-            <li><a href="register.html">Register</a></li>
+            <li><a href="signup.html">Sign up</a></li>
             <li><a href="about.html">About</a></li>
         </ul>
     </nav>
@@ -86,7 +86,7 @@ $conn->close();
             <li><a href="create_listing.html">New Listing</a></li>
             <li><a href="listings.html">Create Listings</a></li>
             <li><a href="login.html">Log In</a></li>
-            <li><a href="register.html">Register</a></li>
+            <li><a href="signup.html">Sign up</a></li>
             <li><a href="about.html">About</a></li>
         </ul>
     </div>

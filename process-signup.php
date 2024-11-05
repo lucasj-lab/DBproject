@@ -60,12 +60,12 @@ ob_end_flush();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>User Sign up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>User Registration</h1>
+        <h1>User Sign up</h1>
         <nav class="desktop-menu">
             <ul>
                 <li><a href="index.html">Home</a></li>
