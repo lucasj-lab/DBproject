@@ -57,7 +57,6 @@ if (class_exists('Imagick')) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_email = $_POST['user_email'];
     $category = $_POST['category'];
     $title = $_POST['title'];
     $description = $_POST['description'];

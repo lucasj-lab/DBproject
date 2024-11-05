@@ -27,10 +27,9 @@
         </nav>
 
         <!-- User Icon for User Dashboard -->
-      <!-- User Icon with conditional class for styling if logged in -->
-      <div class="user-icon <?php echo isset($_SESSION['user_id']) ? 'logged-in' : ''; ?>">
-        <a href="user_dashboard.php">U</a>
-    </div>
+        <div class="user-icon">
+            <a href="user_dashboard.php">U</a> <!-- "U" as a placeholder for the user icon -->
+        </div>
 
         <!-- Hamburger Menu Icon for Mobile View -->
         <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
@@ -53,9 +52,7 @@
         <h2>Post Your Ad</h2>
         <p>Please <a href="signup.php">Sign up</a> to create a new listing.</p>
         <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-
-
-                <input type="text" id="title" name="title" placeholder="Title" required>
+            <div class="listing-form-group">
                     <select id="category" name="category" required>
                     <option value="">--Select Category--</option>
                     <option value="Auto">Auto</option>
@@ -63,6 +60,8 @@
                     <option value="Furniture">Furniture</option>
                     <option value="Other">Other</option>
                 </select>
+
+                <input type="text" id="title" name="title" placeholder="Title" required>
 
                 <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
 
