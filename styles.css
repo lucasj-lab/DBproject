@@ -1104,9 +1104,9 @@ button[type="submit"] {
     box-sizing: border-box;
     /* Includes padding within width */
     display: flex;
+    flex-direction: column;
     /* Centers the content */
-    justify-content: center;
-    /* Center aligns the content horizontally */
+    align-items: center;
 }
 
 .about p {
