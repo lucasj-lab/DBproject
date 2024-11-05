@@ -1,6 +1,5 @@
 <?php 
 session_start();
-ob_start();
 require 'database_connection.php'; // Initializes $conn for MySQLi connection
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -46,13 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $stmt->close();
     }
-
-    // Redirect after form submission
-    header("Location: login.php");
-    exit();
 }
-
-ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -75,13 +68,12 @@ ob_end_flush();
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
-    
+
         <div class="user-icon">
             <a href="user_dashboard.php">U</a> <!-- Placeholder initial for the user icon -->
         </div>
-    
+
         <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    
         <div class="mobile-menu" id="mobileMenu">
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -115,7 +107,7 @@ ob_end_flush();
             ?>
         <?php endif; ?>
 
-        <form action="" method="POST">
+        <form action="signup.php" method="POST">
             <div class="register-fields">
                 <input type="text" id="name" name="name" placeholder="Name" required>
                 <input type="email" id="email" name="email" placeholder="Email" required>
@@ -138,75 +130,7 @@ ob_end_flush();
     </footer>
 
     <style>
-        /* General Reset and Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background-color: #f5f5f5; color: #333; }
-        
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #1a73e8;
-            color: #fff;
-            padding: 1rem;
-            position: relative;
-        }
-
-        .desktop-menu ul, .mobile-menu ul {
-            list-style: none;
-        }
-
-        .desktop-menu ul {
-            display: flex;
-        }
-
-        .desktop-menu li {
-            margin-left: 1rem;
-        }
-
-        .desktop-menu li a, .mobile-menu li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .user-icon {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Mobile Menu */
-        .hamburger {
-            display: none;
-            font-size: 1.8rem;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #1a73e8;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-menu.active { display: block; }
-        .mobile-menu ul { display: flex; flex-direction: column; }
-        .mobile-menu ul li { margin-bottom: 1rem; }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .desktop-menu { display: none; }
-            .hamburger { display: block; }
-        }
-
-        .registration, footer { text-align: center; margin: 2rem auto; }
-        .register-fields input, .register-fields button { display: block; margin: 0.5rem auto; padding: 0.5rem; width: 80%; max-width: 300px; }
+        /* Styles for message display */
         .message-box { padding: 1rem; margin: 1rem auto; border-radius: 5px; width: 80%; max-width: 400px; color: #fff; text-align: center; }
         .success { background-color: #4CAF50; }
         .error { background-color: #f44336; }
