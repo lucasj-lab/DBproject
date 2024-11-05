@@ -36,10 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->bind_param("ssss", $name, $email, $hashed_password, $date_joined);
 
             if ($stmt->execute()) {
-                $_SESSION['message'] = "Registration successful! You can now log in.";
+                $_SESSION['message'] = "Sign up successful! You can now log in.";
                 $_SESSION['message_type'] = 'success';
             } else {
-                $_SESSION['message'] = "Registration failed: " . $stmt->error;
+                $_SESSION['message'] = "Sign up failed: " . $stmt->error;
                 $_SESSION['message_type'] = 'error';
             }
         }
