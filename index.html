@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rookielist</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
+
   <!-- External CSS file -->
 </head>
 
@@ -27,8 +29,11 @@
 
     <!-- User Icon for User Dashboard -->
     <div class="user-icon">
-      <a href="user_dashboard.php">U</a> <!-- "U" for user -->
-    </div>
+      <a href="user_dashboard.php" aria-label="User Dashboard">
+          <i class="fas fa-user"></i> <!-- Font Awesome user icon -->
+      </a>
+  </div>
+  
 
     <!-- Hamburger menu icon for mobile view -->
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
@@ -45,6 +50,9 @@
       </ul>
     </div>
   </header>
+
+
+  
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">

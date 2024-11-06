@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
     $confirmPassword = isset($_POST['confirm_password']) ? trim($_POST['confirm_password']) : '';
     $dateJoined = date('Y-m-d');
-    
+
     // Basic validation
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
         $_SESSION['message'] = "All fields are required.";
@@ -75,8 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </nav>
 
         <div class="user-icon">
-            <a href="user_dashboard.php">U</a> <!-- Placeholder initial for the user icon -->
+            <a href="user_dashboard.php" aria-label="User Dashboard">
+                <i class="fas fa-user"></i> <!-- Font Awesome user icon -->
+            </a>
         </div>
+
 
         <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
         <div class="mobile-menu" id="mobileMenu">

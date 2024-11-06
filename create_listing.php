@@ -7,25 +7,25 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get user details from session
+    // Process the form submission
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
     $price = floatval($_POST['price']);
     $state = trim($_POST['state']);
     $city = trim($_POST['city']) ?: trim($_POST['city-input']);
-    $category = $_POST['category'];
+    $category = ucfirst(strtolower(trim($_POST['category'])));
 
-    // Check if all fields are filled
+    // Check required fields
     if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city)) {
-        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+        echo "<p>All fields are required.</p>";
         exit();
     }
 
     // Get Category_ID
     $category_id = getCategoryID($conn, $category);
     if ($category_id === false) {
-        echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
+        echo "<p>Invalid category selected.</p>";
         exit();
     }
 
@@ -34,51 +34,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
 
     if ($stmt->execute()) {
-        $listing_id = $stmt->insert_id; // Get the ID of the new listing
-
-        // Check if images were uploaded
-        if (!empty($_FILES['images']['name'][0])) {
-            $uploadDirectory = 'uploads/';
-            if (!is_dir($uploadDirectory)) {
-                mkdir($uploadDirectory, 0777, true);
-            }
-
-            foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                $originalFileName = basename($_FILES['images']['name'][$key]);
-                $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-                $uniqueImageName = uniqid() . '_' . pathinfo($originalFileName, PATHINFO_FILENAME);
-
-                // Check for HEIC or HEIF format and convert if needed
-                if (($fileExtension === 'heic' || $fileExtension === 'heif') && class_exists('Imagick')) {
-                    $convertedFilePath = $uploadDirectory . $uniqueImageName . '.jpg';
-                    convertToJpeg($tmpName, $convertedFilePath);
-                    $imageUrl = $convertedFilePath;
-                } else {
-                    // Save original format
-                    $targetFilePath = $uploadDirectory . $uniqueImageName . '.' . $fileExtension;
-                    if (move_uploaded_file($tmpName, $targetFilePath)) {
-                        $imageUrl = $targetFilePath;
-                    }
-                }
-
-                // Insert image data into the database
-                if (isset($imageUrl)) {
-                    $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
-                    $imgStmt = $conn->prepare($imageSql);
-                    $imgStmt->bind_param("si", $imageUrl, $listing_id);
-                    $imgStmt->execute();
-                    $imgStmt->close();
-                }
-            }
-        }
-
-        echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
+        echo "<p>Listing created successfully! <a href='account.php'>View your listings.</a></p>";
     } else {
-        echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
+        echo "<p>Database error: Unable to create listing.</p>";
     }
 
     $stmt->close();
-}
+    $conn->close();
+} else {
+    // Display the HTML form for creating a new listing
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Listing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
+</head>
+<body>
+    <?php include 'header.php'; ?>
+    <div class="post-ad">
+        <h2>Post Your Ad</h2>
+        <p>Please <a href="signup.php">Sign up</a> to create a new listing.</p>
+        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+            <div class="listing-form-group">
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <select id="category" name="category" required>
+                    <option value="">--Select Category--</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+                <select id="state" name="state" onchange="updateCities()" required>
+                    <option value="">--Select State--</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <!-- Add other states as needed -->
+                </select>
+                <div class="listing-city-group">
+                    <select id="city-dropdown" name="city" onchange="toggleInput()" required>
+                        <option value="">--Select City--</option>
+                    </select>
+                    <input type="text" id="city-input" name="city-input" placeholder="Type your city if not listed" oninput="clearDropdown()">
+                </div>
+                <label for="images">Upload Images:</label>
+                <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<?php
+} // End of POST check
+?>
+
+<?php
+// Functions and image processing code here
 
 // Function to get Category_ID from Category table
 function getCategoryID($conn, $categoryName) {
@@ -99,9 +121,5 @@ if (class_exists('Imagick')) {
         $imagick->writeImage($outputPath);
         $imagick->destroy();
     }
-} else {
-    echo "Warning: Imagick is not installed, HEIC/HEIF images may not be supported.";
 }
-
-$conn->close();
 ?>
