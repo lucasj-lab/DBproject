@@ -7,24 +7,8 @@ session_start();
 
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rookielist</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
-
-  <!-- External CSS file -->
-</head>
-
-<header>
-  <?php include 'header.php'; ?>
-</header>
-
 <body>
-
+<?php include 'header.php'; ?>
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
@@ -40,7 +24,6 @@ session_start();
       <input type="text" id="title" name="title" placeholder="Search" class="search-input" required>
       <button type="submit" class="search-btn">
         <light>Search</light>
-      </button>
       </button>
     </div>
   </form>
