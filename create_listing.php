@@ -79,12 +79,93 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="CA">California</option>
                     <!-- Add other states as needed -->
                 </select>
-                <div class="listing-city-group">
-                    <select id="city-dropdown" name="city" onchange="toggleInput()" required>
-                        <option value="">--Select City--</option>
-                    </select>
-                    <input type="text" id="city-input" name="city-input" placeholder="Type your city if not listed" oninput="clearDropdown()">
-                </div>
+
+    <select id="city-dropdown">
+    <option value="">--Select City--</option>
+
+    <optgroup label="Alabama (AL)">
+        <option value="Birmingham">Birmingham</option>
+        <option value="Montgomery">Montgomery</option>
+        <option value="Huntsville">Huntsville</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Tuscaloosa">Tuscaloosa</option>
+    </optgroup>
+
+    <optgroup label="Alaska (AK)">
+        <option value="Anchorage">Anchorage</option>
+        <option value="Fairbanks">Fairbanks</option>
+        <option value="Juneau">Juneau</option>
+        <option value="Sitka">Sitka</option>
+        <option value="Ketchikan">Ketchikan</option>
+    </optgroup>
+
+    <optgroup label="Arizona (AZ)">
+        <option value="Phoenix">Phoenix</option>
+        <option value="Tucson">Tucson</option>
+        <option value="Mesa">Mesa</option>
+        <option value="Chandler">Chandler</option>
+        <option value="Scottsdale">Scottsdale</option>
+    </optgroup>
+
+    <optgroup label="Arkansas (AR)">
+        <option value="Little Rock">Little Rock</option>
+        <option value="Fort Smith">Fort Smith</option>
+        <option value="Fayetteville">Fayetteville</option>
+        <option value="Springdale">Springdale</option>
+        <option value="Jonesboro">Jonesboro</option>
+    </optgroup>
+
+    <optgroup label="California (CA)">
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="San Diego">San Diego</option>
+        <option value="San Jose">San Jose</option>
+        <option value="Sacramento">Sacramento</option>
+    </optgroup>
+
+    <optgroup label="Colorado (CO)">
+        <option value="Denver">Denver</option>
+        <option value="Colorado Springs">Colorado Springs</option>
+        <option value="Aurora">Aurora</option>
+        <option value="Fort Collins">Fort Collins</option>
+        <option value="Lakewood">Lakewood</option>
+    </optgroup>
+
+    <optgroup label="Connecticut (CT)">
+        <option value="Hartford">Hartford</option>
+        <option value="New Haven">New Haven</option>
+        <option value="Stamford">Stamford</option>
+        <option value="Bridgeport">Bridgeport</option>
+        <option value="Waterbury">Waterbury</option>
+    </optgroup>
+
+    <optgroup label="Delaware (DE)">
+        <option value="Wilmington">Wilmington</option>
+        <option value="Dover">Dover</option>
+        <option value="Newark">Newark</option>
+        <option value="Middletown">Middletown</option>
+        <option value="Smyrna">Smyrna</option>
+    </optgroup>
+
+    <optgroup label="Florida (FL)">
+        <option value="Jacksonville">Jacksonville</option>
+        <option value="Miami">Miami</option>
+        <option value="Tampa">Tampa</option>
+        <option value="Orlando">Orlando</option>
+        <option value="St. Petersburg">St. Petersburg</option>
+    </optgroup>
+
+    <optgroup label="Georgia (GA)">
+        <option value="Atlanta">Atlanta</option>
+        <option value="Augusta">Augusta</option>
+        <option value="Columbus">Columbus</option>
+        <option value="Savannah">Savannah</option>
+        <option value="Athens">Athens</option>
+    </optgroup>
+
+    <!-- Add other states and cities as needed -->
+</select>
+
                 <label for="images">Upload Images:</label>
                 <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
                 <button type="submit">Submit</button>
