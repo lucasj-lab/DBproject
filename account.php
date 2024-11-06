@@ -44,7 +44,7 @@ $conn->close();
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
-            <p>You have no listings. <a href="create_listing.html">Create one here</a>.</p>
+            <p>You have no listings. <a href="create_listing.php">Create one here</a>.</p>
         <?php endif; ?>
     </div>
 

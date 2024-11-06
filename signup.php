@@ -106,14 +106,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <p>Already have an account? <a href="login.php">Log in here</a>.</p>
     </div>
-
+    
     <footer>
-        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
+        <?php include 'footer.php'; ?>
     </footer>
+
 
     <script>
         document.querySelector("form").addEventListener("submit", function (e) {
