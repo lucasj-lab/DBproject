@@ -42,13 +42,13 @@ $conn->close();
 <body>
     <!-- Header Section with Full Navigation Menu and User Icon -->
 
-       
-        <header>
-<?php include 'header.php'; ?>
-        </header>
-        <div class="logo">
-            <h1>User Dashboard</h1>
-        </div>
+
+    <header>
+        <?php include 'header.php'; ?>
+    </header>
+    <div class="logo">
+        <h1>User Dashboard</h1>
+    </div>
 
     <!-- Main Content -->
     <main>
@@ -89,10 +89,12 @@ $conn->close();
                             </td>
 
                             <td>
-                                <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>">Edit</a> |
+                                <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>"
+                                    class="button button-edit">Edit</a>
                                 <a href="delete_listing.php?id=<?php echo $listing['Listing_id']; ?>"
-                                    onclick="return confirm('Are you sure?')">Delete</a>
+                                    class="button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

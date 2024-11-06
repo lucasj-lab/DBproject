@@ -10,18 +10,11 @@
 </head>
 
 <body>
-    <header>
-        <h1>All Listings</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="login.html">Log In</a></li>
-                <li><a href="signup.php">Sign up</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-    </header>
+    
+<header>
+<?php include 'header.php'; ?>
+</header>
+
 
     <main>
         <section id="listings">

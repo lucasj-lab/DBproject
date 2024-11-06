@@ -2,6 +2,8 @@
 session_start();
 require 'database_connection.php';
 
+$uploadDir = '/var/www/html/uploads/'; 
+
 if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to create a listing.");
 }
