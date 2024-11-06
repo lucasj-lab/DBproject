@@ -64,10 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
 
 
-<?php include 'header.php'; ?>
-
     <header>
-        <h1>User Sign up</h1>
+        <?php include 'header.php'; ?>
     </header>
 
     <!-- JavaScript to toggle the mobile menu -->
