@@ -1,5 +1,5 @@
-
-    <script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById("mobileMenu");
             mobileMenu.classList.toggle("active");
@@ -56,7 +56,7 @@
             toggleInput();
         }
 
-        document.getElementById('listing-form').onsubmit = function (event) {
+        document.getElementById('listing-form').onsubmit = function(event) {
             event.preventDefault();
 
             const formData = new FormData(this);
@@ -66,11 +66,15 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.id = 'message';
+                    let messageDiv = document.getElementById('message');
+                    if (!messageDiv) {
+                        messageDiv = document.createElement('div');
+                        messageDiv.id = 'message';
+                        document.body.prepend(messageDiv);
+                    }
                     messageDiv.style.display = 'block';
 
-                    if (data.success) {
+                    if (data && data.success) {
                         messageDiv.style.color = 'green';
                         messageDiv.textContent = 'Listing created successfully!';
                         this.reset();
@@ -78,16 +82,18 @@
                         messageDiv.style.color = 'red';
                         messageDiv.textContent = data.message || 'Failed to create listing.';
                     }
-                    document.body.prepend(messageDiv);
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    const messageDiv = document.createElement('div');
-                    messageDiv.id = 'message';
+                    let messageDiv = document.getElementById('message');
+                    if (!messageDiv) {
+                        messageDiv = document.createElement('div');
+                        messageDiv.id = 'message';
+                        document.body.prepend(messageDiv);
+                    }
                     messageDiv.style.display = 'block';
                     messageDiv.style.color = 'red';
                     messageDiv.textContent = 'An error occurred while creating the listing.';
-                    document.body.prepend(messageDiv);
                 });
         };
 
@@ -100,7 +106,7 @@
                 const file = files[i];
                 const fileReader = new FileReader();
 
-                fileReader.onload = function (event) {
+                fileReader.onload = function(event) {
                     const img = document.createElement('img');
                     img.src = event.target.result;
                     img.style.width = '100px';
@@ -113,4 +119,7 @@
         }
 
         document.getElementById('images').addEventListener('change', previewImages);
-    </script>
+        document.getElementById('state').addEventListener('change', updateCities);
+        document.getElementById('city-dropdown').addEventListener('change', toggleInput);
+    });
+</script>
