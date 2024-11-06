@@ -62,6 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
+
+
+<?php include 'header.php'; ?>
+
     <header>
         <h1>User Sign up</h1>
         <nav class="desktop-menu">
