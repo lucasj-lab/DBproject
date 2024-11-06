@@ -264,19 +264,6 @@ nav ul li a:hover {
     margin-bottom: 10px;
 }
 
-a.button.button-edit {
-    background: #0056b3;
-    color: #ffffff;
-    padding-inline: 20px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    border-radius: 10px;
-    margin: 0px;
-  }
-
-
-
-
 /* Pill Button Styling */
 .pill-button {
     display: inline-block;
