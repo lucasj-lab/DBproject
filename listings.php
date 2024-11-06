@@ -57,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Active Listings</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -129,28 +130,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
         </section>
     </main>
 
-    <?php include 'footer.php'; ?>
+
 
     <!-- Add styles for responsive design and general layout -->
     <style>
         /* General Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background-color: #f5f5f5; color: #333; }
-        header { background-color: #1a73e8; color: #fff; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .desktop-menu, .mobile-menu ul { list-style: none; }
-        .desktop-menu li a, .mobile-menu ul li a { color: #fff; text-decoration: none; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .desktop-menu,
+        .mobile-menu ul {
+            list-style: none;
+        }
+
+        .desktop-menu li a,
+        .mobile-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
         /* Responsive Menu */
-        .hamburger { display: none; font-size: 1.8rem; color: #fff; cursor: pointer; }
-        .mobile-menu { display: none; position: absolute; top: 100%; right: 0; background-color: #1a73e8; padding: 1rem; border-radius: 8px; box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1); }
-        .mobile-menu.active { display: block; width: fit-content; }
-        .mobile-menu ul { display: flex; flex-direction: column; }
-        @media (max-width: 768px) { .desktop-menu { display: none; } .hamburger { display: block; } }
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1a73e8;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+            width: fit-content;
+        }
+
+        .mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
 
         /* Listings Section */
-        .listing-item { background-color: #fff; padding: 1rem; margin: 1rem 0; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); }
-        .listing-item h3 { margin: 0.5rem 0; }
+        .listing-item {
+            background-color: #fff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .listing-item h3 {
+            margin: 0.5rem 0;
+        }
     </style>
 </body>
+<?php include 'footer.php'; ?>
 
 </html>

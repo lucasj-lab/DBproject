@@ -90,10 +90,11 @@ $conn->close();
 
                             <td>
                                 <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>"
-                                    class="button button-edit">Edit</a>
+                                    class="pill-button button-edit">Edit</a>
                                 <a href="delete_listing.php?id=<?php echo $listing['Listing_id']; ?>"
-                                    class="button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                                    class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
+
 
                         </tr>
                     <?php endforeach; ?>
@@ -104,10 +105,12 @@ $conn->close();
         <?php endif; ?>
     </main>
 
-    <!-- Footer Section -->
-    <footer >
-        <?php include 'footer.php'; ?>
-    </foote>
+
 </body>
+
+<!-- Footer Section -->
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
 
 </html>

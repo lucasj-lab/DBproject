@@ -253,7 +253,7 @@ nav ul li a:hover {
 }
 
 .listing-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 /* Image Styling */
@@ -455,7 +455,7 @@ button {
 
 button:hover {
     background-color: var(--secondary-color);
-    color: #ffffff;
+    color: #000000;
 }
 
 /* Responsive Design */
@@ -1082,10 +1082,6 @@ button {
     cursor: pointer;
 }
 
-button.search-btn:hover {
-    background-color: #fbbc04;
-      color: #000
-  }
 
 
 /* Styles specifically for the listing form group */
@@ -1280,4 +1276,37 @@ input[type=number] {
 
 .pill-button:hover {
     background-color: #0056b3; /* Darker color on hover */
+}
+
+
+/* Pill-Shaped Button Styling */
+.pill-button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px; /* Creates the pill shape */
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+    text-align: center;
+}
+
+/* Edit Button Styling */
+.pill-button.button-edit {
+    background-color: #007bff; /* Blue color for Edit */
+}
+
+.pill-button.button-edit:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Delete Button Styling */
+.pill-button.button-delete {
+    background-color: #d9534f; /* Red color for Delete */
+}
+
+.pill-button.button-delete:hover {
+    background-color: #c9302c; /* Darker red on hover */
 }
