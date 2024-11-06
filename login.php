@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    
+     <?php include 'header.php'; ?>
 
     <h2>User Log In</h2>
 
