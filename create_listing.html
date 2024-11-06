@@ -196,7 +196,7 @@
                     messageDiv.style.color = 'red';
                     messageDiv.textContent = 'An error occurred while creating the listing.';
                     document.body.prepend(messageDiv);
-                });
+                });;
         };
 
         function previewImages() {
@@ -230,6 +230,15 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        div#message 
+        {
+  text-align: center;
+  font-weight: bolder;
+  background-color: #1d2636;
+  font-stretch: extra-expanded;
+        }
+
 
         body {
             font-family: Arial, sans-serif;

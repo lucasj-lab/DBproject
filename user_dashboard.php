@@ -32,6 +32,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard</title>
@@ -42,6 +43,7 @@ $conn->close();
         }
     </script>
 </head>
+
 <body>
     <!-- Header Section with Full Navigation Menu and User Icon -->
     <header>
@@ -85,40 +87,50 @@ $conn->close();
         <!-- Personalized welcome message with user data -->
         <h1>Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
-        <p><strong>Member Since:</strong> <?php echo htmlspecialchars($user['Date_Joined']); ?></p>
+        <p><strong>Member Since:</strong>
+            <?php
+            $dateJoined = new DateTime($user['Date_Joined']);
+            echo htmlspecialchars($dateJoined->format('l, F jS, Y'));
+            ?>
+        </p>
 
         <h2>Your Listings</h2>
 
         <?php if (!empty($listings)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Date Posted</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($listings as $listing): ?>
-                <tr>
-                <td><?php echo htmlspecialchars($listing['Title']); ?></td>
-                <td><?php echo htmlspecialchars($listing['Description']); ?></td>
-                <td>$<?php echo htmlspecialchars($listing['Price']); ?></td>
-                <td><?php echo htmlspecialchars($listing['Date_Posted']); ?></td>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Date Posted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($listings as $listing): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($listing['Title']); ?></td>
+                            <td><?php echo htmlspecialchars($listing['Description']); ?></td>
+                            <td>$<?php echo htmlspecialchars($listing['Price']); ?></td>
+                            <td>
+                                <?php
+                                $datePosted = new DateTime($listing['Date_Posted']);
+                                echo htmlspecialchars($datePosted->format('l, F jS, Y'));
+                                ?>
+                            </td>
 
-                    <td>
-                        <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>">Edit</a> |
-                        <a href="delete_listing.php?id=<?php echo $listing['Listing_id']; ?>"
-                            onclick="return confirm('Are you sure?')">Delete</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                            <td>
+                                <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>">Edit</a> |
+                                <a href="delete_listing.php?id=<?php echo $listing['Listing_id']; ?>"
+                                    onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php else: ?>
-        <p>You have no listings yet. <a href="create_listing.html">Create one here</a>.</p>
+            <p>You have no listings yet. <a href="create_listing.html">Create one here</a>.</p>
         <?php endif; ?>
     </main>
 
@@ -131,4 +143,5 @@ $conn->close();
         </div>
     </footer>
 </body>
+
 </html>
