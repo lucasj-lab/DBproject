@@ -89,12 +89,11 @@ $conn->close();
                             </td>
 
                             <td>
-                                <a href="edit_listing.php?id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="pill-button button-edit">Edit</a>
-                                <a href="delete_listing.php?id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                                <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                                    class="button button-edit">Edit</a>
+                                <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                                    class="button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
-
 
                         </tr>
                     <?php endforeach; ?>
@@ -105,12 +104,14 @@ $conn->close();
         <?php endif; ?>
     </main>
 
-
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </footer>
 </body>
-
-<!-- Footer Section -->
-<footer>
-    <?php include 'footer.php'; ?>
-</footer>
 
 </html>
