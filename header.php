@@ -28,7 +28,7 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
 
     <nav class="desktop-menu">
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="create_listing.php">New Listing</a></li>
         <li><a href="listings.php">View All Listings</a></li>
         <?php if ($isAdmin): ?>
@@ -54,8 +54,8 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
     <!-- Mobile Dropdown Menu -->
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="create_listing.html">New Listing</a></li>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="create_listing.php">New Listing</a></li>
         <li><a href="listings.html">View All Listings</a></li>
         <?php if ($isAdmin): ?>
           <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
