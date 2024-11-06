@@ -1082,6 +1082,11 @@ button {
     cursor: pointer;
 }
 
+button.search-btn:hover {
+    background-color: #fbbc04;
+      color: #000
+  }
+
 
 /* Styles specifically for the listing form group */
 .listing-form-group {
@@ -1091,11 +1096,6 @@ button {
     max-width: 500px;
     margin: 0 auto;
 }
-
-button.search-btn:hover {
-    background-color: #fbbc04;
-      color: #000
-  }
 
 
 
