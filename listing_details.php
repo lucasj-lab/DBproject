@@ -1,8 +1,4 @@
 <?php
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require 'database_connection.php';
 
 // Check if the Listing_ID is set in the URL
@@ -75,12 +71,14 @@ $conn->close();
 </head>
 
 <body>
-
     <header>
-        <h1>Listing Details</h1>
+    <?php include 'header.php'; ?>
     </header>
 
     <main>
+        <h1>
+            Listing Details
+        </h1>
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">
             <?php if (!empty($listing['Image_URL'])): ?>
@@ -100,7 +98,7 @@ $conn->close();
                 ?>
             </p>
             <!-- Back to Listings button -->
-            <a href="listings.html" class="pill-button back-to-listings">Back to Listings</a>
+            <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
         </form>
     </main>
 

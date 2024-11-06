@@ -1,5 +1,9 @@
+<?php
+require 'database_connection.php';
 
-<?php include 'header.php'; ?>
+session_start();
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +17,9 @@
 
   <!-- External CSS file -->
 </head>
-
+<header>
+<?php include 'header.php'; ?>
+</header>
 <body>
 
   <!-- Hero Section -->
