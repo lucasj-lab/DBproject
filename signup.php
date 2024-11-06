@@ -2,9 +2,7 @@
 session_start();
 require 'database_connection.php';
 
-
-
-// Initializes $conn for MySQLi connection
+// Initialize MySQLi connection and process the form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
@@ -36,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['message'] = "Email is already registered.";
             $_SESSION['message_type'] = 'error';
         } else {
-            // Insert new user3
+            // Insert new user
             $stmt = $conn->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bind_param("ssss", $name, $email, $hashed_password, $date_joined);
+            $stmt->bind_param("ssss", $name, $email, $hashed_password, $dateJoined);
 
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Sign up successful! You can now log in.";
@@ -49,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION['message_type'] = 'error';
             }
         }
-
         $stmt->close();
     }
 }
@@ -66,27 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
-
-
-    <header>
-        <?php include 'header.php'; ?>
-    </header>
-
-    <!-- JavaScript to toggle the mobile menu -->
-    <script>
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById("mobileMenu");
-            mobileMenu.classList.toggle("active");
-        }
-    </script>
+    <?php include 'header.php'; ?>
 
     <div class="registration">
         <h2>Create an Account</h2>
 
         <!-- Display session messages if they exist -->
         <?php if (isset($_SESSION['message'])): ?>
-            <div class="message-box <?= ($_SESSION['message_type'] === 'success') ? 'success' : 'error'; ?>">
-                <p><?= $_SESSION['message']; ?></p>
+            <div class="message-box <?php echo ($_SESSION['message_type'] === 'success') ? 'success' : 'error'; ?>">
+                <p><?php echo $_SESSION['message']; ?></p>
             </div>
             <?php
             unset($_SESSION['message']);
@@ -101,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="password" id="password" name="password" placeholder="Password" required
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                     title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
-
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password"
                     required title="Please re-enter your password to confirm.">
                 <button type="submit">Sign up</button>
@@ -110,13 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <p>Already have an account? <a href="login.php">Log in here</a>.</p>
     </div>
-    
-    <footer>
-        <?php include 'footer.php'; ?>
-    </footer>
 
+    <?php include 'footer.php'; ?>
 
     <script>
+        // JavaScript for client-side password match validation
         document.querySelector("form").addEventListener("submit", function (e) {
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirm_password").value;
@@ -139,14 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             color: #fff;
             text-align: center;
         }
-
-        .success {
-            background-color: #4CAF50;
-        }
-
-        .error {
-            background-color: #f44336;
-        }
+        .success { background-color: #4CAF50; }
+        .error { background-color: #f44336; }
     </style>
 </body>
 

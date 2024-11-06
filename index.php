@@ -17,9 +17,11 @@ session_start();
 
   <!-- External CSS file -->
 </head>
+
 <header>
 <?php include 'header.php'; ?>
 </header>
+
 <body>
 
   <!-- Hero Section -->
