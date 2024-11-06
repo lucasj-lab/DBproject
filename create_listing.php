@@ -92,6 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
+    <footer>
+    <?php include 'footer.php'; ?>
+</footer>
     <script src="script.js"></script>
 </body>
 </html>

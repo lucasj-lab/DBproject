@@ -1,9 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-
-
 session_start();
 require 'database_connection.php';
 
@@ -46,41 +41,14 @@ $conn->close();
 
 <body>
     <!-- Header Section with Full Navigation Menu and User Icon -->
-    <header>
+
+       
+        <header>
+<?php include 'header.php'; ?>
+        </header>
         <div class="logo">
             <h1>User Dashboard</h1>
         </div>
-
-        <!-- Desktop Navigation Menu -->
-        <nav>
-            <ul class="desktop-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </nav>
-
-        <!-- User Icon for Dashboard Access -->
-        <div class="user-icon">
-            <a href="user_dashboard.php">U</a> <!-- "U" as placeholder for the user icon -->
-        </div>
-
-        <!-- Hamburger Menu Icon for Mobile View -->
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-
-        <!-- Mobile Dropdown Menu -->
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </div>
-    </header>
 
     <!-- Main Content -->
     <main>
@@ -130,7 +98,7 @@ $conn->close();
                 </tbody>
             </table>
         <?php else: ?>
-            <p>You have no listings yet. <a href="create_listing.html">Create one here</a>.</p>
+            <p>You have no listings yet. <a href="create_listing.php">Create one here</a>.</p>
         <?php endif; ?>
     </main>
 

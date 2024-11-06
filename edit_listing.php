@@ -119,14 +119,11 @@ $conn->close();
             <button type="submit">Update Listing</button>
         </form>
     </div>
+    
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
 
-    <footer>
-        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-    </footer>
 </body>
 
 </html>
