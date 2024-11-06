@@ -1234,3 +1234,43 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+/* General Alert Styling */
+.alert {
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: #fff;
+}
+
+/* Success Alert */
+.alert-success {
+    background-color: #28a745; /* Green background */
+    border-left: 5px solid #218838;
+}
+
+/* Error Alert */
+.alert-error {
+    background-color: #d9534f; /* Red background */
+    border-left: 5px solid #c9302c;
+}
+
+/* Pill-Shaped Button Styling */
+.pill-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff; /* Customize as needed */
+    border-radius: 50px; /* Creates the pill shape */
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.pill-button:hover {
+    background-color: #0056b3; /* Darker color on hover */
+}

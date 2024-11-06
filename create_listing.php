@@ -35,10 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
 
     if ($stmt->execute()) {
-        echo "<p>Listing created successfully! <a href='account.php'>View your listings.</a></p>";
+        echo "<div class='alert alert-success'>Listing created successfully! <a href='my_listings.php' class='pill-button'>View your listings</a></div>";
     } else {
-        echo "<p>Database error: Unable to create listing.</p>";
+        echo "<div class='alert alert-error'>Database error: Unable to create listing.</div>";
     }
+    
 
     $stmt->close();
     $conn->close();
