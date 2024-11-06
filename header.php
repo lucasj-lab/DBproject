@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Set default values for session variables to avoid undefined index warnings
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
-$username = $_SESSION['username'] ?? 'User'; // Defaults to 'User' if 'username' is not set
+$username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is not set
 ?>
 
 <header>

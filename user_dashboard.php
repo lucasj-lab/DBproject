@@ -15,14 +15,14 @@ if (!isset($_SESSION['user_id'])) {
 
 // Fetch user data
 $user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT name, email, date_joined FROM user WHERE id = ?");
+$stmt = $conn->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 // Fetch user's listings
-$stmt = $conn->prepare("SELECT id, title, description, price, date_posted FROM listings WHERE user_id = ?");
+$stmt = $conn->prepare("SELECT User_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $listings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -83,9 +83,9 @@ $conn->close();
     <!-- Main Content -->
     <main>
         <!-- Personalized welcome message with user data -->
-        <h1>Welcome, <?php echo htmlspecialchars($user['name']); ?></h1>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-        <p><strong>Member Since:</strong> <?php echo htmlspecialchars($user['date_joined']); ?></p>
+        <h1>Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
+        <p><strong>Member Since:</strong> <?php echo htmlspecialchars($user['Date_Joined']); ?></p>
 
         <h2>Your Listings</h2>
 
@@ -103,13 +103,14 @@ $conn->close();
             <tbody>
                 <?php foreach ($listings as $listing): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($listing['title']); ?></td>
-                    <td><?php echo htmlspecialchars($listing['description']); ?></td>
-                    <td>$<?php echo htmlspecialchars($listing['price']); ?></td>
-                    <td><?php echo htmlspecialchars($listing['date_posted']); ?></td>
+                <td><?php echo htmlspecialchars($listing['Title']); ?></td>
+                <td><?php echo htmlspecialchars($listing['Description']); ?></td>
+                <td>$<?php echo htmlspecialchars($listing['Price']); ?></td>
+                <td><?php echo htmlspecialchars($listing['Date_Posted']); ?></td>
+
                     <td>
-                        <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a> |
-                        <a href="delete_listing.php?id=<?php echo $listing['id']; ?>"
+                        <a href="edit_listing.php?id=<?php echo $listing['Listing_id']; ?>">Edit</a> |
+                        <a href="delete_listing.php?id=<?php echo $listing['Listing_id']; ?>"
                             onclick="return confirm('Are you sure?')">Delete</a>
                     </td>
                 </tr>

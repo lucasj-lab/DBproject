@@ -4,10 +4,10 @@ require 'database_connection.php'; // Initializes $conn for MySQLi connection
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $confirmPassword = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
-    $date_joined = date('Y-m-d');
-
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $confirmPassword = isset($_POST['confirm_password']) ? trim($_POST['confirm_password']) : '';
+    $dateJoined = date('Y-m-d');
+    
     // Basic validation
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
         $_SESSION['message'] = "All fields are required.";

@@ -91,8 +91,7 @@ $conn->close();
             <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
             <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
             <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?>
-            </p>
+            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
             <p><strong>Date Posted:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
 
             <!-- Back to Listings button -->
