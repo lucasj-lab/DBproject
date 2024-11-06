@@ -1,6 +1,10 @@
 <?php
 session_start();
-require 'database_connection.php'; // Initializes $conn for MySQLi connection
+require 'database_connection.php';
+
+
+
+// Initializes $conn for MySQLi connection
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
