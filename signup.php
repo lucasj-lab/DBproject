@@ -68,33 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <header>
         <h1>User Sign up</h1>
-        <nav class="desktop-menu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">Create Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.php">Log In</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-
-        <div class="user-icon">
-            <a href="user_dashboard.php" aria-label="User Dashboard">
-                <i class="fas fa-user"></i> <!-- Font Awesome user icon -->
-            </a>
-        </div>
-
-
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">Create Listing</a></li>
-                <li><a href="listings.html">Listings</a></li>
-                <li><a href="login.php">Log In</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
     </header>
 
     <!-- JavaScript to toggle the mobile menu -->
