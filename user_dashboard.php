@@ -44,7 +44,7 @@ $conn->close();
 
 
 
-        <?php include 'header.php'; ?>
+    <?php include 'header.php'; ?>
 
     <div class="logo">
         <h1>User Dashboard</h1>
@@ -94,6 +94,7 @@ $conn->close();
                                 <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
                                     class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
