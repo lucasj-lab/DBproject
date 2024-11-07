@@ -73,6 +73,6 @@ session_start();
       document.getElementById("mobileMenu").classList.toggle("active");
     }
   </script>
-
+<?php include 'footer.php'; ?>
  </body>
  </html>
