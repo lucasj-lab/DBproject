@@ -1028,8 +1028,8 @@ button[type="submit"] {
 .search-btn {
 
     position: absolute;
-    top: 89%;
-    right: 10px;
+    top: 92%;
+    right: 3px;
     transform: translateY(-100%);
     background-color: #007bff;
     color: white;
@@ -1054,7 +1054,7 @@ button.search-btn:hover
 
 button.search-btn 
     {
-        padding: 12px 8px;
+        padding: 12px 10px;
     }
 
 
