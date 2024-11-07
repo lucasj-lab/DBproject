@@ -39,9 +39,7 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
       </ul>
     </nav>
 
-   
-
-      <a href="<?php echo $isAdmin ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>" aria-label="User Dashboard">
+  
 
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
