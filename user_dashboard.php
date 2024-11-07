@@ -43,9 +43,9 @@ $conn->close();
     <!-- Header Section with Full Navigation Menu and User Icon -->
 
 
-    <header>
+
         <?php include 'header.php'; ?>
-    </header>
+
     <div class="logo">
         <h1>User Dashboard</h1>
     </div>
@@ -90,11 +90,10 @@ $conn->close();
 
                             <td>
                                 <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="button button-edit">Edit</a>
+                                    class="pill-button button-edit">Edit</a>
                                 <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                                    class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
-
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

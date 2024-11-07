@@ -45,9 +45,6 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
 
       <a href="<?php echo $isAdmin ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>" aria-label="User Dashboard">
         <i class="fas fa-user"></i>
-      </a>
-     <?php echo htmlspecialchars(substr($username, 0, 1)); ?></span> 
-    </div>
 
     <!-- Hamburger Menu for Mobile View -->
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
