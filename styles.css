@@ -1010,6 +1010,7 @@ button[type="submit"] {
     display: inline-block;
     width: 100%;
     z-index: 1;
+
     /* Adjust width as needed */
 }
 
@@ -1023,6 +1024,11 @@ button[type="submit"] {
     /* Optional rounded corners */
     outline: none;
 }
+
+form.search-form {
+    max-width: 600px;
+  }
+
 
 /* Style the button with a small square and an arrow */
 .search-btn {
@@ -1042,6 +1048,7 @@ button[type="submit"] {
     padding: 0;
     border-radius: 10px;
     width: 50px;
+    font: weight 700;
     /* Makes the button a small square, not a circle */
     font-weight: lighter;
 }
