@@ -17,8 +17,6 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $isAdmin ? 'Admin Dashboard' : 'Rookielist'; ?></title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
 </head>
 
 <body>
@@ -44,7 +42,6 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
    
 
       <a href="<?php echo $isAdmin ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>" aria-label="User Dashboard">
-        <i class="fas fa-user"></i>
 
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
