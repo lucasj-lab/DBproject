@@ -1,6 +1,10 @@
-<footer>
+
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<body><footer>
     <div class="footer-content">
-        <p>&copy; <?php echo date("Y"); ?> Your Website Name. All rights reserved.</p>
+        <p>&copy; <?php echo date("Y"); ?> Rookie List 2.0 | All rights reserved.</p>
         <nav>
             <ul>
                 <li><a href="about.php">About Us</a></li>
@@ -10,3 +14,7 @@
         </nav>
     </div>
 </footer>
+</body>
+</html>
+
+  <!-- Add styles and hamburger CSS -->
