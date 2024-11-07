@@ -41,7 +41,7 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
       </ul>
     </nav>
 
-    <!-- User Icon -->
+   
     <div class="user-icon">
       <a href="<?php echo $isAdmin ? 'admin_dashboard.php' : 'user_dashboard.php'; ?>" aria-label="User Dashboard">
         <i class="fas fa-user"></i> <!-- Font Awesome user icon -->

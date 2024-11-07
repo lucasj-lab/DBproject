@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        header("Location: account.php");  // Redirect after successful update
+        header("Location: user_dashboard.php");  // Redirect after successful update
         exit();
     } else {
         $error_message = "Error updating listing.";
@@ -164,9 +164,9 @@ $conn->close();
     </form>
 </div>
 
-<footer>
+
     <?php include 'footer.php'; ?>
-</footer>
+
 
 </body>
 

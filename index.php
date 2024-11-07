@@ -185,10 +185,7 @@ session_start();
     }
   </style>
 
-
+<?php include 'footer.php'; ?>
 </body>
-<footer>
-  <?php include 'footer.php'; ?>
-</footer>
 
 </html>

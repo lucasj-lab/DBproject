@@ -1,7 +1,12 @@
 <footer>
-    <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
-    <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+    <div class="footer-content">
+        <p>&copy; <?php echo date("Y"); ?> Your Website Name. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="about.php">About Us</a></li>
+                <li><a href="contact.php">Contact</a></li>
+                <li><a href="privacy.php">Privacy Policy</a></li>
+            </ul>
+        </nav>
     </div>
 </footer>

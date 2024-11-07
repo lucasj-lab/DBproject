@@ -71,9 +71,9 @@ $conn->close();
 </head>
 
 <body>
-    <header>
+
     <?php include 'header.php'; ?>
-    </header>
+
 
     <main>
         <h1>

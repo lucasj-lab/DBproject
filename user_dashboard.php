@@ -89,9 +89,9 @@ $conn->close();
                             </td>
 
                             <td>
-                                <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                                <a href="edit_listing.php?id=<?php echo $listing['Listing_ID']; ?>"
                                     class="button button-edit">Edit</a>
-                                <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                                <a href="delete_listing.php?id=<?php echo $listing['Listing_ID']; ?>"
                                     class="button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                             </td>
 
