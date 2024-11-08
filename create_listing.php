@@ -28,7 +28,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title']);
@@ -56,36 +55,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $listing_id = $stmt->insert_id;
-
         echo "<div class='alert alert-success'>Listing created successfully! <a href='my_listings.php' class='pill-button'>View your listings</a></div>";
 
         // Handle multiple image uploads and insert into images table
         if (!empty($_FILES['images']['name'][0])) {
+            // Prepare image insertion statement outside the loop
+            $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
+
             foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
                 $fileName = basename($_FILES['images']['name'][$index]);
                 $targetPath = $uploadDir . $fileName;
 
                 if (move_uploaded_file($tmpName, $targetPath)) {
-                    // Optional: Convert image to JPEG if needed
-                    // Uncomment below if using Imagick to convert images to JPEG format
-                    // convertToJpeg($targetPath, $targetPath); 
-
                     // Store relative path in database
                     $image_url = 'uploads/' . $fileName;
-                    $stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
-                    $stmt->bind_param("si", $image_url, $listing_id);
-                    $stmt->execute();
+                    $image_stmt->bind_param("si", $image_url, $listing_id);
+                    $image_stmt->execute();
                     echo "<p>Image $fileName uploaded successfully and saved in the database.</p>";
-                    $stmt->close();
                 } else {
                     echo "<p>Error uploading $fileName.</p>";
                 }
             }
+            
+            // Close the image insertion statement after the loop
+            $image_stmt->close();
         }
     } else {
-        echo "<div class='alert alert-error'>Database error: Unable to create listing.</div>";
+        echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
     }
 
+    // Close the main listing insertion statement and database connection
     $stmt->close();
     $conn->close();
 } else {
