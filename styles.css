@@ -125,10 +125,36 @@ nav ul li a:hover {
 
 /* Listings Grid */
 #listings {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Default 4x4 layout for large screens */
     gap: 20px;
     padding: 20px;
 }
+
+/* Media query for screens between 1024px and 1366px */
+@media (max-width: 1366px) {
+    #listings {
+        grid-template-columns: repeat(3, 1fr); /* 3x3 layout for medium-large screens */
+        justify-content: center;
+    }
+}
+
+/* Media query for screens between 600px and 1024px */
+@media (max-width: 1024px) {
+    #listings {
+        grid-template-columns: repeat(2, 1fr); /* 2x2 layout for medium screens */
+        justify-content: center;
+    }
+}
+
+/* Media query for screens smaller than 600px */
+@media (max-width: 600px) {
+    #listings {
+        grid-template-columns: 1fr; /* 1 column layout for small screens */
+        justify-content: center;
+    }
+}
+
 
 .category-grid {
     /* display: inline-grid; */
