@@ -126,7 +126,6 @@ nav ul li a:hover {
 
 /* Listings Grid */
 #listings {
-    display: inline-grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
@@ -632,15 +631,7 @@ nav ul li a:hover {
     font-weight: bold;
 }
 
-/* Listings Grid */
-#listings {
-    display: flex;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    margin: 2rem;
 
-}
 
 
 
