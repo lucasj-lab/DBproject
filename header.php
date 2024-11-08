@@ -166,7 +166,7 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
         .listing-item {
             background-color: #fff;
             padding: 1rem;
-            margin: 1rem 0;
+            margin: 2rem 1rem;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
