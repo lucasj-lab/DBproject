@@ -329,6 +329,7 @@ button {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
     background-color: #fff;
+    margin-bottom: 20px;
 }
 
 input[type="text"]:focus,
@@ -667,6 +668,7 @@ footer {
     padding: 2rem 1rem;
     text-align: center;
     font-size: 1rem;
+    margin-top: 30px;
 }
 
 footer p {
@@ -1016,7 +1018,6 @@ button[type="submit"] {
     padding: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-
 }
 
 
@@ -1163,3 +1164,63 @@ input[type=number] {
     text-decoration: underline;
 }
 
+/* Container for the whole table */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+.dashboard-header {
+    background-color: #f4f4f4;
+}
+
+.dashboard-header-cell {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Row styling */
+.dashboard-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dashboard-row:hover {
+    background-color: #f1f1f1;
+}
+
+/* Cell styling */
+.dashboard-cell {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.actions-cell {
+    text-align: center;
+}
+
+/* Button styling */
+.pill-button {
+    padding: 5px 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9em;
+    color: #fff;
+    display: inline-block;
+}
+
+.button-edit {
+    background-color: #4CAF50;
+}
+
+.button-delete {
+    background-color: #f44336;
+}
+
+.button-edit:hover, .button-delete:hover {
+    opacity: 0.8;
+}
