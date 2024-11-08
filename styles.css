@@ -117,6 +117,15 @@ nav ul li a:hover {
     transform: scale(1.05);
 }
 
+.listing-item {
+    background-color: #fff;
+    padding: 1rem;
+    margin: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: inline-grid;
+}
+
 /* Listings Grid */
 #listings {
     display: grid;
@@ -171,7 +180,7 @@ a.pill-button.back-to-listings {
     /* Removes underline */
     font-weight: bold;
     /* Makes text bold */
-    border-radius: 50px;
+    border-radius: 10px;
     /* Rounds the button for a pill shape */
     text-align: center;
     /* Centers text if the button expands */
@@ -208,6 +217,7 @@ a.pill-button.back-to-listings {
 
 .listing-item p {
     color: var(--text-color);
+    text-align: justify;
 }
 
 /* Hamburger Menu for Mobile */
