@@ -77,28 +77,32 @@ $conn->close();
                         <th class="dashboard-header-cell">Date Posted</th>
                         <th class="dashboard-header-cell">Actions</th>
                     </tr>
-                </thead>
-                <tbody class="dashboard-body">
-                    <?php foreach ($listings as $listing): ?>
-                        <tr class="dashboard-row">
-                            <td class="dashboard-cell"><?php echo htmlspecialchars($listing['Title']); ?></td>
-                            <td class="dashboard-cell"><?php echo htmlspecialchars($listing['Description']); ?></td>
-                            <td class="dashboard-cell">$<?php echo htmlspecialchars($listing['Price']); ?></td>
-                            <td class="dashboard-cell">
-                                <?php
-                                $datePosted = new DateTime($listing['Date_Posted']);
-                                echo htmlspecialchars($datePosted->format('l, F jS, Y'));
-                                ?>
-                            </td>
-                            <td class="dashboard-cell actions-cell">
-                                <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="pill-button button-edit">Edit</a>
-                                <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                    class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
+                    <tbody class="dashboard-body">
+    <?php foreach ($listings as $listing): ?>
+        <tr class="dashboard-row">
+            <td class="dashboard-cell"><?php echo htmlspecialchars($listing['Title']); ?></td>
+            <td class="dashboard-cell"><?php echo htmlspecialchars($listing['Description']); ?></td>
+            <td class="dashboard-cell">$<?php echo htmlspecialchars($listing['Price']); ?></td>
+            <td class="dashboard-cell">
+                <?php
+                $datePosted = new DateTime($listing['Date_Posted']);
+                echo htmlspecialchars($datePosted->format('l, F jS, Y'));
+                ?>
+            </td>
+            <td class="dashboard-cell actions-cell">
+                <?php if (isset($listing['Listing_ID'])): ?>
+                    <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                        class="pill-button button-edit">Edit</a>
+                    <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
+                        class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                <?php else: ?>
+                    <span class="text-muted">No actions available</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
                 </div>
             </table>
 
