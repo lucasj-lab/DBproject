@@ -1051,7 +1051,7 @@ form.search-form {
 .search-btn {
 
     position: absolute;
-    top: 92%;
+    top: 63%;
     right: 3px;
     transform: translateY(-100%);
     background-color: #007bff;
