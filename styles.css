@@ -295,8 +295,9 @@ form {
 
 form.listing-details-form 
 { 
-    display: inline-block;
+    display: grid;
     margin: 2rem;
+    width: max-content;
 }
 
 form.listing-details-form p {

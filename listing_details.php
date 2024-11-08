@@ -75,10 +75,10 @@ $conn->close();
     <?php include 'header.php'; ?>
 
 
-    <main>
+    <sect>
 
-           <form class="listing-details-header" <h1> Listing Details </h1>
-</form>
+        <section class="listing-details-header" <h1> Listing Details </h1>
+        </section>
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">
             <?php if (!empty($listing['Image_URL'])): ?>
@@ -100,12 +100,12 @@ $conn->close();
             <!-- Back to Listings button -->
             <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
         </form>
-    </main>
+        </main>
 
-   
-<footer>
-    <?php include 'footer.php'; ?>
-</footer>
+
+        <footer>
+            <?php include 'footer.php'; ?>
+        </footer>
 
 </body>
 
