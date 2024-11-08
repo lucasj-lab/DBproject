@@ -44,7 +44,7 @@ $conn->close();
 
 
 
-    <?php include 'header.php'; ?>
+    <?php include 'header.php'; ?>          
 
     <div class="logo">
         <h1>User Dashboard</h1>
