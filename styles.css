@@ -412,13 +412,23 @@ button:hover {
     text-align: center;
 }
 
+
 .category-grid {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 4fr));
     gap: 1.5rem;
-    /* padding: 1rem; */
+    padding: 1rem;
     margin-top: 1.5rem;
     justify-content: center;
-}
+  }
+  
+  /* Media query for screens smaller than 1024px */
+  @media (max-width: 1024px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    }
+  }
+  
 
 form.category-item {
     width: -webkit-fill-available;
