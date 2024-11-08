@@ -127,14 +127,14 @@ nav ul li a:hover {
 
 /* Listings Grid */
 #listings {
-    display: grid;
+    display: inline-grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
 .category-grid {
-    display: grid;
+    display: inline-grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     /* Creates a responsive row layout */
     gap: 10px;
