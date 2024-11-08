@@ -34,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = trim($_POST['description']);
     $price = floatval($_POST['price']);
     $state = trim($_POST['state']);
-    $city = trim($_POST['city']) ?: trim($_POST['city-input']);
+    $city = trim($_POST['city'] ?? '') ?: trim($_POST['city-input'] ?? '');
+
     $category = ucfirst(strtolower(trim($_POST['category'])));
 
     if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city)) {
