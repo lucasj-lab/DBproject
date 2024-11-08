@@ -281,7 +281,16 @@ p {
     color: var(#000);
 }
 
+form.listing-details-header
+{
+    font-weight: 600;
+    font-size: xxx-large;
+}
 
+main {
+    justify-self: center;
+  }
+  
 /* Form Styles */
 form {
     margin: 2rem auto;
@@ -293,8 +302,7 @@ form {
 }
 
 
-form.listing-details-form 
-{ 
+form.listing-details-form {
     display: grid;
     margin: 2rem;
     width: max-content;
@@ -635,7 +643,7 @@ nav ul li a:hover {
     gap: 20px;
     padding: 20px;
     margin: 2rem;
-    
+
 }
 
 
@@ -794,8 +802,7 @@ footer p {
 
 /* 4 columns on large screens */
 @media (min-width: 1024px) {
-    .category-grid 
-    {
+    .category-grid {
         grid-template-columns: repeat(4, 1fr);
 
     }
@@ -1050,7 +1057,7 @@ button[type="submit"] {
 
 form.search-form {
     max-width: 600px;
-  }
+}
 
 
 /* Style the button with a small square and an arrow */
@@ -1076,16 +1083,14 @@ form.search-form {
     font-weight: lighter;
 }
 
-button.search-btn:hover 
-    {
-        background-color: #fbbc04;
-        color: #000;
-    }
+button.search-btn:hover {
+    background-color: #fbbc04;
+    color: #000;
+}
 
-button.search-btn 
-    {
-        padding: 12px 10px;
-    }
+button.search-btn {
+    padding: 12px 10px;
+}
 
 
 .session-message {

@@ -77,8 +77,8 @@ $conn->close();
 
     <sect>
 
-        <section class="listing-details-header" <h1> Listing Details </h1>
-        </section>
+            <h1> Listing Details </h1>
+
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">
             <?php if (!empty($listing['Image_URL'])): ?>
