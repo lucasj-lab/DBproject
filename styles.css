@@ -634,7 +634,7 @@ nav ul li a:hover {
 
 /* Listings Grid */
 #listings {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
@@ -1173,6 +1173,3 @@ input[type=number] {
     text-decoration: underline;
 }
 
-h1 {
-    text-align: center;
-  }
