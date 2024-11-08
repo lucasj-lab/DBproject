@@ -73,7 +73,7 @@ $conn->close();
 <body>
 
     <?php include 'header.php'; ?>
-
+<main>
 
     <sect>
 
@@ -100,6 +100,7 @@ $conn->close();
             <!-- Back to Listings button -->
             <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
         </form>
+        
         </main>
 
 
