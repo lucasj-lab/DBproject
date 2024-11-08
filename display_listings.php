@@ -51,31 +51,33 @@
         }
 
         function displayListings(listings) {
-            const listingsContainer = document.getElementById("listings");
-            listingsContainer.innerHTML = "";  // Clear previous content
+    const listingsContainer = document.getElementById("listings");
+    listingsContainer.innerHTML = "";  // Clear previous content
 
-            listings.forEach(listing => {
-                const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
+    listings.forEach(listing => {
+        const listingDiv = document.createElement("div");
+        listingDiv.className = "listing-item";
 
-                // Set a placeholder image if Image_URL is missing
-                const image = listing.Image_URL || "no_image.png";
-                listingDiv.innerHTML = `
-                    <img src="${image}" alt="Listing Image" class="listing-image">
-                    <h3>${listing.Title}</h3>
-                    <p>Price: $${listing.Price}</p>
-                    <p>Posted by: ${listing.User_Name}</p>
-                    <p>Category: ${listing.Category_Name}</p>
-                    <p>Location: ${listing.City}, ${listing.State}</p>
-                   <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
-                   <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
-                    View Listing
-                   </button>
-                `;
+        // Set the correct image path, use placeholder if `Image_URL` is missing
+        const image = listing.Image_URL ? `/${listing.Image_URL}` : "images/no_image.png"; // Adjust placeholder path as needed
+        listingDiv.innerHTML = `
+            <img src="${image}" alt="Listing Image" class="listing-image">
+            <h3>${listing.Title}</h3>
+            <p>Price: $${listing.Price}</p>
+            <p>Posted by: ${listing.User_Name}</p>
+            <p>Category: ${listing.Category_Name}</p>
+            <p>Location: ${listing.City}, ${listing.State}</p>
+            <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
+            <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
+                View Listing
+            </button>
+        `;
 
-                listingsContainer.appendChild(listingDiv);
-            });
-        }
+        listingsContainer.appendChild(listingDiv);
+    });
+}
+
+        
     </script>
 </body>
 
