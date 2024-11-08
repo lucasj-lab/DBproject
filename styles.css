@@ -296,6 +296,7 @@ form {
 form.listing-details-form 
 { 
     display: inline-block;
+    margin: 2rem;
 }
 
 form.listing-details-form p {
