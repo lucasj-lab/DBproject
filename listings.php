@@ -130,6 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             <p>Loading listings...</p>
         </section>
     </main>
+
 </body>
 <?php include 'footer.php'; ?>
 
