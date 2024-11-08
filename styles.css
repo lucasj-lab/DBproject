@@ -1275,8 +1275,6 @@ body, html {
 header, footer {
     width: 100%;
     padding: 1rem;
-    background-color: #f1f1f1;
-    text-align: center;
 }
 
 /* Main dashboard styling */
