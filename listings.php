@@ -122,10 +122,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 </head>
 
 <body>
-    <h1>Active Listings</h1>
     <?php include 'header.php'; ?>
 
     <main>
+    <h1>Active Listings</h1>
         <section id="listings">
             <p>Loading listings...</p>
         </section>
