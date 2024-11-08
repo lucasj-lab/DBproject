@@ -51,7 +51,7 @@ $conn->close();
     </div>
 
     <!-- Main Content -->
-    <main>
+    <main class="dashboard-main">
         <!-- Personalized welcome message with user data -->
         <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
 
