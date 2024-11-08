@@ -9,7 +9,6 @@ error_reporting(E_ALL);
 $uploadDir = '/var/www/html/uploads/';
 
 if (!isset($_SESSION['user_id'])) {
-    // Display a message with login and signup options if the user is not logged in
     echo "
     <!DOCTYPE html>
     <html lang='en'>
@@ -34,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = trim($_POST['description']);
     $price = floatval($_POST['price']);
     $state = trim($_POST['state']);
-    $city = trim($_POST['city'] ?? '') ?: trim($_POST['city-input'] ?? '');
+    $city = isset($_POST['city']) && trim($_POST['city']) !== '' ? trim($_POST['city']) : (isset($_POST['city-input']) ? trim($_POST['city-input']) : '');
 
     $category = ucfirst(strtolower(trim($_POST['category'])));
 
@@ -60,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Handle multiple image uploads and insert into images table
         if (!empty($_FILES['images']['name'][0])) {
-            // Prepare image insertion statement outside the loop
             $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
 
             foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
@@ -68,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $targetPath = $uploadDir . $fileName;
 
                 if (move_uploaded_file($tmpName, $targetPath)) {
-                    // Store relative path in database
                     $image_url = 'uploads/' . $fileName;
                     $image_stmt->bind_param("si", $image_url, $listing_id);
                     $image_stmt->execute();
@@ -77,115 +74,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<p>Error uploading $fileName.</p>";
                 }
             }
-            
-            // Close the image insertion statement after the loop
             $image_stmt->close();
         }
     } else {
         echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
     }
 
-    // Close the main listing insertion statement and database connection
     $stmt->close();
     $conn->close();
 } else {
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Create Listing</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <?php include 'header.php'; ?>
-        
-        <div class="post-ad">
-            <h2>Post Your Ad</h2>
-            <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-                <div class="listing-form-group">
-                    <input type="text" id="title" name="title" placeholder="Title" required>
-                    <select id="category" name="category" required>
-                        <option value="">--Select Category--</option>
-                        <option value="Auto">Auto</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
-                    <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
-                    <select id="state" name="state" onchange="updateCities()" required>
-                        <option value="">--Select State--</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                    </select>
-                    <select id="city-dropdown" name="city">
-                        <option value="">--Select City--</option>
-                    </select>
-                    <label for="images">Upload Images:</label>
-                    <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
-        </div>
-
-        <script>
-            const citiesByState = {
-                'AL': ['Birmingham', 'Montgomery', 'Huntsville', 'Mobile', 'Tuscaloosa'],
-                'AK': ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'],
-                'AZ': ['Phoenix', 'Tucson', 'Mesa', 'Chandler', 'Scottsdale'],
-                'AR': ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale', 'Jonesboro'],
-                'CA': ['Los Angeles', 'San Francisco', 'San Diego', 'San Jose', 'Sacramento']
-            };
-
-            function updateCities() {
-                const stateSelect = document.getElementById('state');
-                const cityDropdown = document.getElementById('city-dropdown');
-                const selectedState = stateSelect.value;
-
-                cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-
-                if (selectedState && citiesByState[selectedState]) {
-                    citiesByState[selectedState].forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        cityDropdown.appendChild(option);
-                    });
-                }
-            }
-        </script>
-
-        <?php include 'footer.php'; ?>
-    </body>
-    </html>
-    <?php
-}
-
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Listing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <?php include 'header.php'; ?>
+    <div class="post-ad">
+        <h2>Post Your Ad</h2>
+        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+            <div class="listing-form-group">
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <select id="category" name="category" required>
+                    <option value="">--Select Category--</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+                <select id="state" name="state" onchange="updateCities()" required>
+                    <option value="">--Select State--</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                </select>
+                <select id="city-dropdown" name="city">
+                    <option value="">--Select City--</option>
+                </select>
+                <label for="images">Upload Images:</label>
+                <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        const citiesByState = {
+            'AL': ['Birmingham', 'Montgomery', 'Huntsville', 'Mobile', 'Tuscaloosa'],
+            'AK': ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'],
+            'AZ': ['Phoenix', 'Tucson', 'Mesa', 'Chandler', 'Scottsdale'],
+            'AR': ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale', 'Jonesboro'],
+            'CA': ['Los Angeles', 'San Francisco', 'San Diego', 'San Jose', 'Sacramento']
+        };
 
+        function updateCities() {
+            const stateSelect = document.getElementById('state');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const selectedState = stateSelect.value;
+
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+            if (selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            }
+        }
+    </script>
+    <?php include 'footer.php'; ?>
+</body>
+</html>
 <?php
-// Function to retrieve Category_ID from the database
-function getCategoryID($conn, $categoryName) {
-    $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
-    $stmt->bind_param("s", $categoryName);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $category_id = $result->fetch_assoc()['Category_ID'] ?? false;
-    $stmt->close();
-    return $category_id;
-}
-
-// Optional: Function to convert images to JPEG format using Imagick
-if (class_exists('Imagick')) {
-    function convertToJpeg($inputPath, $outputPath) {
-        $imagick = new Imagick($inputPath);
-        $imagick->setImageFormat('jpeg');
-        $imagick->writeImage($outputPath);
-        $imagick->destroy();
-    }
 }
 ?>
