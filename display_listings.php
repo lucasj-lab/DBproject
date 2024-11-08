@@ -58,8 +58,9 @@
         const listingDiv = document.createElement("div");
         listingDiv.className = "listing-item";
 
-        // Set the correct image path, use placeholder if `Image_URL` is missing
-        const image = listing.Image_URL ? `/${listing.Image_URL}` : "images/no_image.png"; // Adjust placeholder path as needed
+        // Prepend the server root to Image_URL and set a placeholder if missing
+        const image = listing.Image_URL ? `/${listing.Image_URL}` : "/images/no_image.png";
+        
         listingDiv.innerHTML = `
             <img src="${image}" alt="Listing Image" class="listing-image">
             <h3>${listing.Title}</h3>
@@ -67,7 +68,7 @@
             <p>Posted by: ${listing.User_Name}</p>
             <p>Category: ${listing.Category_Name}</p>
             <p>Location: ${listing.City}, ${listing.State}</p>
-            <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
+            <p>Posted on: ${listing.Formatted_Date}</p>
             <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
                 View Listing
             </button>
