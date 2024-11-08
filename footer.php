@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<body><footer>
+    <footer>
     <div class="footer-content">
         <p>&copy; <?php echo date("Y"); ?> Rookie List 2.0 | All rights reserved.</p>
         <nav>
