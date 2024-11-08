@@ -77,7 +77,7 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            background-color: #f5f5f5;
+            background-color: #fff;
             color: #333;
         }
 

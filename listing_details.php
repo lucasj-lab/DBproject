@@ -77,7 +77,7 @@ $conn->close();
 
     <sect>
 
-            <h1> Listing Details </h1>
+        <h1> Listing Details </h1>
 
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">

@@ -9,26 +9,26 @@ $error_message = ""; // Initialize error message variable
 
 if ($_SERVER["REQUEST_METHOD"] === "POST")
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
+$password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    // Prepare and execute the query to fetch user details by email
-    $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        if (password_verify($password, $user['Password'])) {
-            $_SESSION['user_id'] = $user['User_ID'];
-            $_SESSION['message'] = "Login successful!";
-            $_SESSION['message_type'] = 'success';
-            header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
-            exit();
-        } else {
-            $_SESSION['message'] = "Incorrect password.";
-            $_SESSION['message_type'] = 'error';
-        }
+// Prepare and execute the query to fetch user details by email
+$stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    if (password_verify($password, $user['Password'])) {
+        $_SESSION['user_id'] = $user['User_ID'];
+        $_SESSION['message'] = "Login successful!";
+        $_SESSION['message_type'] = 'success';
+        header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
+        exit();
+    } else {
+        $_SESSION['message'] = "Incorrect password.";
+        $_SESSION['message_type'] = 'error';
+    }
 
 }
 ?>
@@ -44,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
 </head>
 
 <body>
-    
-     <?php include 'header.php'; ?>
+
+    <?php include 'header.php'; ?>
 
     <h2>User Log In</h2>
 
