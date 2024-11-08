@@ -2,9 +2,12 @@
 session_start();
 require 'database_connection.php';
 
+// Enable error reporting and log to a specified file
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', '/var/www/html/php-error.log'); // Update with the path to your log file
 
 $uploadDir = '/var/www/html/uploads/';
 
@@ -16,7 +19,12 @@ $uploadDir = '/var/www/html/uploads/';
  * @return int|false Returns the Category_ID if found, or false if not.
  */
 function getCategoryID($conn, $categoryName) {
+    error_log("Retrieving Category ID for category: $categoryName");
     $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
+    if (!$stmt) {
+        error_log("Prepare failed for getCategoryID: " . $conn->error);
+        return false;
+    }
     $stmt->bind_param("s", $categoryName);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -26,7 +34,7 @@ function getCategoryID($conn, $categoryName) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    // User is not logged in
+    error_log("User is not logged in");
     echo "
     <!DOCTYPE html>
     <html lang='en'>
@@ -46,34 +54,51 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    error_log("Form submitted: " . json_encode($_POST));
     $user_id = $_SESSION['user_id'];
-    $title = trim($_POST['title']);
-    $description = trim($_POST['description']);
-    $price = floatval($_POST['price']);
-    $state = trim($_POST['state']);
+    $title = trim($_POST['title'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $price = floatval($_POST['price'] ?? 0);
+    $state = trim($_POST['state'] ?? '');
     $city = isset($_POST['city']) && trim($_POST['city']) !== '' ? trim($_POST['city']) : (isset($_POST['city-input']) ? trim($_POST['city-input']) : '');
-    $category = ucfirst(strtolower(trim($_POST['category'])));
+    $category = ucfirst(strtolower(trim($_POST['category'] ?? '')));
 
-    if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city)) {
+    // Validate fields
+    if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city) || empty($category)) {
+        error_log("Form validation failed: missing required fields");
         echo "<p>All fields are required.</p>";
         exit();
     }
 
+    // Get Category_ID
     $category_id = getCategoryID($conn, $category);
     if ($category_id === false) {
+        error_log("Invalid category selected: $category");
         echo "<p>Invalid category selected.</p>";
         exit();
     }
 
+    // Insert listing into database
     $stmt = $conn->prepare("INSERT INTO listings (User_ID, Title, Description, Price, Date_Posted, Category_ID, State, City) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)");
+    if (!$stmt) {
+        error_log("Prepare failed for listing insertion: " . $conn->error);
+        echo "<p>Database error: Unable to create listing.</p>";
+        exit();
+    }
     $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
 
     if ($stmt->execute()) {
         $listing_id = $stmt->insert_id;
-        echo "<div class='alert alert-success'>Listing created successfully! <a href='my_listings.php' class='pill-button'>View your listings</a></div>";
+        error_log("Listing created with ID: $listing_id");
 
+        // Handle image uploads
         if (!empty($_FILES['images']['name'][0])) {
             $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
+            if (!$image_stmt) {
+                error_log("Prepare failed for image insertion: " . $conn->error);
+                echo "<p>Error preparing image insertion.</p>";
+                exit();
+            }
 
             foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
                 $fileName = basename($_FILES['images']['name'][$index]);
@@ -82,15 +107,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (move_uploaded_file($tmpName, $targetPath)) {
                     $image_url = 'uploads/' . $fileName;
                     $image_stmt->bind_param("si", $image_url, $listing_id);
-                    $image_stmt->execute();
-                    echo "<p>Image $fileName uploaded successfully and saved in the database.</p>";
+                    if ($image_stmt->execute()) {
+                        error_log("Image uploaded successfully: $fileName");
+                    } else {
+                        error_log("Error inserting image into database: " . $image_stmt->error);
+                    }
                 } else {
-                    echo "<p>Error uploading $fileName.</p>";
+                    error_log("Error moving uploaded file: $fileName");
                 }
             }
             $image_stmt->close();
         }
     } else {
+        error_log("Error executing listing insertion: " . $stmt->error);
         echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
     }
 
