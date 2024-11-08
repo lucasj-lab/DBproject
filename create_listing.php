@@ -9,8 +9,25 @@ error_reporting(E_ALL);
 $uploadDir = '/var/www/html/uploads/';
 
 if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to create a listing.");
+    // Display a message with login and signup options if the user is not logged in
+    echo "
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Not Logged In</title>
+        <link rel='stylesheet' href='styles.css'>
+    </head>
+    <body>
+        <div class='redirect-message'>
+            <h2>You must be logged in to create a listing.</h2>
+            <p>Please <a href='login.php'>log in</a> or <a href='signup.php'>sign up</a> to continue.</p>
+        </div>
+    </body>
+    </html>";
+    exit();
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
