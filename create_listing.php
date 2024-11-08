@@ -93,6 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php include 'header.php'; ?>
         </header>
         
+        <div class="creating-listing-form">
+        <h2>Create a New Listing</h2>
+        
         <form action="create_listing.php" method="POST" enctype="multipart/form-data">
             <!-- Listing form fields -->
             <input type="text" name="title" placeholder="Title" required>
@@ -108,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <input type="file" name="images[]" multiple accept="image/*">
             <button type="submit">Create Listing</button>
         </form>
+    </div>
 
         <footer>
             <?php include 'footer.php'; ?>

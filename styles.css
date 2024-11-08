@@ -1402,3 +1402,51 @@ table th, table td {
     padding: 0.75rem;
     font-size: 1rem;
 }
+
+/* Style for Creating Listing Form Container */
+.creating-listing-form {
+    max-width: 600px;
+    margin: auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f4f4f9;
+}
+
+/* Style for Form Fields in Creating Listing Form */
+.creating-listing-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.creating-listing-form input[type="text"],
+.creating-listing-form input[type="number"],
+.creating-listing-form select,
+.creating-listing-form textarea,
+.creating-listing-form input[type="file"],
+.creating-listing-form button {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Specific styling for the button */
+.creating-listing-form button {
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.creating-listing-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Additional styling for textarea in Creating Listing Form */
+.creating-listing-form textarea {
+    resize: vertical;
+}
