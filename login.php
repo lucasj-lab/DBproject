@@ -47,21 +47,23 @@ if ($result->num_rows > 0) {
 
     <?php include 'header.php'; ?>
 
-    <h2>User Log In</h2>
+    <div class="login-container">
+        <h2>User Log In</h2>
 
-    <!-- Display error message if login fails -->
-    <?php if (!empty($error_message)): ?>
-        <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
+        <!-- Display error message if login fails -->
+        <?php if (!empty($error_message)): ?>
+            <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
+        <?php endif; ?>
 
-    <form action="login.php" method="POST">
-        <div class="log-in-fields">
-            <input type="email" name="email" placeholder="Enter your email address"
-                value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Log In</button>
-        </div>
-    </form>
+        <form action="login.php" method="POST">
+            <div class="log-in-fields">
+                <input type="email" name="email" placeholder="Enter your email address"
+                    value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Log In</button>
+            </div>
+        </form>
+    </div>
 
     <?php include 'footer.php'; ?>
 </body>

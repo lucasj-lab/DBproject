@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="registration">
+    <div class="signup-container">
         <h2>Create an Account</h2>
 
         <!-- Display session messages if they exist -->
@@ -91,6 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <button type="submit">Sign up</button>
             </div>
         </form>
+    </div>
 
         <p>Already have an account? <a href="login.php">Log in here</a>.</p>
     </div>

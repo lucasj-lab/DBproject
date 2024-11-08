@@ -1353,3 +1353,52 @@ table th, table td {
         font-size: 0.9rem; /* Adjust font size for smaller screens */
     }
 }
+
+
+/* Style for Login Container */
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Style for Log In Fields */
+.login-container .log-in-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container .log-in-fields input,
+.login-container .log-in-fields button {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+/* Style for Signup Container */
+.signup-container {
+    max-width: 500px;
+    margin: auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #eef5ff;
+}
+
+/* Style for Register Fields */
+.signup-container .register-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-container .register-fields input,
+.signup-container .register-fields button {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
