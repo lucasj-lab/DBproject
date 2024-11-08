@@ -53,7 +53,8 @@ $conn->close();
     <!-- Main Content -->
     <main>
         <!-- Personalized welcome message with user data -->
-        <h1>Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
+        <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
+
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
         <p><strong>Member Since:</strong>
             <?php

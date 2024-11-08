@@ -1226,3 +1226,13 @@ input[type=number] {
     opacity: 0.8;
     /* margin-bottom: 10px; */
 }
+
+.welcome-heading {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
+}
