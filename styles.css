@@ -1215,6 +1215,7 @@ input[type=number] {
 
 .button-edit {
     background-color: #4CAF50;
+    margin-bottom: 10px;
 }
 
 .button-delete {
@@ -1223,4 +1224,5 @@ input[type=number] {
 
 .button-edit:hover, .button-delete:hover {
     opacity: 0.8;
+    /* margin-bottom: 10px; */
 }
