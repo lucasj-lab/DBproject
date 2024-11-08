@@ -1141,3 +1141,24 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+
+/* Add this to your styles.css */
+.redirect-message {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.redirect-message h2 {
+    color: #333;
+}
+
+.redirect-message a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.redirect-message a:hover {
+    text-decoration: underline;
+}
