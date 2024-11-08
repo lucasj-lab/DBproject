@@ -1262,3 +1262,63 @@ input[type=number] {
         max-width: 100%;       /* Allow the container to take up the full width */
     }
 }
+
+/* General full-width styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Header and footer full-width styling */
+header, footer {
+    width: 100%;
+    padding: 1rem;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+/* Main dashboard styling */
+.dashboard-main {
+    padding: 1rem;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto; /* Centers on wider screens */
+}
+
+/* Responsive table container */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Adds horizontal scroll for small screens */
+    margin: 1rem 0;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .dashboard-main {
+        padding: 0.5rem;
+        max-width: 100%;
+    }
+
+    header, footer {
+        padding: 0.5rem;
+    }
+
+    table th, table td {
+        padding: 0.5rem;
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
+}

@@ -52,6 +52,7 @@ $conn->close();
 
     <!-- Main Content -->
     <main class="dashboard-main">
+        
         <!-- Personalized welcome message with user data -->
         <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
 
@@ -66,6 +67,7 @@ $conn->close();
         <h2>Your Listings</h2>
 
         <?php if (!empty($listings)): ?>
+            <div class="table-container">
             <table class="dashboard-table">
                 <thead class="dashboard-header">
                     <tr>
@@ -97,6 +99,7 @@ $conn->close();
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
+                </div>
             </table>
 
         <?php else: ?>
