@@ -1412,6 +1412,7 @@ table th, table td {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f4f4f9;
+    margin-top: 20px;
 }
 
 /* Style for Form Fields in Creating Listing Form */
@@ -1443,10 +1444,104 @@ table th, table td {
 }
 
 .creating-listing-form button:hover {
-    background-color: #0056b3;
+    background-color: #fbbc04;
+    color: #000
 }
 
 /* Additional styling for textarea in Creating Listing Form */
 .creating-listing-form textarea {
     resize: vertical;
+}
+
+/* Style for the Listings Container */
+.listings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Style for Each Listing Item */
+.listing-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.listing-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+
+/* Style for the Listings Container */
+.listings-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Default 4x4 layout for large screens */
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Media query for screens between 1024px and 1366px */
+@media (max-width: 1366px) {
+    .listings-container {
+        grid-template-columns: repeat(3, 1fr); /* 3x3 layout for medium-large screens */
+    }
+}
+
+/* Media query for screens smaller than 1024px */
+@media (max-width: 1024px) {
+    .listings-container {
+        grid-template-columns: repeat(2, 1fr); /* 2x2 layout for medium screens */
+    }
+}
+
+/* Media query for screens smaller than 600px */
+@media (max-width: 600px) {
+    .listings-container {
+        grid-template-columns: 1fr; /* 1 column layout for small screens */
+    }
+}
+
+
+.listing-item h3 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.listing-item p {
+    font-size: 1rem;
+    color: #555;
+    margin: 0.25rem 0;
+}
+
+/* Style for the "View Listing" Button */
+.pill-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pill-button:hover {
+    background-color: #0056b3;
+}
+
+/* Hover Effect for Listing Item */
+.listing-item:hover {
+    transform: translateY(-5px);
 }
