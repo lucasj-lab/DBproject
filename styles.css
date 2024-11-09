@@ -202,7 +202,7 @@ a.pill-button.back-to-listings {
     /* Removes underline */
     font-weight: bold;
     /* Makes text bold */
-    border-radius: 10px;
+    border-radius: 30px;
     /* Rounds the button for a pill shape */
     text-align: center;
     /* Centers text if the button expands */
@@ -329,6 +329,12 @@ form.listing-details-form {
     margin: 2rem;
     width: max-content;
 }
+
+form.listing-details-form h3 {
+    display: grid;
+    width: max-content;
+}
+
 
 form.listing-details-form p {
     text-align: justify;
