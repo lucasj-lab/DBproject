@@ -5,11 +5,16 @@ $username = "admin";
 $password = "Butterball3!";
 $dbname = "projectDB";
 
-// Create a MySQLi connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    // Create a PDO connection
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    
+    // Set PDO error mode to exception for better error handling
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    echo "Connected successfully"; // Optional message for successful connection (can be removed in production)
+} catch (PDOException $e) {
+    // Catch any connection errors and display a user-friendly message
+    die("Connection failed: " . $e->getMessage());
 }
 ?>
