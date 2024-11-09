@@ -1389,6 +1389,7 @@ table th, table td {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #eef5ff;
+    margin-top: 45px;
 }
 
 /* Style for Register Fields */
@@ -1538,8 +1539,10 @@ table th, table td {
     transition: background-color 0.3s;
 }
 
+
 .pill-button:hover {
-    background-color: #0056b3;
+    background-color: #fbbc04;
+    color: #000;
 }
 
 /* Hover Effect for Listing Item */
