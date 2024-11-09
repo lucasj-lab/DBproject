@@ -42,7 +42,7 @@ $category_stmt->bind_result($category);
 $category_stmt->fetch();
 $category_stmt->close();
 
-// Fetch images
+// Fetch images associated with the listing
 $image_stmt = $conn->prepare("SELECT file_path FROM images WHERE listing_id = ?");
 $image_stmt->bind_param("i", $listing_id);
 $image_stmt->execute();
@@ -109,65 +109,81 @@ $conn->close();
             border-radius: 50px;
             text-decoration: none;
         }
+
         .image-gallery img {
             width: 100px;
             height: auto;
-            margin: 5px;
+            margin-right: 10px;
+        }
+
+        .image-gallery {
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <?php include 'header.php'; ?>
+    </header>
 
-<header>
-    <?php include 'header.php'; ?>
-</header>
+    <div class="edit-listing-container">
+        <h2>Edit Listing</h2>
 
-<h1>Edit Listing</h1>
+        <?php if ($error_message): ?>
+            <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
 
-<div class="edit-listing">
-    <?php if (!empty($error_message)): ?>
-        <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
+        <form action="edit_listing.php?listing_id=<?php echo $listing_id; ?>" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($title); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea name="description" id="description" rows="4" required><?php echo htmlspecialchars($description); ?></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" name="price" id="price" value="<?php echo htmlspecialchars($price); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="<?php echo htmlspecialchars($state); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="<?php echo htmlspecialchars($city); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select name="category" id="category" required>
+                    <option value="Auto" <?php echo $category == 'Auto' ? 'selected' : ''; ?>>Auto</option>
+                    <option value="Electronics" <?php echo $category == 'Electronics' ? 'selected' : ''; ?>>Electronics</option>
+                    <option value="Furniture" <?php echo $category == 'Furniture' ? 'selected' : ''; ?>>Furniture</option>
+                    <option value="Other" <?php echo $category == 'Other' ? 'selected' : ''; ?>>Other</option>
+                </select>
+            </div>
 
-    <form method="POST" action="" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
+            <div class="form-group">
+                <label for="images">Upload New Images:</label>
+                <input type="file" name="images[]" id="images" multiple>
+            </div>
 
-        <label for="description">Description:</label>
-        <textarea name="description" required><?php echo htmlspecialchars($description); ?></textarea>
+            <div class="image-gallery">
+                <label>Current Images:</label>
+                <?php foreach ($images as $image) : ?>
+                    <img src="/<?php echo htmlspecialchars($image); ?>" alt="Current Listing Image">
+                <?php endforeach; ?>
+            </div>
 
-        <label for="price">Price:</label>
-        <input type="number" step="0.01" name="price" value="<?php echo htmlspecialchars($price); ?>" required>
+            <button type="submit" class="pill-button">Save Changes</button>
+        </form>
+    </div>
 
-        <label for="state">State:</label>
-        <input type="text" name="state" value="<?php echo htmlspecialchars($state); ?>" required>
-
-        <label for="city">City:</label>
-        <input type="text" name="city" value="<?php echo htmlspecialchars($city); ?>" required>
-
-        <label for="category">Category:</label>
-        <input type="text" name="category" value="<?php echo htmlspecialchars($category); ?>" required>
-
-        <!-- Existing Images Display -->
-        <div class="image-gallery">
-            <?php foreach ($images as $image): ?>
-                <img src="<?php echo htmlspecialchars($image); ?>" alt="Listing Image">
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Upload New Images -->
-        <label for="images">Upload New Images:</label>
-        <input type="file" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif">
-
-        <button type="submit" class="pill-button">Update Listing</button>
-    </form>
-</div>
-
-
-    <?php include 'footer.php'; ?>
-
-
+    <footer>
+        <?php include 'footer.php'; ?>
+    </footer>
 </body>
 
 </html>
