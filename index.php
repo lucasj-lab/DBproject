@@ -1,12 +1,24 @@
 <?php
-require 'database_connection.php';
-
+// Start the session at the top of the page to avoid any issues with session variables.
 session_start();
 
+// Include database connection
+require 'database_connection.php';
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rookielist</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
 <body>
   <?php include 'header.php'; ?>
@@ -22,6 +34,7 @@ session_start();
       </div>
     </section>
 
+    <!-- Search Form -->
     <form action="search_listings.php" method="get" class="search-form">
       <div class="search-container">
         <input type="text" id="title" name="title" placeholder="Search" class="search-input" required>
@@ -35,7 +48,7 @@ session_start();
     <section class="browse-categories">
       <h2>Browse Categories</h2>
       <div class="category-grid">
-
+        <!-- Category Forms -->
         <form action="browse_category.php" method="GET" class="category-item">
           <input type="hidden" name="category" value="Auto">
           <button type="submit" class="pill-button">
@@ -67,17 +80,16 @@ session_start();
             Other
           </button>
         </form>
-
       </div>
     </section>
   </main>
+
   <script>
     function toggleMobileMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
     }
   </script>
 
-  
   <footer>
     <?php include 'footer.php'; ?>
   </footer>
