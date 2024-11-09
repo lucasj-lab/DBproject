@@ -1,8 +1,3 @@
-
-create_listings
-
-
-
 <?php
 session_start();
 require 'database_connection.php';
@@ -13,30 +8,27 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
 ini_set('error_log', '/var/www/html/php-error.log'); // Update with the path to your log file
-
+trigger_error("This is a test error.", E_USER_NOTICE);
 $uploadDir = '/var/www/html/uploads/';
 
 /**
  * Retrieves the Category_ID from the category table based on the category name.
  *
- * @param mysqli $conn The database connection.
+ * @param PDO $conn The database connection.
  * @param string $categoryName The name of the category to search for.
  * @return int|false Returns the Category_ID if found, or false if not.
  */
 function getCategoryID($conn, $categoryName) {
     error_log("Retrieving Category ID for category: $categoryName");
+
+    // Use PDO prepared statement
     $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
-    if (!$stmt) {
-        error_log("Prepare failed for getCategoryID: " . $conn->error);
-        return false;
-    }
-    $stmt->bind_param("s", $categoryName);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $category_id = $result->fetch_assoc()['Category_ID'] ?? false;
-    $stmt->close();
+    $stmt->execute([$categoryName]);
+    $category_id = $stmt->fetch(PDO::FETCH_ASSOC)['Category_ID'] ?? false;
+
     return $category_id;
 }
+
 if (!isset($_SESSION['user_id'])) {
     error_log("User is not logged in");
     echo "
@@ -60,7 +52,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     error_log("Form submitted: " . json_encode($_POST));
     $user_id = $_SESSION['user_id'];
@@ -78,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Get Category_ID
+    // Get Category_ID using PDO
     $category_id = getCategoryID($conn, $category);
     if ($category_id === false) {
         error_log("Invalid category selected: $category");
@@ -86,53 +77,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Insert listing into database
+    // Insert listing into database using PDO
     $stmt = $conn->prepare("INSERT INTO listings (User_ID, Title, Description, Price, Date_Posted, Category_ID, State, City) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)");
     if (!$stmt) {
-        error_log("Prepare failed for listing insertion: " . $conn->error);
+        error_log("Prepare failed for listing insertion: " . $conn->errorInfo()[2]);
         echo "<p>Database error: Unable to create listing.</p>";
         exit();
     }
-    $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
 
-    if ($stmt->execute()) {
-        $listing_id = $stmt->insert_id;
-        error_log("Listing created with ID: $listing_id");
+    // Execute the statement with the necessary bindings
+    $stmt->execute([$user_id, $title, $description, $price, $category_id, $state, $city]);
 
-        // Handle image uploads
-        if (!empty($_FILES['images']['name'][0])) {
-            $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
-            if (!$image_stmt) {
-                error_log("Prepare failed for image insertion: " . $conn->error);
-                echo "<p>Error preparing image insertion.</p>";
-                exit();
-            }
+    // Get the inserted listing's ID
+    $listing_id = $conn->lastInsertId();
+    error_log("Listing created with ID: $listing_id");
 
-            foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
-                $fileName = basename($_FILES['images']['name'][$index]);
-                $targetPath = $uploadDir . $fileName;
-
-                if (move_uploaded_file($tmpName, $targetPath)) {
-                    $image_url = 'uploads/' . $fileName;
-                    $image_stmt->bind_param("si", $image_url, $listing_id);
-                    if ($image_stmt->execute()) {
-                        error_log("Image uploaded successfully: $fileName");
-                    } else {
-                        error_log("Error inserting image into database: " . $image_stmt->error);
-                    }
-                } else {
-                    error_log("Error moving uploaded file: $fileName");
-                }
-            }
-            $image_stmt->close();
+    // Handle image uploads
+    if (!empty($_FILES['images']['name'][0])) {
+        $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
+        if (!$image_stmt) {
+            error_log("Prepare failed for image insertion: " . $conn->errorInfo()[2]);
+            echo "<p>Error preparing image insertion.</p>";
+            exit();
         }
-    } else {
-        error_log("Error executing listing insertion: " . $stmt->error);
-        echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
+
+        foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
+            $fileName = basename($_FILES['images']['name'][$index]);
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($tmpName, $targetPath)) {
+                $image_url = 'uploads/' . $fileName;
+                $image_stmt->execute([$image_url, $listing_id]);
+                error_log("Image uploaded successfully: $fileName");
+            } else {
+                error_log("Error moving uploaded file: $fileName");
+            }
+        }
+        $image_stmt->close();
     }
 
-    $stmt->close();
-    $conn->close();
+    echo "<p>Listing created successfully.</p>";
 } else {
     ?>
     <!DOCTYPE html>
@@ -142,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <title>Create Listing</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <>
+    <body>
         <?php include 'header.php'; ?>
         
         <div class="creating-listing-form">
@@ -170,43 +154,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <select id="city-dropdown" name="city">
                         <option value="">--Select City--</option>
                     </select>
-                    <label for="images">Upload Images:</label>
-                    <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
-                    <button type="submit">Submit</button>
+                    <input type="file" name="images[]" multiple>
+                    <button type="submit">Create Listing</button>
                 </div>
             </form>
         </div>
-
-        <script>
-            const citiesByState = {
-                'AL': ['Birmingham', 'Montgomery', 'Huntsville', 'Mobile', 'Tuscaloosa'],
-                'AK': ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'],
-                'AZ': ['Phoenix', 'Tucson', 'Mesa', 'Chandler', 'Scottsdale'],
-                'AR': ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale', 'Jonesboro'],
-                'CA': ['Los Angeles', 'San Francisco', 'San Diego', 'San Jose', 'Sacramento']
-            };
-
-            function updateCities() {
-                const stateSelect = document.getElementById('state');
-                const cityDropdown = document.getElementById('city-dropdown');
-                const selectedState = stateSelect.value;
-
-                cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-
-                if (selectedState && citiesByState[selectedState]) {
-                    citiesByState[selectedState].forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        cityDropdown.appendChild(option);
-                    });
-                }
-            }
-        </script>
-
-        <?php include 'footer.php'; ?>
     </body>
     </html>
-    <?php
+<?php
 }
 ?>
