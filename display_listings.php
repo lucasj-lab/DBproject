@@ -4,6 +4,8 @@ require 'database_connection.php';
 // Fetch listings with category, user, and image data
 if (isset($_GET['id'])) {
     $listing_id = intval($_GET['id']);  // Make sure to cast to integer for security
+
+    // Prepare the SQL query
     $sql = "
         SELECT 
             listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
@@ -12,27 +14,36 @@ if (isset($_GET['id'])) {
         JOIN user ON listings.User_ID = user.User_ID
         JOIN category ON listings.Category_ID = category.Category_ID
         LEFT JOIN images ON listings.Listing_ID = images.Listing_ID
-        WHERE listings.Listing_ID = ?
+        WHERE listings.Listing_ID = :listing_id
     ";
+
+    // Prepare the statement
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $listing_id);
+
+    // Bind the parameter using PDO syntax
+    $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+
+    // Execute the query
     $stmt->execute();
-    $result = $stmt->get_result();
-    
+
+    // Fetch the results
     $listingDetails = [];
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Group images by listing ID
             $listingDetails['details'] = $row;
             $listingDetails['images'][] = $row['Image_URL'];
         }
     }
-    $stmt->close();
+
+    // Close the statement (optional with PDO, but good practice)
+    $stmt->closeCursor();
 } else {
     echo "<p>Listing ID not provided.</p>";
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
