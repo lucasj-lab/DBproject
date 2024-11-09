@@ -5,7 +5,7 @@ require 'database_connection.php';
 if (isset($_GET['id'])) {
     $listing_id = intval($_GET['id']);
 
-    // Query to fetch listing details
+    // Query to fetch listing details using PDO
     $sql = "
         SELECT 
             listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
@@ -19,28 +19,35 @@ if (isset($_GET['id'])) {
         LEFT JOIN 
             images ON listings.Listing_ID = images.Listing_ID
         WHERE 
-            listings.Listing_ID = $listing_id
+            listings.Listing_ID = :listing_id
     ";
 
-    $result = $conn->query($sql);
-    if ($result === false) {
-        echo "Query error: " . $conn->error;
-        exit;
-    } elseif ($result->num_rows > 0) {
-        $listing = $result->fetch_assoc();
-    } else {
-        echo "No listing found for ID: $listing_id";
+    try {
+        // Prepare and execute the query using PDO
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch the listing details
+        $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If listing is not found
+        if (!$listing) {
+            echo "No listing found for ID: $listing_id";
+            exit;
+        }
+
+    } catch (PDOException $e) {
+        // Handle any PDO exceptions
+        echo "Error: " . $e->getMessage();
         exit;
     }
+
 } else {
     echo "No listing ID provided in URL.";
     exit;
 }
-
-// Close the database connection
-$conn->close();
 ?>
-
 
 <script>
     // Get the raw date from the data attribute
@@ -58,8 +65,6 @@ $conn->close();
     dateElement.textContent += formattedDate;
 </script>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,9 +80,9 @@ $conn->close();
     <?php include 'header.php'; ?>
 <main>
 
-    <sect>
+    <section>
 
-        <h1> Listing Details </h1>
+        <h1>Listing Details</h1>
 
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">
@@ -89,8 +94,7 @@ $conn->close();
             <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
             <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
             <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?>
-            </p>
+            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
             <p><strong>Date Posted:</strong>
                 <?php
                 $datePosted = new DateTime($listing['Date_Posted']);
@@ -100,13 +104,14 @@ $conn->close();
             <!-- Back to Listings button -->
             <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
         </form>
-        
-        </main>
 
+    </section>
+    
+</main>
 
-        <footer>
-            <?php include 'footer.php'; ?>
-        </footer>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
 
 </body>
 

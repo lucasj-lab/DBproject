@@ -7,29 +7,38 @@ require 'database_connection.php';
 
 $error_message = ""; // Initialize error message variable
 
-if ($_SERVER["REQUEST_METHOD"] === "POST")
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-// Prepare and execute the query to fetch user details by email
-$stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-    if (password_verify($password, $user['Password'])) {
-        $_SESSION['user_id'] = $user['User_ID'];
-        $_SESSION['message'] = "Login successful!";
-        $_SESSION['message_type'] = 'success';
-        header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
-        exit();
+    // Basic validation
+    if (empty($email) || empty($password)) {
+        $error_message = "Email and password are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Invalid email format.";
     } else {
-        $_SESSION['message'] = "Incorrect password.";
-        $_SESSION['message_type'] = 'error';
-    }
+        // Prepare and execute the query to fetch user details by email
+        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
+        $stmt->bindValue(1, $email, PDO::PARAM_STR);
+        $stmt->execute();
 
+        // Fetch the user data
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['Password'])) {
+            // Successful login
+            $_SESSION['user_id'] = $user['User_ID'];
+            $_SESSION['message'] = "Login successful!";
+            $_SESSION['message_type'] = 'success';
+            header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
+            exit();
+        } else {
+            // Invalid login credentials
+            $error_message = "Incorrect email or password.";
+        }
+
+        $stmt->closeCursor(); // Close the statement after use
+    }
 }
 ?>
 

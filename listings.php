@@ -9,7 +9,7 @@ require 'database_connection.php';
 
 // Check if the request is an AJAX request for listings data
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
-    // Fetch all listings with user, category, and image data
+    // Fetch all listings with user, category, and image data using PDO
     $sql = "
         SELECT 
             listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
@@ -25,26 +25,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
         ORDER BY 
             listings.Date_Posted DESC
     ";
-    $result = $conn->query($sql);
 
-    // Prepare listings array
-    $listings = [];
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            // Format the date
-            $datePosted = new DateTime($row['Date_Posted']);
-            $row['Formatted_Date'] = $datePosted->format('l, F jS, Y');
-            $listings[] = $row;
+    try {
+        // Prepare and execute the query using PDO
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        // Fetch all listings from the database
+        $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Format the date and prepare the listings array
+        if ($listings) {
+            foreach ($listings as &$listing) {
+                $datePosted = new DateTime($listing['Date_Posted']);
+                $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y');
+            }
+        } else {
+            // If no listings are found
+            $listings = ["message" => "No listings available."];
         }
-    } else {
-        // If no listings are found
-        $listings = ["message" => "No listings available."];
+
+        // Output the listings in JSON format
+        header('Content-Type: application/json');
+        echo json_encode($listings);
+    } catch (PDOException $e) {
+        // Handle any PDO exceptions
+        header('Content-Type: application/json');
+        echo json_encode(["error" => "Database error: " . $e->getMessage()]);
     }
 
-    // Output the listings in JSON format
-    header('Content-Type: application/json');
-    echo json_encode($listings);
-    $conn->close();
     exit();
 }
 ?>
@@ -105,18 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     <p><strong>Posted by:</strong> ${listing.User_Name}</p>
                     <p><strong>Category:</strong> ${listing.Category_Name}</p>
                     <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                    <p><strong>Date Posted:</strong> ${listing.Formatted_Date}</p>
-                    <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
-                        View Listing
-                    </button>
+                    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                    <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
                 `;
 
                 listingsContainer.appendChild(listingDiv);
             });
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
         }
     </script>
 </head>
@@ -124,14 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 <body>
     <?php include 'header.php'; ?>
 
-    <main>
-    <h1>Active Listings</h1>
-        <section id="listings">
-            <p>Loading listings...</p>
-        </section>
-    </main>
+    <div class="listings-container">
+        <h2>Active Listings</h2>
+
+        <!-- The listings will be dynamically inserted here -->
+        <div id="listings"></div>
+    </div>
+
+    <?php include 'footer.php'; ?>
 
 </body>
-<?php include 'footer.php'; ?>
 
 </html>

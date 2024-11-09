@@ -24,44 +24,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['message'] = "Password must be at least 8 characters long.";
         $_SESSION['message_type'] = 'error';
     } else {
-        // Check if email is already registered
+        // Check if email is already registered using PDO
         $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
-        $stmt->bind_param("s", $email);
+        $stmt->bindValue(1, $email, PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result->num_rows > 0) {
+        if ($result) {
             $_SESSION['message'] = "Email is already registered.";
             $_SESSION['message_type'] = 'error';
         } else {
-            // Insert new user
+            // Insert new user using PDO
             $stmt = $conn->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bind_param("ssss", $name, $email, $hashed_password, $dateJoined);
+            $stmt->bindValue(1, $name, PDO::PARAM_STR);
+            $stmt->bindValue(2, $email, PDO::PARAM_STR);
+            $stmt->bindValue(3, $hashed_password, PDO::PARAM_STR);
+            $stmt->bindValue(4, $dateJoined, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Sign up successful! You can now log in.";
                 $_SESSION['message_type'] = 'success';
             } else {
-                $_SESSION['message'] = "Sign up failed: " . $stmt->error;
+                $_SESSION['message'] = "Sign up failed: " . $stmt->errorInfo()[2];
                 $_SESSION['message_type'] = 'error';
             }
         }
-        $stmt->close();
+        $stmt->closeCursor();
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Sign up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <?php include 'header.php'; ?>
 
@@ -88,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters">
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password"
                     required title="Please re-enter your password to confirm.">
-                <button type="submit">Sign up</button>
+                <button type="submit">Sign Up</button>
             </div>
         </form>
     </div>

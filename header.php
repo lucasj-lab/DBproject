@@ -1,12 +1,16 @@
 <?php
 // Start session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+session_start();
+
+// Redirect to login if user is not logged in
+if (!isset($_SESSION['name'])) {
+    header('Location: login.php');
+    exit();
 }
 
-// Set default values for session variables to avoid undefined index warnings
+// Sanitize session variables to prevent XSS
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
-$username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is not set
+$username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User' if 'username' is not set
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +21,9 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $isAdmin ? 'Admin Dashboard' : 'Rookielist'; ?></title>
   <link rel="stylesheet" href="styles.css">
+  <header>
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  </header>
 </head>
 
 <body>
@@ -38,8 +45,6 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
         <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>
-
-  
 
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
@@ -65,5 +70,5 @@ $username = $_SESSION['name'] ?? 'User'; // Defaults to 'User' if 'username' is 
     }
   </script>
 
-    </body>
-    </html>
+</body>
+</html>

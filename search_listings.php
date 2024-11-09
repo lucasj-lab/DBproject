@@ -10,7 +10,7 @@ require 'database_connection.php';
 
 // Fetch search term from the request
 $searchTerm = $_GET['q'] ?? ''; // Using GET for search term
-$searchTerm = '%' . $conn->real_escape_string($searchTerm) . '%';
+$searchTerm = '%' . $pdo->quote($searchTerm) . '%';
 
 // Fetch listings based on search term
 $sql = "
@@ -26,46 +26,44 @@ $sql = "
     LEFT JOIN 
         images ON listings.Listing_ID = images.Listing_ID
     WHERE 
-        listings.Title LIKE ? OR listings.Description LIKE ? 
+        listings.Title LIKE :searchTerm OR listings.Description LIKE :searchTerm
     ORDER BY 
         listings.Date_Posted DESC
 ";
 
+try {
+    // Prepare and execute the query using PDO
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+    $stmt->execute();
 
-// Database query preparation
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $searchTerm, $searchTerm);
-$stmt->execute();
-$result = $stmt->get_result();
+    // Fetch the listings
+    $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Initialize the listings array
-$listings = [];
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Format the Date_Posted field
-        if (!empty($row['Date_Posted'])) {
-            $datePosted = new DateTime($row['Date_Posted']);
-            $formattedDate = $datePosted->format('l, F jS, Y'); // e.g., "Friday, November 1st, 2024"
+    // Format the date for each listing
+    foreach ($listings as &$listing) {
+        if (!empty($listing['Date_Posted'])) {
+            $datePosted = new DateTime($listing['Date_Posted']);
+            $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y'); // Format the date
         } else {
-            $formattedDate = "Date not available";
+            $listing['Formatted_Date'] = "Date not available";
         }
-
-        // Add the formatted date to the row array
-        $row['Formatted_Date'] = $formattedDate;
-
-        // Add the modified row to the listings array
-        $listings[] = $row;
     }
-} else {
-    $listings = ["message" => "No listings found for your search."];
+
+    // If no listings are found
+    if (empty($listings)) {
+        $listings = ["message" => "No listings found for your search."];
+    }
+
+} catch (PDOException $e) {
+    // Handle any PDO exceptions
+    echo "Error: " . $e->getMessage();
+    exit;
 }
 
-// Close the statement and connection
-$stmt->close();
-$conn->close();
+// Close the database connection
+$pdo = null;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,8 +78,9 @@ $conn->close();
 <body>
 
     <header>
-        <?php include 'header.php'; ?> 
-</header>
+        <?php include 'header.php'; ?>
+    </header>
+
     <script>
         function toggleMobileMenu() {
             document.getElementById("mobileMenu").classList.toggle("active");
@@ -93,21 +92,18 @@ $conn->close();
             <?php if (!empty($listings[0]['Listing_ID'])): ?>
                 <?php foreach ($listings as $listing): ?>
                     <div class="listing-item">
-                        <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
+                        <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
                         <h3><?= htmlspecialchars($listing['Title']); ?></h3>
                         <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
                         <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
                         <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
-                            <?= htmlspecialchars($listing['State']); ?></p>
-                        <p><strong>Posted on:</strong>
-                            <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
+                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
+                        <p><strong>Posted on:</strong> <?= htmlspecialchars($listing['Formatted_Date']); ?></p>
                         <button type="button" class="pill-button"
                             onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
                             View Listing
                         </button>
                     </div>
-
                 <?php endforeach; ?>
             <?php else: ?>
                 <p><?= htmlspecialchars($listings['message']); ?></p>
@@ -115,9 +111,10 @@ $conn->close();
         </section>
     </main>
 
- <footer>
-    <?php include 'footer.php'; ?>
-</footer>
+    <footer>
+        <?php include 'footer.php'; ?>
+    </footer>
+
 </body>
 
 </html>
