@@ -105,7 +105,7 @@ $stmt->closeCursor();  // Close the statement after use
                 </table>
             </div>
         <?php else: ?>
-            <p>You have no listings yet. <a href="create_listing.php">Create one here</a>.</p>
+            <p>You have no listings yet!! <a href="create_listing.php">Create one here</a>.</p>
         <?php endif; ?>
     </main>
 
