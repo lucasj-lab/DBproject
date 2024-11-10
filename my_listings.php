@@ -36,7 +36,7 @@ $pdo = null;
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="listings">
+    <div class="listing-container">
         <h2>Your Listings</h2>
         <?php if (!empty($listings)): ?>
             <ul>
