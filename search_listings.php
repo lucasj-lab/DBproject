@@ -9,8 +9,10 @@ ini_set('display_errors', 1);
 require 'database_connection.php';
 
 // Fetch search term from the request
-$searchTerm = $_GET['q'] ?? ''; // Using GET for search term
-$searchTerm = '%' . $pdo->quote($searchTerm) . '%';
+$searchTerm = $_GET['q'] ?? '';
+
+// Prepare the search term with wildcards for use in LIKE
+$searchTerm = '%' . $searchTerm . '%';
 
 // Fetch listings based on search term
 $sql = "
@@ -34,7 +36,7 @@ $sql = "
 try {
     // Prepare and execute the query using PDO
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':searchTerm', $searchTerm, PDO::PARAM_STR);
     $stmt->execute();
 
     // Fetch the listings
@@ -52,7 +54,7 @@ try {
 
     // If no listings are found
     if (empty($listings)) {
-        $listings = ["message" => "No listings found for your search."];
+        $listings = [["message" => "No listings found for your search."]];
     }
 
 } catch (PDOException $e) {
@@ -64,19 +66,15 @@ try {
 // Close the database connection
 $pdo = null;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-
     <header>
         <?php include 'header.php'; ?>
     </header>
@@ -106,7 +104,7 @@ $pdo = null;
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p><?= htmlspecialchars($listings['message']); ?></p>
+                <p><?= htmlspecialchars($listings[0]['message']); ?></p>
             <?php endif; ?>
         </section>
     </main>
@@ -114,7 +112,5 @@ $pdo = null;
     <footer>
         <?php include 'footer.php'; ?>
     </footer>
-
 </body>
-
 </html>
