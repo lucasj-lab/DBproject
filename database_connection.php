@@ -1,13 +1,5 @@
 <?php
 
-
-require 'database_connection.php';
-if ($conn) {
-    echo "Database connected successfully!";
-} else {
-    echo "Failed to connect to database.";
-}
-
 // Database connection parameters
 $servername = "database-1-instance-1.ctkqko2k074a.us-east-2.rds.amazonaws.com";
 $username = "admin";

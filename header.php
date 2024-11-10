@@ -1,5 +1,4 @@
 <?php
-// Start session if not already started
 session_start();
 
 // Redirect to login if user is not logged in and we're not already on the login page
