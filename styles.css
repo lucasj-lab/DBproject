@@ -1484,15 +1484,16 @@ table td {
 
 /* Style for the Listings Container */
 .listings-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: inline;
+    grid-template-columns: repeat(4, 1fr);
+    /* Default 4x4 layout for large screens */
     gap: 20px;
     padding: 20px;
-}
 
+}
 /* Style for Each Listing Item */
 .listing-item {
-    display: flex;
+
     flex-direction: column;
     align-items: center;
     padding: 1.5rem;
@@ -1715,7 +1716,6 @@ table td {
     font-size: 1rem;
     cursor: pointer;
     border: none;
-    border-radius: 4px;
     color: #fff;
     background-color: #1a73e8;
     transition: background-color 0.3s ease;
@@ -1734,4 +1734,60 @@ table td {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 0.9rem;
+}
+
+/* Mobile styles for Edit Listing container */
+@media only screen and (max-width: 600px) {
+    .edit-listing-container {
+        padding: 20px;
+        margin: 0 auto;
+        width: 90%; /* Takes up most of the screen */
+    }
+
+    .edit-listing-container h2 {
+        font-size: 1.5rem; /* Smaller heading */
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* Space between fields */
+        display: flex;
+        flex-direction: column; /* Stack labels and inputs vertically */
+    }
+
+    .form-group label {
+        font-size: 0.9rem; /* Smaller label text */
+        margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group textarea {
+        font-size: 1rem; /* Adjust font size */
+        padding: 10px;
+        width: 100%; /* Full width input */
+        box-sizing: border-box; /* Prevent overflow */
+    }
+
+    .image-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .image-gallery img {
+        width: 70px; /* Smaller preview size */
+        margin: 5px;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .pill-button {
+        font-size: 1rem;
+        padding: 10px;
+        width: 100%; /* Full-width button */
+        margin-top: 10px;
+        text-align: center;
+    }
 }

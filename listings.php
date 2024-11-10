@@ -68,60 +68,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchListings();
+    });
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetchListings();
-        });
-
-        function fetchListings() {
-            fetch('listings.php?fetchListings=true')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-                    } else if (data.message) {
-                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-                    } else {
-                        displayListings(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
-                });
-        }
-
-        function displayListings(listings) {
-            const listingsContainer = document.getElementById("listings");
-            listingsContainer.innerHTML = "";  // Clear previous content
-
-            listings.forEach(listing => {
-                const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
-
-                const image = listing.Image_URL || "no_image.png"; // Placeholder image
-                listingDiv.innerHTML = `
-                    <img src="${image}" alt="Listing Image" class="listing-image">
-                    <h3><strong>${listing.Title}</strong></h3>
-                    <p><strong>Description:</strong> ${listing.Description}</p>
-                    <p><strong>Price:</strong> $${listing.Price}</p>
-                    <p><strong>Posted by:</strong> ${listing.User_Name}</p>
-                    <p><strong>Category:</strong> ${listing.Category_Name}</p>
-                    <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-                    <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
-                `;
-
-                listingsContainer.appendChild(listingDiv);
+    function fetchListings() {
+        fetch('listings.php?fetchListings=true')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                } else if (data.message) {
+                    document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                } else {
+                    displayListings(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching listings:', error);
+                document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
             });
-        }
-    </script>
+    }
+
+    function displayListings(listings) {
+        const listingsContainer = document.getElementById("listings");
+        listingsContainer.innerHTML = "";  // Clear previous content
+
+        listings.forEach(listing => {
+            const listingDiv = document.createElement("div");
+            listingDiv.className = "listing-item";
+
+            // Use the correct variable name for the image
+            const image = listing.Image_URL || "no_image.png"; // Fallback image
+
+            listingDiv.innerHTML = `
+                <img src="${image}" alt="Listing Image" class="listing-image">
+                <h3><strong>${listing.Title}</strong></h3>
+                <p><strong>Description:</strong> ${listing.Description}</p>
+                <p><strong>Price:</strong> $${listing.Price}</p>
+                <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
+            `;
+
+            listingsContainer.appendChild(listingDiv);
+        });
+    }
+</script>
 </head>
 
 <body>
