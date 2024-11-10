@@ -1665,3 +1665,73 @@ table td {
     margin: 5px;
     border: 1px solid #ddd;
 }
+
+
+.edit-listing-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table layout */
+.edit-listing-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.edit-listing-container th, .edit-listing-container td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.edit-listing-container th {
+    background-color: #1a73e8;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.edit-listing-container td {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Buttons styling */
+.edit-listing-container .btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.edit-listing-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #1a73e8;
+    transition: background-color 0.3s ease;
+}
+
+.edit-listing-container button:hover {
+    background-color: #145db2;
+}
+
+/* Optional styling for inputs in the table if needed */
+.edit-listing-container input[type="text"], 
+.edit-listing-container input[type="number"], 
+.edit-listing-container textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
