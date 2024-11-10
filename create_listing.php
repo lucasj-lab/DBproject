@@ -140,38 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-        <label>Title</label>
-        <input type="text" name="title" required>
-
-        <label>Category</label>
-        <select name="category" required>
-            <option value="">--Select Category--</option>
-            <option value="Auto">Auto</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Furniture">Furniture</option>
-            <option value="Other">Other</option>
-        </select>
-
-        <label>Description</label>
-        <textarea name="description" rows="4" required></textarea>
-
-        <label>Price</label>
-        <input type="number" step="0.01" name="price" required>
-
-        <label>State</label>
-        <input type="text" name="state" required>
-
-        <label>City</label>
-        <input type="text" name="city" required>
-
-        <label>Upload Images</label>
-        <input type="file" name="images[]" multiple>
-
-        <button type="submit">Submit Listing</button>
-    </form>
-
-
 
 
     <?php include 'header.php'; ?>
@@ -196,7 +164,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="AK">Alaska</option>
                     <!-- Add other states as needed -->
                 </select>
-                <input type="text" id="city" name="city" placeholder="City" required>
+    <select id="city" name="city" placeholder="City" required>
+        <option Value="">--Select City--/select</option>
+        
                 <input type="file" name="images[]" multiple>
                 <button type="submit">Submit Listing</button>
             </div>
