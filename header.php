@@ -2,11 +2,12 @@
 // Start session if not already started
 session_start();
 
-// Redirect to login if user is not logged in
-if (!isset($_SESSION['name'])) {
-    header('Location: login.php');
-    exit();
+// Redirect to login if user is not logged in and we're not already on the login page
+if (!isset($_SESSION['name']) && basename($_SERVER['PHP_SELF']) !== 'login.php') {
+  header('Location: login.php');
+  exit();
 }
+
 
 // Sanitize session variables to prevent XSS
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
