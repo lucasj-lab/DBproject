@@ -113,8 +113,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <a href="edit_listing.php?id=<?php echo $listing_id; ?>" class="pill-button-edit">Edit</a> |
-                                    <a href="delete_listing.php?id=<?php echo $listing_id; ?>" class="pill-button-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <a href="edit_listing.php?listing_id=<?php echo $listing_id; ?>" class="pill-button-edit">Edit</a> |
+                                    <a href="delete_listing.php?listing_id=<?php echo $listing_id; ?>" class="pill-button-delete" onclick="return confirm('Are you sure?')">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
