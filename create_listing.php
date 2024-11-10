@@ -1,7 +1,7 @@
 <?php
 // Start the session only if it has not been started yet
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+
 }
 
 // Enable error reporting
@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', '/var/www/html/php-error.log'); 
+ini_set('error_log', '/var/www/html/php-error.log');
 
 // Include the database connection file
 require 'database_connection.php';
@@ -40,7 +40,7 @@ if (!isset($_SESSION['user_id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     error_log("Form submitted: " . json_encode($_POST));
-    
+
     // Fetch form data and sanitize
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title'] ?? '');
@@ -57,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+
     // Get Category_ID
     $category_id = getCategoryID($conn, $category);
     if ($category_id === false) {
@@ -72,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<p>Database error: Unable to create listing.</p>";
         exit();
     }
-    
+
     $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
 
     if ($stmt->execute()) {
@@ -113,18 +114,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
     $conn->close();
+
+
+    // JavaScript to show success modal after submission
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("successModal").style.display = "block";
+        });
+    </script>';
 } else {
+    error_log("Error executing listing insertion: " . $stmt->error);
+    echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
     ?>
     <!DOCTYPE html>
     <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <title>Create Listing</title>
         <link rel="stylesheet" href="styles.css">
     </head>
+
     <body>
         <?php include 'header.php'; ?>
-        
+
         <div class="creating-listing-form">
             <h2>Create a New Listing</h2>
             <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
@@ -160,8 +173,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <?php include 'footer.php'; ?>
+
+        <div id="successModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>Success!</h2>
+                <p>Your listing has been created successfully.</p>
+                <div class="modal-buttons">
+                    <button onclick="window.location.href='listings.php'">View All Listings</button>
+                    <button onclick="window.location.href='user_dashboard.php'">View My Listings</button>
+                    <button onclick="window.location.href='create_listing.php'">Create New Listing</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            const citiesByState = {
+                AL: ["Birmingham", "Montgomery", "Mobile", "Huntsville"],
+                AK: ["Anchorage", "Juneau", "Fairbanks", "Wasilla"],
+                AZ: ["Phoenix", "Tucson", "Mesa", "Chandler"],
+                AR: ["Little Rock", "Fort Smith", "Fayetteville", "Springdale"],
+                CA: ["Los Angeles", "San Diego", "San Jose", "San Francisco"]
+                // Add more states and cities as needed
+            };
+
+            function updateCities() {
+                const stateSelect = document.getElementById("state");
+                const citySelect = document.getElementById("city-dropdown");
+                const selectedState = stateSelect.value;
+
+                // Clear current city options
+                citySelect.innerHTML = '<option value="">--Select City--</option>';
+
+                // Populate city options based on selected state
+                if (citiesByState[selectedState]) {
+                    citiesByState[selectedState].forEach(city => {
+                        const option = document.createElement("option");
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                }
+            }
+        </script>
+
+
+        <!-- Modal JavaScript -->
+        <script>
+            // Close modal when clicking outside
+            window.onclick = function (event) {
+                const modal = document.getElementById("successModal");
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
     </body>
+
+
     </html>
-<?php
+    <?php
 }
 ?>
