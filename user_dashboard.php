@@ -11,18 +11,18 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch user data
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = ?");
-$stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Correct usage with PDO
+$stmt->bindValue(1, $user_id, PDO::PARAM_INT);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $stmt->closeCursor();  // Close the statement after use
 
 // Fetch user's listings
-$stmt = $pdo->prepare("SELECT User_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
-$stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Correct usage with PDO
+$stmt = $pdo->prepare("SELECT Listing_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
+$stmt->bindValue(1, $user_id, PDO::PARAM_INT);
 $stmt->execute();
-$listings = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Fetch all rows as associative array
+$listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt->closeCursor();  // Close the statement after use
-$conn = null;  // Close the connection
+
 ?>
 
 <!DOCTYPE html>
@@ -47,10 +47,16 @@ $conn = null;  // Close the connection
         <h1>User Dashboard</h1>
     </div>
 
+    <!-- Display success message if provided in the URL -->
+    <?php if (isset($_GET['msg'])): ?>
+        <div class="success-message">
+            <?php echo htmlspecialchars($_GET['msg']); ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Main Content -->
     <main class="dashboard-main">
 
-        <!-- Personalized welcome message with user data -->
         <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
 
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
@@ -88,14 +94,10 @@ $conn = null;  // Close the connection
                                     ?>
                                 </td>
                                 <td class="dashboard-cell actions-cell">
-                                    <?php if (isset($listing['Listing_ID'])): ?>
-                                        <a href="edit_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                            class="pill-button button-edit">Edit</a>
-                                        <a href="delete_listing.php?listing_id=<?php echo $listing['Listing_ID']; ?>"
-                                            class="pill-button button-delete" onclick="return confirm('Are you sure?')">Delete</a>
-                                    <?php else: ?>
-                                        <span class="text-muted">No actions available</span>
-                                    <?php endif; ?>
+                                    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
+                                        class="pill-button button-edit">Edit</a>
+                                    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
+                                        class="pill-button button-delete" onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

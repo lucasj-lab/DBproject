@@ -80,35 +80,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':city', $city, PDO::PARAM_STR);
 
         $stmt->execute();
-        $listing_id = $pdo->lastInsertId();
 
-        // Handle image uploads
-        if (!empty($_FILES['images']['name'][0])) {
-            $uploadDir = '/var/www/html/uploads/';
-            $image_stmt = $pdo->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (:image_url, :listing_id)");
-
-            foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
-                $fileName = basename($_FILES['images']['name'][$index]);
-                $targetPath = $uploadDir . $fileName;
-
-                if (move_uploaded_file($tmpName, $targetPath)) {
-                    $image_url = 'uploads/' . $fileName;
-                    $image_stmt->bindValue(':image_url', $image_url, PDO::PARAM_STR);
-                    $image_stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
-                    $image_stmt->execute();
-                } else {
-                    echo "<p>Error uploading file: $fileName</p>";
-                }
-            }
-        }
-
-        echo "<script>showSuccessModal();</script>";
+        // Redirect to listing success page
+        header("Location: listing_success.php");
+        exit();
 
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
