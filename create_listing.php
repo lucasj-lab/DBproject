@@ -2,16 +2,14 @@
 // Start the session
 session_start();
 
-// Include the database connection file
-require 'database_connection.php';
-
 // Enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
 ini_set('error_log', '/var/www/html/php-error.log'); 
-
+// Include the database connection file
+require 'database_connection.php';
 // Check if user_id is available in session
 if (!isset($_SESSION['user_id'])) {
     error_log("User is not logged in");
