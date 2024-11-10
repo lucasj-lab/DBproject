@@ -17,12 +17,12 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch user's listings with associated images, city, and state
 $sql = "SELECT listings.Listing_ID, listings.title, listings.description, listings.price, listings.date_posted, 
-               listings.city, listings.state, images.file_path 
+               listings.city, listings.state, images.image_url
         FROM listings 
         LEFT JOIN images ON listings.Listing_ID = images.Listing_ID
         WHERE listings.user_id = :user_id";
 $stmt = $pdo->prepare($sql);
-$stmt->execute(['user_id' => $user_id]);
+$stmt-> $pdo->execute(['user_id' => $user_id]);
 
 // Organize listings with their associated images
 $listings = [];
