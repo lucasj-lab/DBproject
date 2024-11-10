@@ -22,7 +22,8 @@ $sql = "SELECT listings.Listing_ID, listings.title, listings.description, listin
         LEFT JOIN images ON listings.Listing_ID = images.Listing_ID
         WHERE listings.user_id = :user_id";
 $stmt = $pdo->prepare($sql);
-$stmt-> $pdo->execute(['user_id' => $user_id]);
+$stmt->execute(['user_id' => $user_id]);
+
 
 // Organize listings with their associated images
 $listings = [];
