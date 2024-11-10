@@ -40,10 +40,10 @@ try {
     $category = $category_stmt->fetchColumn();
 
     // Fetch images associated with the listing
-    $image_stmt = $pdo->prepare("SELECT file_path FROM images WHERE listing_id = :listing_id");
+    $image_stmt = $pdo->prepare("SELECT image_url FROM images WHERE listing_id = :listing_id");
     $image_stmt->execute([':listing_id' => $listing_id]);
     while ($image = $image_stmt->fetch(PDO::FETCH_ASSOC)) {
-        $images[] = $image['file_path'];
+        $images[] = $image['image_url'];
     }
 
     // Handle form submission for updating the listing
@@ -76,16 +76,16 @@ try {
             // Handle new images if uploaded
             if (!empty($_FILES['images']['name'][0])) {
                 $uploadDir = '/var/www/html/uploads/';
-                $imageInsertStmt = $pdo->prepare("INSERT INTO images (listing_id, file_path) VALUES (:listing_id, :file_path)");
+                $imageInsertStmt = $pdo->prepare("INSERT INTO images (listing_id, image_url) VALUES (:listing_id, :image_url)");
 
                 foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
                     $fileName = basename($_FILES['images']['name'][$key]);
-                    $targetPath = $uploadDir . $fileName;
+                    $targetPath = $uploadDir . $imageUrl;
                     if (move_uploaded_file($tmpName, $targetPath)) {
-                        $file_path = 'uploads/' . $fileName;
+                        $image_url = 'uploads/' . $imageUrl;
                         $imageInsertStmt->execute([
                             ':listing_id' => $listing_id,
-                            ':file_path' => $file_path
+                            ':image_url' => $image_url
                         ]);
                     }
                 }

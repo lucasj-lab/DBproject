@@ -1794,17 +1794,22 @@ table td {
     }
 }
 
+/* Common styles for buttons inside actions-cell */
+.actions-cell a {
+    display: block;         /* Make the buttons block elements */
+    width: 100px;           /* Set a fixed width (adjust as needed) */
+    margin: 5px auto;       /* Center the buttons horizontally */
+    text-align: center;     /* Center the text inside the buttons */
+}
+
 /* Edit Button - Green */
 .pill-button-edit {
     background-color: #4caf50;
-    margin: 1em;
-    display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 0;        /* Adjust padding for consistent height */
     color: white;
     text-decoration: none;
     font-weight: bold;
     border-radius: 30px;
-    text-align: center;
     transition: background-color 0.3s ease;
 }
 
@@ -1815,14 +1820,11 @@ table td {
 /* Delete Button - Red */
 .pill-button-delete {
     background-color: #f44336;
-    margin: 1em;
-    display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 0;
     color: white;
     text-decoration: none;
     font-weight: bold;
     border-radius: 30px;
-    text-align: center;
     transition: background-color 0.3s ease;
 }
 
