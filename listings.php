@@ -1,4 +1,4 @@
-<?php
+<div?php
 
 // Enable error reporting
 error_reporting(E_ALL);
@@ -127,12 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="listings-container">
+
         <h2>Active Listings</h2>
 
         <!-- The listings will be dynamically inserted here -->
-        <div id="listings"></div>
-    </div>
+        <div class="listing-container"</div>
+
 
     <?php include 'footer.php'; ?>
 
