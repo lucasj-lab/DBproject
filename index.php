@@ -1,13 +1,8 @@
 <?php
-// Start the session at the top of the page to avoid any issues with session variables.
 session_start();
 
-// Include database connection
-require 'database_connection.php';
 
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require 'database_connection.php';
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +34,7 @@ ini_set('display_errors', 1);
       <div class="search-container">
         <input type="text" id="title" name="title" placeholder="Search" class="search-input" required>
         <button type="submit" class="search-btn">
-          <light>Search</light>
+          <label>Search</label>
         </button>
       </div>
     </form>

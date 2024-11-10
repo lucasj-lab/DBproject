@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', '/var/www/html/php-error.log');  // Update with the correct path if necessary
+ini_set('error_log', '/var/www/html/php-error.log'); 
 
 // Check if user_id is available in session
 if (!isset($_SESSION['user_id'])) {
