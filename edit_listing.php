@@ -50,7 +50,7 @@ if (!$listing) {
     </script>
 </head>
 <body>
-    <h1>Edit Listing</h1>
+<h1 class="edit-listing-title">Edit Your Listing</h1>
 
     <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
         <!-- Hidden input to keep the listing ID -->
@@ -71,7 +71,7 @@ if (!$listing) {
         <label for="state">State:</label>
         <input type="text" id="state" name="state" value="<?php echo htmlspecialchars($listing['state']); ?>" required>
 
-        <!-- Display existing images -->
+         <h3 class="edit-listing-subtitle">Current Image</h3>
         <div class="image-section">
             <h3>Current Image</h3>
             <?php if (!empty($listing['image_url'])): ?>
@@ -87,8 +87,8 @@ if (!$listing) {
         <!-- Image preview element -->
         <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 150px; height: auto; margin-top: 10px;">
 
-        <!-- Save button -->
-        <button type="submit" class="pill-button-edit">Save Changes</button>
+        <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-form">
+        <button type="submit" class="pill-button-edit">Update</button>
     </form>
 
     <!-- Include the footer -->
