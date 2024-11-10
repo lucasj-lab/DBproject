@@ -111,7 +111,7 @@ $stmt->closeCursor();  // Close the statement after use
 
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
+        <p>&copy; 2029 Rookies 2.0 | All rights reserved.</p>
     </footer>
 </body>
 
