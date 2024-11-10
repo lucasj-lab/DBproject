@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['message_type'] = 'error';
     } else {
         // Check if email is already registered using PDO
-        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
         $stmt->bindValue(1, $email, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['message_type'] = 'error';
         } else {
             // Insert new user using PDO
-            $stmt = $conn->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $stmt->bindValue(1, $name, PDO::PARAM_STR);
             $stmt->bindValue(2, $email, PDO::PARAM_STR);

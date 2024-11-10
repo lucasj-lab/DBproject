@@ -126,7 +126,8 @@ nav ul li a:hover {
 /* Listings Grid */
 #listings {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Default 4x4 layout for large screens */
+    grid-template-columns: repeat(4, 1fr);
+    /* Default 4x4 layout for large screens */
     gap: 20px;
     padding: 20px;
 }
@@ -134,7 +135,8 @@ nav ul li a:hover {
 /* Media query for screens between 1024px and 1366px */
 @media (max-width: 1366px) {
     #listings {
-        grid-template-columns: repeat(3, 1fr); /* 3x3 layout for medium-large screens */
+        grid-template-columns: repeat(3, 1fr);
+        /* 3x3 layout for medium-large screens */
         justify-content: center;
     }
 }
@@ -142,7 +144,8 @@ nav ul li a:hover {
 /* Media query for screens between 600px and 1024px */
 @media (max-width: 1024px) {
     #listings {
-        grid-template-columns: repeat(2, 1fr); /* 2x2 layout for medium screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2x2 layout for medium screens */
         justify-content: center;
     }
 }
@@ -150,7 +153,8 @@ nav ul li a:hover {
 /* Media query for screens smaller than 600px */
 @media (max-width: 600px) {
     #listings {
-        grid-template-columns: 1fr; /* 1 column layout for small screens */
+        grid-template-columns: 1fr;
+        /* 1 column layout for small screens */
         justify-content: center;
     }
 }
@@ -303,8 +307,7 @@ p {
     color: var(#000);
 }
 
-form.listing-details-header
-{
+form.listing-details-header {
     font-weight: 600;
     font-size: xxx-large;
 }
@@ -312,8 +315,8 @@ form.listing-details-header
 main {
     justify-self: center;
     text-align: center;
-  }
-  
+}
+
 /* Form Styles */
 form {
     margin: 2rem auto;
@@ -453,15 +456,16 @@ button:hover {
     padding: 1rem;
     margin-top: 1.5rem;
     justify-content: center;
-  }
-  
-  /* Media query for screens smaller than 1024px */
-  @media (max-width: 1024px) {
+}
+
+/* Media query for screens smaller than 1024px */
+@media (max-width: 1024px) {
     .category-grid {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns */
     }
-  }
-  
+}
+
 
 form.category-item {
     width: -webkit-fill-available;
@@ -469,7 +473,7 @@ form.category-item {
 }
 
 form.category-item {
-   
+
     padding: 1.5rem;
     border-radius: 15px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -477,7 +481,7 @@ form.category-item {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: inline-grid;
 
-     margin: 10px; 
+    margin: 10px;
     max-width: 300px;
 }
 
@@ -1262,7 +1266,8 @@ input[type=number] {
     background-color: #f44336;
 }
 
-.button-edit:hover, .button-delete:hover {
+.button-edit:hover,
+.button-delete:hover {
     opacity: 0.8;
     /* margin-bottom: 10px; */
 }
@@ -1281,10 +1286,14 @@ input[type=number] {
 .dashboard-main {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centers items horizontally */
-    justify-content: center; /* Centers items vertically */
-    min-height: 80vh; /* Ensures vertical centering */
-    text-align: center; /* Centers text */
+    align-items: center;
+    /* Centers items horizontally */
+    justify-content: center;
+    /* Centers items vertically */
+    min-height: 80vh;
+    /* Ensures vertical centering */
+    text-align: center;
+    /* Centers text */
     padding: 20px;
 }
 
@@ -1292,19 +1301,23 @@ input[type=number] {
     padding: 1rem;
     width: 100%;
     max-width: 850px;
-    margin: 0 auto; /* Centers the container */
+    margin: 0 auto;
+    /* Centers the container */
 }
 
 /* Media query for mobile devices */
 @media (max-width: 400px) {
     .dashboard-main {
-        padding: 0.5rem;       /* Reduce padding on smaller screens */
-        max-width: 100%;       /* Allow the container to take up the full width */
+        padding: 0.5rem;
+        /* Reduce padding on smaller screens */
+        max-width: 100%;
+        /* Allow the container to take up the full width */
     }
 }
 
 /* General full-width styling */
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -1312,7 +1325,8 @@ body, html {
 }
 
 /* Header and footer full-width styling */
-header, footer {
+header,
+footer {
     width: 100%;
     padding: 1rem;
 }
@@ -1322,13 +1336,15 @@ header, footer {
     padding: 1rem;
     width: 100%;
     max-width: 850px;
-    margin: 0 auto; /* Centers on wider screens */
+    margin: 0 auto;
+    /* Centers on wider screens */
 }
 
 /* Responsive table container */
 .table-container {
     width: 100%;
-    overflow-x: auto; /* Adds horizontal scroll for small screens */
+    overflow-x: auto;
+    /* Adds horizontal scroll for small screens */
     margin: 1rem 0;
 }
 
@@ -1338,7 +1354,8 @@ table {
     border-collapse: collapse;
 }
 
-table th, table td {
+table th,
+table td {
     padding: 0.75rem;
     border: 1px solid #ddd;
     text-align: left;
@@ -1351,13 +1368,16 @@ table th, table td {
         max-width: 100%;
     }
 
-    header, footer {
+    header,
+    footer {
         padding: 0.5rem;
     }
 
-    table th, table td {
+    table th,
+    table td {
         padding: 0.5rem;
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
+        font-size: 0.9rem;
+        /* Adjust font size for smaller screens */
     }
 }
 
@@ -1495,7 +1515,8 @@ table th, table td {
 /* Style for the Listings Container */
 .listings-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Default 4x4 layout for large screens */
+    grid-template-columns: repeat(4, 1fr);
+    /* Default 4x4 layout for large screens */
     gap: 20px;
     padding: 20px;
 }
@@ -1503,21 +1524,24 @@ table th, table td {
 /* Media query for screens between 1024px and 1366px */
 @media (max-width: 1366px) {
     .listings-container {
-        grid-template-columns: repeat(3, 1fr); /* 3x3 layout for medium-large screens */
+        grid-template-columns: repeat(3, 1fr);
+        /* 3x3 layout for medium-large screens */
     }
 }
 
 /* Media query for screens smaller than 1024px */
 @media (max-width: 1024px) {
     .listings-container {
-        grid-template-columns: repeat(2, 1fr); /* 2x2 layout for medium screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2x2 layout for medium screens */
     }
 }
 
 /* Media query for screens smaller than 600px */
 @media (max-width: 600px) {
     .listings-container {
-        grid-template-columns: 1fr; /* 1 column layout for small screens */
+        grid-template-columns: 1fr;
+        /* 1 column layout for small screens */
     }
 }
 
@@ -1563,7 +1587,8 @@ table th, table td {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Adds a subtle overlay */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Adds a subtle overlay */
     margin: 0;
 }
 
@@ -1597,43 +1622,46 @@ table th, table td {
     color: #333;
 }
 
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 300px;
-        text-align: center;
-        border-radius: 10px;
-    }
-    .modal-buttons button {
-        margin: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 5px;
-    }
-    .modal-buttons button:hover {
-        background-color: #0056b3;
-    }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
-    .preview-image {
-        width: 100px;
-        height: auto;
-        margin: 5px;
-        border: 1px solid #ddd;
-    }
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.modal-buttons button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.modal-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.preview-image {
+    width: 100px;
+    height: auto;
+    margin: 5px;
+    border: 1px solid #ddd;
+}

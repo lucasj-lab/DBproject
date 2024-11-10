@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         listings.forEach(listing => {
             const listingDiv = document.createElement("div");
-            listingDiv.className = "listing-item";
+            listingDiv.className = "listing-container"; // Add listing-container class
 
             const image = listing.Image_URL || "no_image.png"; // Placeholder image
             listingDiv.innerHTML = `
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     <p><strong>Category:</strong> ${listing.Category_Name}</p>
                     <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
                     <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-                    <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
+                    <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="pill-button">View Details</a>
                 `;
 
             listingsContainer.appendChild(listingDiv);

@@ -8,12 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 require 'database_connection.php';
 
 $user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT Listing_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$listings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
-$conn->close();
+
+try {
+    // Prepare and execute the query using PDO
+    $stmt = $pdo->prepare("SELECT Listing_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = :user_id");
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+// Close the connection by setting PDO to null
+$pdo = null;
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +53,9 @@ $conn->close();
                         </p>
                         <!-- Back to Listings button -->
                         <a href="create_listing.php" class="pill-button">New Listing</a>
-                        <a href="edit_listing.php?id=<?php echo $listing_id; ?>" class="pill-button">Edit Listing</a>
-                    <?php endforeach; ?>
+                        <a href="edit_listing.php?id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button">Edit Listing</a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         <?php else: ?>
             <p>You have no listings. <a href="create_listing.php">Create one here</a>.</p>
