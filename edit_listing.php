@@ -52,7 +52,7 @@ if (!$listing) {
 <body>
     <h1>Edit Listing</h1>
 
-    <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-form">
+    <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
         <!-- Hidden input to keep the listing ID -->
         <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
 
