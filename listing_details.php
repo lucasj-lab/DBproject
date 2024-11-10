@@ -2,8 +2,8 @@
 require 'database_connection.php';
 
 // Check if the Listing_ID is set in the URL
-if (isset($_GET['id'])) {
-    $listing_id = intval($_GET['id']);
+if (isset($_GET['listing_id'])) {
+    $listing_id = intval($_GET['listing_id']);
 
     // Query to fetch listing details using PDO
     $sql = "

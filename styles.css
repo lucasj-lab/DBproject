@@ -1515,7 +1515,7 @@ table td {
 
 /* Style for the Listings Container */
 .listings-container {
-    display: grid;
+
     grid-template-columns: repeat(4, 1fr);
     /* Default 4x4 layout for large screens */
     gap: 20px;
