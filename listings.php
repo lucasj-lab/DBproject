@@ -1,5 +1,5 @@
 <?php
-
+// listings.php - Combined version with header and footer
 
 // Enable error reporting
 error_reporting(E_ALL);
@@ -126,11 +126,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
 <body>
     <?php include 'header.php'; ?>
-"
+
+    <div class="listings-container">
         <h2>Active Listings</h2>
 
-        <!-- The listings will be dynamically inserted here -->
-        <div id="listing-container"></div>
+        <!-- Each listing will have the class "listing-container" -->
+        <div id="listings">
+            <?php foreach ($listings as $listing): ?>
+                <div class="listing-container">
+                    <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image"
+                        class="listing-image">
+                    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+                    <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
+                    <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
+                    <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
+                        <?= htmlspecialchars($listing['State']); ?></p>
+                    <p><strong>Posted on:</strong>
+                        <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
+                    <button type="button" class="pill-button"
+                        onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                        View Listing
+                    </button>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <?php include 'footer.php'; ?>
