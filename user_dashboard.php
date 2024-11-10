@@ -112,10 +112,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                         <p>No images available</p>
                                     <?php endif; ?>
                                 </td>
-                                <td>
-                                    <a href="edit_listing.php?listing_id=<?php echo $listing_id; ?>" class="pill-button-edit">Edit</a> |
-                                    <a href="delete_listing.php?listing_id=<?php echo $listing_id; ?>" class="pill-button-delete" onclick="return confirm('Are you sure?')">Delete</a>
-                                </td>
+                                <td class="dashboard-cell actions-cell">
+    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button-edit">Edit</a>
+    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button-delete" onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
+</td>
+
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

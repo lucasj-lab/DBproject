@@ -1247,30 +1247,6 @@ input[type=number] {
     text-align: center;
 }
 
-/* Button styling */
-.pill-button {
-    padding: 5px 10px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.9em;
-    color: #fff;
-    display: inline-block;
-}
-
-.button-edit {
-    background-color: #4CAF50;
-    margin-bottom: 10px;
-}
-
-.button-delete {
-    background-color: #f44336;
-}
-
-.button-edit:hover,
-.button-delete:hover {
-    opacity: 0.8;
-    /* margin-bottom: 10px; */
-}
 
 .welcome-heading {
     font-size: 2em;
@@ -1301,7 +1277,7 @@ input[type=number] {
     padding: 1rem;
     width: 100%;
     max-width: 850px;
-    margin: 0 auto;
+    margin: 0;
     /* Centers the container */
 }
 
@@ -1805,7 +1781,7 @@ table td {
 /* Edit Button - Green */
 .pill-button-edit {
     background-color: #4caf50;
-    padding: 10px 0;        /* Adjust padding for consistent height */
+    padding: 10px;        /* Adjust padding for consistent height */
     color: white;
     text-decoration: none;
     font-weight: bold;
