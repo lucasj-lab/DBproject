@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error_message = "Invalid email format.";
     } else {
         // Prepare and execute the query to fetch user details by email
-        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = :email");
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = :email");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 

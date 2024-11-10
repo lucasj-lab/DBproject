@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
     ";
 
     // Prepare the statement
-    $stmt = $conn->prepare($sql);
+    $stmt = $pdo->prepare($sql);
 
     // Bind the parameter using PDO syntax
     $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);

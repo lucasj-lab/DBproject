@@ -10,14 +10,14 @@ if (!isset($_SESSION['user_id'])) {
 
 // Fetch user data
 $user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = ?");
+$stmt = $pdo->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = ?");
 $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Correct usage with PDO
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $stmt->closeCursor();  // Close the statement after use
 
 // Fetch user's listings
-$stmt = $conn->prepare("SELECT User_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
+$stmt = $pdo->prepare("SELECT User_ID, Title, Description, Price, Date_Posted FROM listings WHERE User_ID = ?");
 $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Correct usage with PDO
 $stmt->execute();
 $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Fetch all rows as associative array

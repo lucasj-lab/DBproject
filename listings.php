@@ -69,43 +69,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
         integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetchListings();
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchListings();
+    });
 
-        function fetchListings() {
-            fetch('listings.php?fetchListings=true')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-                    } else if (data.message) {
-                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-                    } else {
-                        displayListings(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
-                });
-        }
+    function fetchListings() {
+        fetch('listings.php?fetchListings=true')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                } else if (data.message) {
+                    document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                } else {
+                    displayListings(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching listings:', error);
+                document.getElementById("listings").innerHTML =
+                    "<p>Error loading listings. Please try again later.</p>";
+            });
+    }
 
-        function displayListings(listings) {
-            const listingsContainer = document.getElementById("listings");
-            listingsContainer.innerHTML = "";  // Clear previous content
+    function displayListings(listings) {
+        const listingsContainer = document.getElementById("listings");
+        listingsContainer.innerHTML = ""; // Clear previous content
 
-            listings.forEach(listing => {
-                const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
+        listings.forEach(listing => {
+            const listingDiv = document.createElement("div");
+            listingDiv.className = "listing-item";
 
-                const image = listing.Image_URL || "no_image.png"; // Placeholder image
-                listingDiv.innerHTML = `
+            const image = listing.Image_URL || "no_image.png"; // Placeholder image
+            listingDiv.innerHTML = `
                     <img src="${image}" alt="Listing Image" class="listing-image">
                     <h3><strong>${listing.Title}</strong></h3>
                     <p><strong>Description:</strong> ${listing.Description}</p>
@@ -117,9 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
                 `;
 
-                listingsContainer.appendChild(listingDiv);
-            });
-        }
+            listingsContainer.appendChild(listingDiv);
+        });
+    }
     </script>
 </head>
 

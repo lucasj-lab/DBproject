@@ -1,5 +1,4 @@
 <?php
-// Start session if not already started
 session_start();
 
 // Sanitize session variables to prevent XSS
@@ -11,9 +10,12 @@ require 'database_connection.php';
 // Check if category ID is provided in the URL
 $categoryId = $_GET['category_id'] ?? null;
 
+$listings = [];
+
 if ($categoryId) {
     $categoryId = intval($categoryId); // Sanitize the category ID input
-    // Fetch listings for the selected category
+
+    // Fetch listings for the selected category using PDO
     $sql = "
         SELECT 
             listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
@@ -27,22 +29,19 @@ if ($categoryId) {
         LEFT JOIN 
             images ON listings.Listing_ID = images.Listing_ID
         WHERE 
-            listings.Category_ID = ? 
+            listings.Category_ID = :categoryId
         ORDER BY 
             listings.Date_Posted DESC
     ";
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $categoryId);
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Initialize the listings array
-    $listings = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+    if ($results) {
+        foreach ($results as $row) {
             // Format the Date_Posted field
             if (!empty($row['Date_Posted'])) {
                 $datePosted = new DateTime($row['Date_Posted']);
@@ -60,15 +59,10 @@ if ($categoryId) {
     } else {
         $listings = ["message" => "No listings found in this category."];
     }
-
-    // Close the statement and connection
-    $stmt->close();
 } else {
     $listings = ["message" => "Category ID is missing or invalid."];
 }
 
-// Close the database connection
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +89,7 @@ $conn->close();
             <?php if (!empty($listings[0]['Listing_ID'])): ?>
                 <?php foreach ($listings as $listing): ?>
                     <div class="listing-item">
-                        <img src="<?= $listing['Image_URL'] ?? 'no_image.png'; ?>" alt="Listing Image" class="listing-image">
+                        <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
                         <h3><?= htmlspecialchars($listing['Title']); ?></h3>
                         <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
                         <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
