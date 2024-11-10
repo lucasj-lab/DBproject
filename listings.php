@@ -1,5 +1,4 @@
 <?php
-// listings.php - Combined version with header and footer
 
 // Enable error reporting
 error_reporting(E_ALL);

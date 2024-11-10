@@ -1597,8 +1597,6 @@ table th, table td {
     color: #333;
 }
 
-<!-- Modal CSS -->
-<style>
     .modal {
         display: none;
         position: fixed;
@@ -1632,4 +1630,10 @@ table th, table td {
     .modal-buttons button:hover {
         background-color: #0056b3;
     }
-</style>
+
+    .preview-image {
+        width: 100px;
+        height: auto;
+        margin: 5px;
+        border: 1px solid #ddd;
+    }

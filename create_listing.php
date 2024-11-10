@@ -1,22 +1,18 @@
 <?php
-// Start the session only if it has not been started yet
+// Start the session if not already started
 if (session_status() === PHP_SESSION_NONE) {
-
+    session_start();
 }
 
-// Enable error reporting
+// Enable error reporting for debugging
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', '/var/www/html/php-error.log');
 
 // Include the database connection file
 require 'database_connection.php';
 
 // Check if user_id is available in session
 if (!isset($_SESSION['user_id'])) {
-    error_log("User is not logged in");
     echo "
     <!DOCTYPE html>
     <html lang='en'>
@@ -38,200 +34,185 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    error_log("Form submitted: " . json_encode($_POST));
+// Function to get category ID
+function getCategoryID($pdo, $category) {
+    $stmt = $pdo->prepare("SELECT Category_ID FROM category WHERE Category_Name = :category");
+    $stmt->bindValue(':category', $category, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchColumn() ?: false;
+}
 
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Fetch form data and sanitize
     $user_id = $_SESSION['user_id'];
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $price = floatval($_POST['price'] ?? 0);
     $state = trim($_POST['state'] ?? '');
-    $city = isset($_POST['city']) && trim($_POST['city']) !== '' ? trim($_POST['city']) : (isset($_POST['city-input']) ? trim($_POST['city-input']) : '');
+    $city = trim($_POST['city'] ?? '');
     $category = ucfirst(strtolower(trim($_POST['category'] ?? '')));
 
-    // Validate the form data
+    // Validate required fields
     if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city) || empty($category)) {
-        error_log("Form validation failed: missing required fields");
         echo "<p>All fields are required.</p>";
         exit();
     }
 
-
-    // Get Category_ID
-    $category_id = getCategoryID($conn, $category);
+    // Get the Category_ID from the database
+    $category_id = getCategoryID($pdo, $category);
     if ($category_id === false) {
-        error_log("Invalid category selected: $category");
         echo "<p>Invalid category selected.</p>";
         exit();
     }
 
-    // Insert listing into the database
-    $stmt = $conn->prepare("INSERT INTO listings (User_ID, Title, Description, Price, Date_Posted, Category_ID, State, City) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)");
-    if (!$stmt) {
-        error_log("Prepare failed for listing insertion: " . $conn->error);
-        echo "<p>Database error: Unable to create listing.</p>";
-        exit();
-    }
-
-    $stmt->bind_param("issdiss", $user_id, $title, $description, $price, $category_id, $state, $city);
-
-    if ($stmt->execute()) {
-        $listing_id = $stmt->insert_id;
-        error_log("Listing created with ID: $listing_id");
+    // Insert listing data into the database
+    try {
+        $stmt = $pdo->prepare("INSERT INTO listings (User_ID, Title, Description, Price, Date_Posted, Category_ID, State, City) 
+                               VALUES (:user_id, :title, :description, :price, NOW(), :category_id, :state, :city)");
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':price', $price);
+        $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+        $stmt->bindValue(':state', $state, PDO::PARAM_STR);
+        $stmt->bindValue(':city', $city, PDO::PARAM_STR);
+        
+        $stmt->execute();
+        $listing_id = $pdo->lastInsertId();
 
         // Handle image uploads
         if (!empty($_FILES['images']['name'][0])) {
-            $image_stmt = $conn->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (?, ?)");
-            if (!$image_stmt) {
-                error_log("Prepare failed for image insertion: " . $conn->error);
-                echo "<p>Error preparing image insertion.</p>";
-                exit();
-            }
+            $uploadDir = '/var/www/html/uploads/';
+            $image_stmt = $pdo->prepare("INSERT INTO images (Image_URL, Listing_ID) VALUES (:image_url, :listing_id)");
 
             foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
                 $fileName = basename($_FILES['images']['name'][$index]);
-                $targetPath = '/var/www/html/uploads/' . $fileName;
+                $targetPath = $uploadDir . $fileName;
 
                 if (move_uploaded_file($tmpName, $targetPath)) {
                     $image_url = 'uploads/' . $fileName;
-                    $image_stmt->bind_param("si", $image_url, $listing_id);
-                    if ($image_stmt->execute()) {
-                        error_log("Image uploaded successfully: $fileName");
-                    } else {
-                        error_log("Error inserting image into database: " . $image_stmt->error);
-                    }
+                    $image_stmt->bindValue(':image_url', $image_url, PDO::PARAM_STR);
+                    $image_stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+                    $image_stmt->execute();
                 } else {
-                    error_log("Error moving uploaded file: $fileName");
+                    echo "<p>Error uploading file: $fileName</p>";
                 }
             }
-            $image_stmt->close();
         }
-    } else {
-        error_log("Error executing listing insertion: " . $stmt->error);
-        echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
+
+        echo "<p>Listing created successfully!</p>";
+
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
-
-    $stmt->close();
-    $conn->close();
-
-
-    // JavaScript to show success modal after submission
-    echo '<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("successModal").style.display = "block";
-        });
-    </script>';
-} else {
-    error_log("Error executing listing insertion: " . $stmt->error);
-    echo "<div class='alert alert-danger'>Database error: Unable to create listing.</div>";
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Create Listing</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-
-    <body>
-        <?php include 'header.php'; ?>
-
-        <div class="creating-listing-form">
-            <h2>Create a New Listing</h2>
-            <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-                <div class="listing-form-group">
-                    <input type="text" id="title" name="title" placeholder="Title" required>
-                    <select id="category" name="category" required>
-                        <option value="">--Select Category--</option>
-                        <option value="Auto">Auto</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
-                    <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
-                    <select id="state" name="state" onchange="updateCities()" required>
-                        <option value="">--Select State--</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                    </select>
-                    <select id="city-dropdown" name="city">
-                        <option value="">--Select City--</option>
-                    </select>
-
-                    <!-- Optional image upload -->
-                    <input type="file" name="images[]" multiple>
-
-                    <button type="submit">Submit Listing</button>
-                </div>
-            </form>
-        </div>
-
-        <?php include 'footer.php'; ?>
-
-        <div id="successModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <h2>Success!</h2>
-                <p>Your listing has been created successfully.</p>
-                <div class="modal-buttons">
-                    <button onclick="window.location.href='listings.php'">View All Listings</button>
-                    <button onclick="window.location.href='user_dashboard.php'">View My Listings</button>
-                    <button onclick="window.location.href='create_listing.php'">Create New Listing</button>
-                </div>
-            </div>
-        </div>
-
-
-        <script>
-            const citiesByState = {
-                AL: ["Birmingham", "Montgomery", "Mobile", "Huntsville"],
-                AK: ["Anchorage", "Juneau", "Fairbanks", "Wasilla"],
-                AZ: ["Phoenix", "Tucson", "Mesa", "Chandler"],
-                AR: ["Little Rock", "Fort Smith", "Fayetteville", "Springdale"],
-                CA: ["Los Angeles", "San Diego", "San Jose", "San Francisco"]
-                // Add more states and cities as needed
-            };
-
-            function updateCities() {
-                const stateSelect = document.getElementById("state");
-                const citySelect = document.getElementById("city-dropdown");
-                const selectedState = stateSelect.value;
-
-                // Clear current city options
-                citySelect.innerHTML = '<option value="">--Select City--</option>';
-
-                // Populate city options based on selected state
-                if (citiesByState[selectedState]) {
-                    citiesByState[selectedState].forEach(city => {
-                        const option = document.createElement("option");
-                        option.value = city;
-                        option.textContent = city;
-                        citySelect.appendChild(option);
-                    });
-                }
-            }
-        </script>
-
-
-        <!-- Modal JavaScript -->
-        <script>
-            // Close modal when clicking outside
-            window.onclick = function (event) {
-                const modal = document.getElementById("successModal");
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            }
-        </script>
-    </body>
-
-
-    </html>
-    <?php
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Listing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <?php include 'header.php'; ?>
+    
+    <div class="creating-listing-form">
+        <h2>Create a New Listing</h2>
+        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+            <div class="listing-form-group">
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <select id="category" name="category" required>
+                    <option value="">--Select Category--</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+                <select id="state" name="state" required>
+                    <option value="">--Select State--</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <!-- Add other states as needed -->
+                </select>
+                <input type="text" id="city" name="city" placeholder="City" required>
+                <input type="file" name="images[]" multiple>
+                <button type="submit">Submit Listing</button>
+            </div>
+        </form>
+    </div>
+
+    
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const stateDropdown = document.getElementById("state");
+    const cityDropdown = document.getElementById("city");
+
+    // Predefined example city data by state
+    const citiesByState = {
+        "AL": ["Birmingham", "Montgomery", "Mobile"],
+        "AK": ["Anchorage", "Juneau", "Fairbanks"],
+        "AZ": ["Phoenix", "Tucson", "Mesa"],
+        "AR": ["Little Rock", "Fayetteville", "Springdale"],
+        "CA": ["Los Angeles", "San Francisco", "San Diego"]
+        // Add more states and cities as needed
+    };
+
+    stateDropdown.addEventListener("change", function() {
+        const selectedState = stateDropdown.value;
+        const cities = citiesByState[selectedState] || [];
+        cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+        cities.forEach(city => {
+            const option = document.createElement("option");
+            option.value = city;
+            option.textContent = city;
+            cityDropdown.appendChild(option);
+        });
+    });
+});
+</script>
+
+<div id="imagePreviewContainer"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const imageInput = document.querySelector("input[name='images[]']");
+    const previewContainer = document.getElementById("imagePreviewContainer");
+
+    imageInput.addEventListener("change", function() {
+        previewContainer.innerHTML = ""; // Clear previous previews
+        Array.from(imageInput.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.classList.add("preview-image");
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+});
+</script>
+
+    <script>
+function showSuccessModal() {
+    document.getElementById("successModal").style.display = "block";
+}
+
+// Simulate showing the modal after successful listing creation
+// In real use, this function call should be triggered only if the server returns success
+showSuccessModal();
+</script>
+
+
+<?php include 'footer.php'; ?>
+
+
+</body>
+</html>
