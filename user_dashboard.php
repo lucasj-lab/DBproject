@@ -38,7 +38,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             'state' => $row['state']
         ];
     }
-    $listings[$row['Listing_ID']]['images'][] = $row['Image_URL'];
+    $listings[$row['Listing_ID']]['images'][] = $row['image_url'];
 }
 ?>
 
