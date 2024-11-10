@@ -1,19 +1,23 @@
 <?php
-session_start();
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Sanitize session variables to prevent XSS
-$isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
-$username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User' if 'username' is not set
+$isAdmin = $_SESSION['is_admin'] ?? false;
+$username = htmlspecialchars($_SESSION['name'] ?? 'User');
 
+// Include database connection
 require 'database_connection.php';
 
 // Check if category ID is provided in the URL
 $categoryId = $_GET['category_id'] ?? null;
-
 $listings = [];
 
-if ($categoryId) {
-    $categoryId = intval($categoryId); // Sanitize the category ID input
+if ($categoryId && is_numeric($categoryId)) { // Ensure the category ID is numeric
+    $categoryId = intval($categoryId); // Convert to integer for safety
 
     // Fetch listings for the selected category using PDO
     $sql = "
@@ -45,7 +49,7 @@ if ($categoryId) {
             // Format the Date_Posted field
             if (!empty($row['Date_Posted'])) {
                 $datePosted = new DateTime($row['Date_Posted']);
-                $formattedDate = $datePosted->format('l, F jS, Y'); // e.g., "Friday, November 1st, 2024"
+                $formattedDate = $datePosted->format('l, F jS, Y');
             } else {
                 $formattedDate = "Date not available";
             }
@@ -73,16 +77,10 @@ if ($categoryId) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Category</title>
     <link rel="stylesheet" href="styles.css">
-    <header>
-        <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    </header>
 </head>
 
 <body>
-
-    <header>
-        <?php include 'header.php'; ?>
-    </header>
+    <?php include 'header.php'; ?>
 
     <main>
         <section id="listings">
@@ -108,9 +106,6 @@ if ($categoryId) {
         </section>
     </main>
 
-    <footer>
-        <?php include 'footer.php'; ?>
-    </footer>
-
+    <?php include 'footer.php'; ?>
 </body>
 </html>
