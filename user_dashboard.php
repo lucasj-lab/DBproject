@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'database_connection.php'; // Include your PDO connection setup here
 
 // Redirect to login page if not logged in
@@ -38,7 +37,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             'state' => $row['state']
         ];
     }
-    $listings[$row['Listing_ID']]['images'][] = $row['file_path'];
+    $listings[$row['Listing_ID']]['images'][] = $row['image_url'];
 }
 ?>
 
