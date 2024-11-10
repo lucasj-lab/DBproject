@@ -1808,3 +1808,47 @@ table td {
     background-color: #d32f2f; /* Darker red on hover */
 }
 
+/* Centered, primary color styling for Edit Listing page titles */
+.edit-listing-title {
+    text-align: center;
+    color: #1a73e8; /* Primary color */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.edit-listing-subtitle {
+    text-align: center;
+    color: #1a73e8; /* Primary color */
+    font-size: 1.5rem;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+
+/* Center align the submit button at the bottom of the form */
+.submit-button-container {
+    text-align: center; /* Centers the button */
+    margin-top: 20px; /* Space above the button */
+}
+
+/* Styling for the submit button */
+.pill-button-edit {
+    background-color: #4caf50; /* Green color */
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 30px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+/* Hover effect for the submit button */
+.pill-button-edit:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
