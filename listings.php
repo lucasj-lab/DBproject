@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 <p><strong>Category:</strong> ${listing.Category_Name}</p>
                 <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
                 <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-               <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="view-details-btn">View Details</a>
+               <a href="listing_details.php?listing_id=${listing.Listing_ID}" class="pill-button">View Details</a>
 
             `;
 

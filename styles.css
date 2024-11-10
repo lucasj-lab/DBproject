@@ -1657,7 +1657,8 @@ table td {
 }
 
 .modal-buttons button:hover {
-    background-color: #0056b3;
+    background-color: #fbbc04;
+    color: #000;
 }
 
 .preview-image {
@@ -1722,7 +1723,8 @@ table td {
 }
 
 .edit-listing-container button:hover {
-    background-color: #145db2;
+    background-color: #fbbc04;
+    color: #000;
 }
 
 /* Optional styling for inputs in the table if needed */
