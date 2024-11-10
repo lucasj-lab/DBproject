@@ -116,87 +116,45 @@ function getCategoryID($pdo, $categoryName) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Listing</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .pill-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #007bff;
-            border-radius: 50px;
-            text-decoration: none;
-        }
+    <h1>Edit Listing</h1>
 
-        .image-gallery img {
-            width: 100px;
-            height: auto;
-            margin-right: 10px;
-        }
+<form action="update_listing.php" method="POST" enctype="multipart/form-data">
+    <!-- Hidden input to keep the listing ID -->
+    <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
 
-        .image-gallery {
-            margin-top: 20px;
-        }
-    </style>
-</head>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($listing['title']); ?>" required>
 
-<body>
-    <header>
-        <?php include 'header.php'; ?>
-    </header>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required><?php echo htmlspecialchars($listing['description']); ?></textarea>
 
-    <div class="edit-listing-container">
-        <h2>Edit Listing</h2>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($listing['price']); ?>" required>
 
-        <?php if ($error_message): ?>
-            <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($listing['city']); ?>" required>
+
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" value="<?php echo htmlspecialchars($listing['state']); ?>" required>
+
+    <!-- Display existing images -->
+    <div class="image-section">
+        <h3>Current Images</h3>
+        <?php if (!empty($listing['image_url'])): ?>
+            <img src="<?php echo htmlspecialchars($listing['image_url']); ?>" alt="Current Image" class="current-image" style="width: 150px; height: auto;">
+        <?php else: ?>
+            <p>No images available for this listing.</p>
         <?php endif; ?>
+    </div>
 
-        <form action="edit_listing.php?listing_id=<?php echo $listing_id; ?>" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($title); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea name="description" id="description" rows="4" required><?php echo htmlspecialchars($description); ?></textarea>
-            </div>
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" name="price" id="price" value="<?php echo htmlspecialchars($price); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="state">State:</label>
-                <input type="text" name="state" id="state" value="<?php echo htmlspecialchars($state); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="city">City:</label>
-                <input type="text" name="city" id="city" value="<?php echo htmlspecialchars($city); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select name="category" id="category" required>
-                    <option value="Auto" <?php echo $category == 'Auto' ? 'selected' : ''; ?>>Auto</option>
-                    <option value="Electronics" <?php echo $category == 'Electronics' ? 'selected' : ''; ?>>Electronics</option>
-                    <option value="Furniture" <?php echo $category == 'Furniture' ? 'selected' : ''; ?>>Furniture</option>
-                    <option value="Other" <?php echo $category == 'Other' ? 'selected' : ''; ?>>Other</option>
-                </select>
-            </div>
+    <!-- New image upload with preview -->
+    <label for="new_image">Upload New Image:</label>
+    <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
+    <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 150px; height: auto; margin-top: 10px;">
 
-            <div class="form-group">
-                <label for="images">Upload New Images:</label>
-                <input type="file" name="images[]" id="images" multiple>
-            </div>
-
-            <div class="image-gallery">
-                <label>Current Images:</label>
-                <?php foreach ($images as $image): ?>
-                    <img src="/<?php echo htmlspecialchars($image); ?>" alt="Current Listing Image">
-                <?php endforeach; ?>
-            </div>
-
-            <button type="submit" class="pill-button">Save Changes</button>
-        </form>
+    <!-- Save button -->
+    <button type="submit" class="pill-button-edit">Update Listing</button>
+</form>
     </div>
 
     <footer>

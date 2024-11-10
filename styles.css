@@ -1807,3 +1807,14 @@ table td {
 .pill-button-delete:hover {
     background-color: #d32f2f; /* Darker red on hover */
 }
+
+.image-section {
+    margin-top: 20px;
+}
+
+.current-image, #imagePreview {
+    width: 150px;
+    height: auto;
+    margin: 10px 0;
+    display: block;
+}
