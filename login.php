@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error_message = "Invalid email format.";
     } else {
         // Prepare and execute the query to fetch user details by email
-        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
-        $stmt->bindValue(1, $email, PDO::PARAM_STR);
+        $stmt = $conn->prepare("SELECT * FROM user WHERE Email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
         // Fetch the user data
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $user['User_ID'];
             $_SESSION['message'] = "Login successful!";
             $_SESSION['message_type'] = 'success';
-            header("Location: user_dashboard.php"); // Redirect to the dashboard or another page
+            header("Location: user_dashboard.php");
             exit();
         } else {
             // Invalid login credentials
@@ -44,14 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Log In</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
     <?php include 'header.php'; ?>
@@ -76,5 +74,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <?php include 'footer.php'; ?>
 </body>
-
 </html>
