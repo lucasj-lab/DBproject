@@ -19,11 +19,9 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
 
 <body>
   <header>
-    <div class="logo">
+    < class="logo">
       <h1><?php echo $isAdmin ? "Admin Dashboard" : "Rookielist"; ?></h1>
-    </div>
-
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+</div>
 
     <!-- Mobile Dropdown Menu -->
     <div class="mobile-menu" id="mobileMenu">
@@ -38,6 +36,8 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         <?php endif; ?>
         <li><a href="logout.php">Logout</a></li>
       </ul>
+      
+      <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
       <nav class="desktop-menu">
       <ul>
