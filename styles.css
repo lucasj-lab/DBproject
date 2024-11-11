@@ -1345,12 +1345,13 @@ table td {
 }
 
 
+
 /* Style for Login Container */
 .login-container {
-    max-width: 400px;
+    max-width: 500px;
     margin: auto;
     padding: 2rem;
-    border: 1px solid #ddd;
+    border: 1px solid #b3b3b3de;
     border-radius: 8px;
     box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
     background-color: #eef5ff;
