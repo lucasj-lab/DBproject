@@ -116,9 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include 'header.php'; ?>
 
-    <div class="creating-listing-form">
         <h2>Create a New Listing</h2>
-        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+        <div id="create-a-listing" action="create_listing.php" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
                 <input type="text" id="title" name="title" placeholder="Title" required>
                 <select id="category" name="category" required>
@@ -193,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
             </div>
-        </form>
+        </div>
     </div>
 
     <div id="imagePreviewContainer"></div>
