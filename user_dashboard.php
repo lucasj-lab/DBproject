@@ -53,9 +53,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <!-- Header Section with Full Navigation Menu and User Icon -->
     <?php include 'header.php'; ?>
 
-    <div class="dashboard-header">
-        <h1>User Dashboard</h1>
-    </div>
+
 
     <!-- Display success message if provided in the URL -->
     <?php if (isset($_GET['msg'])): ?>
@@ -66,6 +64,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
     <!-- Main Content -->
     <main class="dashboard-main">
+
+    <div class="dashboard-header">
+        <h1>User Dashboard</h1>
+    </div>
+    
         <div class="dope-dashboard">
             <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>

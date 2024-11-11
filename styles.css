@@ -1218,8 +1218,10 @@ input[type=number] {
 
 /* Header styling */
 .dashboard-header {
-    background-color: #b4d0f4;
-    text-align: center;
+    background-color: #f4f4f4;
+    justify-self: center;
+    color: #2196F3
+    
 }
 
 .dashboard-header-cell {

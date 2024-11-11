@@ -23,20 +23,6 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
       <h1><?php echo $isAdmin ? "Admin Dashboard" : "Rookielist"; ?></h1>
     </div>
 
-    <nav class="desktop-menu">
-      <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="create_listing.php">New Listing</a></li>
-        <li><a href="listings.php">View All Listings</a></li>
-        <?php if ($isAdmin): ?>
-          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
-        <?php else: ?>
-          <li><a href="user_dashboard.php">User Dashboard</a></li>
-        <?php endif; ?>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
-
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
     <!-- Mobile Dropdown Menu -->
@@ -52,6 +38,21 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         <?php endif; ?>
         <li><a href="logout.php">Logout</a></li>
       </ul>
+
+      <nav class="desktop-menu">
+      <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="create_listing.php">New Listing</a></li>
+        <li><a href="listings.php">View All Listings</a></li>
+        <?php if ($isAdmin): ?>
+          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+        <?php else: ?>
+          <li><a href="user_dashboard.php">User Dashboard</a></li>
+        <?php endif; ?>
+        <li><a href="logout.php">Logout</a></li>
+      </ul>
+    </nav>
+    
     </div>
   </header>
 
