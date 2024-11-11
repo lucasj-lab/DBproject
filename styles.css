@@ -1353,6 +1353,7 @@ table td {
     box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
     background-color: #eef5ff;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 /* Style for Log In Fields */
@@ -1400,7 +1401,7 @@ table td {
     padding: 2rem;
     border: 1px solid #00000052;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #607d8b3b;
+    
     margin-top: 40px;
     margin-bottom: 40px;
     border-radius: 20px;
@@ -2041,7 +2042,7 @@ table td {
 }
 
 /* Responsive table adjustments */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .dashboard-table, .table-container {
         display: block;
     }
