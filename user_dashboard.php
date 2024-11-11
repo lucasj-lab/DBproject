@@ -64,11 +64,35 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
     <!-- Main Content -->
     <main class="dashboard-main">
+           <!-- Display session messages if they exist -->
+           <?php if (isset($_SESSION['message'])): ?>
+            <div class="message-box <?php echo ($_SESSION['message_type'] === 'success') ? 'success' : 'error'; ?>">
+                <p><?php echo $_SESSION['message']; ?></p>
+            </div>
+            <?php
+            unset($_SESSION['message']);
+            unset($_SESSION['message_type']);
+            ?>
+        <?php endif; ?>
+    <style>
+        /* Styles for message display */
+        .message-box {
+            padding: 1rem;
+            margin: 1rem auto;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            color: #fff;
+            text-align: center;
+        }
+        .success { background-color: #4CAF50; }
+        .error { background-color: #f44336; }
+    </style>
 
     <div class="dashboard-header">
         <h1>User Dashboard</h1>
     </div>
-    
+
         <div class="dope-dashboard">
             <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>

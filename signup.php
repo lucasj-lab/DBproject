@@ -112,20 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         });
     </script>
 
-    <style>
-        /* Styles for message display */
-        .message-box {
-            padding: 1rem;
-            margin: 1rem auto;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 400px;
-            color: #fff;
-            text-align: center;
-        }
-        .success { background-color: #4CAF50; }
-        .error { background-color: #f44336; }
-    </style>
 </body>
 
 </html>

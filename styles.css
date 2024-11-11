@@ -1342,26 +1342,6 @@ table td {
     text-align: left;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .dashboard-main {
-        padding: 0.5rem;
-        max-width: 100%;
-    }
-
-    header,
-    footer {
-        padding: 0.5rem;
-    }
-
-    table th,
-    table td {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        /* Adjust font size for smaller screens */
-    }
-}
-
 
 /* Style for Login Container */
 .login-container {
