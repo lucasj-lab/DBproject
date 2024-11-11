@@ -1413,8 +1413,7 @@ table td {
     max-width: 600px;
     margin: auto;
     padding: 2rem;
-    border: 1px solid #ddd;
-    border-radius: 9px;
+    border: 1px solid #4f8ba878;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f4f4f9;
     margin-top: 20px;
@@ -1441,7 +1440,7 @@ table td {
 
 /* Specific styling for the button */
 .creating-listing-form button {
-    background-color: #007BFF;
+    background-color: #1a73e8;
     color: #fff;
     cursor: pointer;
     border: none;
@@ -1848,11 +1847,11 @@ table td {
 }
 /* Style for Dope Dashboard Container */
 .dope-dashboard {
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
     padding: 2rem;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 14px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
     margin-top: 30px;
@@ -1901,6 +1900,45 @@ table td {
     max-width: 600px;
     text-align: center;
     font-weight: bold;
+}
+
+
+/* Container for the file upload button */
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Style the invisible file input */
+.file-input {
+    display: none;
+}
+
+/* Style the custom file upload button */
+.file-upload-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for file upload button */
+.file-upload-button:hover {
+    background-color: #45a049;
+}
+
+/* Style for the chosen file text */
+.file-upload-text {
+    font-size: 1rem;
+    color: #555;
 }
 
 

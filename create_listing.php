@@ -130,37 +130,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
                 <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
-                <label for="state" class="form-label">State:</label>
-                <select id="state" name="state" class="input-field" onchange="loadCities(this.value)">
-                    <option value="">Select a State</option>
-                    <!-- Add state options here, e.g., -->
-                    <option value="California">California</option>
-                    <option value="Texas">Texas</option>
-                    <!-- Add more states as needed -->
+                <select id="state" name="state" required>
+                    <option value="">--Select State--</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <!-- Add other states as needed -->
                 </select>
+                <select id="city" name="city" placeholder="City" required>
+                    <option Value="">--Select City--</option>
 
-                <label for="city" class="form-label">City:</label>
-                <select id="city" name="city" class="input-field">
-                    <option value="">Select a City</option>
-                    <!-- Cities will be populated dynamically based on selected state -->
-                </select>
+                    <div class="file-upload-container">
+                        <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
+                        <label for="fileInput" class="file-upload-button">Choose Files</label>
+                        <span class="file-upload-text">No files chosen</span>
+                    </div>
 
-                <input type="file" name="images[]" multiple>
-                <button type="submit">Submit Listing</button>
             </div>
         </form>
     </div>
+    <script>
+document.getElementById('fileInput').addEventListener('change', function() {
+    const fileNames = Array.from(this.files).map(file => file.name).join(', ');
+    document.querySelector('.file-upload-text').textContent = fileNames || "No files chosen";
+});
+</script>
 
     <script>
-        function showSuccessModal() {
-            document.getElementById("successModal").style.display = "block";
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const stateDropdown = document.getElementById("state");
+            const cityDropdown = document.getElementById("city");
 
-        // Simulate showing the modal after successful listing creation
-        // In real use, this function call should be triggered only if the server returns success
-        showSuccessModal();
+            // Predefined example city data by state
+            const citiesByState = {
+                "AL": ["Birmingham", "Montgomery", "Mobile"],
+                "AK": ["Anchorage", "Juneau", "Fairbanks"],
+                "AZ": ["Phoenix", "Tucson", "Mesa"],
+                "AR": ["Little Rock", "Fayetteville", "Springdale"],
+                "CA": ["Los Angeles", "San Francisco", "San Diego"]
+                // Add more states and cities as needed
+            };
+
+            stateDropdown.addEventListener("change", function () {
+                const selectedState = stateDropdown.value;
+                const cities = citiesByState[selectedState] || [];
+                cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+                cities.forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            });
+        });
     </script>
 
+    <div id="imagePreviewContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.querySelector("input[name='images[]']");
+            const previewContainer = document.getElementById("imagePreviewContainer");
+
+            imageInput.addEventListener("change", function () {
+                previewContainer.innerHTML = ""; // Clear previous previews
+                Array.from(imageInput.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-image");
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        });
+    </script>
 
     <?php include 'footer.php'; ?>
 
