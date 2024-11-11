@@ -1,4 +1,5 @@
 <?php
+
 // Sanitize session variables to prevent XSS
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
 $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User' if 'username' is not set
@@ -19,9 +20,25 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
 
 <body>
   <header>
-    < class="logo">
+    <div class="logo">
       <h1><?php echo $isAdmin ? "Admin Dashboard" : "Rookielist"; ?></h1>
-</div>
+    </div>
+
+    <nav class="desktop-menu">
+      <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="create_listing.php">New Listing</a></li>
+        <li><a href="listings.php">View All Listings</a></li>
+        <?php if ($isAdmin): ?>
+          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+        <?php else: ?>
+          <li><a href="user_dashboard.php">User Dashboard</a></li>
+        <?php endif; ?>
+        <li><a href="logout.php">Logout</a></li>
+      </ul>
+    </nav>
+
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
     <!-- Mobile Dropdown Menu -->
     <div class="mobile-menu" id="mobileMenu">
@@ -36,23 +53,6 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         <?php endif; ?>
         <li><a href="logout.php">Logout</a></li>
       </ul>
-      
-      <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-
-      <nav class="desktop-menu">
-      <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="create_listing.php">New Listing</a></li>
-        <li><a href="listings.php">View All Listings</a></li>
-        <?php if ($isAdmin): ?>
-          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
-        <?php else: ?>
-          <li><a href="user_dashboard.php">User Dashboard</a></li>
-        <?php endif; ?>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
-    
     </div>
   </header>
 
