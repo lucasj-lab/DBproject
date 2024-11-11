@@ -82,6 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <form action="signup.php" method="POST">
             <div class="register-fields">
+            </div class="log-in-link"<p>Already have an account? <a href="login.php">Log in here</a>.</p>
+</div>
                 <input type="text" id="name" name="name" placeholder="Name" required>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <input type="password" id="password" name="password" placeholder="Password" required

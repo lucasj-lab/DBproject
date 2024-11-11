@@ -70,6 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <button type="submit">Log In</button>
             </div>
         </form>
+        <p>Wanna be a Rookie? </p>
+        <a href="signup.php">Sign up here</a>
     </div>
 
     <?php include 'footer.php'; ?>

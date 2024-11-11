@@ -323,12 +323,12 @@ main {
 }
 /* Form Styles */
 form {
-    margin: 2rem auto;
-    padding: 1rem;
+    margin: 2rem;
+    padding: 3rem;
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 7px 13px 7px 2px rgb(102 95 95 / 10%);
-    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 4px rgb(0 0 0 / 9%)
+    text-align center;
 }
 
 form.listing-details-form {
@@ -362,12 +362,13 @@ input[type="number"],
 textarea,
 select,
 button {
-    border-radius: 10px;
+    border-radius: 3px;
     /* Pill shape */
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
     background-color: #fff;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -479,13 +480,13 @@ form.category-item {
 
     padding: 1.5rem;
     border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 4px rgb(0 0 0 / 9%)
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: inline-grid;
-
-    margin: 10px;
     max-width: 300px;
+    background-color: #eef5ff8f;
+    
 }
 
 /* Categories Section */
@@ -1097,7 +1098,7 @@ form.search-form {
 .search-btn {
 
     position: absolute;
-    top: 63%;
+    top: 47.2%;
     right: 3px;
     transform: translateY(-100%);
     background-color: #007bff;
