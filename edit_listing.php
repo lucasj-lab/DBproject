@@ -74,11 +74,7 @@ if (!$listing) {
                 <select id="city" name="city" placeholder="City" required>
                     <option Value="">--Select City--</option>
 
-                    <div class="file-upload-container">
-                        <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
-                        <label for="fileInput" class="file-upload-button">Choose Files</label>
-                        <span class="file-upload-text">No files chosen</span>
-                    </div>
+
                     <label for="new_image">Upload New Image:</label>
         <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
         <!-- Image preview element -->
@@ -149,8 +145,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
         });
     </script>
 
-         <h3 class="edit-listing-subtitle">Current Image</h3>
-        <div class="image-section">
+
 
             <?php if (!empty($listing['image_url'])): ?>
                 <img src="<?php echo htmlspecialchars($listing['image_url']); ?>" alt="Current Image" class="current-image" style="width: 150px; height: auto;">
@@ -158,8 +153,6 @@ document.getElementById('fileInput').addEventListener('change', function() {
                 <p>No image available for this listing.</p>
             <?php endif; ?>
         </div>
-
-        <!-- New image upload with preview -->
         <label for="new_image">Upload New Image:</label>
         <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
         <!-- Image preview element -->
@@ -168,6 +161,8 @@ document.getElementById('fileInput').addEventListener('change', function() {
         <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-form">
         <button type="submit" class="pill-button-edit">Update</button>
     </form>
+
+    
 </body>
     <!-- Include the footer -->
     <?php include 'footer.php'; ?>
