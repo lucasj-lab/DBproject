@@ -325,12 +325,11 @@ main {
 form {
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #3333331c;
+    background-color: #ffffff;
     border-radius: 10px;
-    box-shadow: .3px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 7px 13px 7px 2px rgb(102 95 95 / 10%);
     text-align: center;
 }
-
 
 form.listing-details-form {
     display: grid;
@@ -1028,8 +1027,8 @@ button {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 350px;
+    margin: 0;
 }
 
 .listing-form-group input[type="text"],
@@ -1371,7 +1370,7 @@ table td {
     padding: 2rem;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
     background-color: #eef5ff;
     margin-top: 30px;
 }
@@ -1394,10 +1393,10 @@ table td {
     max-width: 500px;
     margin: auto;
     padding: 2rem;
-    border: 1px solid #ddd;
+    border: 1px solid #0000001c;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #eef5ff;
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
+    background-color: rgb(26 115 232 / 9%);
     margin-top: 45px;
 }
 
@@ -1431,7 +1430,9 @@ table td {
 .creating-listing-form form {
     display: flex;
     flex-direction: column;
+    place-items: center;
 }
+
 
 .creating-listing-form input[type="text"],
 .creating-listing-form input[type="number"],
