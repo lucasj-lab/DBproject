@@ -712,7 +712,6 @@ footer {
     padding: 2rem 1rem;
     text-align: center;
     font-size: 1rem;
-    margin-top: 30px;
 }
 
 footer p {
@@ -1314,7 +1313,7 @@ footer {
 .dashboard-main {
     padding: 1rem;
     width: 100%;
-    max-width: 850px;
+    max-width: 1000px;
     margin: 0 auto;
     /* Centers on wider screens */
 }
@@ -1416,10 +1415,11 @@ table td {
     max-width: 600px;
     margin: auto;
     padding: 2rem;
-    border: 1px solid #4f8ba878;
+    border: 1px solid #00000052;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f4f4f9;
+    background-color: #607d8b3b;
     margin-top: 20px;
+    border-radius: 20px;
 }
 
 /* Style for Form Fields in Creating Listing Form */
@@ -1878,13 +1878,13 @@ table td {
 .dope-dashboard .dashboard-table th, 
 .dope-dashboard .dashboard-table td {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #000000;
     text-align: left;
 }
 
 .dope-dashboard .dashboard-table th {
     font-weight: bold;
-    background-color: #eef5ff;
+    background-color: #607d8b3b;
     color: #333;
 }
 
