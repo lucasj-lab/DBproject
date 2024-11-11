@@ -46,15 +46,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <div class="dope-dashboard">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script>
-        function toggleMobileMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
-        }
-    </script>
+
 </head>
 
 <body>
@@ -137,10 +129,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </div>    <?php endif; ?>
     </main>
 
-    <!-- Footer Section -->
-    <footer>
+</body>
+<footer>
         <?php include 'footer.php'; ?>
     </footer>
-</body>
 
 </html>

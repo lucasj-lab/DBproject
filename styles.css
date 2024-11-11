@@ -1218,7 +1218,8 @@ input[type=number] {
 
 /* Header styling */
 .dashboard-header {
-    background-color: #f4f4f4;
+    background-color: #b4d0f4;
+    text-align: center;
 }
 
 .dashboard-header-cell {
@@ -1366,7 +1367,7 @@ table td {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
+    background-color: #eef5ff;
     margin-top: 30px;
 }
 
@@ -1847,7 +1848,7 @@ table td {
 }
 /* Style for Dope Dashboard Container */
 .dope-dashboard {
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
     padding: 2rem;
     border: 1px solid #ddd;
