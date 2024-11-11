@@ -71,8 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </form>
     </div>
-    <p>Wanna be a Rookie? </p>
-    <a href="signup.php">Sign up here</a>
+    <p>Wanna be a Rookie? <a href="signup.php">Sign up here</a></p>
     <?php include 'footer.php'; ?>
 </body>
 </html>
