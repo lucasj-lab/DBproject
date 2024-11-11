@@ -65,8 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <?php include 'header.php'; ?>
-    </div class="log-in-link"<p>Already have an account? <a href="login.php">Log in here</a>.</p>
-    </div>
+
     <div class="signup-container">
         <h2>Create an Account</h2>
 
@@ -80,7 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['message_type']);
             ?>
         <?php endif; ?>
-
+        </div class="log-in-link"<p>Already have an account? <a href="login.php">Log in here</a>.</p>
+        </div>
         <form action="signup.php" method="POST">
             <div class="register-fields">
                 <input type="text" id="name" name="name" placeholder="Name" required>
