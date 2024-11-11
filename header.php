@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 // Sanitize session variables to prevent XSS
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
 $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User' if 'username' is not set
