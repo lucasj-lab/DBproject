@@ -1418,7 +1418,8 @@ table td {
     border: 1px solid #00000052;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #607d8b3b;
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     border-radius: 20px;
 }
 
@@ -1438,7 +1439,7 @@ table td {
     padding: 0.75rem;
     font-size: 1rem;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
 }
 
 /* Specific styling for the button */
