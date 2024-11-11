@@ -1351,12 +1351,11 @@ table td {
     max-width: 500px;
     margin: auto;
     padding: 2rem;
-    border: 1px solid #b3b3b3de;
+    border: 1px solid #0000001c;
     border-radius: 8px;
     box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
-    background-color: #eef5ff;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    background-color: rgb(26 115 232 / 9%);
+    margin-top: 45px;
 }
 
 /* Style for Log In Fields */
