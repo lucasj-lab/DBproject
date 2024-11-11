@@ -324,7 +324,7 @@ main {
 }
 /* Form Styles */
 form {
-    margin: 2rem;
+    margin: 2rem auto;
     padding: 3rem;
     background-color: #ffffff;
     border-radius: 8px;
