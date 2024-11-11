@@ -1763,7 +1763,6 @@ table td {
 
     .pill-button {
         font-size: 1rem;
-        padding: 10px;
         width: 100%; /* Full-width button */
         margin-top: 10px;
         text-align: center;
@@ -1773,15 +1772,15 @@ table td {
 /* Common styles for buttons inside actions-cell */
 .actions-cell a {
     display: block;         /* Make the buttons block elements */
-    width: 100px;           /* Set a fixed width (adjust as needed) */
-    margin: 5px auto;       /* Center the buttons horizontally */
+    width: 7rem;           /* Set a fixed width (adjust as needed) */
+    margin: 5px;       /* Center the buttons horizontally */
     text-align: center;     /* Center the text inside the buttons */
 }
 
 /* Edit Button - Green */
 .pill-button-edit {
     background-color: #4caf50;
-    padding: 10px;        /* Adjust padding for consistent height */
+     /* Adjust padding for consistent height */
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -1796,7 +1795,6 @@ table td {
 /* Delete Button - Red */
 .pill-button-delete {
     background-color: #f44336;
-    padding: 10px 0;
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -1833,22 +1831,3 @@ table td {
     margin-top: 20px; /* Space above the button */
 }
 
-/* Styling for the submit button */
-.pill-button-edit {
-    background-color: #4caf50; /* Green color */
-    padding: 10px 20px;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 30px;
-    display: inline-block;
-    transition: background-color 0.3s;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-}
-
-/* Hover effect for the submit button */
-.pill-button-edit:hover {
-    background-color: #45a049; /* Darker green on hover */
-}

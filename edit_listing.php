@@ -73,7 +73,7 @@ if (!$listing) {
 
          <h3 class="edit-listing-subtitle">Current Image</h3>
         <div class="image-section">
-            <h3>Current Image</h3>
+        
             <?php if (!empty($listing['image_url'])): ?>
                 <img src="<?php echo htmlspecialchars($listing['image_url']); ?>" alt="Current Image" class="current-image" style="width: 150px; height: auto;">
             <?php else: ?>
