@@ -30,6 +30,7 @@ if (!$listing) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit Listing</title>
@@ -40,7 +41,7 @@ if (!$listing) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById("imagePreview").src = e.target.result;
                     document.getElementById("imagePreview").style.display = "block";
                 };
@@ -49,8 +50,9 @@ if (!$listing) {
         }
     </script>
 </head>
+
 <body>
-<h1 class="edit-listing-title">Edit Your Listing</h1>
+    <h1 class="edit-listing-title">Edit Your Listing</h1>
 
     <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
         <!-- Hidden input to keep the listing ID -->
@@ -60,22 +62,35 @@ if (!$listing) {
         <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($listing['title']); ?>" required>
 
         <label for="description">Description:</label>
-        <textarea id="description" name="description" required><?php echo htmlspecialchars($listing['description']); ?></textarea>
+        <textarea id="description" name="description"
+            required><?php echo htmlspecialchars($listing['description']); ?></textarea>
 
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($listing['price']); ?>" required>
+        <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($listing['price']); ?>"
+            required>
 
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($listing['city']); ?>" required>
+        <label for="state" class="form-label">State:</label>
+        <select id="state" name="state" class="input-field" onchange="loadCities(this.value)">
+            <option value="">Select a State</option>
+            <!-- Add state options here, e.g., -->
+            <option value="California">California</option>
+            <option value="Texas">Texas</option>
+            <!-- Add more states as needed -->
+        </select>
 
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" value="<?php echo htmlspecialchars($listing['state']); ?>" required>
+        <label for="city" class="form-label">City:</label>
+        <select id="city" name="city" class="input-field">
+            <option value="">Select a City</option>
+            <!-- Cities will be populated dynamically based on selected state -->
+        </select>
 
-         <h3 class="edit-listing-subtitle">Current Image</h3>
+
+        <h3 class="edit-listing-subtitle">Current Image</h3>
         <div class="image-section">
-        
+
             <?php if (!empty($listing['image_url'])): ?>
-                <img src="<?php echo htmlspecialchars($listing['image_url']); ?>" alt="Current Image" class="current-image" style="width: 150px; height: auto;">
+                <img src="<?php echo htmlspecialchars($listing['image_url']); ?>" alt="Current Image" class="current-image"
+                    style="width: 150px; height: auto;">
             <?php else: ?>
                 <p>No image available for this listing.</p>
             <?php endif; ?>
@@ -85,13 +100,16 @@ if (!$listing) {
         <label for="new_image">Upload New Image:</label>
         <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
         <!-- Image preview element -->
-        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 150px; height: auto; margin-top: 10px;">
+        <img id="imagePreview" src="#" alt="Image Preview"
+            style="display: none; width: 150px; height: auto; margin-top: 10px;">
 
-        <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-form">
-        <button type="submit" class="pill-button-edit">Update</button>
-    </form>
+        <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST"
+            enctype="multipart/form-data" class="edit-listing-form">
+            <button type="submit" class="pill-button-edit">Update</button>
+        </form>
 
-    <!-- Include the footer -->
-    <?php include 'footer.php'; ?>
+        <!-- Include the footer -->
+        <?php include 'footer.php'; ?>
 </body>
+
 </html>
