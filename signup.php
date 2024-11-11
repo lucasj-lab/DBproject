@@ -79,8 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['message_type']);
             ?>
         <?php endif; ?>
-        </div class="log-in-link"<p>Already have an account? <a href="login.php">Log in here</a>.</p>
-        </div>
+
         <form action="signup.php" method="POST">
             <div class="register-fields">
                 <input type="text" id="name" name="name" placeholder="Name" required>
