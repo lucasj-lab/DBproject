@@ -44,8 +44,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <div class="dope-dashboard">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <script>
@@ -54,6 +56,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         }
     </script>
 </head>
+
 <body>
     <!-- Header Section with Full Navigation Menu and User Icon -->
     <?php include 'header.php'; ?>
@@ -71,66 +74,73 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
     <!-- Main Content -->
     <main class="dashboard-main">
-        <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
-        <p><strong>Member Since:</strong> <?php echo htmlspecialchars((new DateTime($user['Date_Joined']))->format('l, F jS, Y')); ?></p>
+        <div class="dope-dashboard">
+            <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
+            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
+            <p><strong>Member Since:</strong>
+                <?php echo htmlspecialchars((new DateTime($user['Date_Joined']))->format('l, F jS, Y')); ?></p>
 
-        <h2>Your Listings</h2>
+            <h2>Your Listings</h2>
 
-        <?php if (!empty($listings)): ?>
-            <div class="table-container">
-                <table class="dashboard-table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Date Posted</th>
-                            <th>City</th>
-                            <th>State</th>
-                            <th>Images</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($listings as $listing_id => $listing): ?>
+            <?php if (!empty($listings)): ?>
+                <div class="table-container">
+                    <table class="dashboard-table">
+                        <thead>
                             <tr>
-                                <td><?php echo htmlspecialchars($listing['details']['title']); ?></td>
-                                <td><?php echo htmlspecialchars($listing['details']['description']); ?></td>
-                                <td>$<?php echo htmlspecialchars($listing['details']['price']); ?></td>
-                                <td><?php echo htmlspecialchars((new DateTime($listing['details']['date_posted']))->format('l, F jS, Y')); ?></td>
-                                <td><?php echo htmlspecialchars($listing['details']['city']); ?></td>
-                                <td><?php echo htmlspecialchars($listing['details']['state']); ?></td>
-                                <td>
-                                    <?php if (!empty($listing['images'])): ?>
-                                        <?php foreach ($listing['images'] as $image): ?>
-                                            <?php if ($image): ?>
-                                                <img src="<?php echo htmlspecialchars($image); ?>" alt="Listing Image" class="listing-image" style="width: 80px; height: auto; margin: 5px;">
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <p>No images available</p>
-                                    <?php endif; ?>
-                                </td>
-                           <td class="dashboard-cell actions-cell">
-    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button-edit">Edit</a>
-    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button-delete" onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
-</td>
-
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Date Posted</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Images</th>
+                                <th>Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
-        <?php endif; ?>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($listings as $listing_id => $listing): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($listing['details']['title']); ?></td>
+                                    <td><?php echo htmlspecialchars($listing['details']['description']); ?></td>
+                                    <td>$<?php echo htmlspecialchars($listing['details']['price']); ?></td>
+                                    <td><?php echo htmlspecialchars((new DateTime($listing['details']['date_posted']))->format('l, F jS, Y')); ?>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($listing['details']['city']); ?></td>
+                                    <td><?php echo htmlspecialchars($listing['details']['state']); ?></td>
+                                    <td>
+                                        <?php if (!empty($listing['images'])): ?>
+                                            <?php foreach ($listing['images'] as $image): ?>
+                                                <?php if ($image): ?>
+                                                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Listing Image"
+                                                        class="listing-image" style="width: 80px; height: auto; margin: 5px;">
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <p>No images available</p>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="dashboard-cell actions-cell">
+                                        <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>"
+                                            class="pill-button-edit">Edit</a>
+                                        <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>"
+                                            class="pill-button-delete"
+                                            onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
+                                    </td>
+
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
+                <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
+        </div>    <?php endif; ?>
     </main>
 
     <!-- Footer Section -->
     <footer>
-    <?php include 'footer.php'; ?>
+        <?php include 'footer.php'; ?>
     </footer>
 </body>
-</html>
 
+</html>

@@ -1831,18 +1831,6 @@ table td {
     margin-top: 20px; /* Space above the button */
 }
 
-/* Success message styling */
-.success-message {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 15px;
-    margin: 20px auto;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
-    max-width: 600px;
-    text-align: center;
-    font-weight: bold;
-}
 
 /* Styling for form labels */
 .form-label {
@@ -1858,3 +1846,61 @@ table td {
     text-align: center;
     margin-top: 20px;
 }
+/* Style for Dope Dashboard Container */
+.dope-dashboard {
+    max-width: 800px;
+    margin: auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin-top: 30px;
+}
+
+/* Style for Dashboard Title */
+.dope-dashboard .dashboard-title {
+    font-size: 1.8rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Table Styling within Dope Dashboard */
+.dope-dashboard .dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.dope-dashboard .dashboard-table th, 
+.dope-dashboard .dashboard-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.dope-dashboard .dashboard-table th {
+    font-weight: bold;
+    background-color: #eef5ff;
+    color: #333;
+}
+
+.dope-dashboard .dashboard-table td {
+    color: #555;
+}
+
+/* Optional: Success Message Styling */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    margin: 20px auto;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    max-width: 600px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
