@@ -222,6 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 </body>
+<footer>
 <?php include 'footer.php'; ?>
-
+</footer>
 </html>
