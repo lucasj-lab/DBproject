@@ -79,7 +79,13 @@ if (!$listing) {
                         <label for="fileInput" class="file-upload-button">Choose Files</label>
                         <span class="file-upload-text">No files chosen</span>
                     </div>
+                    <label for="new_image">Upload New Image:</label>
+        <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
+        <!-- Image preview element -->
+        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 150px; height: auto; margin-top: 10px;">
 
+        <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-form">
+        <button type="submit" class="pill-button-edit">Update</button>
             </div>
         </form>
     </div>
@@ -162,8 +168,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
         <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-form">
         <button type="submit" class="pill-button-edit">Update</button>
     </form>
-
+</body>
     <!-- Include the footer -->
     <?php include 'footer.php'; ?>
-</body>
 </html>
