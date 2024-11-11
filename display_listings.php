@@ -45,18 +45,8 @@ if (isset($_GET['id'])) {
 ?>
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listing Details</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header>
     <?php include 'header.php'; ?>
-</header>
+
 
 <div class="listing-details">
     <?php if (!empty($listingDetails)) : ?>
@@ -98,9 +88,11 @@ if (isset($_GET['id'])) {
     <?php endif; ?>
 </div>
 
+
+</body>
+
 <footer>
     <?php include 'footer.php'; ?>
 </footer>
 
-</body>
 </html>
