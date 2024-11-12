@@ -10,9 +10,9 @@
 <body>
     <?php include 'header.php'; ?>
 
-    <h2>Create a New Listing</h2>
+
     <form id="create-a-listing" class="form-wrapper" action="create_listing.php" method="POST" enctype="multipart/form-data">
-        
+    <h2>Create a New Listing</h2>
         <div class="input-container">
             <input type="text" id="title" name="title" placeholder="Title" required>
         </div>
