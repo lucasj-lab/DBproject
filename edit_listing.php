@@ -36,7 +36,7 @@ if (!$listing) {
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
     <script src="dynamic_cities.js"></script>
-    
+
     <script>
         // JavaScript function to preview selected image files before upload
         function previewImage(event) {
@@ -93,68 +93,14 @@ if (!$listing) {
                 </div>
             </form>
             </div>
-            <script>
-                document.getElementById('fileInput').addEventListener('change', function () {
-                    const fileNames = Array.from(this.files).map(file => file.name).join(', ');
-                    document.querySelector('.file-upload-text').textContent = fileNames || "No files chosen";
-                });
-            </script>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const stateDropdown = document.getElementById("state");
-                    const cityDropdown = document.getElementById("city");
-
-                    // Predefined example city data by state
-                    const citiesByState = {
-                        "AL": ["Birmingham", "Montgomery", "Mobile"],
-                        "AK": ["Anchorage", "Juneau", "Fairbanks"],
-                        "AZ": ["Phoenix", "Tucson", "Mesa"],
-                        "AR": ["Little Rock", "Fayetteville", "Springdale"],
-                        "CA": ["Los Angeles", "San Francisco", "San Diego"]
-                        // Add more states and cities as needed
-                    };
-
-                    stateDropdown.addEventListener("change", function () {
-                        const selectedState = stateDropdown.value;
-                        const cities = citiesByState[selectedState] || [];
-                        cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-
-                        cities.forEach(city => {
-                            const option = document.createElement("option");
-                            option.value = city;
-                            option.textContent = city;
-                            cityDropdown.appendChild(option);
-                        });
-                    });
-                });
-            </script>
 
             <div id="imagePreviewContainer"></div>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const imageInput = document.querySelector("input[name='images[]']");
-                    const previewContainer = document.getElementById("imagePreviewContainer");
 
-                    imageInput.addEventListener("change", function () {
-                        previewContainer.innerHTML = ""; // Clear previous previews
-                        Array.from(imageInput.files).forEach(file => {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                const img = document.createElement("img");
-                                img.src = e.target.result;
-                                img.classList.add("preview-image");
-                                previewContainer.appendChild(img);
-                            };
-                            reader.readAsDataURL(file);
-                        });
-                    });
-                });
-            </script>
-
+            <script src="dynamic_cities.js"></script>
+            <script src="image_preview.js"></script>
 </body>
-<!-- Include the footer -->
+
 <?php include 'footer.php'; ?>
 
 </html>
