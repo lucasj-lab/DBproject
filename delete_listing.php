@@ -30,4 +30,3 @@ try {
 } catch (PDOException $e) {
     echo "Error deleting listing: " . $e->getMessage();
 }
-?>

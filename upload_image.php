@@ -39,4 +39,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 } else {
     echo json_encode(["error" => "Invalid request."]);
 }
-?>
+

@@ -64,4 +64,4 @@ if (!empty($_FILES['new_image']['name'])) {
 // Redirect back to a confirmation or view page for the updated listing
 header("Location: view_listing.php?listing_id=" . $listing_id);
 exit();
-?>
+
