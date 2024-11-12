@@ -21,7 +21,6 @@ if (!isset($_SESSION['user_id'])) {
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Not Logged In</title>
         <link rel='stylesheet' href='styles.css'>
-         <script src="dynamic_cities.js"></script>
     </head>
     <body>
         <div class='redirect-message-container'>
@@ -30,7 +29,7 @@ if (!isset($_SESSION['user_id'])) {
                 <p>Please <a href='login.php'>log in</a> or <a href='signup.php'>sign up</a> to continue.</p>
             </div>
         </div>
-    </body>
+        </body>
     </html>";
     exit();
 }
@@ -189,38 +188,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="file-upload-container">
                         <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
                         <label for="fileInput" class="file-upload-button">Choose Files</label>
-    
                     </div>
 
             </div>
         </div>
     </div>
 
-    <div id="imagePreviewContainer"></div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imageInput = document.querySelector("input[name='images[]']");
-            const previewContainer = document.getElementById("imagePreviewContainer");
-
-            imageInput.addEventListener("change", function () {
-                previewContainer.innerHTML = ""; // Clear previous previews
-                Array.from(imageInput.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("preview-image");
-                        previewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-        });
-    </script>
-
-
-
+<script src="dynamic_cities.js"></script>
+<script src="image_preview.js"></script>
 
 </body>
 <footer>

@@ -481,7 +481,7 @@ form.category-item {
 
     padding: 1.5rem;
     border-radius: 15px;
-    box-shadow: 0 4px 8px 4px rgb(0 0 0 / 9%)
+    box-shadow: 0 4px 8px 4px rgb(0 0 0 / 9%);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: inline-grid;
