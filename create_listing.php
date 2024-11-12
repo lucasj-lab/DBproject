@@ -5,18 +5,21 @@
     <meta charset="UTF-8">
     <title>Create Listing</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="dynamic_cities.js" defer></script>
 </head>
 
 <body>
     <?php include 'header.php'; ?>
 
-
-    <form id="create-a-listing" class="form-wrapper" action="create_listing.php" method="POST" enctype="multipart/form-data">
     <h2>Create a New Listing</h2>
+    <form id="create-a-listing" class="form-wrapper" action="create_listing.php" method="POST" enctype="multipart/form-data">
+        
+        <!-- Title Field -->
         <div class="input-container">
             <input type="text" id="title" name="title" placeholder="Title" required>
         </div>
 
+        <!-- Category Dropdown -->
         <div class="input-container">
             <select id="category" name="category" required>
                 <option value="">--Select Category--</option>
@@ -27,16 +30,19 @@
             </select>
         </div>
 
+        <!-- Description Field -->
         <div class="input-container">
             <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
         </div>
 
+        <!-- Price Field -->
         <div class="input-container">
             <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
         </div>
-<div class="input-container"><input type="text" id="stateInput" placeholder="Type to search for a state" autocomplete="on"> </div>
-<div id="stateDropdown" class="dropdown-content"></div>      
-<select id="state" name="state" required>
+
+        <!-- State Dropdown -->
+        <div class="input-container">
+        <select id="state" name="state" required>
     <option value="">--Select State--</option>
     <option value="AL">Alabama</option>
     <option value="AK">Alaska</option>
@@ -89,31 +95,27 @@
     <option value="WI">Wisconsin</option>
     <option value="WY">Wyoming</option>
 </select>
-
         </div>
 
-        <div class="input-container"><input type="text" id="cityInput" placeholder="Type to search for a city" autocomplete="on"> </div>
-        <div id="cityDropdown" class="dropdown-content"></div>     
-                <option value="">--Select City--</option>
-            </select>
+        <!-- City Autocomplete Input and Dropdown -->
+        <div class="input-container">
+            <input type="text" id="cityInput" placeholder="Type to search for a city" autocomplete="off">
+            <div id="cityDropdown" class="dropdown-content"></div>
         </div>
 
+        <!-- File Upload Section -->
         <div class="input-container file-upload-container">
             <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
             <label for="fileInput" class="file-upload-button">Choose Files</label>
         </div>
 
+        <!-- Submit Button -->
         <div class="input-container">
             <button type="submit" class="submit-button">Create Listing</button>
         </div>
     </form>
 
-    <script src="dynamic_cities.js"></script>
-    <script src="image_preview.js"></script>
-</body>
-
-<footer>
     <?php include 'footer.php'; ?>
-</footer>
+</body>
 
 </html>
