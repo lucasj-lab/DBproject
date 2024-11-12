@@ -35,6 +35,8 @@ if (!$listing) {
     <meta charset="UTF-8">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="dynamic_cities.js"></script>
+    
     <script>
         // JavaScript function to preview selected image files before upload
         function previewImage(event) {

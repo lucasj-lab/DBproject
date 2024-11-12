@@ -21,6 +21,7 @@ if (!isset($_SESSION['user_id'])) {
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Not Logged In</title>
         <link rel='stylesheet' href='styles.css'>
+         <script src="dynamic_cities.js"></script>
     </head>
     <body>
         <div class='redirect-message-container'>
@@ -188,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="file-upload-container">
                         <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
                         <label for="fileInput" class="file-upload-button">Choose Files</label>
-                        <span class="file-upload-text">No files chosen</span>
+    
                     </div>
 
             </div>
