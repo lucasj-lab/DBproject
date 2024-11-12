@@ -34,8 +34,9 @@
         <div class="input-container">
             <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
         </div>
-
-        <select id="state" name="state" required>
+<div class="input-container"><input type="text" id="stateInput" placeholder="Type to search for a state" autocomplete="on"> </div>
+<div id="stateDropdown" class="dropdown-content"></div>      
+<select id="state" name="state" required>
     <option value="">--Select State--</option>
     <option value="AL">Alabama</option>
     <option value="AK">Alaska</option>
@@ -91,8 +92,8 @@
 
         </div>
 
-        <div class="input-container">
-            <select id="city" name="city" required>
+        <div class="input-container"><input type="text" id="cityInput" placeholder="Type to search for a city" autocomplete="on"> </div>
+        <div id="cityDropdown" class="dropdown-content"></div>     
                 <option value="">--Select City--</option>
             </select>
         </div>

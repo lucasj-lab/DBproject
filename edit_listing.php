@@ -35,21 +35,6 @@ if (!$listing) {
     <meta charset="UTF-8">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
-
-    <script>
-        // JavaScript function to preview selected image files before upload
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById("imagePreview").src = e.target.result;
-                    document.getElementById("imagePreview").style.display = "block";
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -72,10 +57,6 @@ if (!$listing) {
 
         <select id="state" name="state" required>
             <option value="">--Select State--</option>
-            <option value="AL">Alabama</option>
-            <option value="AK">Alaska</option>
-            <select id="state" name="state" required>
-                <option value="">--Select State--</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>

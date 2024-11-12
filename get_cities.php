@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET['state'])) {
     $state = $_GET['state'];
-    $apiKey = "RB9qnYzOQyP7TJ5Y9LdfWg==WIxdUUjvSqgzLKpe"; // Replace with your actual API key
+    $apiKey = "RB9qnYzOQyP7TJ5Y9LdfWg==WIxdUUjvSqgzLKpe"; 
 
     $apiUrl = "https://api.api-ninjas.com/v1/city?state=" . urlencode($state);
 

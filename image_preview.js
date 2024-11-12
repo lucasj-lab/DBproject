@@ -18,10 +18,18 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.readAsDataURL(file);
         });
     });
-});
+}); 
 
-// File names display functionality
-document.getElementById('fileInput').addEventListener('change', function () {
-    const fileNames = Array.from(this.files).map(file => file.name).join(', ');
-    document.querySelector('.file-upload-text').textContent = fileNames || "No files chosen";
-});
+
+// JavaScript function to preview selected image files before upload
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("imagePreview").src = e.target.result;
+                    document.getElementById("imagePreview").style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
