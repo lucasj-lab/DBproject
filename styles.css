@@ -2078,12 +2078,16 @@ table td {
 }
 
 /* Footer styling */
+/* Footer styling */
 footer {
     background-color: #1a73e8;
     color: #fff;
     padding: 1rem 0;
     text-align: center;
+    margin-top: 50px;
+    padding-bottom: 50px;
 }
+
 
 footer nav ul {
     list-style: none;
@@ -2096,4 +2100,66 @@ footer nav ul li a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
+}
+
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Container */
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input-container input,
+.input-container select,
+.input-container textarea,
+.file-upload-button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+/* File Upload */
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload-button {
+    background-color: #ddd;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+}
+
+.file-upload-button:hover {
+    background-color: #ccc;
 }
