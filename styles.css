@@ -2105,12 +2105,13 @@ footer nav ul li a {
 
 /* Form Wrapper */
 .form-wrapper {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    /* background-color: #dfdfdf7a; */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top:50px;
 }
 
 /* Input Container */
@@ -2124,8 +2125,8 @@ footer nav ul li a {
 .file-upload-button {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid #0000003b;
+    border-radius: 3px;
     font-size: 16px;
     font-family: Arial, sans-serif;
 }
@@ -2154,12 +2155,18 @@ footer nav ul li a {
 }
 
 .file-upload-button {
-    background-color: #ddd;
+    background-color: #55555582;
     cursor: pointer;
     padding: 10px;
     text-align: center;
 }
 
 .file-upload-button:hover {
-    background-color: #ccc;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+select#state {
+  width: -webkit-fill-available;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
