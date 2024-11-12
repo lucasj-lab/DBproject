@@ -1030,7 +1030,7 @@ button {
     flex-direction: column;
     gap: 15px;
     max-width: 350px;
-    margin: 0;
+    margin: auto;       
 }
 
 .listing-form-group input[type="text"],
@@ -1406,7 +1406,7 @@ table td {
     box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
     background-color: rgb(26 115 232 / 9%);
     margin-top: 45px;
-    
+
 }
 
 /* Style for Form Fields in Creating Listing Form */
