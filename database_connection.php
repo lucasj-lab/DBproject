@@ -7,7 +7,8 @@ $dbname = "projectDB";
 
 try {
     // Create a new PDO instance with DSN (Data Source Name)
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+  $pdo = new PDO("mysql:host=$servername;port=3307;dbname=$dbname;charset=utf8", $username, $password);
+
 
     // Set PDO attributes for error handling
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
