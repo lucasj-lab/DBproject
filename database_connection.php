@@ -1,13 +1,13 @@
 <?php
 // Database connection settings
 $servername = "127.0.0.1"; 
-$port = "3307";            // Replace with your actual port if it's different
 $username = "root";        
-$password = "admin";       // Replace with the correct password or leave empty if none
-$dbname = "projectdb";     
+$password = "admin";          
+$dbname = "DBproject";     
+$port = "3307";  // Make sure this is set correctly
 
 try {
-    // Create a new PDO instance with DSN, including port
+    // Create a new PDO instance with DSN (Data Source Name)
     $pdo = new PDO("mysql:host=$servername;port=$port;dbname=$dbname;charset=utf8", $username, $password);
 
     // Set PDO attributes for error handling
@@ -18,3 +18,4 @@ try {
     // Catch and display connection errors
     echo "Database connection failed: " . $e->getMessage();
 }
+?>
