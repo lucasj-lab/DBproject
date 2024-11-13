@@ -1,17 +1,19 @@
 <?php
-$servername = "database-1-instance-1.ctkqko2k074a.us-east-2.rds.amazonaws.com";
-$username = "admin";
-$password = "Butterball3!";
-$dbname = "projectDB";
+// Database connection settings
+$servername = "127.0.0.1"; 
+$username = "root";        
+$password = "";          
+$dbname = "projectDB";     
 
 try {
-    // Create a PDO connection
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    
-    // Set PDO error mode to exception for better error handling
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    // Catch any connection errors and display a user-friendly message
-    die("Database connection failed: " . $e->getMessage());
-}
+    // Create a new PDO instance with DSN (Data Source Name)
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
 
+    // Set PDO attributes for error handling
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    echo "Connected to the database successfully!";
+} catch (PDOException $e) {
+    // Catch and display connection errors
+    echo "Database connection failed: " . $e->getMessage();
+}

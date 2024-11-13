@@ -30,5 +30,5 @@ if (isset($_GET['state'])) {
     } else {
         echo "<option value=''>Error retrieving city data</option>";
     }
-}
+};
 
