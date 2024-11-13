@@ -4,7 +4,7 @@ $servername = "127.0.0.1";
 $username = "root";        
 $password = "";          
 $dbname = "projectdb";     
-$port = "3307";  //
+$port = "3306";  //
 
 try {
     // Create a new PDO instance with DSN (Data Source Name)
