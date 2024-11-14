@@ -1,6 +1,8 @@
 <?php
+session_start(); // Start or continue the session
 
-// Sanitize session variables to prevent XSS
+// Check if the user is logged in and if they are an admin
+$isLoggedIn = isset($_SESSION['user_id']);
 $isAdmin = $_SESSION['is_admin'] ?? false; // Defaults to false if 'is_admin' is not set
 $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User' if 'username' is not set
 ?>
@@ -29,19 +31,26 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         <li><a href="index.php">Home</a></li>
         <li><a href="create_listing.php">New Listing</a></li>
         <li><a href="listings.php">View All Listings</a></li>
-        <?php if ($isAdmin): ?>
-          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+        
+        <?php if ($isLoggedIn): ?>
+          <?php if ($isAdmin): ?>
+            <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+          <?php else: ?>
+            <li><a href="user_dashboard.php">User Dashboard</a></li>
+          <?php endif; ?>
+          <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="user_dashboard.php">User Dashboard</a></li>
+          <li><a href="login.php">Login</a></li>
+          <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
-        <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>
 
-    <div class="user-icon">
-        <a href="user_dashboard.php">u</a> <!-- "U" for user icon, customize as needed -->
+    <!-- User Icon -->
+    <div class="user-icon" id="userIcon">
+      <a href="<?php echo $isLoggedIn ? 'user_dashboard.php' : 'login.php'; ?>">U</a> <!-- "U" for user icon -->
     </div>
-    
+
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 
     <!-- Mobile Dropdown Menu -->
@@ -50,21 +59,45 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         <li><a href="index.php">Home</a></li>
         <li><a href="create_listing.php">New Listing</a></li>
         <li><a href="listings.php">View All Listings</a></li>
-        <?php if ($isAdmin): ?>
-          <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+        
+        <?php if ($isLoggedIn): ?>
+          <?php if ($isAdmin): ?>
+            <li><a href="admin_dashboard.php">Admin Dashboard</a></li>
+          <?php else: ?>
+            <li><a href="user_dashboard.php">User Dashboard</a></li>
+          <?php endif; ?>
+          <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="user_dashboard.php">User Dashboard</a></li>
+          <li><a href="login.php">Login</a></li>
+          <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
-        <li><a href="logout.php">Logout</a></li>
       </ul>
     </div>
   </header>
 
+  <!-- JavaScript -->
   <script>
+    // Toggle mobile menu visibility
     function toggleMobileMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
     }
+
+    // Change user icon border color when logged in
+    document.addEventListener("DOMContentLoaded", function() {
+      const userIcon = document.getElementById("userIcon");
+      const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
+      if (isLoggedIn) {
+        userIcon.classList.add("logged-in"); // Adds the class for styling if logged in
+      }
+    });
   </script>
+
+  <style>
+    /* CSS to set the user icon border color when logged in */
+    .user-icon.logged-in {
+      border: 2px solid green; /* Modify this style as per your requirements */
+    }
+  </style>
 
 </body>
 </html>

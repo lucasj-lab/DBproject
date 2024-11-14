@@ -141,20 +141,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 <div class="listing-container">
                     <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image"
                         class="listing-image">
-                    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                    <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                    <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
-                    <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                    <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
-                        <?= htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted on:</strong>
-                        <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
-                    <button type="button" class="pill-button"
-                        onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+<p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+<p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+<p><strong>Posted by User ID:</strong> <?php echo htmlspecialchars($listing['User_ID']); ?></p>
+<p><strong>Category ID:</strong> <?php echo htmlspecialchars($listing['Category_ID']); ?></p>
+<p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+<p><strong>Date Posted:</strong>
+    <?php
+    $datePosted = new DateTime($listing['Date_Posted']);
+    echo htmlspecialchars($datePosted->format('l, F jS, Y'));
+    ?>
+</p>
+<?php if (!empty($listing['Image_URL'])): ?>
+    <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+<?php endif; ?>
+
                         View Listing
                     </button>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach; ?>F
         </div>
     </div>
 
