@@ -1,111 +1,116 @@
-<?php
+<?php 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Sanitize session variables to prevent XSS
-$isAdmin = $_SESSION['is_admin'] ?? false;
-$username = htmlspecialchars($_SESSION['name'] ?? 'User');
-
-// Include database connection
+// Include the database connection
 require 'database_connection.php';
 
-// Check if category ID is provided in the URL
-$categoryId = $_GET['category_id'] ?? null;
+// Check if category is set in the GET request
+$category = $_GET['category'] ?? ''; // Set $category from URL or default to an empty string
+
+// Prepare and execute a query to fetch listings by category name
+$stmt = $conn->prepare("
+    SELECT 
+        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
+        user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+    FROM 
+        listings
+    JOIN 
+        user ON listings.User_ID = user.User_ID
+    JOIN 
+        category ON listings.Category_ID = category.Category_ID
+    LEFT JOIN 
+        images ON listings.Listing_ID = images.Listing_ID
+    WHERE 
+        category.Category_Name = ?
+    ORDER BY 
+        listings.Date_Posted DESC
+");
+$stmt->bind_param("s", $category);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Prepare listings for display
 $listings = [];
-
-if ($categoryId && is_numeric($categoryId)) { // Ensure the category ID is numeric
-    $categoryId = intval($categoryId); // Convert to integer for safety
-
-    // Fetch listings for the selected category using PDO
-    $sql = "
-        SELECT 
-            listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-            user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
-        FROM 
-            listings
-        JOIN 
-            user ON listings.User_ID = user.User_ID
-        JOIN 
-            category ON listings.Category_ID = category.Category_ID
-        LEFT JOIN 
-            images ON listings.Listing_ID = images.Listing_ID
-        WHERE 
-            listings.Category_ID = :categoryId
-        ORDER BY 
-            listings.Date_Posted DESC
-    ";
-
-    // Prepare the SQL statement
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if ($results) {
-        foreach ($results as $row) {
-            // Format the Date_Posted field
-            if (!empty($row['Date_Posted'])) {
-                $datePosted = new DateTime($row['Date_Posted']);
-                $formattedDate = $datePosted->format('l, F jS, Y');
-            } else {
-                $formattedDate = "Date not available";
-            }
-
-            // Add the formatted date to the row array
-            $row['Formatted_Date'] = $formattedDate;
-
-            // Add the modified row to the listings array
-            $listings[] = $row;
-        }
-    } else {
-        $listings = ["message" => "No listings found in this category."];
-    }
-} else {
-    $listings = ["message" => "Category ID is missing or invalid."];
+while ($row = $result->fetch_assoc()) {
+    $listings[] = $row;
 }
 
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Category</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Browse <?php echo htmlspecialchars($category ?? ''); ?> Listings</title>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
-
 <body>
-    <?php include 'header.php'; ?>
+<header>
+    <h1>Category Listings</h1>
+    <nav>
+        <ul class="desktop-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- User Icon for User Dashboard -->
+    <div class="user-icon">
+        <a href="user_dashboard.php">U</a> <!-- "U" for user icon, customize as needed -->
+    </div>
+
+    <!-- Hamburger menu icon for mobile view -->
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+
+    <!-- Mobile dropdown menu for smaller screens -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create_listing.html">New Listing</a></li>
+            <li><a href="listings.html">View All Listings</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </div>
+</header>
+
 
     <main>
-        <section id="listings">
-            <?php if (!empty($listings[0]['Listing_ID'])): ?>
+        <?php if (!empty($listings)): ?>
+            <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
-                    <div class="listing-item">
-                        <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
-                        <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                        <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                        <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
-                        <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-                        <p><strong>Posted on:</strong> <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
-                        <button type="button" class="pill-button"
-                            onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                            View Listing
-                        </button>
-                    </div>
+                    <form class="listing-item" action="listing_details.php" method="GET">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($listing['Listing_ID'] ?? ''); ?>">
+                        <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image">
+                        <h3><?php echo htmlspecialchars($listing['Title'] ?? ''); ?></h3>
+                        <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
+                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name'] ?? ''); ?></p>
+                        <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
+                        <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? ''); ?></p> 
+                        <button type="submit" class="pill-button">View Listing</button>
+                    </form>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <p><?= htmlspecialchars($listings['message']); ?></p>
-            <?php endif; ?>
-        </section>
+            </div>
+        <?php else: ?>
+            <p>No listings found in the <?php echo htmlspecialchars($category ?? ''); ?> category.</p>
+        <?php endif; ?>
     </main>
 
-    <?php include 'footer.php'; ?>
+    <footer>
+        <p>&copy; 2024 Rookies 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </footer>
 </body>
 </html>

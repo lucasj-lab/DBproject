@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
         }
     }
 
-    // Close the statement (optional with PDO, but good practice)
+
     $stmt->closeCursor();
 } else {
     echo "<p>Listing ID not provided.</p>";

@@ -172,7 +172,8 @@
         "West Virginia": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
         "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
         "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
-      };=
+      };
+  
 
         function updateCities() {
             const stateSelect = document.getElementById('state');
