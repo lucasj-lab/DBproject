@@ -3,8 +3,24 @@ session_start(); // Start session to access user information
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page if not logged in
-    header("Location: login.php");
+    echo "
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Not Logged In</title>
+        <link rel='stylesheet' href='styles.css'>
+    </head>
+    <body>
+        <div class='redirect-message-container'>
+            <div class='redirect-message'>
+                <h2>You must be logged in to create a listing.</h2>
+                <p>Please <a href='login.php'>log in</a> or <a href='signup.php'>sign up</a> to continue.</p>
+            </div>
+        </div>
+    </body>
+    </html>";
     exit();
 }
 
@@ -81,10 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             
 
-            echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
-        }
     }
 
     $stmt->close();
@@ -225,7 +237,19 @@ $conn->close();
                 reader.readAsDataURL(file);
             });
         });
+
+
+        function showSuccessModal() {
+            document.getElementById("successModal").style.display = "block";
+        }
+
+        // Simulate showing the modal after successful listing creation
+        // In real use, this function call should be triggered only if the server returns success
+        showSuccessModal();
+
     });
+
+
 </script>
 
 <style>
@@ -244,5 +268,7 @@ $conn->close();
     }
 </style>
 
+
 </body>
+<?php include 'footer.php'; ?>
 </html>
