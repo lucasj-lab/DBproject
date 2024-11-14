@@ -13,7 +13,7 @@ $category = $_GET['category'] ?? ''; // Set $category from URL or default to an 
 $stmt = $conn->prepare("
     SELECT 
         listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-        user.Name AS User_ID, category.Category_ID, listings.State, listings.City, images.Image_URL
+        user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
     FROM 
         listings
     JOIN 
