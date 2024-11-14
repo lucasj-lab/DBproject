@@ -104,6 +104,7 @@ $conn->close();
 <body>
     <?php include 'header.php'; ?>
     <div class="create-listing-container">
+    <h1 class="edit-listing-title">Edit Your Listing</h1>
     <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
         <div class="listing-form-group">
             <select id="category" name="category" required>
@@ -138,7 +139,9 @@ $conn->close();
             <label for="images">Upload Images:</label>
     <input type="file" id="images" name="images[]" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
     <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
+    <div class="btn-container">
     <button type="submit">Submit</button>
+    </div>
 </form>
 </div>       
 </div>

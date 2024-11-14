@@ -55,85 +55,131 @@ if (!$listing) {
         <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($listing['price']); ?>"
             required>
 
-        <select id="state" name="state" required>
-            <option value="">--Select State--</option>
+            <select id="state" name="state" onchange="updateCities()" required>
+                <option value="">--Select State--</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>
                 <option value="AR">Arkansas</option>
                 <option value="CA">California</option>
                 <option value="CO">Colorado</option>
-                <option value="CT">Connecticut</option>
-                <option value="DE">Delaware</option>
-                <option value="FL">Florida</option>
-                <option value="GA">Georgia</option>
-                <option value="HI">Hawaii</option>
-                <option value="ID">Idaho</option>
-                <option value="IL">Illinois</option>
-                <option value="IN">Indiana</option>
-                <option value="IA">Iowa</option>
-                <option value="KS">Kansas</option>
-                <option value="KY">Kentucky</option>
-                <option value="LA">Louisiana</option>
-                <option value="ME">Maine</option>
-                <option value="MD">Maryland</option>
-                <option value="MA">Massachusetts</option>
-                <option value="MI">Michigan</option>
-                <option value="MN">Minnesota</option>
-                <option value="MS">Mississippi</option>
-                <option value="MO">Missouri</option>
-                <option value="MT">Montana</option>
-                <option value="NE">Nebraska</option>
-                <option value="NV">Nevada</option>
-                <option value="NH">New Hampshire</option>
-                <option value="NJ">New Jersey</option>
-                <option value="NM">New Mexico</option>
-                <option value="NY">New York</option>
-                <option value="NC">North Carolina</option>
-                <option value="ND">North Dakota</option>
-                <option value="OH">Ohio</option>
-                <option value="OK">Oklahoma</option>
-                <option value="OR">Oregon</option>
-                <option value="PA">Pennsylvania</option>
-                <option value="RI">Rhode Island</option>
-                <option value="SC">South Carolina</option>
-                <option value="SD">South Dakota</option>
-                <option value="TN">Tennessee</option>
-                <option value="TX">Texas</option>
-                <option value="UT">Utah</option>
-                <option value="VT">Vermont</option>
-                <option value="VA">Virginia</option>
-                <option value="WA">Washington</option>
-                <option value="WV">West Virginia</option>
-                <option value="WI">Wisconsin</option>
-                <option value="WY">Wyoming</option>
+                <!-- Add other states as needed -->
             </select>
 
-        </select>
-        <select id="city" name="city" placeholder="City" required>
-            <option Value="">--Select City--</option>
-
-
-            <label for="new_image">Upload New Image:</label>
-            <input type="file" id="new_image" name="new_image" accept="image/*" onchange="previewImage(event)">
-            <!-- Image preview element -->
-            <img id="imagePreview" src="#" alt="Image Preview"
-                style="display: none; width: 150px; height: auto; margin-top: 10px;">
-
-            <form action="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST"
-                enctype="multipart/form-data" class="edit-listing-form">
-                <button type="submit" class="pill-button-edit">Update</button>
-                </div>
-            </form>
+            <div class="listing-city-group">
+                <select id="city-dropdown" name="city" required>
+                    <option value="">--Select City--</option>
+                </select>
             </div>
 
-            <div id="imagePreviewContainer"></div>
+            <label for="images">Upload Images:</label>
+    <input type="file" id="images" name="images[]" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+    <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
+    <div class="btn-container">
+    <button type="submit">Submit</button>
+    </div>
+</form>
+</div>       
+</div>
+    </form>
+
+    <script>
+        // Data structure with states and corresponding cities
+        const statesAndCities = {
+            "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+            "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+            "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+            "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+            "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+            "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"]
+            // Add other states and cities as needed
+        };
+
+        // Function to update city dropdown based on selected state
+        function updateCities() {
+            const stateSelect = document.getElementById('state');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const selectedState = stateSelect.value;
+
+            // Clear previous city options
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+            // Populate city dropdown if a valid state is selected
+            if (selectedState && statesAndCities[selectedState]) {
+                const cities = statesAndCities[selectedState];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            }
+        }
+
+        // Debugging: Ensure JavaScript is loaded and functions are called correctly
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("JavaScript loaded, ready to update cities.");
+        });
+        function updateCities() {
+    const stateSelect = document.getElementById('state');
+    const cityDropdown = document.getElementById('city-dropdown');
+    const selectedState = stateSelect.value;
+
+    console.log("Selected state:", selectedState); // Debugging log
+
+    // Clear previous city options
+    cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+    // Populate city dropdown if a valid state is selected
+    if (selectedState && statesAndCities[selectedState]) {
+        const cities = statesAndCities[selectedState];
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            cityDropdown.appendChild(option);
+        });
+        console.log("Cities added:", cities); // Debugging log
+    }
+}
 
 
-            <script src="dynamic_cities.js"></script>
-            <script src="image_preview.js"></script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageInput = document.querySelector("input[name='images[]']");
+        const previewContainer = document.getElementById("imagePreviewContainer");
+
+        imageInput.addEventListener("change", function () {
+            previewContainer.innerHTML = ""; // Clear previous previews
+            Array.from(imageInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    });
+</script>
+
+<style>
+    #imagePreviewContainer {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .preview-image {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
 </body>
-
 <?php include 'footer.php'; ?>
 
 </html>
