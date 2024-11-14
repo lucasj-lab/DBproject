@@ -67,75 +67,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($category_id === false) {
         echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
         exit();
-    } else {
-        // Prepare and execute the INSERT query
-        $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
-        
-        // Check if the statement was prepared successfully
-        if ($stmt) {
-            $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
-
-            // Execute the statement and check for success
-            if ($stmt->execute()) {
-                echo json_encode(['success' => true, 'message' => 'Listing created successfully!']);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to create listing.']);
-            }
-
-            $stmt->close(); // Close the statement
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Database error: Failed to prepare statement.']);
-        }
     }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 
+    // Prepare and execute the INSERT query
+    $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
+    
+    // Check if the statement was prepared successfully
+    if ($stmt) {
+        $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
 
+        // Execute the statement and check for success
+        if ($stmt->execute()) {
             $listing_id = $stmt->insert_id;
-            if (!empty($_FILES['images']['name'][0])) 
-            {
+
+            // Handle image uploads if provided
+            if (!empty($_FILES['images']['name'][0])) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
                 $uploadDirectory = 'uploads/';
-                if (!is_dir($uploadDirectory)) 
-                {
+                if (!is_dir($uploadDirectory)) {
                     mkdir($uploadDirectory, 0777, true);
                 }
-            
-                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName)
-                 {
-                    $fileType = mime_content_type($tmpName); // Check the MIME type of the file
-            
+
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+                    $fileType = mime_content_type($tmpName);
+
                     // Only process if the file is of an allowed type
                     if (in_array($fileType, $allowedTypes)) {
                         $imageName = basename($_FILES['images']['name'][$key]);
                         $uniqueImageName = time() . "_" . $imageName;
                         $targetFilePath = $uploadDirectory . $uniqueImageName;
-            
-                        if (move_uploaded_file($tmpName, $targetFilePath)) 
-                        {
+
+                        if (move_uploaded_file($tmpName, $targetFilePath)) {
                             $imageUrl = $targetFilePath;
-            
+
                             // Insert image data into images table
                             $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
                             $imgStmt = $conn->prepare($imageSql);
                             $imgStmt->bind_param("si", $imageUrl, $listing_id);
                             $imgStmt->execute();
+                            $imgStmt->close();
                         }
-                     else {
-                        echo "File type not allowed: " . htmlspecialchars($fileType);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => "File type not allowed: " . htmlspecialchars($fileType)]);
                         exit();
                     }
                 }
             }
-            
+            echo json_encode(['success' => true, 'message' => 'Listing created successfully!', 'listing_id' => $listing_id]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to create listing.']);
+        }
 
+        $stmt->close(); // Close the statement
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Database error: Failed to prepare statement.']);
     }
-
-    $stmt->close();
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 }
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
