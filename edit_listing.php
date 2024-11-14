@@ -38,10 +38,11 @@ if (!$listing) {
 </head>
 
 <body>
-    <form id="create-listing-form">
-    <h1 class="edit-listing-title">Edit Your Listing</h1>
+    <form id="create-listing-container">
+    <h1 class="edit-listing-e">Edit Your Listing</h1>
 
     <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
+    <div class="listing-form-group">
         <!-- Hidden input to keep the listing ID -->
         <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
 
