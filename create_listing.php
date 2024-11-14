@@ -20,7 +20,8 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
     </body>
-    </html>";
+    </html>"
+
     exit();
 }
 
@@ -270,5 +271,7 @@ $conn->close();
 
 
 </body>
+
 <?php include 'footer.php'; ?>
+
 </html>
