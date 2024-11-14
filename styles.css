@@ -2064,7 +2064,8 @@ table td {
 
     .dashboard-table td {
         display: flex;
-        justify-content: space-between;
+        align-items: flex-start;
+        text-align: left; /* Align text to the left */
         padding: 0.5rem;
         border-bottom: 0;
     }
@@ -2080,6 +2081,7 @@ table td {
         padding-bottom: 1rem;
     }
 }
+
 
 /* Footer styling */
 /* Footer styling */
@@ -2215,4 +2217,87 @@ select#state {
 
 .dropdown-content div:hover {
     background-color: #ddd;
+}
+.create-listing-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 14px 17px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table layout if using a table inside the form */
+.create-listing-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.create-listing-container th, .create-listing-container td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.create-listing-container th {
+    background-color: #1a73e8;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.create-listing-container td {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Buttons styling */
+.create-listing-container .btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.create-listing-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    background-color: #1a73e8;
+    transition: background-color 0.3s ease;
+}
+
+.create-listing-container button:hover {
+    background-color: #fbbc04;
+    color: #000;
+}
+
+/* Optional styling for inputs in the form if needed */
+.create-listing-container input[type="text"], 
+.create-listing-container input[type="number"], 
+.create-listing-container textarea,
+.create-listing-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Mobile styles for Create Listing container */
+@media only screen and (max-width: 600px) {
+    .create-listing-container {
+        padding: 20px;
+        margin: 0 auto;
+        width: 90%; /* Takes up most of the screen */
+    }
+
+    .create-listing-container h2 {
+        font-size: 1.5rem; /* Smaller heading */
+        text-align: center;
+    }
 }

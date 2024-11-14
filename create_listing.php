@@ -103,8 +103,8 @@ $conn->close();
 </head>
 <body>
     <?php include 'header.php'; ?>
-
-    <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+    <div class="create-listing-container">
+    <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
         <div class="listing-form-group">
             <select id="category" name="category" required>
                 <option value="">--Select Category--</option>
@@ -140,7 +140,8 @@ $conn->close();
     <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
     <button type="submit">Submit</button>
 </form>
-        </div>
+</div>       
+</div>
     </form>
 
     <script>
