@@ -13,7 +13,7 @@ $category = $_GET['category'] ?? ''; // Set $category from URL or default to an 
 $stmt = $conn->prepare("
     SELECT 
         listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-        user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+        user.Name AS User_ID, category.Category_ID, listings.State, listings.City, images.Image_URL
     FROM 
         listings
     JOIN 
@@ -55,7 +55,7 @@ $conn->close();
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
-                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($listing['Listing_ID'] ?? ''); ?>">
+                    <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
                         <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image">
                         <h3><?php echo htmlspecialchars($listing['Title'] ?? ''); ?></h3>
                         <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
