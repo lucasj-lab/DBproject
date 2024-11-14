@@ -39,7 +39,7 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
     </nav>
 
     <div class="user-icon">
-        <a href="user_dashboard.php"></a> <!-- "U" for user icon, customize as needed -->
+        <a href="user_dashboard.php">u</a> <!-- "U" for user icon, customize as needed -->
     </div>
     
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
