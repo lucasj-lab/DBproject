@@ -92,7 +92,7 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+< lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -101,53 +101,21 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<>
     <header>
+    <?php include 'header.php'; ?>
         <div class="logo">
             <h1>Create New Listing</h1>
         </div>
-
-        <!-- Desktop Navigation Menu -->
-        <nav>
-            <ul class="desktop-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-
-        <!-- User Icon for User Dashboard -->
-        <div class="user-icon">
-            <a href="user_dashboard.php">U</a> <!-- "U" as a placeholder for the user icon -->
-        </div>
-
-        <!-- Hamburger Menu Icon for Mobile View -->
-        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-
-        <!-- Mobile Dropdown Menu for Smaller Screens -->
-        <div class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="create_listing.html">New Listing</a></li>
-                <li><a href="listings.html">View All Listings</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
-    </header>
-
+  </header>
 
     <div class="post-ad">
         <h2>Post Your Ad</h2>
         <p>Please <a href="register.html">register</a> to create a new listing.</p>
         <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-
+     <!-- State Dropdown -->
+     <div class="input-container">
             <div class="listing-form-group">
-                <input type="text" id="user_email" name="user_email" placeholder="Email" required>
 
                 <select id="category" name="category" required>
                     <option value="">--Select Category--</option>
@@ -164,9 +132,6 @@ $conn->close();
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
 
                 <select id="state" name="state" onchange="updateCities()" required>
-                    <!-- State Dropdown -->
-                    <div class="input-container">
-                        <select id="state" name="state" required>
                             <option value="">--Select State--</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
@@ -225,8 +190,6 @@ $conn->close();
                     <select id="city-dropdown" name="city" onchange="toggleInput()" required>
                         <option value="">--Select City--</option>
                     </select>
-                    <input type="text" id="city-input" name="city-input" placeholder="Type your city here if not listed"
-                        oninput="clearDropdown()" />
                 </div>
 
                 <label for="images">Upload Images:</label>
@@ -236,7 +199,7 @@ $conn->close();
             </div>
         </form>
     </div>
-
+    </div>
 
     <script>
         function toggleMobileMenu() {
@@ -369,327 +332,6 @@ $conn->close();
                 });
         };
     </script>
-
-    <style>
-        /* General Reset and Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        header {
-            background-color: #1a73e8;
-            color: #fff;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .logo h1 {
-            margin-left: 3em;
-            font-size: 1.8rem;
-
-        }
-
-        .desktop-menu {
-            display: flex;
-            list-style: none;
-        }
-
-        .desktop-menu li {
-            margin-left: 1rem;
-        }
-
-        .desktop-menu li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* Hamburger Menu for Mobile */
-        .hamburger {
-            display: none;
-            font-size: 1.8rem;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #1a73e8;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        .mobile-menu ul {
-            display: flex;
-            flex-direction: column;
-            list-style: none;
-        }
-
-        .mobile-menu ul li {
-            margin-bottom: 1rem;
-        }
-
-        .mobile-menu ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .desktop-menu {
-                display: none;
-            }
-
-            .hamburger {
-                display: block;
-            }
-        }
-
-        /* Listings Section */
-        .listing-item {
-            background-color: #fff;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .listing-item h3 {
-            margin: 0.5rem 0;
-        }
-    </style>
-
-</body>
-
-</html>
-<!-- State Dropdown -->
-<div class="input-container">
-    <select id="state" name="state" required>
-        <option value="">--Select State--</option>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-        <option value="IA">Iowa</option>
-        <option value="KS">Kansas</option>
-        <option value="KY">Kentucky</option>
-        <option value="LA">Louisiana</option>
-        <option value="ME">Maine</option>
-        <option value="MD">Maryland</option>
-        <option value="MA">Massachusetts</option>
-        <option value="MI">Michigan</option>
-        <option value="MN">Minnesota</option>
-        <option value="MS">Mississippi</option>
-        <option value="MO">Missouri</option>
-        <option value="MT">Montana</option>
-        <option value="NE">Nebraska</option>
-        <option value="NV">Nevada</option>
-        <option value="NH">New Hampshire</option>
-        <option value="NJ">New Jersey</option>
-        <option value="NM">New Mexico</option>
-        <option value="NY">New York</option>
-        <option value="NC">North Carolina</option>
-        <option value="ND">North Dakota</option>
-        <option value="OH">Ohio</option>
-        <option value="OK">Oklahoma</option>
-        <option value="OR">Oregon</option>
-        <option value="PA">Pennsylvania</option>
-        <option value="RI">Rhode Island</option>
-        <option value="SC">South Carolina</option>
-        <option value="SD">South Dakota</option>
-        <option value="TN">Tennessee</option>
-        <option value="TX">Texas</option>
-        <option value="UT">Utah</option>
-        <option value="VT">Vermont</option>
-        <option value="VA">Virginia</option>
-        <option value="WA">Washington</option>
-        <option value="WV">West Virginia</option>
-        <option value="WI">Wisconsin</option>
-        <option value="WY">Wyoming</option>
-    </select>
-</div>
-
-<!-- City Autocomplete Input and Dropdown -->
-<div class="input-container">
-    <div id="cityDropdown" class="dropdown-content"></div>
-</div>
-
-<!-- File Upload Section -->
-<div class="input-container file-upload-container">
-    <input type="file" id="fileInput" name="files[]" class="file-input" multiple>
-    <label for="fileInput" class="file-upload-button">Choose Files</label>
-</div>
-
-<!-- Submit Button -->
-<div class="input-container">
-    <button type="submit" class="submit-button">Create Listing</button>
-</div>
-</form>
-
-<?php include 'footer.php'; ?>
-<script>
-    function toggleMobileMenu() {
-        const mobileMenu = document.getElementById("mobileMenu");
-        mobileMenu.classList.toggle("active");
-    }
-
-    const statesAndCities = {
-        "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-        "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-        "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
-        "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
-        "California": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
-        "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
-        "Connecticut": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
-        "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
-        "Florida": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
-        "Georgia": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
-        "Hawaii": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
-        "Idaho": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
-        "Illinois": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
-        "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
-        "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
-        "Kansas": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
-        "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
-        "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
-        "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
-        "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
-        "Massachusetts": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
-        "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
-        "Minnesota": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
-        "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
-        "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
-        "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
-        "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
-        "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
-        "New Hampshire": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
-        "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
-        "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
-        "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
-        "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
-        "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
-        "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
-        "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
-        "Oregon": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
-        "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
-        "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
-        "South Carolina": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
-        "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
-        "Tennessee": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
-        "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
-        "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
-        "Vermont": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
-        "Virginia": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
-        "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
-        "West Virginia": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
-        "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
-        "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
-    };
-
-
-    function updateCities() {
-        const stateSelect = document.getElementById('state');
-        const cityDropdown = document.getElementById('city-dropdown');
-        const cityInput = document.getElementById('city-input');
-        const selectedState = stateSelect.value;
-
-        cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-        cityInput.value = "";
-
-        if (selectedState) {
-            const cities = citiesByState[selectedState] || [];
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                cityDropdown.appendChild(option);
-            });
-        }
-    }
-
-    function toggleInput() {
-        const cityDropdown = document.getElementById('city-dropdown');
-        const cityInput = document.getElementById('city-input');
-
-        if (cityDropdown.value === "") {
-            cityInput.style.display = "block";
-        } else {
-            cityInput.style.display = "none";
-        }
-    }
-
-    function clearDropdown() {
-        const cityDropdown = document.getElementById('city-dropdown');
-        cityDropdown.value = "";
-        toggleInput();
-    }
-
-    document.getElementById('listing-form').onsubmit = function (event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-        fetch('create_listing.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.createElement('div');
-                messageDiv.id = 'message';
-                messageDiv.style.display = 'block';
-
-                if (data.success) {
-                    messageDiv.style.color = 'green';
-                    messageDiv.textContent = 'Listing created successfully!';
-                    this.reset();
-                } else {
-                    messageDiv.style.color = 'red';
-                    messageDiv.textContent = data.message || 'Failed to create listing.';
-                }
-                document.body.prepend(messageDiv);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageDiv = document.createElement('div');
-                messageDiv.id = 'message';
-                messageDiv.style.display = 'block';
-                messageDiv.style.color = 'red';
-                messageDiv.textContent = 'An error occurred while creating the listing.';
-                document.body.prepend(messageDiv);
-            });
-    };
-</script>
 
 </body>
 
