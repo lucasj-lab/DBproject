@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Listing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Create New Listing</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+        <!-- Hamburger menu icon for mobile view -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+        <!-- Mobile dropdown menu for smaller screens -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_listing.html">New Listing</a></li>
+                <li><a href="listings.html">View All Listings</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="post-ad">
+        <h2>Post Your Ad</h2>
+        <p>Please <a href="register.html">register</a> to create a new listing.</p>
+        <form id="listing-form" action="create_listing.php" method="POST">
+            <label for="user_email">User Email:</label>
+            <input type="text" id="user_email" name="user_email" required>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                <option value="">--Select Category--</option>
+                <option value="Auto">Auto</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Other">Other</option>
+            </select>
+
+    
+            <input type="text" id="title" name="title" placeholder="Title" required>
+
+        
+            <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+
+
+            <input type="number" step="0.01" id="price" name="price" class="input-field" placeholder="Price" required>
+    
+            <select id="state" name="state" onchange="updateCities()" required>
+                <option value="">--Select State--</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <!-- Add other states as needed -->
+            </select>
+
+            <div>
+                <select id="city-dropdown" name="city" onchange="toggleInput()" required>
+                    <option value="">--Select City--</option>
+                </select>
+                <input type="text" id="city-input" name="city-input" placeholder="Type your city here if not listed" oninput="clearDropdown()" />
+            </div>
+
+            <label for="images">Upload Images:</label>
+            <input type="file" id="images" name="images[]" multiple>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobileMenu");
+            mobileMenu.classList.toggle("active");
+        }
+
+        const citiesByState = {
+            'AL': ['Birmingham', 'Montgomery', 'Huntsville', 'Mobile', 'Tuscaloosa'],
+            'AK': ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'],
+            'AZ': ['Phoenix', 'Tucson', 'Mesa', 'Chandler', 'Scottsdale'],
+            'AR': ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale', 'Jonesboro'],
+            'CA': ['Los Angeles', 'San Francisco', 'San Diego', 'San Jose', 'Sacramento'],
+            'CO': ['Denver', 'Colorado Springs', 'Aurora', 'Fort Collins', 'Lakewood'],
+            'CT': ['Hartford', 'New Haven', 'Stamford', 'Bridgeport', 'Waterbury'],
+            'DE': ['Wilmington', 'Dover', 'Newark', 'Middletown', 'Smyrna'],
+            'FL': ['Jacksonville', 'Miami', 'Tampa', 'Orlando', 'St. Petersburg'],
+            'GA': ['Atlanta', 'Augusta', 'Columbus', 'Savannah', 'Athens']
+            // Add other states and cities as needed
+        };
+
+        function updateCities() {
+            const stateSelect = document.getElementById('state');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const cityInput = document.getElementById('city-input');
+            const selectedState = stateSelect.value;
+
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+            cityInput.value = "";
+
+            if (selectedState) {
+                const cities = citiesByState[selectedState] || [];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            }
+        }
+
+        function toggleInput() {
+            const cityDropdown = document.getElementById('city-dropdown');
+            const cityInput = document.getElementById('city-input');
+
+            if (cityDropdown.value === "") {
+                cityInput.style.display = "block";
+            } else {
+                cityInput.style.display = "none";
+            }
+        }
+
+        function clearDropdown() {
+            const cityDropdown = document.getElementById('city-dropdown');
+            cityDropdown.value = "";
+            toggleInput();
+        }
+
+        document.getElementById('listing-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            fetch('create_listing.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
+                messageDiv.style.display = 'block';
+
+                if (data.success) {
+                    messageDiv.style.color = 'green';
+                    messageDiv.textContent = 'Listing created successfully!';
+                    this.reset();
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = data.message || 'Failed to create listing.';
+                }
+                document.body.prepend(messageDiv);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
+                messageDiv.style.display = 'block';
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = 'An error occurred while creating the listing.';
+                document.body.prepend(messageDiv);
+            });
+        };
+    </script>
+</body>
+</html>

@@ -55,34 +55,30 @@ document.addEventListener("DOMContentLoaded", function () {
         "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
         "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
       };
-
-    // Event Listener for State Selection
-    stateDropdown.addEventListener("change", function () {
+      stateDropdown.addEventListener("change", function () {
         const selectedState = stateDropdown.value;
-        cityInput.value = "";  // Clear previous input
-        cityDropdown.innerHTML = "";  // Clear previous dropdown suggestions
+        cityInput.value = ""; 
+        cityDropdown.innerHTML = ""; 
         cityDropdown.style.display = "none";
 
         if (selectedState && statesAndCities[selectedState]) {
             const cities = statesAndCities[selectedState];
 
-            // Filtered city suggestions based on user input
             cityInput.addEventListener("input", function () {
                 const searchQuery = cityInput.value.toLowerCase();
-                cityDropdown.innerHTML = "";  // Clear previous results
+                cityDropdown.innerHTML = ""; 
 
                 if (searchQuery.length > 0) {
                     const filteredCities = cities.filter(city =>
                         city.toLowerCase().startsWith(searchQuery)
                     );
 
-                    // Populate dropdown with filtered cities
                     filteredCities.forEach(city => {
                         const option = document.createElement("div");
                         option.textContent = city;
                         option.addEventListener("click", () => {
-                            cityInput.value = city;  // Set selected city
-                            cityDropdown.innerHTML = "";  // Clear suggestions
+                            cityInput.value = city; 
+                            cityDropdown.innerHTML = ""; 
                             cityDropdown.style.display = "none";
                         });
                         cityDropdown.appendChild(option);
@@ -96,7 +92,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Hide dropdown if user clicks outside
     document.addEventListener("click", function (e) {
         if (!cityInput.contains(e.target) && !cityDropdown.contains(e.target)) {
             cityDropdown.style.display = "none";

@@ -81,7 +81,7 @@ if (isset($_GET['id'])) {
 
         <div class="listing-actions">
             <button onclick="window.location.href='contact_seller.php?user_id=<?php echo $listing['User_ID']; ?>&listing_id=<?php echo $listing['Listing_ID']; ?>'">Contact Seller</button>
-            <button onclick="window.location.href='index.php'">Back to Listings</button>
+            <button onclick="window.location.href='listings.php'">Back to Listings</button>
         </div>
     <?php else : ?>
         <p>Listing details not found.</p>

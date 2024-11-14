@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Create Listing</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="dynamic_cities.js" defer></script>
 </head>
 
 <body>
@@ -116,6 +115,82 @@
     </form>
 
     <?php include 'footer.php'; ?>
+
+   <script>
+   
+   function updateCities() {
+            const stateSelect = document.getElementById('state');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const cityInput = document.getElementById('city-input');
+            const selectedState = stateSelect.value;
+
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+            cityInput.value = "";
+
+            if (selectedState) {
+                const cities = citiesByState[selectedState] || [];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+            }
+        }
+
+        function toggleInput() {
+            const cityDropdown = document.getElementById('city-dropdown');
+            const cityInput = document.getElementById('city-input');
+
+            if (cityDropdown.value === "") {
+                cityInput.style.display = "block";
+            } else {
+                cityInput.style.display = "none";
+            }
+        }
+
+        function clearDropdown() {
+            const cityDropdown = document.getElementById('city-dropdown');
+            cityDropdown.value = "";
+            toggleInput();
+        }
+
+        document.getElementById('listing-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            fetch('create_listing.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
+                messageDiv.style.display = 'block';
+
+                if (data.success) {
+                    messageDiv.style.color = 'green';
+                    messageDiv.textContent = 'Listing created successfully!';
+                    this.reset();
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = data.message || 'Failed to create listing.';
+                }
+                document.body.prepend(messageDiv);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
+                messageDiv.style.display = 'block';
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = 'An error occurred while creating the listing.';
+                document.body.prepend(messageDiv);
+            });
+        };
+    </script>
+
 </body>
 
 </html>
