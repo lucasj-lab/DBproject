@@ -73,9 +73,10 @@ if (!$listing) {
                     <option value="">--Select City--</option>
                 </select>
             </div>
-
-            <label for="images">Upload Images:</label>
+           <div class="btn-container">
+            <label for="images"></label>
     <input type="file" id="images" name="images[]" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+    </div>
     <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
     <div class="btn-container">
     <button type="submit">Submit</button>
