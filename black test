@@ -104,7 +104,7 @@
             'DE': ['Wilmington', 'Dover', 'Newark', 'Middletown', 'Smyrna'],
             'FL': ['Jacksonville', 'Miami', 'Tampa', 'Orlando', 'St. Petersburg'],
             'GA': ['Atlanta', 'Augusta', 'Columbus', 'Savannah', 'Athens']
-            // Add other states and cities as needed
+
         };
 
         function updateCities() {
