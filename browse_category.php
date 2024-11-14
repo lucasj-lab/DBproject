@@ -49,42 +49,8 @@ $conn->close();
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
-<header>
-    <h1>Category Listings</h1>
-    <nav>
-        <ul class="desktop-menu">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
-
-    <!-- User Icon for User Dashboard -->
-    <div class="user-icon">
-        <a href="user_dashboard.php">U</a> <!-- "U" for user icon, customize as needed -->
-    </div>
-
-    <!-- Hamburger menu icon for mobile view -->
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-
-    <!-- Mobile dropdown menu for smaller screens -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="create_listing.html">New Listing</a></li>
-            <li><a href="listings.html">View All Listings</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </div>
-</header>
-
-
-    <main>
+<?php include 'header.php'; ?>
+ <main>
         <?php if (!empty($listings)): ?>
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>

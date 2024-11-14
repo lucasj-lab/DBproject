@@ -48,29 +48,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt->execute()) {
             $listing_id = $stmt->insert_id;
-
-            // Check if images were uploaded
             if (!empty($_FILES['images']['name'][0])) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
                 $uploadDirectory = 'uploads/';
                 if (!is_dir($uploadDirectory)) {
                     mkdir($uploadDirectory, 0777, true);
                 }
-
+            
                 foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                    $imageName = basename($_FILES['images']['name'][$key]);
-                    $targetFilePath = $uploadDirectory . $imageName;
-
-                    if (move_uploaded_file($tmpName, $targetFilePath)) {
-                        $imageUrl = $targetFilePath;
-
-                        // Insert image data into images table
-                        $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
-                        $imgStmt = $conn->prepare($imageSql);
-                        $imgStmt->bind_param("si", $imageUrl, $listing_id);
-                        $imgStmt->execute();
+                    $fileType = mime_content_type($tmpName); // Check the MIME type of the file
+            
+                    // Only process if the file is of an allowed type
+                    if (in_array($fileType, $allowedTypes)) {
+                        $imageName = basename($_FILES['images']['name'][$key]);
+                        $uniqueImageName = time() . "_" . $imageName;
+                        $targetFilePath = $uploadDirectory . $uniqueImageName;
+            
+                        if (move_uploaded_file($tmpName, $targetFilePath)) {
+                            $imageUrl = $targetFilePath;
+            
+                            // Insert image data into images table
+                            $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
+                            $imgStmt = $conn->prepare($imageSql);
+                            $imgStmt->bind_param("si", $imageUrl, $listing_id);
+                            $imgStmt->execute();
+                        }
+                    } else {
+                        echo "File type not allowed: " . htmlspecialchars($fileType);
+                        exit();
                     }
                 }
             }
+            
 
             echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
         } else {
@@ -127,8 +136,10 @@ $conn->close();
             </div>
 
             <label for="images">Upload Images:</label>
-            <input type="file" id="images" name="images[]" multiple>
-            <button type="submit">Submit</button>
+    <input type="file" id="images" name="images[]" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+    <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
+    <button type="submit">Submit</button>
+</form>
         </div>
     </form>
 
@@ -192,7 +203,42 @@ $conn->close();
     }
 }
 
-    </script>
-    
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageInput = document.querySelector("input[name='images[]']");
+        const previewContainer = document.getElementById("imagePreviewContainer");
+
+        imageInput.addEventListener("change", function () {
+            previewContainer.innerHTML = ""; // Clear previous previews
+            Array.from(imageInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    });
+</script>
+
+<style>
+    #imagePreviewContainer {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .preview-image {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+
 </body>
 </html>

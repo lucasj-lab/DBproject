@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const imageInput = document.querySelector("input[name='files[]']");
+    const imageInput = document.querySelector("input[name='images[]']");
     const previewContainer = document.getElementById("imagePreviewContainer");
 
     imageInput.addEventListener("change", function () {
