@@ -43,7 +43,7 @@ function getCategoryID($conn, $categoryName)
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
+if ($_SERVER['REQUEST_METHOD'] == 'POST')  
     $user_id = $_SESSION['user_id']; // Retrieve user ID from session
     $category = $_POST['category'];
     $title = $_POST['title'];
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $stmt->close();
-}
+
 
 $conn->close();
 ?>
