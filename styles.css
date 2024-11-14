@@ -929,9 +929,9 @@ nav ul li a {
 
 /* Style for the user icon with light green outline if logged in */
 .user-icon.logged-in a {
-    border: 2px solid lightgreen;
-    padding: 5px;
-    border-radius: 50%;
+    border: 2px solid #008000;
+    padding: 4px;
+    border-radius: 30px;
 }
 
 
