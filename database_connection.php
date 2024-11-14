@@ -11,7 +11,14 @@ try {
     // Set PDO error mode to exception for better error handling
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    // Catch any connection errors and display a user-friendly message
-    die("Database connection failed: " . $e->getMessage());
+    die("Database connection (PDO) failed: " . $e->getMessage());
 }
 
+// Create a MySQLi connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the MySQLi connection
+if ($conn->connect_error) {
+    die("Database connection (MySQLi) failed: " . $conn->connect_error);
+}
+?>
