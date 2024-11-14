@@ -2,7 +2,7 @@
 session_start();
 require 'database_connection.php';
 
-// Check if user is logged in
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -44,24 +44,26 @@ if (!$success) {
     exit();
 }
 
-// Handle image upload if a new image was uploaded
-if (!empty($_FILES['new_image']['name'])) {
-    $image_path = 'uploads/' . basename($_FILES['new_image']['name']);
+// Handle new image upload if a file is provided
+if (!empty($_FILES['new_image']['name'][0])) {
+    foreach ($_FILES['new_image']['tmp_name'] as $key => $tmpName) {
+        $imageName = basename($_FILES['new_image']['name'][$key]);
+        $targetFilePath = 'uploads/' . time() . "_" . $imageName;
 
-    // Move the uploaded file to the uploads directory
-    if (move_uploaded_file($_FILES['new_image']['tmp_name'], $image_path)) {
-        // Update the image URL in the images table, or insert it if it doesn’t exist
-        $sql = "INSERT INTO images (Listing_ID, image_url) VALUES (:listing_id, :image_url) 
-                ON DUPLICATE KEY UPDATE image_url = :image_url";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['listing_id' => $listing_id, 'image_url' => $image_path]);
-    } else {
-        echo "Image upload failed.";
-        exit();
+        // Move the uploaded file to the uploads directory
+        if (move_uploaded_file($tmpName, $targetFilePath)) {
+            // Insert the image URL into the images table for this listing
+            $sql = "INSERT INTO images (Listing_ID, image_url) VALUES (:listing_id, :image_url)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['listing_id' => $listing_id, 'image_url' => $targetFilePath]);
+        } else {
+            echo "Image upload failed.";
+            exit();
+        }
     }
 }
 
 // Redirect back to a confirmation or view page for the updated listing
 header("Location: view_listing.php?listing_id=" . $listing_id);
 exit();
-
+?>

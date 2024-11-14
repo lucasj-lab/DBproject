@@ -38,6 +38,7 @@ if (!$listing) {
 </head>
 
 <body>
+    <form id="create-listing-form">
     <h1 class="edit-listing-title">Edit Your Listing</h1>
 
     <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
@@ -79,6 +80,8 @@ if (!$listing) {
     <button type="submit">Submit</button>
     </div>
 </form>
+</form>
+
 </div>       
 </div>
     </form>
