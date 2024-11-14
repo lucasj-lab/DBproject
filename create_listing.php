@@ -113,6 +113,10 @@ $conn->close();
                 <option value="">--Select State--</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
                 <!-- Add other states as needed -->
             </select>
 
@@ -129,19 +133,27 @@ $conn->close();
     </form>
 
     <script>
+        // Data structure with states and corresponding cities
         const statesAndCities = {
-            "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-            "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-            // Add other states and cities here
+            "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+            "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+            "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+            "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+            "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+            "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"]
+            // Add other states and cities as needed
         };
 
+        // Function to update city dropdown based on selected state
         function updateCities() {
             const stateSelect = document.getElementById('state');
             const cityDropdown = document.getElementById('city-dropdown');
             const selectedState = stateSelect.value;
 
+            // Clear previous city options
             cityDropdown.innerHTML = '<option value="">--Select City--</option>';
 
+            // Populate city dropdown if a valid state is selected
             if (selectedState && statesAndCities[selectedState]) {
                 const cities = statesAndCities[selectedState];
                 cities.forEach(city => {
@@ -152,6 +164,35 @@ $conn->close();
                 });
             }
         }
+
+        // Debugging: Ensure JavaScript is loaded and functions are called correctly
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("JavaScript loaded, ready to update cities.");
+        });
+        function updateCities() {
+    const stateSelect = document.getElementById('state');
+    const cityDropdown = document.getElementById('city-dropdown');
+    const selectedState = stateSelect.value;
+
+    console.log("Selected state:", selectedState); // Debugging log
+
+    // Clear previous city options
+    cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+    // Populate city dropdown if a valid state is selected
+    if (selectedState && statesAndCities[selectedState]) {
+        const cities = statesAndCities[selectedState];
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            cityDropdown.appendChild(option);
+        });
+        console.log("Cities added:", cities); // Debugging log
+    }
+}
+
     </script>
+    
 </body>
 </html>
