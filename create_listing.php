@@ -1,4 +1,13 @@
 <?php
+session_start(); // Start session to access user information
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page if not logged in
+    header("Location: login.php");
+    exit();
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -19,70 +28,54 @@ function getCategoryID($conn, $categoryName)
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_email = $_POST['user_email'];
+    $user_id = $_SESSION['user_id']; // Retrieve user ID from session
     $category = $_POST['category'];
     $title = $_POST['title'];
     $description = $_POST['description'];
     $price = $_POST['price'];
     $state = $_POST['state'];
-    $city = $_POST['city'] ?? $_POST['city-input'];
+    $city = $_POST['city']; // Only use city dropdown selection
 
+    // Get the Category_ID using the function
+    $category_id = getCategoryID($conn, $category);
 
-    // Get the User_ID using the email
-    $stmt = $conn->prepare("SELECT User_ID FROM user WHERE Email = ?");
-    $stmt->bind_param("s", $user_email);
-    $stmt->execute();
-    $stmt->store_result();
+    if ($category_id === false) {
+        echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
+    } else {
+        // Insert new listing
+        $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
+        $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
 
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id);
-        $stmt->fetch();
+        if ($stmt->execute()) {
+            $listing_id = $stmt->insert_id;
 
-        // Get the Category_ID using the function
-        $category_id = getCategoryID($conn, $category);
-
-        if ($category_id === false) {
-            echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
-        } else {
-            // Insert new listing
-            $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
-            $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
-
-            if ($stmt->execute()) {
-                $listing_id = $stmt->insert_id; // Get the ID of the new listing
-
-                // Check if images were uploaded
-                if (!empty($_FILES['images']['name'][0])) {
-                    $uploadDirectory = 'uploads/';
-                    if (!is_dir($uploadDirectory)) {
-                        mkdir($uploadDirectory, 0777, true);
-                    }
-
-                    foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                        $imageName = basename($_FILES['images']['name'][$key]);
-                        $targetFilePath = $uploadDirectory . $imageName;
-
-                        if (move_uploaded_file($tmpName, $targetFilePath)) {
-                            $imageUrl = $targetFilePath;
-
-                            // Insert image data into images table
-                            $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
-                            $imgStmt = $conn->prepare($imageSql);
-                            $imgStmt->bind_param("si", $imageUrl, $listing_id);
-                            $imgStmt->execute();
-                        }
-                    }
+            // Check if images were uploaded
+            if (!empty($_FILES['images']['name'][0])) {
+                $uploadDirectory = 'uploads/';
+                if (!is_dir($uploadDirectory)) {
+                    mkdir($uploadDirectory, 0777, true);
                 }
 
-                // Return success message
-                echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+                    $imageName = basename($_FILES['images']['name'][$key]);
+                    $targetFilePath = $uploadDirectory . $imageName;
 
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
+                    if (move_uploaded_file($tmpName, $targetFilePath)) {
+                        $imageUrl = $targetFilePath;
+
+                        // Insert image data into images table
+                        $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
+                        $imgStmt = $conn->prepare($imageSql);
+                        $imgStmt->bind_param("si", $imageUrl, $listing_id);
+                        $imgStmt->execute();
+                    }
+                }
             }
+
+            echo json_encode(['success' => true, 'message' => 'Listing created successfully! <a href=\'account.php\'> Click here to view your listings.</a>']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Database error: Unable to create listing.']);
         }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'User email not found.']);
     }
 
     $stmt->close();
@@ -91,48 +84,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-< lang="en">
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Listing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
-<>
-    <header>
+<body>
     <?php include 'header.php'; ?>
-        <div class="logo">
-            <h1>Create New Listing</h1>
-        </div>
-  </header>
 
-    <div class="post-ad">
-        <h2>Post Your Ad</h2>
-        <p>Please <a href="register.html">register</a> to create a new listing.</p>
-        <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-     <!-- State Dropdown -->
-     <div class="input-container">
-            <div class="listing-form-group">
-
-                <select id="category" name="category" required>
-                    <option value="">--Select Category--</option>
-                    <option value="Auto">Auto</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Furniture">Furniture</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <input type="text" id="title" name="title" placeholder="Title" required>
-
-                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
-
-                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
-
-                <select id="state" name="state" onchange="updateCities()" required>
-                            <option value="">--Select State--</option>
+    <form id="listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+        <div class="listing-form-group">
+            <select id="state" name="state" onchange="updateCities()" required>
+                <option value="">--Select State--</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
                             <option value="AZ">Arizona</option>
@@ -184,29 +151,16 @@ $conn->close();
                             <option value="WI">Wisconsin</option>
                             <option value="WY">Wyoming</option>
                         </select>
+                        <div class="listing-city-group">
+                <select id="city-dropdown" name="city" required>
+                    <option value="">--Select City--</option>
                 </select>
-
-                <div class="listing-city-group">
-                    <select id="city-dropdown" name="city" onchange="toggleInput()" required>
-                        <option value="">--Select City--</option>
-                    </select>
-                </div>
-
-                <label for="images">Upload Images:</label>
-                <input type="file" id="images" name="images[]" multiple>
-
-                <button type="submit">Submit</button>
             </div>
-        </form>
-    </div>
-    </div>
+        </div>
+    </form>
 
     <script>
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById("mobileMenu");
-            mobileMenu.classList.toggle("active");
-        }
-
+        // Data structure with states and corresponding cities
         const statesAndCities = {
         "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
         "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
@@ -260,17 +214,17 @@ $conn->close();
         "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
       };
 
+        // Function to update city dropdown based on selected state
         function updateCities() {
             const stateSelect = document.getElementById('state');
             const cityDropdown = document.getElementById('city-dropdown');
-            const cityInput = document.getElementById('city-input');
             const selectedState = stateSelect.value;
 
+         
             cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-            cityInput.value = "";
 
-            if (selectedState) {
-                const cities = citiesByState[selectedState] || [];
+            if (selectedState && statesAndCities[selectedState]) {
+                const cities = statesAndCities[selectedState];
                 cities.forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
@@ -279,62 +233,9 @@ $conn->close();
                 });
             }
         }
-
-        function toggleInput() {
-            const cityDropdown = document.getElementById('city-dropdown');
-            const cityInput = document.getElementById('city-input');
-
-            if (cityDropdown.value === "") {
-                cityInput.style.display = "block";
-            } else {
-                cityInput.style.display = "none";
-            }
-        }
-
-        function clearDropdown() {
-            const cityDropdown = document.getElementById('city-dropdown');
-            cityDropdown.value = "";
-            toggleInput();
-        }
-
-        document.getElementById('listing-form').onsubmit = function (event) {
-            event.preventDefault();
-
-            const formData = new FormData(this);
-            fetch('create_listing.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.id = 'message';
-                    messageDiv.style.display = 'block';
-
-                    if (data.success) {
-                        messageDiv.style.color = 'green';
-                        messageDiv.textContent = 'Listing created successfully!';
-                        this.reset();
-                    } else {
-                        messageDiv.style.color = 'red';
-                        messageDiv.textContent = data.message || 'Failed to create listing.';
-                    }
-                    document.body.prepend(messageDiv);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const messageDiv = document.createElement('div');
-                    messageDiv.id = 'message';
-                    messageDiv.style.display = 'block';
-                    messageDiv.style.color = 'red';
-                    messageDiv.textContent = 'An error occurred while creating the listing.';
-                    document.body.prepend(messageDiv);
-                });
-        };
     </script>
-
 </body>
-
-<?php include 'footer.php'; ?>
-
 </html>
+
+$conn->close();
+?>
