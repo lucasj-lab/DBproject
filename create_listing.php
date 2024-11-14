@@ -43,29 +43,54 @@ function getCategoryID($conn, $categoryName)
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
-    $user_id = $_SESSION['user_id']; // Retrieve user ID from session
-    $category = $_POST['category'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
-    $state = $_POST['state'];
-    $city = $_POST['city']; // Only use city dropdown selection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Retrieve user ID from session
+    $user_id = $_SESSION['user_id'] ?? null;
+
+    // Retrieve form data and check if they exist to prevent warnings
+    $category = $_POST['category'] ?? null;
+    $title = $_POST['title'] ?? null;
+    $description = $_POST['description'] ?? null;
+    $price = $_POST['price'] ?? null;
+    $state = $_POST['state'] ?? null;
+    $city = $_POST['city'] ?? null;
+
+    // Validate that all required fields are present
+    if (!$user_id || !$category || !$title || !$description || !$price || !$state || !$city) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+        exit();
+    }
 
     // Get the Category_ID using the function
     $category_id = getCategoryID($conn, $category);
 
-    if ($category_id === false) 
-    {
+    if ($category_id === false) {
         echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
-    } else 
-    
-        // Insert new listing
+        exit();
+    } else {
+        // Prepare and execute the INSERT query
         $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
-        $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
+        
+        // Check if the statement was prepared successfully
+        if ($stmt) {
+            $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
 
-        if ($stmt->execute()) 
-        {
+            // Execute the statement and check for success
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Listing created successfully!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to create listing.']);
+            }
+
+            $stmt->close(); // Close the statement
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Database error: Failed to prepare statement.']);
+        }
+    }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+
+
             $listing_id = $stmt->insert_id;
             if (!empty($_FILES['images']['name'][0])) 
             {
