@@ -43,7 +43,7 @@ function getCategoryID($conn, $categoryName)
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')  
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
     $user_id = $_SESSION['user_id']; // Retrieve user ID from session
     $category = $_POST['category'];
     $title = $_POST['title'];
@@ -55,23 +55,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     // Get the Category_ID using the function
     $category_id = getCategoryID($conn, $category);
 
-    if ($category_id === false) {
+    if ($category_id === false) 
+    {
         echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
-    } else {
+    } else 
+    
         // Insert new listing
         $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
         $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
 
-        if ($stmt->execute()) {
+        if ($stmt->execute()) 
+        {
             $listing_id = $stmt->insert_id;
-            if (!empty($_FILES['images']['name'][0])) {
+            if (!empty($_FILES['images']['name'][0])) 
+            {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
                 $uploadDirectory = 'uploads/';
-                if (!is_dir($uploadDirectory)) {
+                if (!is_dir($uploadDirectory)) 
+                {
                     mkdir($uploadDirectory, 0777, true);
                 }
             
-                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName)
+                 {
                     $fileType = mime_content_type($tmpName); // Check the MIME type of the file
             
                     // Only process if the file is of an allowed type
@@ -80,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         $uniqueImageName = time() . "_" . $imageName;
                         $targetFilePath = $uploadDirectory . $uniqueImageName;
             
-                        if (move_uploaded_file($tmpName, $targetFilePath)) {
+                        if (move_uploaded_file($tmpName, $targetFilePath)) 
+                        {
                             $imageUrl = $targetFilePath;
             
                             // Insert image data into images table
@@ -89,18 +96,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             $imgStmt->bind_param("si", $imageUrl, $listing_id);
                             $imgStmt->execute();
                         }
-                    } else {
+                     else {
                         echo "File type not allowed: " . htmlspecialchars($fileType);
                         exit();
                     }
                 }
             }
-        }    
+            
 
     }
 
     $stmt->close();
-
+}
 
 $conn->close();
 ?>
