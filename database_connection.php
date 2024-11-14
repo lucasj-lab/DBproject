@@ -2,7 +2,7 @@
 // Database connection settings
 $servername = "127.0.0.1"; 
 $username = "root";        
-$password = "";          
+$password = "admin";          
 $dbname = "projectdb";     
 $port = "3306";  //
 
