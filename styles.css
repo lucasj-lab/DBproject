@@ -2295,6 +2295,8 @@ select#state {
         padding: 20px;
         margin: 0 auto;
         width: 90%; /* Takes up most of the screen */
+        margin-top: 50px;
+        margin-bottom: 50px;
     }
 
     .create-listing-container h2 {
