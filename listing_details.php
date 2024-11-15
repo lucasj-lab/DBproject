@@ -1,117 +1,101 @@
 <?php
+// Start session if needed (if header.php doesn't start the session)
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Include the database connection
 require 'database_connection.php';
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['listing_id'])) {
     $listing_id = intval($_GET['listing_id']);
 
-    // Query to fetch listing details using PDO
+    // Prepare the query to fetch listing details
     $sql = "
         SELECT 
             listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-            user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+            user.Name AS User_Name, category.Category_Name, listings.State, listings.City, listings.Image_URL
         FROM 
             listings
         JOIN 
             user ON listings.User_ID = user.User_ID
         JOIN 
             category ON listings.Category_ID = category.Category_ID
-        LEFT JOIN 
-            images ON listings.Listing_ID = images.Listing_ID
         WHERE 
-            listings.Listing_ID = :listing_id
+            listings.Listing_ID = ?
     ";
 
-    try {
-        // Prepare and execute the query using PDO
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+    // Use prepared statements to prevent SQL injection
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("i", $listing_id);
         $stmt->execute();
+        $result = $stmt->get_result();
 
-        // Fetch the listing details
-        $listing = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // If listing is not found
-        if (!$listing) {
+        if ($result && $result->num_rows > 0) {
+            $listing = $result->fetch_assoc();
+        } else {
             echo "No listing found for ID: $listing_id";
             exit;
         }
 
-    } catch (PDOException $e) {
-        // Handle any PDO exceptions
-        echo "Error: " . $e->getMessage();
+        $stmt->close();
+    } else {
+        echo "Query error: " . $conn->error;
         exit;
     }
-
 } else {
     echo "No listing ID provided in URL.";
     exit;
 }
+
+// Close the database connection
+$conn->close();
 ?>
-
-<script>
-    // Get the raw date from the data attribute
-    const dateElement = document.getElementById('Date-Posted');
-    const rawDate = dateElement.getAttribute('data-date');
-
-    // Convert to a Date object
-    const date = new Date(rawDate);
-
-    // Format the date (e.g., Friday, November 1st, 2024, 2:30 PM)
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedDate = date.toLocaleString('en-US', options);
-
-    // Update the element’s text
-    dateElement.textContent += formattedDate;
-</script>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Include any head content from header.php if necessary -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
-    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+    <title><?= htmlspecialchars($listing['Title']); ?></title>
+    <link rel="stylesheet" href="styles.css?v=<?= time(); ?>">
 </head>
 
 <body>
 
     <?php include 'header.php'; ?>
-<main>
 
-    <section>
-
-        <h1>Listing Details</h1>
-
+    <main>
         <!-- Form wrapper for centered listing details -->
-        <form class="listing-details-form">
+        <div class="listing-details-form">
             <?php if (!empty($listing['Image_URL'])): ?>
-                <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+                <img src="<?= htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
             <?php endif; ?>
-            <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-            <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-            <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-            <p><strong>Date Posted:</strong>
-                <?php
-                $datePosted = new DateTime($listing['Date_Posted']);
-                echo htmlspecialchars($datePosted->format('l, F jS, Y'));
-                ?>
+            <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+            <p><strong>Description:</strong> <?= nl2br(htmlspecialchars($listing['Description'])); ?></p>
+            <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+            <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
+            <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
+            <p><strong>Location:</strong> <?= htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+            <?php
+            $datePosted = new DateTime($listing['Date_Posted']);
+            echo htmlspecialchars($datePosted->format('l, F jS, Y'));
+            ?>
             </p>
+
             <!-- Back to Listings button -->
             <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
-        </form>
+        </div>
+    </main>
 
-    </section>
-    
-</main>
-
-<footer>
     <?php include 'footer.php'; ?>
-</footer>
 
 </body>
 
