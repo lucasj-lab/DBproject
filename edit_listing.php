@@ -62,7 +62,7 @@ $conn->close();
 </head>
 <body>
 <?php include 'header.php'; ?>
-    <header>
+<header>
         <h1 class="edit-listing-title">Edit Listing</h1>
     </header>
 
@@ -73,12 +73,14 @@ $conn->close();
             <div class="form-group">
                 <label class="form-label" for="thumbnail">Select Thumbnail:</label>
                 <select name="thumbnail" id="thumbnail" required>
-                    <option value="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>">Current Thumbnail</option>
-                    <?php foreach ($additionalImages as $image): ?>
-                        <option value="<?= htmlspecialchars($image['Image_URL']); ?>">
-                            <?= htmlspecialchars(basename($image['Image_URL'])); ?>
-                        </option>
-                    <?php endforeach; ?>
+                    <option value="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? ''); ?>">Current Thumbnail</option>
+                    <?php if (!empty($additionalImages)): ?>
+                        <?php foreach ($additionalImages as $image): ?>
+                            <option value="<?= htmlspecialchars($image['Image_URL']); ?>">
+                                <?= htmlspecialchars(basename($image['Image_URL'])); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="submit-button-container">
@@ -88,24 +90,24 @@ $conn->close();
 
         <!-- Edit Listing Form -->
         <form id="edit-listing-form" method="POST" action="update_listing.php" enctype="multipart/form-data">
-            <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
+            <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
 
             <!-- Title -->
             <div class="form-group">
                 <label class="form-label" for="title">Title:</label>
-                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
+                <input type="text" id="title" name="title" value="<?= htmlspecialchars($title); ?>" required>
             </div>
 
             <!-- Description -->
             <div class="form-group">
                 <label class="form-label" for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required><?php echo htmlspecialchars($description); ?></textarea>
+                <textarea id="description" name="description" rows="4" required><?= htmlspecialchars($description); ?></textarea>
             </div>
 
             <!-- Price -->
             <div class="form-group">
                 <label class="form-label" for="price">Price:</label>
-                <input type="number" step="0.01" id="price" name="price" value="<?php echo htmlspecialchars($price); ?>" required>
+                <input type="number" step="0.01" id="price" name="price" value="<?= htmlspecialchars($price); ?>" required>
             </div>
 
             <!-- State -->
@@ -113,12 +115,12 @@ $conn->close();
                 <label class="form-label" for="state">State:</label>
                 <select id="state" name="state" onchange="updateCities()" required>
                     <option value="">--Select State--</option>
-                    <option value="AL" <?= $state === "AL" ? "selected" : "" ?>>Alabama</option>
-                    <option value="AK" <?= $state === "AK" ? "selected" : "" ?>>Alaska</option>
-                    <option value="AZ" <?= $state === "AZ" ? "selected" : "" ?>>Arizona</option>
-                    <option value="AR" <?= $state === "AR" ? "selected" : "" ?>>Arkansas</option>
-                    <option value="CA" <?= $state === "CA" ? "selected" : "" ?>>California</option>
-                    <option value="CO" <?= $state === "CO" ? "selected" : "" ?>>Colorado</option>
+                    <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
+                    <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
+                    <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
+                    <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
+                    <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
+                    <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
                     <!-- Add other states as needed -->
                 </select>
             </div>
@@ -132,43 +134,61 @@ $conn->close();
                 </select>
             </div>
 
+            <!-- File Upload -->
             <div class="file-upload-container">
-            <label class="form-label" for="images"></label>
-            <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-            <label for="images" class="file-upload-button">Choose Files</label>
-            <span class="file-upload-text" id="file-upload-text">No files chosen</span>
-            <div class="btn-container">
-        <button type="submit">Update</button>
-    </div>
-        <div id="imagePreviewContainer"></div> <!-- Image Previews -->
-    </div>
+                <label class="form-label" for="images">Upload New Images:</label>
+                <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+                <label for="images" class="file-upload-button">Choose Files</label>
+                <span class="file-upload-text" id="file-upload-text">No files chosen</span>
+            </div>
 
-</form>
+            <!-- Image Preview -->
+            <div id="imagePreviewContainer"></div>
+
+            <!-- Submit Button -->
+            <div class="btn-container">
+                <button type="submit">Update</button>
+            </div>
+        </form>
     </div>
 
     <script>
-    const fileInput = document.getElementById('images');
-    const previewContainer = document.getElementById('imagePreviewContainer');
-    const fileText = document.getElementById('file-upload-text');
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.querySelector("#images");
+            const previewContainer = document.getElementById("imagePreviewContainer");
 
-    fileInput.addEventListener('change', function () {
-        previewContainer.innerHTML = ''; // Clear existing previews
-        fileText.textContent = this.files.length > 0 ? `${this.files.length} files selected` : 'No files chosen';
-
-        Array.from(this.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '70px';
-                img.style.margin = '5px';
-                img.alt = 'Preview';
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+            imageInput.addEventListener("change", function () {
+                previewContainer.innerHTML = ""; // Clear previous previews
+                Array.from(imageInput.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-image");
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
         });
-    });
-</script>
+    </script>
+
+    <style>
+        #imagePreviewContainer {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
 
 <?php include 'footer.php'; ?>
 </body>

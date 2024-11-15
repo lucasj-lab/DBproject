@@ -1,3 +1,10 @@
+<?php
+require 'database_connection.php';
+require 'listing_queries.php';
+include 'header.php'; // For layout
+?>
+
+
 <!-- display_listings.php -->
 <!DOCTYPE html>
 <html lang="en">
@@ -8,6 +15,7 @@
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
 <body>
+    
 <?php include 'header.php'; ?>
     <main>
         <section id="listings">
