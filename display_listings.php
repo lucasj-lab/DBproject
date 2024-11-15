@@ -68,8 +68,8 @@
 }
 
                 listingsContainer.appendChild(listingDiv);
-            });
-        }
+           
+
     </script>
 
 

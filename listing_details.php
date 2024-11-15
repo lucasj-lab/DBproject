@@ -78,29 +78,28 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
     <?php include 'header.php'; ?>
-    <main> 
-    <section>
-        <h1>Listing Details</h1>
+    <main>
+        <div class="listing-details-container">
+            <h1><?php echo htmlspecialchars($images[0]['Title']); ?></h1>
+            <p><?php echo htmlspecialchars($images[0]['Description']); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($images[0]['Price']); ?></p>
 
-        <!-- Form wrapper for centered listing details -->
-        <form class="listing-details-form">
-            <!-- Image Gallery Section -->
-            <?php if (!empty($images)): ?>
-                <div class="image-gallery">
-                    <!-- Main Image -->
-                    <img id="mainImage" src="<?= htmlspecialchars($images[0]['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
+            <div class="image-gallery">
+                <!-- Main Thumbnail -->
+                <img id="mainImage" src="<?php echo htmlspecialchars($thumbnail); ?>" class="main-image" alt="Main Image">
 
-                    <!-- Smaller Images -->
-                    <div class="thumbnail-container">
-                        <?php foreach ($images as $image): ?>
-                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-image" 
-                                 onclick="changeMainImage(this.src)" alt="Additional Image">
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php else: ?>
-                <p>No images available for this listing.</p>
-            <?php endif; ?>
+                <?php if (!empty($additionalImages)): ?>
+    <!-- Scrollable Gallery -->
+    <div class="thumbnail-scroll-container">
+        <?php foreach ($additionalImages as $image): ?>
+            <img src="<?php echo htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-scroll-image" 
+                 onclick="changeMainImage(this.src)" alt="Additional Image">
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>No images available for this listing.</p>
+<?php endif; ?>
+
 
             <!-- Listing Details Section -->
             <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
