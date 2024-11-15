@@ -128,7 +128,7 @@ $conn->close();
             <!-- City -->
             <div class="form-group">
                 <label class="form-label" for="city">City:</label>
-                <select id="city-dropdown" name="city" required>
+                <select id="state" name="city" required>
                     <option value="">--Select City--</option>
                     <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
                 </select>

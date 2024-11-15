@@ -1985,7 +1985,7 @@ table td {
 
 /* Dashboard and container styling */
 .dope-dashboard {
-    max-width: 95%;
+    max-width: 1000px;
     margin: 1.5rem auto;
     padding: 1.5rem;
     background-color: #f9f9f9;
@@ -2032,7 +2032,7 @@ table td {
 
 .pill-button-edit {
     background-color: #4caf50;
-    margin: 0.2rem 0;
+    margin: 0.5rem;
 }
 
 .pill-button-edit:hover {
@@ -2041,7 +2041,7 @@ table td {
 
 .pill-button-delete {
     background-color: #f44336;
-    margin: 0.2rem 0;
+    margin: 0.5rem;
 }
 
 .pill-button-delete:hover {
@@ -2065,10 +2065,11 @@ table td {
 
     .dashboard-table td {
         display: flex;
-        align-items: flex-start;
+        align-items: flex-end;
         text-align: left; /* Align text to the left */
         padding: 0.5rem;
         border-bottom: 0;
+        flex-direction: row-reverse;
     }
 
     .dashboard-table td::before {
