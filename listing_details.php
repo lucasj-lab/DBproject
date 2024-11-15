@@ -1,5 +1,6 @@
 <?php
 require 'database_connection.php';
+require 'listing_queries.php';
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['listing_id'])) {
@@ -8,14 +9,14 @@ if (isset($_GET['listing_id'])) {
     // Query to fetch listing details using PDO
     $sql = "
     SELECT 
-        listings.Thumbnail_Image, images.Image_URL
+        Listing_ID, Title, Description, Price, Thumbnail_Image, Date_Posted, 
+        State, City, Image_URL
     FROM 
         listings
-    LEFT JOIN 
-        images ON listings.Listing_ID = images.Listing_ID
-    WHERE 
-        listings.Listing_ID = :listing_id
+    ORDER BY 
+        Date_Posted DESC
 ";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['listing_id' => $listing_id]);
 $images = $stmt->fetchAll(PDO::FETCH_ASSOC);

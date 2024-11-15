@@ -184,11 +184,16 @@ $conn->close();
                 </select>
             </div>
 
-            <label for="images">Upload Images:</label>
-    <input type="file" id="images" name="images[]" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-    <div id="imagePreviewContainer"></div> <!-- Container for image previews -->
+            <div class="file-upload-container">
+            <label class="form-label" for="images">Upload Images:</label>
+            <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+            <label for="images" class="file-upload-button">Choose Files</label>
+            <span class="file-upload-text" id="file-upload-text">No files chosen</span>
+        </div>
+        <div id="imagePreviewContainer"></div> <!-- Image Previews -->
+    </div>
     <div class="btn-container">
-    <button type="submit">Submit</button>
+        <button type="submit">Submit</button>
     </div>
 </form>
 </div>       
@@ -256,34 +261,40 @@ $conn->close();
 }
 
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageInput = document.querySelector("input[name='images[]']");
-        const previewContainer = document.getElementById("imagePreviewContainer");
+document.addEventListener("DOMContentLoaded", function () {
+    const imageInput = document.querySelector("input[name='images[]']");
+    const previewContainer = document.getElementById("imagePreviewContainer");
+    const fileText = document.getElementById("file-upload-text");
 
-        imageInput.addEventListener("change", function () {
-            previewContainer.innerHTML = ""; // Clear previous previews
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
+    imageInput.addEventListener("change", function () {
+        previewContainer.innerHTML = ""; // Clear previous previews
+        fileText.textContent = this.files.length > 0 ? `${this.files.length} files selected` : "No files chosen";
+
+        Array.from(this.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
         });
+
+        // Ensure the container respects scrollable behavior
+        previewContainer.scrollLeft = 0; // Reset scroll position when new images are loaded
+    });
+});
 
 
         function showSuccessModal() {
             document.getElementById("successModal").style.display = "block";
         }
 
-        // Simulate showing the modal after successful listing creation
-        // In real use, this function call should be triggered only if the server returns success
+
         showSuccessModal();
 
-    });
+
 
 
 </script>

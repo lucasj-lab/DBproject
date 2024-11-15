@@ -143,25 +143,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         <!-- Each listing will have the class "listing-container" -->
         <div id="listings">
-            <?php foreach ($listings as $listing): ?>
-                <div class="listing-container">
-                    <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image"
-                        class="listing-image">
-                    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                    <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                    <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
-                    <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                    <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
-                        <?= htmlspecialchars($listing['State']); ?>
-                    </p>
-                    <p><strong>Posted on:</strong>
-                        <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
-                    <button type="button" class="pill-button"
-                        onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                        View Listing
-                    </button>
-                </div>
-            <?php endforeach; ?>
+        <?php foreach ($listings as $listing): ?>
+    <tr>
+        <td><?php echo htmlspecialchars($listing['Title']); ?></td>
+        <td><?php echo htmlspecialchars($listing['Description']); ?></td>
+        <td>$<?php echo htmlspecialchars(number_format($listing['Price'], 2)); ?></td>
+        <td>
+            <?php 
+            echo htmlspecialchars(
+                !empty($listing['Date_Posted'])
+                    ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
+                    : 'Date not available'
+            ); 
+            ?>
+        </td>
+        <td><?php echo htmlspecialchars($listing['City']); ?></td>
+        <td><?php echo htmlspecialchars($listing['State']); ?></td>
+        <td>
+            <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image'] ?? 'no_image.png'); ?>" 
+                 alt="Thumbnail Image" 
+                 class="listing-image" 
+                 style="width: 80px; height: auto; margin: 5px;">
+        </td>
+        <td>
+            <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button-edit">Edit</a>
+            <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button-delete"
+               onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+
         </div>
     </div>
 

@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 
 // Include the database connection
 require 'database_connection.php';
-
+require 'listing_queries.php';
 // Check if category is set in the GET request
 $category = $_GET['category'] ?? ''; // Set $category from URL or default to an empty string
 

@@ -1480,6 +1480,7 @@ table td {
     background-color: #fff;
     transition: transform 0.2s;
     text-align: center;
+    max-width: 300px;
 }
 
 .listing-item img {
@@ -2338,4 +2339,52 @@ select#state {
 .thumbnail-image:hover {
     transform: scale(1.1);
     border-color: #000;
+}
+
+
+/* Ensure the image preview container stays within the form boundaries */
+#create-listing-form #imagePreviewContainer,
+#edit-listing-form #imagePreviewContainer {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    max-width: 100%; /* Keep within the form's width */
+    overflow-x: auto; /* Enable horizontal scrolling if images exceed container width */
+    padding: 5px; /* Add some padding for aesthetics */
+    box-sizing: border-box; /* Ensure padding doesn't affect the width */
+    white-space: nowrap; /* Prevent wrapping of images */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Style individual preview images */
+.preview-image {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    flex-shrink: 0; /* Prevent images from shrinking */
+}
+
+/* Scrollbar styling for a better user experience */
+#create-listing-form #imagePreviewContainer::-webkit-scrollbar,
+#edit-listing-form #imagePreviewContainer::-webkit-scrollbar {
+    height: 8px; /* Scrollbar height */
+}
+
+#create-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb,
+#edit-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb {
+    background: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar */
+}
+
+#create-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb:hover,
+#edit-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* Darker thumb on hover */
+}
+
+#create-listing-form #imagePreviewContainer::-webkit-scrollbar-track,
+#edit-listing-form #imagePreviewContainer::-webkit-scrollbar-track {
+    background: #f9f9f9; /* Scrollbar track color */
 }

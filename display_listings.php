@@ -36,25 +36,37 @@
                 });
         }
         function displayListings(listings) {
-            const listingsContainer = document.getElementById("listings");
-            listingsContainer.innerHTML = "";  // Clear previous content
-            listings.forEach(listing => {
-                const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
-                // Set a placeholder image if Image_URL is missing
-                const image = listing.Image_URL || "no_image.png";
-                listingDiv.innerHTML = `
-                    <img src="${image}" alt="Listing Image" class="listing-image">
-                    <h3>${listing.Title}</h3>
-                    <p>Price: $${listing.Price}</p>
-                    <p>Posted by: ${listing.User_Name}</p>
-                    <p>Category: ${listing.Category_Name}</p>
-                    <p>Location: ${listing.City}, ${listing.State}</p>
-                   <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
-                   <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
-                    View Listing
-                   </button>
-                `;
+    const listingsContainer = document.getElementById("listings");
+    listingsContainer.innerHTML = ""; // Clear previous content
+
+    listings.forEach(listing => {
+        const listingDiv = document.createElement("div");
+        listingDiv.className = "listing-item";
+
+        // Use fallback for missing thumbnail
+        const thumbnail = listing.Thumbnail_Image || "no_image.png";
+
+        // Generate the HTML for a single listing
+        listingDiv.innerHTML = `
+            <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+            <h3><strong>${listing.Title}</strong></h3>
+            <p><strong>Description:</strong> ${listing.Description}</p>
+            <p><strong>Price:</strong> $${listing.Price}</p>
+            <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+            <p><strong>Category:</strong> ${listing.Category_Name}</p>
+            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+            <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+            <button type="button" class="pill-button"
+                onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
+                View Listing
+            </button>
+        `;
+
+        // Append the listing to the container
+        listingsContainer.appendChild(listingDiv);
+    });
+}
+
                 listingsContainer.appendChild(listingDiv);
             });
         }
