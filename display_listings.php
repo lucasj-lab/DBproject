@@ -1,11 +1,10 @@
 <?php
 require 'database_connection.php';
 require 'listing_queries.php';
-include 'header.php'; // For layout
 ?>
 
 
-<!-- display_listings.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
