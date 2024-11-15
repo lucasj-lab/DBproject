@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     <p><strong>Posted on:</strong>
                         <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
                     <button type="button" class="pill-button"
-                        onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                        onclick="window.location.href='listing_details.php?listing_id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
                         View Listing
                     </button>
                 </div>
