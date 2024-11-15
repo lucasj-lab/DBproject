@@ -1,4 +1,4 @@
-<?php
+<?php 
 header('Content-Type: application/json');
 
 // Directory where uploaded images will be stored
@@ -10,18 +10,8 @@ if (!is_dir($targetDirectory)) {
 }
 
 // Check if a file was uploaded
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
     $image = $_FILES['image'];
-
-    // Debug uploaded file data
-    var_dump($image); // Outputs all details of the uploaded file
-    exit(); // Stops execution so you can check the debug output
-
-    // Check for upload errors
-    if ($image['error'] !== UPLOAD_ERR_OK) {
-        echo json_encode(["error" => "An error occurred during the file upload."]);
-        exit();
-    }
 
     // Validate file type
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -40,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     } else {
         echo json_encode(["error" => "Failed to upload image."]);
     }
-} else {
-    echo json_encode(["error" => "Invalid request."]);
+    exit();
 }
 
+echo json_encode(["error" => "Invalid request."]);
+exit();
