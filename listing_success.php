@@ -28,7 +28,7 @@ $listing_id = $_GET['listing_id'] ?? null;
 
     <?php if ($listing_id): ?>
         <p>View your listing: 
-            <a href="view_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button">View Listing</a>
+            <a href="listing_details.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" class="pill-button">View Listing</a>
         </p>
     <?php endif; ?>
 
