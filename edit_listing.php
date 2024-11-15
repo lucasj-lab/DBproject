@@ -140,7 +140,6 @@ $conn->close();
             <div class="btn-container">
         <button type="submit">Update</button>
     </div>
-        </div>
         <div id="imagePreviewContainer"></div> <!-- Image Previews -->
     </div>
 
