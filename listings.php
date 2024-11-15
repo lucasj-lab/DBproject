@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Fetch existing listings for display
 $listings = [];
-$sql = "SELECT Title, Description, Price, User_ID, Category_ID, City, State, Date_Posted, Image_URL FROM listings";
+$sql = "SELECT Title, Description, Price, User_ID, Category_ID, City, State, Date_Posted, Image_ID FROM listings";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {
