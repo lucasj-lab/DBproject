@@ -17,20 +17,22 @@ $listing_id = intval($_GET['listing_id']);
 $user_id = $_SESSION['user_id'];
 $error_message = "";
 
-// Initialize variables
-$title = $description = "";
-$price = 0.0;
-
-// Fetch listing details
-$stmt = $conn->prepare("SELECT Title, Description, Price FROM listings WHERE Listing_ID = ? AND User_ID = ?");
+// Fetch listing details including state, city, and thumbnail
+$stmt = $conn->prepare("
+    SELECT Title, Description, Price, State, City, Thumbnail_Image 
+    FROM listings 
+    WHERE Listing_ID = ? AND User_ID = ?
+");
 $stmt->bind_param("ii", $listing_id, $user_id);
 $stmt->execute();
-$stmt->bind_result($title, $description, $price);
+$stmt->bind_result($title, $description, $price, $state, $city, $thumbnail_image);
 
 if (!$stmt->fetch()) {
     $error_message = "Listing not found or you do not have permission to edit this listing.";
+    $stmt->close();
+    $conn->close();
+    die($error_message);
 }
-
 $stmt->close();
 
 // Handle form submission for updating the listing
@@ -38,9 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
     $price = $_POST['price'] ?? 0;
+    $state = $_POST['state'] ?? '';
+    $city = $_POST['city'] ?? '';
 
-    $updateStmt = $conn->prepare("UPDATE listings SET Title = ?, Description = ?, Price = ? WHERE Listing_ID = ? AND User_ID = ?");
-    $updateStmt->bind_param("ssdii", $title, $description, $price, $listing_id, $user_id);
+    $updateStmt = $conn->prepare("
+        UPDATE listings 
+        SET Title = ?, Description = ?, Price = ?, State = ?, City = ? 
+        WHERE Listing_ID = ? AND User_ID = ?
+    ");
+    $updateStmt->bind_param("ssdssii", $title, $description, $price, $state, $city, $listing_id, $user_id);
 
     if ($updateStmt->execute()) {
         header("Location: user_dashboard.php");  // Redirect after successful update
@@ -53,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -60,9 +70,10 @@ $conn->close();
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<?php include 'header.php'; ?>
-<header>
+    <?php include 'header.php'; ?>
+    <header>
         <h1 class="edit-listing-title">Edit Listing</h1>
     </header>
 
@@ -73,14 +84,12 @@ $conn->close();
             <div class="form-group">
                 <label class="form-label" for="thumbnail">Select Thumbnail:</label>
                 <select name="thumbnail" id="thumbnail" required>
-                    <option value="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? ''); ?>">Current Thumbnail</option>
-                    <?php if (!empty($additionalImages)): ?>
-                        <?php foreach ($additionalImages as $image): ?>
-                            <option value="<?= htmlspecialchars($image['Image_URL']); ?>">
-                                <?= htmlspecialchars(basename($image['Image_URL'])); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <option value="<?= htmlspecialchars($thumbnail_image); ?>">Current Thumbnail</option>
+                    <?php foreach ($additionalImages as $image): ?>
+                        <option value="<?= htmlspecialchars($image['Image_URL']); ?>">
+                            <?= htmlspecialchars(basename($image['Image_URL'])); ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
             </div>
             <div class="submit-button-container">
@@ -89,7 +98,7 @@ $conn->close();
         </form>
 
         <!-- Edit Listing Form -->
-        <form id="edit-listing-form" method="POST" action="update_listing.php" enctype="multipart/form-data">
+        <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
 
             <!-- Title -->
@@ -113,8 +122,7 @@ $conn->close();
             <!-- State -->
             <div class="form-group">
                 <label class="form-label" for="state">State:</label>
-                <select id="state" name="state" onchange="updateCities()" required>
-                    <option value="">--Select State--</option>
+                <select id="state" name="state" required>
                     <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
                     <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
                     <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
@@ -128,10 +136,7 @@ $conn->close();
             <!-- City -->
             <div class="form-group">
                 <label class="form-label" for="city">City:</label>
-                <select id="state" name="city" required>
-                    <option value="">--Select City--</option>
-                    <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
-                </select>
+                <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
             </div>
 
             <!-- File Upload -->
@@ -190,6 +195,7 @@ $conn->close();
         }
     </style>
 
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 </body>
+
 </html>
