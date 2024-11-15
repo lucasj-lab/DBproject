@@ -50,13 +50,14 @@ $conn->close();
 </head>
 <body>
 <?php include 'header.php'; ?>
- <main>
+<main>
+    <div class="listings">
         <?php if (!empty($listings)): ?>
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
-                    <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
-                        <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image">
+                        <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
+                        <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
                         <h3><?php echo htmlspecialchars($listing['Title'] ?? ''); ?></h3>
                         <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
                         <p>Posted by: <?php echo htmlspecialchars($listing['User_Name'] ?? ''); ?></p>
@@ -69,7 +70,8 @@ $conn->close();
         <?php else: ?>
             <p>No listings found in the <?php echo htmlspecialchars($category ?? ''); ?> category.</p>
         <?php endif; ?>
-    </main>
+    </div>
+</main>
 
     <?php include 'footer.php'; ?>
 </body>
