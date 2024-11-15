@@ -1,17 +1,13 @@
 <?php
 
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 
 require 'database_connection.php';
 require 'listing_queries.php';
 
 // Check if the Listing_ID is set in the URL
 if (isset($_GET['listing_id'])) {
-    $listing_id = intval($_GET['listing_id']);
-
+    $$listing_id = intval($_GET['listing_id']);
+    $listing = getListingDetails($pdo, $listing_id);
     // Query to fetch listing details using PDO
     $sql = "
     SELECT 
@@ -43,12 +39,14 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
             exit;
         }
 
+
     } catch (PDOException $e) {
         // Handle any PDO exceptions
         echo "Error: " . $e->getMessage();
         exit;
     }
-
+ $thumbnail = htmlspecialchars($listing['Thumbnail_Image']);
+    $additionalImages = $listing['Images'];
 } else {
     echo "No listing ID provided in URL.";
     exit;
@@ -91,20 +89,22 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p><strong>Price:</strong> $<?php echo htmlspecialchars($images[0]['Price']); ?></p>
 
             <div class="image-gallery">
-                <!-- Main Thumbnail -->
-                <img id="mainImage" src="<?php echo htmlspecialchars($thumbnail); ?>" class="main-image" alt="Main Image">
+    <!-- Main Thumbnail -->
+    <img id="mainImage" src="<?php echo $thumbnail; ?>" class="main-image" alt="Main Image">
+    
+    <?php if (!empty($additionalImages)): ?>
+        <!-- Scrollable Gallery -->
+        <div class="thumbnail-scroll-container">
+            <?php foreach ($additionalImages as $image): ?>
+                <img src="<?php echo htmlspecialchars($image); ?>" class="thumbnail-scroll-image" 
+                     onclick="changeMainImage(this.src)" alt="Additional Image">
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>No additional images available for this listing.</p>
+    <?php endif; ?>
+</div>
 
-                <?php if (!empty($additionalImages)): ?>
-    <!-- Scrollable Gallery -->
-    <div class="thumbnail-scroll-container">
-        <?php foreach ($additionalImages as $image): ?>
-            <img src="<?php echo htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-scroll-image" 
-                 onclick="changeMainImage(this.src)" alt="Additional Image">
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>No images available for this listing.</p>
-<?php endif; ?>
 
 
             <!-- Listing Details Section -->

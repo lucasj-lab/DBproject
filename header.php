@@ -1,5 +1,7 @@
 <?php
-session_start(); // Start or continue the session
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+} // Start or continue the session
 
 // Check if the user is logged in and if they are an admin
 $isLoggedIn = isset($_SESSION['user_id']);

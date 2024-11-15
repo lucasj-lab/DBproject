@@ -77,6 +77,9 @@ require 'listing_queries.php';
                 listingsContainer.appendChild(listingDiv);
            
 
+                var_dump($listings); // Ensure listings are being fetched correctly
+exit();
+
     </script>
 
 

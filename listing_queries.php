@@ -21,6 +21,7 @@ function getAllListings($pdo, $conditions = []) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($conditions);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($result);
 }
 
 /**
@@ -42,7 +43,6 @@ function getListingDetails($pdo, $listing_id) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['listing_id' => $listing_id]);
 
-    // Group data for listing details
     $result = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         if (empty($result)) {
@@ -55,11 +55,9 @@ function getListingDetails($pdo, $listing_id) {
                 'Date_Posted' => $row['Date_Posted'],
                 'State' => $row['State'],
                 'City' => $row['City'],
-                'Images' => [] // Initialize empty array for additional images
+                'Images' => []
             ];
         }
-
-        // Add images to the Images array
         if (!empty($row['Image_URL'])) {
             $result['Images'][] = $row['Image_URL'];
         }
@@ -67,4 +65,3 @@ function getListingDetails($pdo, $listing_id) {
 
     return $result;
 }
-?>
