@@ -1,103 +1,165 @@
-<? 
+<?php
+// listings.php - Combined version with header and footer
+
+// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require 'database_connection.php';
 
-// Function to get Category_ID from Category table
-function getCategoryID($conn, $categoryName) {
-    $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
-    $stmt->bind_param("s", $categoryName);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($row = $result->fetch_assoc()) {
-        return $row['Category_ID'];
-    } else {
-        return false; // Category not found
-    }
-}
+// Check if the request is an AJAX request for listings data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
+    // Fetch all listings with user, category, and image data using PDO
+    $sql = "
+        SELECT 
+            listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
+            user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+        FROM 
+            listings
+        JOIN 
+            user ON listings.User_ID = user.User_ID
+        JOIN 
+            category ON listings.Category_ID = category.Category_ID
+        LEFT JOIN 
+            images ON listings.Listing_ID = images.Listing_ID
+        ORDER BY 
+            listings.Date_Posted DESC
+    ";
 
-// Check if POST request is made for creating a new listing
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_id = $_SESSION['user_id'] ?? null;
-    $category = $_POST['category'] ?? null;
-    $title = $_POST['title'] ?? null;
-    $description = $_POST['description'] ?? null;
-    $price = $_POST['price'] ?? null;
-    $state = $_POST['state'] ?? null;
-    $city = $_POST['city'] ?? null;
+    try {
+        // Prepare and execute the query using PDO
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
 
-    // Validate required fields
-    if (!$user_id || !$category || !$title || !$description || !$price || !$state || !$city) {
-        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
-        exit();
-    }
+        // Fetch all listings from the database
+        $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Get Category_ID
-    $category_id = getCategoryID($conn, $category);
-    if ($category_id === false) {
-        echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
-        exit();
-    }
-
-    // Prepare and execute the INSERT query
-    $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
-    if ($stmt) {
-        $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
-        if ($stmt->execute()) {
-            $listing_id = $stmt->insert_id;
-
-            // Handle image uploads
-            if (!empty($_FILES['images']['name'][0])) {
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
-                $uploadDirectory = 'uploads/';
-                if (!is_dir($uploadDirectory)) {
-                    mkdir($uploadDirectory, 0777, true);
-                }
-
-                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
-                    $fileType = mime_content_type($tmpName);
-                    if (in_array($fileType, $allowedTypes)) {
-                        $imageName = basename($_FILES['images']['name'][$key]);
-                        $uniqueImageName = time() . "_" . $imageName;
-                        $targetFilePath = $uploadDirectory . $uniqueImageName;
-
-                        if (move_uploaded_file($tmpName, $targetFilePath)) {
-                            $imageUrl = $targetFilePath;
-                            $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
-                            $imgStmt = $conn->prepare($imageSql);
-                            $imgStmt->bind_param("si", $imageUrl, $listing_id);
-                            $imgStmt->execute();
-                            $imgStmt->close();
-                        }
-                    }
-                }
+        // Format the date and prepare the listings array
+        if ($listings) {
+            foreach ($listings as &$listing) {
+                $datePosted = new DateTime($listing['Date_Posted']);
+                $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y');
             }
-            echo json_encode(['success' => true, 'message' => 'Listing created successfully!', 'listing_id' => $listing_id]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to create listing.']);
+            // If no listings are found
+            $listings = ["message" => "No listings available."];
         }
-        $stmt->close();
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Database error: Failed to prepare statement.']);
-    }
-}
 
-// Fetch existing listings for display
-$listings = [];
-$sql = "SELECT Listing_ID, Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City, Image_URL 
-        FROM listings";
-$result = $conn->query($sql);
-
-if ($result && $result->num_rows > 0) {
-    while ($listing = $result->fetch_assoc()) {
-        $listings[] = $listing;
+        // Output the listings in JSON format
+        header('Content-Type: application/json');
+        echo json_encode($listings);
+    } catch (PDOException $e) {
+        // Handle any PDO exceptions
+        header('Content-Type: application/json');
+        echo json_encode(["error" => "Database error: " . $e->getMessage()]);
     }
-} else {
-    echo "No listings found.";
+
+    exit();
 }
-$conn->close();
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Listings</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+K9aIIXUXl09Aq5AxlE9+y5T" crossorigin="anonymous">
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchListings();
+    });
+
+    function fetchListings() {
+        fetch('listings.php?fetchListings=true')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                } else if (data.message) {
+                    document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                } else {
+                    displayListings(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching listings:', error);
+                document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
+            });
+    }
+
+    function displayListings(listings) {
+        const listingsContainer = document.getElementById("listings");
+        listingsContainer.innerHTML = "";  // Clear previous content
+
+        listings.forEach(listing => {
+            const listingDiv = document.createElement("div");
+            listingDiv.className = "listing-item";
+
+            // Use the correct variable name for the image
+            const image = listing.Image_URL || "no_image.png"; // Fallback image
+
+            listingDiv.innerHTML = `
+                <img src="${image}" alt="Listing Image" class="listing-image">
+                <h3><strong>${listing.Title}</strong></h3>
+                <p><strong>Description:</strong> ${listing.Description}</p>
+                <p><strong>Price:</strong> $${listing.Price}</p>
+                <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+              <a href="listing_details.php?listing_id=<?php echo isset($listing['Listing_ID']) ? $listing['Listing_ID'] : ''; ?>" class="pill-button">View Listing</a>
+
+
+
+
+            `;
+
+            listingsContainer.appendChild(listingDiv);
+        });
+    }
+</script>
+</head>
+
+<body>
+    <?php include 'header.php'; ?>
+
+    <div class="listings-container">
+        <h2>Active Listings</h2>
+
+        <!-- Each listing will have the class "listing-container" -->
+        <div id="listings">
+            <?php foreach ($listings as $listing): ?>
+                <div class="listing-container">
+                    <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image"
+                        class="listing-image">
+                    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+                    <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
+                    <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
+                    <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>,
+                        <?= htmlspecialchars($listing['State']); ?></p>
+                    <p><strong>Posted on:</strong>
+                        <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
+                    <button type="button" class="pill-button"
+                        onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
+                        View Listing
+                    </button>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <?php include 'footer.php'; ?>
+
 </body>
+
 </html>
