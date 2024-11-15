@@ -1,34 +1,75 @@
-<?php
-require 'database_connection.php';
+<!-- display_listings.php -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Listings</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+<?php include 'header.php'; ?>
+    <main>
+        <section id="listings">
+            <p>Loading listings...</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Rookielist 2.0 | All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchListings();
+        });
+        function fetchListings() {
+            fetch('listings.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                    } else if (data.message) {
+                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                    } else {
+                        displayListings(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching listings:', error);
+                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
+                });
+        }
+        function displayListings(listings) {
+            const listingsContainer = document.getElementById("listings");
+            listingsContainer.innerHTML = "";  // Clear previous content
+            listings.forEach(listing => {
+                const listingDiv = document.createElement("div");
+                listingDiv.className = "listing-item";
+                // Set a placeholder image if Image_URL is missing
+                const image = listing.Image_URL || "no_image.png";
+                listingDiv.innerHTML = `
+                    <img src="${image}" alt="Listing Image" class="listing-image">
+                    <h3>${listing.Title}</h3>
+                    <p>Price: $${listing.Price}</p>
+                    <p>Posted by: ${listing.User_Name}</p>
+                    <p>Category: ${listing.Category_Name}</p>
+                    <p>Location: ${listing.City}, ${listing.State}</p>
+                   <p>Posted on: ${listing.Formatted_Date}</p> <!-- Display formatted date directly from JSON -->
+                   <button type="button" class="pill-button" onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
+                    View Listing
+                   </button>
+                `;
+                listingsContainer.appendChild(listingDiv);
+            });
+        }
+    </script>
 
-// Fetch listings and associated images
-$listingsSql = "SELECT listings.*, images.id AS image_id, images.image_url
-                FROM listings
-                LEFT JOIN images ON listings.id = images.listing_id
-                ORDER BY listings.Date_Posted DESC";
-$stmt = $conn->prepare($listingsSql);
-$stmt->execute();
-$result = $stmt->get_result();
 
-// Display each listing with its images
-while ($listing = $result->fetch_assoc()) {
-    echo '<div class="listing-item">';
-    echo '<h3>' . htmlspecialchars($listing['Title']) . '</h3>';
-    echo '<p>Description: ' . htmlspecialchars($listing['Description']) . '</p>';
-    echo '<p>Price: $' . htmlspecialchars($listing['Price']) . '</p>';
-    echo '<p>Location: ' . htmlspecialchars($listing['City']) . ', ' . htmlspecialchars($listing['State']) . '</p>';
-
-    // Display images if available
-    if ($listing['image_url']) {
-        echo '<div class="listing-images">';
-        echo '<img id="image_' . htmlspecialchars($listing['image_id']) . '" src="' . htmlspecialchars($listing['image_url']) . '" alt="Listing Image" class="listing-image">';
-        echo '</div>';
-    } else {
-        echo '<p>No image available</p>';
-    }
-
-    echo '</div>';
-}
-$stmt->close();
-$conn->close();
-?>
+<footer>
+    <?php include 'footer.php'; ?>
+  </footer>
+</body>
+</html>

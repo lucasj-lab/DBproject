@@ -42,6 +42,17 @@ function getCategoryID($conn, $categoryName)
         return false; // Category not found
     }
 }
+// Check if Imagick is installed and define the conversion function if it is
+if (class_exists('Imagick')) {
+    function convertToJpeg($inputPath, $outputPath) {
+        $imagick = new Imagick($inputPath);
+        $imagick->setImageFormat('jpeg');
+        $imagick->writeImage($outputPath);
+        $imagick->destroy();
+    }
+} else {
+    echo "Warning: Imagick is not installed, HEIC/HEIF images may not be supported.";
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve user ID from session

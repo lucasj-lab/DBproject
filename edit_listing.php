@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updateStmt->bind_param("ssdii", $title, $description, $price, $listing_id, $user_id);
 
     if ($updateStmt->execute()) {
-        header("Location: account.php");  // Redirect after successful update
+        header("Location: user_dashboard.php");  // Redirect after successful update
         exit();
     } else {
         $error_message = "Error updating listing.";
@@ -67,24 +67,31 @@ $conn->close();
         <h1>Edit Listing</h1>
     </header>
 
-    <div class="edit-listing">
-        <?php if (!empty($error_message)) : ?>
-            <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
-        <?php endif; ?>
+    <form method="POST" action="update_listing.php" enctype="multipart/form-data">
+    <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
 
-        <form method="POST" action="">
-            <label for="title">Title:</label>
-            <input type="text" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
+    <label for="title">Title:</label>
+    <input type="text" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
 
-            <label for="description">Description:</label>
-            <textarea name="description" required><?php echo htmlspecialchars($description); ?></textarea>
+    <label for="description">Description:</label>
+    <textarea name="description" required><?php echo htmlspecialchars($description); ?></textarea>
 
-            <label for="price">Price:</label>
-            <input type="number" name="price" value="<?php echo htmlspecialchars($price); ?>" required>
+    <label for="price">Price:</label>
+    <input type="number" name="price" value="<?php echo htmlspecialchars($price); ?>" required>
 
-            <button type="submit">Update Listing</button>
-        </form>
-    </div>
+    <label for="state">State:</label>
+    <input type="text" name="state" value="<?php echo htmlspecialchars($state); ?>" required>
+
+    <label for="city">City:</label>
+    <input type="text" name="city" value="<?php echo htmlspecialchars($city); ?>" required>
+
+    <label for="images">New Images:</label>
+                <input type="file" id="images" name="images[]" multiple accept=".jpg, .jpeg, .png, .gif, .heic, .heif">
+                
+
+    <button type="submit">Update Listing</button>
+</form>
+
 
     <footer>
         <p>&copy; 2024 Craigslist 2.0 | All rights reserved</p>

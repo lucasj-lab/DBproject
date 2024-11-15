@@ -17,13 +17,15 @@ $state = $_POST['state'];
 $city = $_POST['city'];
 $user_id = $_SESSION['user_id'];
 
-// Ensure that required fields are not empty
+// Check if required fields are empty
 if (empty($title) || empty($description) || empty($price) || empty($state) || empty($city)) {
-    echo "All fields are required!";
+    $_SESSION['message'] = "All fields are required.";
+    $_SESSION['message_type'] = "error";
+    header("Location: edit_listing.php?listing_id=$listing_id");
     exit();
 }
 
-// Update the listing information in the database
+// Update the listing
 $sql = "UPDATE listings 
         SET title = :title, description = :description, price = :price, state = :state, city = :city
         WHERE Listing_ID = :listing_id AND user_id = :user_id";
@@ -38,11 +40,18 @@ $success = $stmt->execute([
     'user_id' => $user_id
 ]);
 
-// Check if the update was successful
-if (!$success) {
-    echo "Failed to update the listing.";
+if ($success) {
+    $_SESSION['message'] = "Listing updated successfully.";
+    $_SESSION['message_type'] = "success";
+    header("Location: user_dashboard.php");
+    exit();
+} else {
+    $_SESSION['message'] = "Failed to update the listing.";
+    $_SESSION['message_type'] = "error";
+    header("Location: edit_listing.php?listing_id=$listing_id");
     exit();
 }
+
 
 // Handle new image upload if a file is provided
 if (!empty($_FILES['new_image']['name'][0])) {
