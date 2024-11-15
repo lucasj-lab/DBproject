@@ -110,11 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Fetch existing listings for display
 $listings = [];
-$sql = "SELECT Title, Description, Price, User_ID, Category_ID, City, State, Date_Posted, Image_ID FROM listings";
+$sql = "SELECT Listing_ID, Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City, Image_URL 
+        FROM listings";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {
-    $listings = $result->fetch_all(MYSQLI_ASSOC);
+    while ($listing = $result->fetch_assoc()) {
+        $listings[] = $listing;
+    }
 } else {
     echo "No listings found.";
 }
