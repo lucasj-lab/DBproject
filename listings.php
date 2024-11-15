@@ -170,26 +170,31 @@ $conn->close();
             </div>
         </form>
     </div>
-
     <div class="listings-container">
-        <h2>Active Listings</h2>
-        <div id="listings">
-            <?php if (!empty($listings)): ?>
-                <?php foreach ($listings as $listing): ?>
-                    <div class="listing-container">
-                        <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
-                        <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                        <p><strong>Description:</strong> <?= htmlspecialchars($listing['Description']); ?></p>
-                        <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-                        <p><strong>Date Posted:</strong> <?= (new DateTime($listing['Date_Posted']))->format('l, F jS, Y'); ?></p>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No listings available at the moment.</p>
-            <?php endif; ?>
-        </div>
+    <h2>Active Listings</h2>
+    <div id="listings">
+        <?php if (!empty($listings)): ?>
+            <?php foreach ($listings as $listing): ?>
+                <div class="listing-container">
+                    <!-- Display Image if available; otherwise show a placeholder -->
+                    <?php if (!empty($listing['Image_URL'])): ?>
+                        <img src="<?= htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+                    <?php else: ?>
+                        <img src="no_image.png" alt="No Image Available" class="listing-image">
+                    <?php endif; ?>
+                    <h3><?= htmlspecialchars($listing['Title']); ?></h3>
+                    <p><strong>Description:</strong> <?= htmlspecialchars($listing['Description']); ?></p>
+                    <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Location:</strong> <?= htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+                    <p><strong>Date Posted:</strong> <?= (new DateTime($listing['Date_Posted']))->format('l, F jS, Y'); ?></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No listings available at the moment.</p>
+        <?php endif; ?>
     </div>
+</div>
+
 
     <script>
         // Update city dropdown based on selected state
