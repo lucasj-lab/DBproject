@@ -5,6 +5,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+ // Debugging line
+ error_log("Listing ID: " . ($listing['Listing_ID'] ?? "Not Set"));
+
 require 'database_connection.php';
 
 // Check if the request is an AJAX request for listings data
@@ -149,10 +152,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                         <?= htmlspecialchars($listing['State']); ?></p>
                     <p><strong>Posted on:</strong>
                         <?= htmlspecialchars($listing['Formatted_Date'] ?? "Date not available"); ?></p>
-                    <button type="button" class="pill-button"
-                        onclick="window.location.href='listing_details.php?listing_id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                        View Listing
-                    </button>
+                        <button type="button" class="pill-button"
+    onclick="window.location.href='listing_details.php?listing_id=<?= htmlspecialchars($listing['Listing_ID'] ?? 0); ?>'">
+    View Listing
+</button>
+
                 </div>
             <?php endforeach; ?>
         </div>

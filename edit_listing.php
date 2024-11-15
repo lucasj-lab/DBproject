@@ -77,7 +77,8 @@ $conn->close();
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>
 
-        <form action="update_listing.php" method="POST" enctype="multipart/form-data" class="edit-listing-container">
+        <form action="update_listing.php?listing_id=<?php echo htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data" class="edit-listing-container">
+
             <div class="listing-form-group">
                 <!-- Hidden input to keep the listing ID -->
                 <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
