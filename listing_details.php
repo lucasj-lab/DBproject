@@ -7,20 +7,19 @@ if (isset($_GET['listing_id'])) {
 
     // Query to fetch listing details using PDO
     $sql = "
-        SELECT 
-            listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-            user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
-        FROM 
-            listings
-        JOIN 
-            user ON listings.User_ID = user.User_ID
-        JOIN 
-            category ON listings.Category_ID = category.Category_ID
-        LEFT JOIN 
-            images ON listings.Listing_ID = images.Listing_ID
-        WHERE 
-            listings.Listing_ID = :listing_id
-    ";
+    SELECT 
+        listings.Thumbnail_Image, images.Image_URL
+    FROM 
+        listings
+    LEFT JOIN 
+        images ON listings.Listing_ID = images.Listing_ID
+    WHERE 
+        listings.Listing_ID = :listing_id
+";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['listing_id' => $listing_id]);
+$images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     try {
         // Prepare and execute the query using PDO
@@ -78,17 +77,31 @@ if (isset($_GET['listing_id'])) {
 <body>
 
     <?php include 'header.php'; ?>
-<main>
-
+    <main> 
     <section>
-
         <h1>Listing Details</h1>
 
         <!-- Form wrapper for centered listing details -->
         <form class="listing-details-form">
-            <?php if (!empty($listing['Image_URL'])): ?>
-                <img src="<?php echo htmlspecialchars($listing['Image_URL']); ?>" alt="Listing Image" class="listing-image">
+            <!-- Image Gallery Section -->
+            <?php if (!empty($images)): ?>
+                <div class="image-gallery">
+                    <!-- Main Image -->
+                    <img id="mainImage" src="<?= htmlspecialchars($images[0]['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
+
+                    <!-- Smaller Images -->
+                    <div class="thumbnail-container">
+                        <?php foreach ($images as $image): ?>
+                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-image" 
+                                 onclick="changeMainImage(this.src)" alt="Additional Image">
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php else: ?>
+                <p>No images available for this listing.</p>
             <?php endif; ?>
+
+            <!-- Listing Details Section -->
             <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
             <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
             <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
@@ -104,10 +117,14 @@ if (isset($_GET['listing_id'])) {
             <!-- Back to Listings button -->
             <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
         </form>
-
     </section>
-    
 </main>
+
+<script>
+    function changeMainImage(src) {
+        document.getElementById("mainImage").src = src;
+    }
+</script>
 
 <footer>
     <?php include 'footer.php'; ?>

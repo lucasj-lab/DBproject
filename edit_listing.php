@@ -67,6 +67,19 @@ $conn->close();
         <h1>Edit Listing</h1>
     </header>
 
+    <form method="POST" action="update_thumbnail.php">
+    <label for="thumbnail">Set Thumbnail:</label>
+    <select name="thumbnail" required>
+        <option value="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>">Current Thumbnail</option>
+        <?php foreach ($additionalImages as $image): ?>
+            <option value="<?= htmlspecialchars($image['Image_URL']); ?>">
+                <?= htmlspecialchars(basename($image['Image_URL'])); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit">Update Thumbnail</button>
+</form>
+
     <form method="POST" action="update_listing.php" enctype="multipart/form-data">
     <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing_id); ?>">
 
