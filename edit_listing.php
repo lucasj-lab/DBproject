@@ -61,6 +61,7 @@ $conn->close();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<?php include 'header.php'; ?>
     <header>
         <h1 class="edit-listing-title">Edit Listing</h1>
     </header>
@@ -132,16 +133,17 @@ $conn->close();
             </div>
 
             <div class="file-upload-container">
-            <label class="form-label" for="images">Upload New Images:</label>
+            <label class="form-label" for="images"></label>
             <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
             <label for="images" class="file-upload-button">Choose Files</label>
             <span class="file-upload-text" id="file-upload-text">No files chosen</span>
+            <div class="btn-container">
+        <button type="submit">Update</button>
+    </div>
         </div>
         <div id="imagePreviewContainer"></div> <!-- Image Previews -->
     </div>
-    <div class="btn-container">
-        <button type="submit">Update</button>
-    </div>
+
 </form>
     </div>
 
