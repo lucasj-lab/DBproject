@@ -1,41 +1,18 @@
 <?php
-// listings.php - Combined version with header and footer
-
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require 'database_connection.php';
+require 'listing_queries.php';
 
-// Check if the request is an AJAX request for listings data
+// Handle AJAX request for fetching listings
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
-    // Query to fetch all listings with user, category, and image data
-    $sql = "
-    SELECT 
-        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Thumbnail_Image,
-        listings.Date_Posted, user.Name AS User_Name, category.Category_Name, listings.State, listings.City
-    FROM 
-        listings
-    JOIN 
-        user ON listings.User_ID = user.User_ID
-    JOIN 
-        category ON listings.Category_ID = category.Category_ID
-    ORDER BY 
-        listings.Date_Posted DESC
-    ";
-
     try {
-        // Prepare and execute the query using PDO
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $listings = getAllListings($pdo);
 
-        // Fetch all listings from the database
-        $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Format the date and prepare the listings array
-        if ($listings) {
+        // Check if listings exist
+        if (empty($listings)) {
+            $response = ["message" => "No listings available."];
+        } else {
             foreach ($listings as &$listing) {
-                // Handle date formatting
+                // Format the date
                 if (!empty($listing['Date_Posted'])) {
                     $datePosted = new DateTime($listing['Date_Posted']);
                     $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y');
@@ -43,26 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     $listing['Formatted_Date'] = "Date not available";
                 }
             }
-        } else {
-            // If no listings are found
-            $listings = ["message" => "No listings available."];
+            $response = $listings;
         }
-
-        // Output the listings in JSON format
         header('Content-Type: application/json');
-        echo json_encode($listings);
+        echo json_encode($response);
     } catch (PDOException $e) {
-        // Handle any PDO exceptions
-        error_log("Database error: " . $e->getMessage()); // Log the error for debugging
+        error_log("Database error: " . $e->getMessage());
         header('Content-Type: application/json');
         echo json_encode(["error" => "Database error. Please try again later."]);
     }
-
     exit();
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,12 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         function fetchListings() {
             fetch('listings.php?fetchListings=true')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.error) {
                         document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
@@ -97,8 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 })
                 .catch(error => {
                     console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML =
-                        "<p>Error loading listings. Please try again later.</p>";
+                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
                 });
         }
 
@@ -110,25 +73,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 const listingDiv = document.createElement("div");
                 listingDiv.className = "listing-item";
 
-                // Use the correct variable name for the image
-                const image = listing.Image_URL || "no_image.png"; // Fallback image
+                // Use fallback for missing thumbnail
+                const thumbnail = listing.Thumbnail_Image || "no_image.png";
 
                 listingDiv.innerHTML = `
-    <img src="${listing.Thumbnail_Image || 'no_image.png'}" alt="Thumbnail Image" class="listing-thumbnail">
-    <h3><strong>${listing.Title}</strong></h3>
-    <p><strong>Description:</strong> ${listing.Description}</p>
-    <p><strong>Price:</strong> $${listing.Price}</p>
-    <p><strong>Posted by:</strong> ${listing.User_Name}</p>
-    <p><strong>Category:</strong> ${listing.Category_Name}</p>
-    <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-    <button type="button" class="pill-button"
-        onclick="window.location.href='listing_details.php?id=${listing.Listing_ID}'">
-        View Listing
-    </button>
-`;
-
-
+                    <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+                    <h3><strong>${listing.Title}</strong></h3>
+                    <p><strong>Description:</strong> ${listing.Description}</p>
+                    <p><strong>Price:</strong> $${listing.Price}</p>
+                    <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                    <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                    <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                    <button type="button" class="pill-button"
+                        onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                        View Listing
+                    </button>
+                `;
                 listingsContainer.appendChild(listingDiv);
             });
         }
@@ -140,42 +101,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     <div class="listings-container">
         <h2>Active Listings</h2>
-
-        <!-- Each listing will have the class "listing-container" -->
         <div id="listings">
-        <?php foreach ($listings as $listing): ?>
-    <tr>
-        <td><?php echo htmlspecialchars($listing['Title']); ?></td>
-        <td><?php echo htmlspecialchars($listing['Description']); ?></td>
-        <td>$<?php echo htmlspecialchars(number_format($listing['Price'], 2)); ?></td>
-        <td>
-            <?php 
-            echo htmlspecialchars(
-                !empty($listing['Date_Posted'])
-                    ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
-                    : 'Date not available'
-            ); 
-            ?>
-        </td>
-        <td><?php echo htmlspecialchars($listing['City']); ?></td>
-        <td><?php echo htmlspecialchars($listing['State']); ?></td>
-        <td>
-            <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image'] ?? 'no_image.png'); ?>" 
-                 alt="Thumbnail Image" 
-                 class="listing-image" 
-                 style="width: 80px; height: auto; margin: 5px;">
-        </td>
-        <td>
-            <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button-edit">Edit</a>
-            <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button-delete"
-               onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
-        </td>
-    </tr>
-<?php endforeach; ?>
-
+            <!-- Listings will be dynamically populated here -->
         </div>
     </div>
 
     <?php include 'footer.php'; ?>
-
 </body>
+</html>
