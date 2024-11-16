@@ -68,10 +68,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit">Log In</button>
+                <p>Wanna be a Rookie? <a href="signup.php">Sign up here</a></p>
             </div>
         </form>
     </div>
-    <p>Wanna be a Rookie? <a href="signup.php">Sign up here</a></p>
+
     <?php include 'footer.php'; ?>
 </body>
 </html>

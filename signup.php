@@ -90,11 +90,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password"
                     required title="Please re-enter your password to confirm.">
                 <button type="submit">Sign Up</button>
+                <p>Already have an account? <a href="login.php">Log in here</a>.</p>
             </div>
         </form>
     </div>
 
-        <p>Already have an account? <a href="login.php">Log in here</a>.</p>
+      
     </div>
 
     <?php include 'footer.php'; ?>
