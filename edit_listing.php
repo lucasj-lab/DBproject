@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/db_connection.php'; // Ensure this points to your database connection script
+// Include database connection
+require_once 'database_connection.php'; // Ensure this points to your database connection script
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
