@@ -2501,7 +2501,6 @@ select#state {
 
 /* Base style for the user icon button */
 .user-icon {
-    display: inline-block;
     width: 50px; /* Adjust size as needed */
     height: 50px; /* Adjust size as needed */
     background-color: transparent; /* Transparent background */
