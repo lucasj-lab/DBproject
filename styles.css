@@ -929,6 +929,8 @@ nav ul li a {
 .user-icon.logged-in a {
     background-color: #4caf50;
     border-radius: 30px;
+    box-shadow: 0 0 5px 5px #4caf50; /* Wide-spread shadow */
+    transform: scale(1.1); /* Slight zoom for interactivity */
 }
 
 
@@ -2540,8 +2542,21 @@ select#state {
     border-radius: 50%; /* Keep the circular look */
 }
 
-/* Hover effect for the user icon */
 .user-icon:hover {
-    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3); /* Wide-spread shadow */
+    box-shadow: 0 0 5px 5px rgb(0, 0, 0); /* Wide-spread shadow */
     transform: scale(1.1); /* Slight zoom for interactivity */
+}
+
+.pill-button.delete-button {
+    background-color: #dc3545; /* Red color for delete button */
+}
+
+/* Hover effect */
+.pill-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.pill-button.delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
 }

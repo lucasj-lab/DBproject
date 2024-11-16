@@ -86,11 +86,11 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     }
                                 </style>
                                 <td>
-                                    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
-                                        class="pill-button-edit">Edit</a>
-                                    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
-                                        class="pill-button-delete"
-                                        onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
+                                    <div class="btn-container">
+                                        <a href="edit_listing.php" class="pill-button">Edit</a>
+                                        <a href="delete_listing.php" class="pill-button delete-button">Delete</a>
+                                    </div>
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
