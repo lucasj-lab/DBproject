@@ -305,7 +305,6 @@ h3 {
 }
 
 p {
-    text-align: center;
     font-size: 1rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -1547,6 +1546,7 @@ table td {
  border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-align: center;
 }
 
 
@@ -2438,4 +2438,114 @@ select#state {
 
 .thumbnail-scroll-image:hover {
     transform: scale(1.1); /* Optional: Slight zoom on hover */
+}
+
+
+/* Wrapper for the listing details section */
+.listing-details-wrapper {
+    background-color: #f3f3f3; /* Light gray background */
+    padding: 15px; /* Space between the border and the content */
+    border: 1px solid #ddd; /* Light border for definition */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 20px 0; /* Space above and below the wrapper */
+    max-width: 800px; /* Optional: Restrict width of the details wrapper */
+    width: 100%; /* Ensure responsiveness */
+}
+
+/* Centering the wrapper */
+.listing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+}
+
+/* Styling for the listing details */
+.listing-details {
+    text-align: center; /* Center align text */
+}
+
+.listing-details h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.listing-details p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* Gallery styles remain unchanged */
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.thumbnail-scroll-image {
+    max-width: 150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail-scroll-image:hover {
+    transform: scale(1.1);
+}
+
+/* Base style for the user icon button */
+.user-icon {
+    display: inline-block;
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    background-color: transparent; /* Transparent background */
+    border-radius: 50%; /* Make it circular */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Pointer cursor for buttons */
+    overflow: hidden; /* Ensure the icon stays within the circle */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth shadow and scale transition */
+}
+
+/* Style for the SVG inside the button */
+.user-icon img {
+    width: 100%; /* Ensure the image fills the button */
+    height: 100%;
+    object-fit: cover; /* Maintain the aspect ratio */
+    border-radius: 50%; /* Ensure the image is circular */
+}
+
+/* Shadow effect on hover */
+.user-icon:hover {
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3); /* Wide-spread shadow */
+    transform: scale(1.1); /* Slight zoom for interactivity */
+}
+
+/* Style for the anchor tag inside the user icon */
+.user-icon a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none; /* Remove underline */
+}
+
+/* Style for the SVG inside the user icon */
+.user-icon img {
+    width: 100%; /* Ensure the image fills the container */
+    height: 100%;
+    object-fit: cover; /* Maintain the aspect ratio */
+    border-radius: 50%; /* Keep the circular look */
+}
+
+/* Hover effect for the user icon */
+.user-icon:hover {
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3); /* Wide-spread shadow */
+    transform: scale(1.1); /* Slight zoom for interactivity */
 }

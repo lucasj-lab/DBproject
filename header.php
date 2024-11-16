@@ -45,10 +45,13 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
       </ul>
     </nav>
 
-    <!-- User Icon -->
-    <div class="user-icon" id="userIcon">
-      <a href="<?php echo $isLoggedIn ? 'user_dashboard.php' : 'login.php'; ?>">U</a> <!-- "U" for user icon -->
-    </div>
+   <!-- User Icon -->
+<div class="user-icon" id="userIcon">
+    <a href="<?php echo $isLoggedIn ? 'user_dashboard.php' : 'login.php'; ?>">
+        <img src="images/user-icon-white-black-back.svg" alt="User Icon">
+    </a>
+</div>
+
 
     <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
 

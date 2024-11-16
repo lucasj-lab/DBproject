@@ -31,36 +31,10 @@ $additionalImages = $listing['Images'];
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="create-listing-container"> <!-- Reusing the container class for consistent styling -->
+    <div class="create-listing-container"> <!-- Main container for the listing -->
         <h1 class="edit-listing-title">Listing Details</h1>
 
-        <!-- Main Details Section -->
-        <div class="form-group">
-            <label for="title"><strong>Title:</strong></label>
-            <p id="title"><?= htmlspecialchars($listing['Title']); ?></p>
-        </div>
-
-        <div class="form-group">
-            <label for="description"><strong>Description:</strong></label>
-            <p id="description"><?= htmlspecialchars($listing['Description']); ?></p>
-        </div>
-
-        <div class="form-group">
-            <label for="price"><strong>Price:</strong></label>
-            <p id="price">$<?= htmlspecialchars(number_format($listing['Price'], 2)); ?></p>
-        </div>
-
-        <div class="form-group">
-            <label for="state"><strong>State:</strong></label>
-            <p id="state"><?= htmlspecialchars($listing['State']); ?></p>
-        </div>
-
-        <div class="form-group">
-            <label for="city"><strong>City:</strong></label>
-            <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
-        </div>
-
-        <!-- Image Gallery -->
+        <!-- Image Gallery Section -->
         <div class="image-gallery">
             <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
             <div class="thumbnail-container">
@@ -72,6 +46,34 @@ $additionalImages = $listing['Images'];
                         alt="Thumbnail"
                     >
                 <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Listing Details Wrapper -->
+        <div class="listing-details-wrapper">
+            <div class="form-group">
+                <label for="title"><strong>Title:</strong></label>
+                <p id="title"><?= htmlspecialchars($listing['Title']); ?></p>
+            </div>
+
+            <div class="form-group">
+                <label for="description"><strong>Description:</strong></label>
+                <p id="description"><?= htmlspecialchars($listing['Description']); ?></p>
+            </div>
+
+            <div class="form-group">
+                <label for="price"><strong>Price:</strong></label>
+                <p id="price">$<?= htmlspecialchars(number_format($listing['Price'], 2)); ?></p>
+            </div>
+
+            <div class="form-group">
+                <label for="state"><strong>State:</strong></label>
+                <p id="state"><?= htmlspecialchars($listing['State']); ?></p>
+            </div>
+
+            <div class="form-group">
+                <label for="city"><strong>City:</strong></label>
+                <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
             </div>
         </div>
 
@@ -91,4 +93,5 @@ $additionalImages = $listing['Images'];
     </script>
 </body>
 </html>
+
 
