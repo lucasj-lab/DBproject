@@ -86,20 +86,17 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     }
                                 </style>
                                 <td>
-                                <div class="dashboard-listing">
-    <!-- Thumbnail Section -->
-    <div class="thumbnail-container">
-        <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>"
-            alt="Listing Thumbnail" class="thumbnail-image">
-    </div>
-
-    <!-- Action Buttons Section -->
-    <div class="button-container">
-        <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
-        <a href="delete_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button delete-button">Delete</a>
-    </div>
-</div>
-
+                                <td class="thumbnail-cell">
+                <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>" 
+                     alt="Listing Thumbnail" class="thumbnail-image">
+            </td>
+            <!-- Actions Cell -->
+            <td class="action-buttons-cell">
+                <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
+                <a href="delete_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button delete-button">Delete</a>
+            </td>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

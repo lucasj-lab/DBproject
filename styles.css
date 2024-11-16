@@ -2560,3 +2560,7 @@ select#state {
 .pill-button.delete-button:hover {
     background-color: #c82333; /* Darker red on hover */
 }
+
+img.thumbnail-option {
+    max-width: -webkit-fill-available;
+  }
