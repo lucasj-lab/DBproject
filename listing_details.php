@@ -25,53 +25,70 @@ $additionalImages = $listing['Images'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($listing['Title']); ?></title>
-    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+    <title>Listing Details</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <?php include 'header.php'; ?>
-    <main>
-        <div class="listing-details-container">
-            <h1><?php echo htmlspecialchars($listing['Title']); ?></h1>
-            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-            <p><strong>Date Posted:</strong>
-                <?php
-                $datePosted = new DateTime($listing['Date_Posted']);
-                echo htmlspecialchars($datePosted->format('l, F jS, Y'));
-                ?>
-            </p>
 
-            <!-- Image Gallery -->
-            <div class="image-gallery">
-                <!-- Main Thumbnail -->
-                <img id="mainImage" src="<?php echo $thumbnail; ?>" class="main-image" alt="Main Image">
-                
-                <?php if (!empty($additionalImages)): ?>
-                    <!-- Scrollable Gallery -->
-                    <div class="thumbnail-scroll-container">
-                        <?php foreach ($additionalImages as $image): ?>
-                            <img src="<?php echo htmlspecialchars($image); ?>" class="thumbnail-scroll-image" 
-                                 onclick="changeMainImage(this.src)" alt="Additional Image">
-                        <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p>No additional images available for this listing.</p>
-                <?php endif; ?>
-            </div>
+    <div class="create-listing-container"> <!-- Reusing the container class for consistent styling -->
+        <h1 class="edit-listing-title">Listing Details</h1>
 
-            <!-- Back to Listings button -->
-            <a href="listings.php" class="pill-button back-to-listings">Back to Listings</a>
+        <!-- Main Details Section -->
+        <div class="form-group">
+            <label for="title"><strong>Title:</strong></label>
+            <p id="title"><?= htmlspecialchars($listing['Title']); ?></p>
         </div>
-    </main>
 
-    <script>
-        function changeMainImage(src) {
-            document.getElementById("mainImage").src = src;
-        }
-    </script>
+        <div class="form-group">
+            <label for="description"><strong>Description:</strong></label>
+            <p id="description"><?= htmlspecialchars($listing['Description']); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label for="price"><strong>Price:</strong></label>
+            <p id="price">$<?= htmlspecialchars(number_format($listing['Price'], 2)); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label for="state"><strong>State:</strong></label>
+            <p id="state"><?= htmlspecialchars($listing['State']); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label for="city"><strong>City:</strong></label>
+            <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
+        </div>
+
+        <!-- Image Gallery -->
+        <div class="image-gallery">
+            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
+            <div class="thumbnail-container">
+                <?php foreach ($listing['Images'] as $image): ?>
+                    <img 
+                        src="<?= htmlspecialchars($image); ?>" 
+                        class="thumbnail-image" 
+                        onclick="changeMainImage(this.src)" 
+                        alt="Thumbnail"
+                    >
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Back to Listings Button -->
+        <div class="btn-container">
+            <a href="listings.php" class="pill-button">Back to Listings</a>
+        </div>
+    </div>
 
     <?php include 'footer.php'; ?>
+
+    <script>
+        // Function to update the main image when a thumbnail is clicked
+        function changeMainImage(src) {
+            document.getElementById('mainImage').src = src;
+        }
+    </script>
 </body>
 </html>
+
