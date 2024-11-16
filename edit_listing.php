@@ -1,3 +1,6 @@
+<?php
+
+
 $stmt->bind_param("ii", $listing_id, $user_id);
 $stmt->execute();
 $stmt->bind_result($title, $description, $price, $state, $city, $thumbnail_image);
@@ -33,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
-@@ -123,152 +67,127 @@
+?>
 </head>
 
 <body>
