@@ -2424,3 +2424,18 @@ select#state {
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+/* CSS to style and control the size of images */
+.thumbnail-scroll-image {
+    max-width: 100%; /* Ensures images scale down to fit their container */
+    max-height: 150px; /* Limits the height of the image */
+    width: auto; /* Keeps the aspect ratio */
+    height: auto; /* Ensures proper scaling */
+    border: 1px solid #ccc; /* Optional: Add a border for aesthetics */
+    padding: 5px; /* Optional: Add padding around the image */
+    cursor: pointer; /* Indicates the image is clickable */
+    transition: transform 0.2s ease-in-out; /* Smooth effect for hover */
+}
+
+.thumbnail-scroll-image:hover {
+    transform: scale(1.1); /* Optional: Slight zoom on hover */
+}
