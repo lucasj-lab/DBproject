@@ -2528,7 +2528,6 @@ select#state {
 
 /* Style for the anchor tag inside the user icon */
 .user-icon a {
-    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
