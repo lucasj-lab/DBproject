@@ -1,6 +1,27 @@
 <?php
+// Include database connection
+require_once 'db_connection.php'; // Ensure this points to your database connection script
 
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+// Validate and assign the listing ID
+$listing_id = $_GET['listing_id'] ?? null;
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$listing_id || !$user_id) {
+    die("Invalid request: Missing listing ID or user not logged in.");
+}
+
+// Prepare the SQL query to fetch listing details
+$stmt = $conn->prepare("SELECT Title, Description, Price, State, City, Thumbnail_Image FROM listings WHERE Listing_ID = ? AND User_ID = ?");
+if (!$stmt) {
+    die("Error preparing the statement: " . $conn->error);
+}
+
+// Bind parameters and execute
 $stmt->bind_param("ii", $listing_id, $user_id);
 $stmt->execute();
 $stmt->bind_result($title, $description, $price, $state, $city, $thumbnail_image);
@@ -11,32 +32,41 @@ $stmt->close();
 
 // Fetch additional images
 $imageStmt = $conn->prepare("SELECT Image_ID, Image_URL FROM images WHERE Listing_ID = ?");
+if (!$imageStmt) {
+    die("Error preparing the image statement: " . $conn->error);
+}
 $imageStmt->bind_param("i", $listing_id);
 $imageStmt->execute();
 $images = $imageStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $imageStmt->close();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Update listing details
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
     $price = $_POST['price'] ?? 0;
     $state = $_POST['state'] ?? '';
     $city = $_POST['city'] ?? '';
     $selected_thumbnail = $_POST['selected_thumbnail'] ?? null;
+
+    // Update listing details
     $updateStmt = $conn->prepare("UPDATE listings SET Title = ?, Description = ?, Price = ?, State = ?, City = ?, Thumbnail_Image = ? WHERE Listing_ID = ? AND User_ID = ?");
+    if (!$updateStmt) {
+        die("Error preparing update statement: " . $conn->error);
+    }
     $updateStmt->bind_param("ssdssiii", $title, $description, $price, $state, $city, $selected_thumbnail, $listing_id, $user_id);
     if ($updateStmt->execute()) {
         header("Location: user_dashboard.php");
         exit();
     } else {
-        $error_message = "Error updating listing.";
+        $error_message = "Error updating listing: " . $conn->error;
     }
     $updateStmt->close();
 }
 
 $conn->close();
 ?>
+
 </head>
 
 <body>
