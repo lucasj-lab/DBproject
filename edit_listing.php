@@ -123,102 +123,152 @@ $conn->close();
 </head>
 
 <body>
-<?php include 'header.php'; ?>
+    <?php include 'header.php'; ?>
 
-<div class="edit-listing-container">
-    <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
+    <div class="edit-listing-container">
+        <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
 
-        <!-- Title -->
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="<?= htmlspecialchars($title); ?>" required>
-        </div>
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="<?= htmlspecialchars($title); ?>" required>
+            </div>
 
-        <!-- Description -->
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required><?= htmlspecialchars($description); ?></textarea>
-        </div>
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required><?= htmlspecialchars($description); ?></textarea>
+            </div>
 
-        <!-- Price -->
-        <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" step="0.01" id="price" name="price" value="<?= htmlspecialchars($price); ?>" required>
-        </div>
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" step="0.01" id="price" name="price" value="<?= htmlspecialchars($price); ?>"
+                    required>
+            </div>
 
-        <!-- State -->
-        <div class="form-group">
-            <label for="state">State:</label>
-            <select id="state" name="state" required>
-                <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
-                <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
-                <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
-                <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
-                <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                <!-- Add more states -->
-            </select>
-        </div>
+            <!-- State -->
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state" required>
+                    <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
+                    <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
+                    <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
+                    <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
+                    <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
+                    <!-- Add more states -->
+                </select>
+            </div>
 
-        <!-- City -->
-        <div class="form-group">
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
-        </div>
+            <!-- City -->
+            <div class="form-group">
+                <label for="city">City:</label>
+                <select id="city" name="city" required>
+                    <option value="" disabled <?= empty($city) ? 'selected' : ''; ?>>--Select City--</option>
+                    <?php if (!empty($city)): ?>
+                        <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
+                    <?php endif; ?>
+                    <!-- Populate additional cities dynamically here -->
+                </select>
+            </div>
 
-        <!-- Thumbnail Selection -->
-        <div class="form-group">
-            <label>Thumbnail:</label>
-            <div class="thumbnail-selection">
-                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
+            <!-- Thumbnail Selection -->
+            <div class="form-group">
+                <label>Thumbnail:</label>
+                <div class="thumbnail-selection">
+                    <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail"
+                        alt="Current Thumbnail">
+                    <?php foreach ($additionalImages as $image): ?>
+                        <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail"
+                            value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
+                        <label for="thumb-<?= htmlspecialchars($image); ?>">
+                            <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div id="imageSelectionContainer" class="image-selection-container">
                 <?php foreach ($additionalImages as $image): ?>
-                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
-                    <label for="thumb-<?= htmlspecialchars($image); ?>">
-                        <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
-                    </label>
+                    <img src="<?= htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-image"
+                        data-image-id="<?= htmlspecialchars($image['Image_ID']); ?>" onclick="selectThumbnail(this)"
+                        alt="Additional Image">
+                <?php endforeach; ?>
+                <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="">
+            </div>
+
+            <!-- Image Preview -->
+            <div id="imagePreviewContainer">
+                <?php foreach ($additionalImages as $image): ?>
+                    <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
                 <?php endforeach; ?>
             </div>
-        </div>
 
-        <!-- Image Upload -->
-        <div class="file-upload-container">
-            <label for="images">Upload New Images:</label>
-            <input type="file" id="images" name="images[]" multiple>
-        </div>
+            <!-- Submit Button -->
+            <button type="submit" name="update_listing">Update Listing</button>
+        </form>
+    </div>
 
-        <!-- Image Preview -->
-        <div id="imagePreviewContainer">
-            <?php foreach ($additionalImages as $image): ?>
-                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
-            <?php endforeach; ?>
-        </div>
 
-        <!-- Submit Button -->
-        <button type="submit" name="update_listing">Update Listing</button>
-    </form>
-</div>
+    <script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageInput = document.querySelector("#images");
-        const previewContainer = document.getElementById("imagePreviewContainer");
+        function updateCities() {
+            const state = document.getElementById("state").value;
+            const cityDropdown = document.getElementById("city");
 
-        imageInput.addEventListener("change", function () {
-            previewContainer.innerHTML = ""; // Clear previous previews
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.classList.add("preview-image");
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
+            // Example: Fetch cities via AJAX or dynamically update options
+            fetch(`/get_cities.php?state=${state}`)
+                .then(response => response.json())
+                .then(cities => {
+                    cityDropdown.innerHTML = '<option value="" disabled>--Select City--</option>';
+                    cities.forEach(city => {
+                        const option = document.createElement("option");
+                        option.value = city;
+                        option.textContent = city;
+                        cityDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Error fetching cities:", error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.querySelector("#images");
+            const previewContainer = document.getElementById("imagePreviewContainer");
+
+            imageInput.addEventListener("change", function () {
+                previewContainer.innerHTML = ""; // Clear previous previews
+                Array.from(imageInput.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-image");
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
             });
         });
-    });
-</script>
 
-<?php include 'footer.php'; ?>
+        function selectThumbnail(imageElement) {
+    // Remove the 'selected' class from all images
+    document.querySelectorAll('.thumbnail-image').forEach(img => {
+        img.classList.remove('selected');
+    });
+
+    // Add the 'selected' class to the clicked image
+    imageElement.classList.add('selected');
+
+    // Store the selected image ID in the hidden input
+    const selectedImageId = imageElement.getAttribute('data-image-id');
+    document.getElementById('selectedThumbnail').value = selectedImageId;
+}
+
+    </script>
+
+    <?php include 'footer.php'; ?>
 </body>
+
 </html>

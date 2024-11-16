@@ -2390,3 +2390,22 @@ select#state {
 #edit-listing-form #imagePreviewContainer::-webkit-scrollbar-track {
     background: #f9f9f9; /* Scrollbar track color */
 }
+
+.thumbnail-image {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.thumbnail-image:hover {
+    border-color: lightgray;
+}
+
+.thumbnail-image.selected {
+    border-color: white;
+}
