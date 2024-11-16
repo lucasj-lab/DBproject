@@ -8,9 +8,17 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+if (isset($_SESSION['success_message'])) {
+    echo "<div class='success-message'>" . htmlspecialchars($_SESSION['success_message']) . "</div>";
+    unset($_SESSION['success_message']); // Clear message after displaying
+}
+
+if (isset($_SESSION['error_message'])) {
+    echo "<div class='error-message'>" . htmlspecialchars($_SESSION['error_message']) . "</div>";
+    unset($_SESSION['error_message']); // Clear message after displaying
 
 $user_id = $_SESSION['user_id'];
-
+}
 // Fetch user data
 $stmt = $pdo->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = :user_id");
 $stmt->execute(['user_id' => $user_id]);
