@@ -46,6 +46,7 @@ $conn->close();
     <form method="POST" enctype="multipart/form-data">
         <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
         <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="<?= htmlspecialchars($thumbnail_image); ?>">
+
         <!-- Title -->
         <div class="form-group">
             <label for="title">Title:</label>
