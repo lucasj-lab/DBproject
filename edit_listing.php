@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start session to access user information
+session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -17,7 +17,7 @@ if (!isset($_GET['listing_id'])) {
 $listing_id = intval($_GET['listing_id']);
 $user_id = $_SESSION['user_id'];
 
-// Initialize variables for pre-filling the form
+// Initialize variables
 $title = $description = $state = $city = $thumbnail_image = "";
 $price = 0.0;
 $additionalImages = [];
@@ -53,45 +53,60 @@ $imageStmt->close();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['update_listing'])) {
-        // Update listing details
-        $title = $_POST['title'] ?? $title;
-        $description = $_POST['description'] ?? $description;
-        $price = $_POST['price'] ?? $price;
-        $state = $_POST['state'] ?? $state;
-        $city = $_POST['city'] ?? $city;
+    // Handle listing update
+    $title = $_POST['title'] ?? $title;
+    $description = $_POST['description'] ?? $description;
+    $price = $_POST['price'] ?? $price;
+    $state = $_POST['state'] ?? $state;
+    $city = $_POST['city'] ?? $city;
+    $newThumbnail = $_POST['thumbnail'] ?? $thumbnail_image;
 
-        $updateStmt = $conn->prepare("
-            UPDATE listings 
-            SET Title = ?, Description = ?, Price = ?, State = ?, City = ? 
-            WHERE Listing_ID = ? AND User_ID = ?
-        ");
-        $updateStmt->bind_param("ssdssii", $title, $description, $price, $state, $city, $listing_id, $user_id);
-        if ($updateStmt->execute()) {
-            header("Location: user_dashboard.php");
-            exit();
-        } else {
-            echo "Error updating listing.";
+    // Update the listing details
+    $updateStmt = $conn->prepare("
+        UPDATE listings 
+        SET Title = ?, Description = ?, Price = ?, State = ?, City = ?, Thumbnail_Image = ? 
+        WHERE Listing_ID = ? AND User_ID = ?
+    ");
+    $updateStmt->bind_param("ssdssiii", $title, $description, $price, $state, $city, $newThumbnail, $listing_id, $user_id);
+    if (!$updateStmt->execute()) {
+        echo "Error updating listing.";
+    }
+    $updateStmt->close();
+
+    // Handle new image uploads
+    if (!empty($_FILES['images']['name'][0])) {
+        $uploadDirectory = 'uploads/';
+        if (!is_dir($uploadDirectory)) {
+            mkdir($uploadDirectory, 0777, true);
         }
-        $updateStmt->close();
+
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+            $fileType = mime_content_type($tmpName);
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
+
+            if (in_array($fileType, $allowedTypes)) {
+                $imageName = basename($_FILES['images']['name'][$key]);
+                $uniqueImageName = time() . "_" . $imageName;
+                $targetFilePath = $uploadDirectory . $uniqueImageName;
+
+                if (move_uploaded_file($tmpName, $targetFilePath)) {
+                    $imageUrl = $targetFilePath;
+
+                    // Add image to the database
+                    $imageStmt = $conn->prepare("
+                        INSERT INTO images (Image_URL, Listing_ID) 
+                        VALUES (?, ?)
+                    ");
+                    $imageStmt->bind_param("si", $imageUrl, $listing_id);
+                    $imageStmt->execute();
+                    $imageStmt->close();
+                }
+            }
+        }
     }
 
-    if (isset($_POST['update_thumbnail'])) {
-        // Update thumbnail image
-        $newThumbnail = $_POST['thumbnail'];
-        $thumbStmt = $conn->prepare("
-            UPDATE listings 
-            SET Thumbnail_Image = ? 
-            WHERE Listing_ID = ? AND User_ID = ?
-        ");
-        $thumbStmt->bind_param("sii", $newThumbnail, $listing_id, $user_id);
-        if ($thumbStmt->execute()) {
-            $thumbnail_image = $newThumbnail; // Update the variable for display
-        } else {
-            echo "Error updating thumbnail.";
-        }
-        $thumbStmt->close();
-    }
+    header("Location: user_dashboard.php");
+    exit();
 }
 
 $conn->close();
@@ -111,24 +126,6 @@ $conn->close();
 <?php include 'header.php'; ?>
 
 <div class="edit-listing-container">
-    <!-- Form for updating the thumbnail -->
-    <form id="edit-thumbnail-form" method="POST">
-        <h2>Set Thumbnail</h2>
-        <div class="form-group">
-            <label for="thumbnail">Select Thumbnail:</label>
-            <select name="thumbnail" id="thumbnail">
-                <option value="<?= htmlspecialchars($thumbnail_image); ?>">Current Thumbnail</option>
-                <?php foreach ($additionalImages as $image): ?>
-                    <option value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "selected" : ""; ?>>
-                        <?= htmlspecialchars(basename($image)); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <button type="submit" name="update_thumbnail">Update Thumbnail</button>
-    </form>
-
-    <!-- Form for updating the listing -->
     <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
 
@@ -153,13 +150,12 @@ $conn->close();
         <!-- State -->
         <div class="form-group">
             <label for="state">State:</label>
-            <select id="state" name="state" onchange="updateCities()" required>
+            <select id="state" name="state" required>
                 <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
                 <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
                 <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
                 <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
                 <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
                 <!-- Add more states -->
             </select>
         </div>
@@ -168,6 +164,20 @@ $conn->close();
         <div class="form-group">
             <label for="city">City:</label>
             <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
+        </div>
+
+        <!-- Thumbnail Selection -->
+        <div class="form-group">
+            <label>Thumbnail:</label>
+            <div class="thumbnail-selection">
+                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
+                <?php foreach ($additionalImages as $image): ?>
+                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
+                    <label for="thumb-<?= htmlspecialchars($image); ?>">
+                        <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
+                    </label>
+                <?php endforeach; ?>
+            </div>
         </div>
 
         <!-- Image Upload -->
