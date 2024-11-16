@@ -926,10 +926,8 @@ nav ul li a {
 
 }
 
-/* Style for the user icon with light green outline if logged in */
 .user-icon.logged-in a {
-    border: 2px solid #008000;
-    padding: 4px;
+    background-color: #4caf50;
     border-radius: 30px;
 }
 

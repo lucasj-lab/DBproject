@@ -68,27 +68,29 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($listing['Description']); ?></td>
                                 <td>$<?php echo htmlspecialchars(number_format($listing['Price'], 2)); ?></td>
                                 <td>
-                                    <?php 
+                                    <?php
                                     echo htmlspecialchars(
                                         !empty($listing['Date_Posted'])
-                                            ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
-                                            : 'Date not available'
-                                    ); 
+                                        ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
+                                        : 'Date not available'
+                                    );
                                     ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($listing['City']); ?></td>
                                 <td><?php echo htmlspecialchars($listing['State']); ?></td>
+                                <style>
+                                    /* CSS to set the user icon border color when logged in */
+                                    .user-icon.logged-in {
+                                        background-color: #008000;
+                                        /* Modify this style as per your requirements */
+                                    }
+                                </style>
                                 <td>
-                                    <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image'] ?? 'no_image.png'); ?>" 
-                                         alt="Thumbnail" 
-                                         style="width: 80px; height: auto;">
-                                </td>
-                                <td>
-                                    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" 
-                                       class="pill-button-edit">Edit</a>
-                                    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" 
-                                       class="pill-button-delete" 
-                                       onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
+                                    <a href="edit_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
+                                        class="pill-button-edit">Edit</a>
+                                    <a href="delete_listing.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>"
+                                        class="pill-button-delete"
+                                        onclick="return confirm('Are you sure you want to delete this listing?')">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
