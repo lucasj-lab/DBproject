@@ -33,25 +33,46 @@ $images = $imageStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $imageStmt->close();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Update listing details
+    // Retrieve form inputs
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
-    $price = $_POST['price'] ?? 0;
+    $price = $_POST['price'] ?? 0.0;
     $state = $_POST['state'] ?? '';
     $city = $_POST['city'] ?? '';
     $selected_thumbnail = $_POST['selected_thumbnail'] ?? null;
 
-    $updateStmt = $conn->prepare("UPDATE listings SET Title = ?, Description = ?, Price = ?, State = ?, City = ?, Thumbnail_Image = ? WHERE Listing_ID = ? AND User_ID = ?");
-    $updateStmt->bind_param("ssdssiii", $title, $description, $price, $state, $city, $selected_thumbnail, $listing_id, $user_id);
-
-    if ($updateStmt->execute()) {
-        header("Location: user_dashboard.php");
-        exit();
+    // Validate form data
+    if (empty($title) || empty($description) || empty($state) || empty($city)) {
+        $error_message = "All fields must be filled out.";
     } else {
-        $error_message = "Error updating listing.";
+        // Update listing with the selected thumbnail
+        $updateStmt = $conn->prepare("
+            UPDATE listings 
+            SET Title = ?, Description = ?, Price = ?, State = ?, City = ?, Thumbnail_Image = ? 
+            WHERE Listing_ID = ? AND User_ID = ?
+        ");
+        $updateStmt->bind_param(
+            "ssdssiii",
+            $title,
+            $description,
+            $price,
+            $state,
+            $city,
+            $selected_thumbnail,
+            $listing_id,
+            $user_id
+        );
+
+        if ($updateStmt->execute()) {
+            header("Location: user_dashboard.php");
+            exit();
+        } else {
+            $error_message = "Error updating listing.";
+        }
+        $updateStmt->close();
     }
-    $updateStmt->close();
 }
+
 
 $conn->close();
 ?>
@@ -113,15 +134,16 @@ $conn->close();
 
         <!-- Image Selection -->
         <div id="imageSelectionContainer" class="image-selection-container">
-            <?php foreach ($images as $image): ?>
-                <img 
-                    src="<?= htmlspecialchars($image['Image_URL']); ?>" 
-                    class="thumbnail-image <?= $thumbnail_image === $image['Image_URL'] ? 'selected' : ''; ?>" 
-                    data-image-id="<?= htmlspecialchars($image['Image_URL']); ?>" 
-                    onclick="selectThumbnail(this)" 
-                    alt="Image for selection"
-                >
-            <?php endforeach; ?>
+        <?php foreach ($images as $image): ?>
+    <img 
+        src="<?= htmlspecialchars($image['Image_URL']); ?>" 
+        class="thumbnail-image <?= $thumbnail_image === $image['Image_URL'] ? 'selected' : ''; ?>" 
+        data-image-id="<?= htmlspecialchars($image['Image_URL']); ?>" 
+        onclick="selectThumbnail(this)" 
+        alt="Image for selection"
+    >
+<?php endforeach; ?>
+
         </div>
 
         <!-- Image Upload -->
@@ -140,11 +162,12 @@ $conn->close();
 
 <script>
     // Handle thumbnail selection
-    function selectThumbnail(imageElement) {
-        document.querySelectorAll('.thumbnail-image').forEach(img => img.classList.remove('selected'));
-        imageElement.classList.add('selected');
-        document.getElementById('selectedThumbnail').value = imageElement.getAttribute('data-image-id');
-    }
+        function selectThumbnail(imageElement) {
+    document.querySelectorAll('.thumbnail-image').forEach(img => img.classList.remove('selected'));
+    imageElement.classList.add('selected');
+    document.getElementById('selectedThumbnail').value = imageElement.getAttribute('data-image-id');
+}
+
 
     // Image upload preview
     document.querySelector('#images').addEventListener('change', function () {
