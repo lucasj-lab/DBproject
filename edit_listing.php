@@ -93,6 +93,8 @@ $conn->close();
     <h1>Edit Listing</h1>
     <form method="POST" enctype="multipart/form-data">
         <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
+        
+        <!-- Hidden input for selected thumbnail -->
         <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="<?= htmlspecialchars($thumbnail_image); ?>">
 
         <!-- Title -->
@@ -134,16 +136,15 @@ $conn->close();
 
         <!-- Image Selection -->
         <div id="imageSelectionContainer" class="image-selection-container">
-        <?php foreach ($images as $image): ?>
-    <img 
-        src="<?= htmlspecialchars($image['Image_URL']); ?>" 
-        class="thumbnail-image <?= $thumbnail_image === $image['Image_URL'] ? 'selected' : ''; ?>" 
-        data-image-id="<?= htmlspecialchars($image['Image_URL']); ?>" 
-        onclick="selectThumbnail(this)" 
-        alt="Image for selection"
-    >
-<?php endforeach; ?>
-
+            <?php foreach ($images as $image): ?>
+                <img 
+                    src="<?= htmlspecialchars($image['Image_URL']); ?>" 
+                    class="thumbnail-image <?= $thumbnail_image === $image['Image_URL'] ? 'selected' : ''; ?>" 
+                    data-image-id="<?= htmlspecialchars($image['Image_URL']); ?>" 
+                    onclick="selectThumbnail(this)" 
+                    alt="Image for selection"
+                >
+            <?php endforeach; ?>
         </div>
 
         <!-- Image Upload -->
@@ -161,12 +162,21 @@ $conn->close();
 </div>
 
 <script>
-    // Handle thumbnail selection
-        function selectThumbnail(imageElement) {
-    document.querySelectorAll('.thumbnail-image').forEach(img => img.classList.remove('selected'));
-    imageElement.classList.add('selected');
-    document.getElementById('selectedThumbnail').value = imageElement.getAttribute('data-image-id');
-}
+    // Function to handle thumbnail selection
+    function selectThumbnail(imageElement) {
+        // Remove 'selected' class from all images
+        document.querySelectorAll('.thumbnail-image').forEach(img => {
+            img.classList.remove('selected');
+        });
+
+        // Add 'selected' class to the clicked image
+        imageElement.classList.add('selected');
+
+        // Update the hidden input with the selected image URL
+        const selectedThumbnailInput = document.getElementById('selectedThumbnail');
+        selectedThumbnailInput.value = imageElement.getAttribute('data-image-id');
+    }
+
 
 
     // Image upload preview
