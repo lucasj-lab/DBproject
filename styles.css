@@ -2407,7 +2407,7 @@ select#state {
 }
 
 .thumbnail-image.selected {
-    border-color: white;
+    border-color: rgba(0, 0, 0, 0.698);
 }
 
         #imagePreviewContainer {
