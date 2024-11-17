@@ -25,9 +25,17 @@ function getAllListings($pdo) {
         LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
         ORDER BY listings.Date_Posted DESC
     ";
+
+    // Debug the SQL query
+    error_log("Executing query: $sql");
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch and debug the results
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    error_log("Query Results: " . json_encode($results));
+    return $results;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
