@@ -165,9 +165,8 @@ $conn->close();
                     </select>
                 </div>
             </div>
-          
             <div id="imagePreviewContainer"></div> <!-- Image Previews -->
-    </div>
+   
     <div class="file-upload-container">
         <label class="form-label" for="images"></label>
         <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif"
@@ -176,6 +175,7 @@ $conn->close();
         <span class="file-upload-text" id="file-upload-text"></span>
         <div class="btn-container">
         <button type="submit">Submit</button>
+        </div>   
     </div>
     </div>
     </form>
