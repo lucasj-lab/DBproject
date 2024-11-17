@@ -248,25 +248,6 @@ $conn->close();
         <h1 class="edit-listing-title">Edit Listing</h1>
         <form id="create-listing-form" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
-                    <!-- Image Gallery Section -->
-        <div class="image-gallery">
-            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image"
-                alt="Main Image">
-            <div class="thumbnail-container">
-                <?php foreach ($additionalImages as $image): ?>
-                    <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)"
-                        alt="Thumbnail">
-                <?php endforeach; ?>
-            </div>
-        </div>
-
-                <!-- Upload new images -->
-                <div class="file-upload-container">
-                    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-                    <label for="images" class="file-upload-button">Choose Files</label>
-                    <span class="file-upload-text" id="file-upload-text"></span>
-                </div>
-            </div>
                 <input type="text" id="title" name="title" placeholder="Title" value="<?= htmlspecialchars($title); ?>" required>
                 <textarea id="description" name="description" rows="4" placeholder="Description" required><?= htmlspecialchars($description); ?></textarea>
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" value="<?= htmlspecialchars($price); ?>" required>
@@ -286,6 +267,24 @@ $conn->close();
                     </select>
                 </div>
 
+                <!-- Display current images as a gallery -->
+                <div class="image-gallery">
+                    <?php foreach ($images as $image): ?>
+                        <div class="image-item">
+                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
+                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
+                            <label>Set as Thumbnail</label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Upload new images -->
+                <div class="file-upload-container">
+                    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+                    <label for="images" class="file-upload-button">Choose Files</label>
+                    <span class="file-upload-text" id="file-upload-text"></span>
+                </div>
+            </div>
             <div class="btn-container">
                 <button type="submit">Update</button>
             </div>
