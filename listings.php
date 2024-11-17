@@ -4,6 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require 'database_connection.php';
+
+// Function to fetch all listings
 function getAllListings($conn) {
     $sql = "
         SELECT 
@@ -24,36 +26,24 @@ function getAllListings($conn) {
         ORDER BY listings.Date_Posted DESC
     ";
 
-    error_log("Executing query: $sql");
-
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-
-    $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    error_log("Query Results: " . json_encode($results));
-
-    return $results;
-}
-
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
 
     $listings = [];
     while ($row = $result->fetch_assoc()) {
-        $row['Images'] = $row['Images'] ? explode(',', $row['Images']) : [];
         $listings[] = $row;
     }
 
-    $stmt->close();
     return $listings;
-
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
         $listings = getAllListings($conn);
 
         if (empty($listings)) {
+            error_log("No listings found");
             $response = ["message" => "No listings available."];
         } else {
             foreach ($listings as &$listing) {
@@ -62,11 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             }
             $response = $listings;
         }
+
         header('Content-Type: application/json');
         echo json_encode($response);
+
     } catch (Exception $e) {
         error_log("Error fetching listings: " . $e->getMessage());
-        echo json_encode(["error" => "Database error. Please try again later."]);
+        echo json_encode(["error" => "Error fetching listings."]);
     }
     exit();
 }
