@@ -4,7 +4,31 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require 'database_connection.php';
-require 'listing_queries.php';
+
+// Function to fetch all listings from the database
+function getAllListings($pdo) {
+    $sql = "
+        SELECT 
+            listings.Listing_ID,
+            listings.Title,
+            listings.Description,
+            listings.Price,
+            listings.Date_Posted,
+            listings.State,
+            listings.City,
+            categories.Category_Name,
+            users.Name AS User_Name,
+            images.Image_URL AS Thumbnail_Image
+        FROM listings
+        LEFT JOIN categories ON listings.Category_ID = categories.Category_ID
+        LEFT JOIN users ON listings.User_ID = users.User_ID
+        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+        ORDER BY listings.Date_Posted DESC
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
@@ -43,55 +67,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             fetchListings();
         });
 
-        
         function fetchListings() {
-    fetch('listings.php?fetchListings=true')
-        .then(response => response.json())
-        .then(data => {
-            console.log("Fetched Listings:", data); // Debug log
-            if (data.error) {
-                document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-            } else if (data.message) {
-                document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-            } else {
-                displayListings(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching listings:', error);
-            document.getElementById("listings").innerHTML =
-                "<p>Error loading listings. Please try again later.</p>";
-        });
-}
+            fetch('listings.php?fetchListings=true')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Listings:", data); // Debug log
+                    if (data.error) {
+                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+                    } else if (data.message) {
+                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+                    } else {
+                        displayListings(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching listings:', error);
+                    document.getElementById("listings").innerHTML =
+                        "<p>Error loading listings. Please try again later.</p>";
+                });
+        }
 
         function displayListings(listings) {
-    const listingsContainer = document.getElementById("listings");
-    listingsContainer.innerHTML = ""; // Clear previous content
+            const listingsContainer = document.getElementById("listings");
+            listingsContainer.innerHTML = ""; // Clear previous content
 
-    listings.forEach(listing => {
-        const listingDiv = document.createElement("div");
-        listingDiv.className = "listing-item";
+            listings.forEach(listing => {
+                const listingDiv = document.createElement("div");
+                listingDiv.className = "listing-item";
 
-        // Use Thumbnail_Image with a fallback
-        const thumbnail = listing.Thumbnail_Image || "no_image.png";
+                // Use Thumbnail_Image with a fallback
+                const thumbnail = listing.Thumbnail_Image || "uploads/no_image.png";
 
-        listingDiv.innerHTML = `
-            <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
-            <h3>${listing.Title}</h3>
-            <p><strong>Description:</strong> ${listing.Description}</p>
-            <p><strong>Price:</strong> $${listing.Price}</p>
-            <p><strong>Posted by:</strong> ${listing.User_Name}</p>
-            <p><strong>Category:</strong> ${listing.Category_Name}</p>
-            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-            <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-            <button type="button" class="pill-button" 
-                onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
-                View Listing
-            </button>
-        `;
-        listingsContainer.appendChild(listingDiv);
-    });
-}
+                listingDiv.innerHTML = `
+                    <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+                    <h3>${listing.Title}</h3>
+                    <p><strong>Description:</strong> ${listing.Description}</p>
+                    <p><strong>Price:</strong> $${listing.Price}</p>
+                    <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                    <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                    <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                    <button type="button" class="pill-button" 
+                        onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                        View Listing
+                    </button>
+                `;
+                listingsContainer.appendChild(listingDiv);
+            });
+        }
     </script>
 </head>
 
