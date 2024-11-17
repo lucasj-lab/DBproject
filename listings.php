@@ -2,23 +2,16 @@
 require 'database_connection.php';
 require 'listing_queries.php';
 
-// Handle AJAX request for fetching listings
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
         $listings = getAllListings($pdo);
 
-        // Check if listings exist
         if (empty($listings)) {
             $response = ["message" => "No listings available."];
         } else {
             foreach ($listings as &$listing) {
-                // Format the date
-                if (!empty($listing['Date_Posted'])) {
-                    $datePosted = new DateTime($listing['Date_Posted']);
-                    $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y');
-                } else {
-                    $listing['Formatted_Date'] = "Date not available";
-                }
+                $datePosted = $listing['Date_Posted'] ? new DateTime($listing['Date_Posted']) : null;
+                $listing['Formatted_Date'] = $datePosted ? $datePosted->format('l, F jS, Y') : "Date not available";
             }
             $response = $listings;
         }
@@ -26,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
         echo json_encode($response);
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
-        header('Content-Type: application/json');
         echo json_encode(["error" => "Database error. Please try again later."]);
     }
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,22 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         
         function fetchListings() {
-            fetch('listings.php?fetchListings=true')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
-                    } else if (data.message) {
-                        document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
-                    } else {
-                        displayListings(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
-                });
-        }
+    fetch('listings.php?fetchListings=true')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched Listings:", data); // Debug log
+            if (data.error) {
+                document.getElementById("listings").innerHTML = `<p>${data.error}</p>`;
+            } else if (data.message) {
+                document.getElementById("listings").innerHTML = `<p>${data.message}</p>`;
+            } else {
+                displayListings(data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching listings:', error);
+            document.getElementById("listings").innerHTML =
+                "<p>Error loading listings. Please try again later.</p>";
+        });
+}
+
         function displayListings(listings) {
     const listingsContainer = document.getElementById("listings");
     listingsContainer.innerHTML = ""; // Clear previous content
