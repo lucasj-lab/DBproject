@@ -260,11 +260,6 @@ $conn->close();
             </div>
         </div>
 
-                   
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
                 <!-- Upload new images -->
                 <div class="file-upload-container">
                     <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
