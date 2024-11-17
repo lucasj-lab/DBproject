@@ -123,6 +123,35 @@ $conn->close();
     <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
 
+                <!-- Thumbnail Selection -->
+                <div class="form-group">
+            <label>Thumbnail:</label>
+            <div class="thumbnail-selection">
+                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
+                <?php foreach ($additionalImages as $image): ?>
+                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
+                    <label for="thumb-<?= htmlspecialchars($image); ?>">
+                        <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
+                    </label>
+                <?php endforeach; ?>
+            </div>
+     
+     
+        <!-- Image Preview -->
+        <div id="imagePreviewContainer">
+            <?php foreach ($additionalImages as $image): ?>
+                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
+            <?php endforeach; ?>
+        </div>
+     
+        </div>
+        <!-- Image Upload -->
+        <div class="file-upload-container">
+            <label for="images">Upload New Images:</label>
+            <input type="file" id="images" name="images[]" multiple>
+        </div>
+
+
         <!-- Title -->
         <div class="form-group">
             <label for="title">Title:</label>
@@ -160,31 +189,6 @@ $conn->close();
             <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
         </div>
 
-        <!-- Thumbnail Selection -->
-        <div class="form-group">
-            <label>Thumbnail:</label>
-            <div class="thumbnail-selection">
-                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
-                <?php foreach ($additionalImages as $image): ?>
-                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
-                    <label for="thumb-<?= htmlspecialchars($image); ?>">
-                        <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
-                    </label>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <!-- Image Upload -->
-        <div class="file-upload-container">
-            <label for="images">Upload New Images:</label>
-            <input type="file" id="images" name="images[]" multiple>
-        </div>
-
-        <!-- Image Preview -->
-        <div id="imagePreviewContainer">
-            <?php foreach ($additionalImages as $image): ?>
-                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
-            <?php endforeach; ?>
-        </div>
 
         <!-- Submit Button -->
         <button type="submit" name="update_listing">Update Listing</button>
