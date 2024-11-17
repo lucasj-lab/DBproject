@@ -51,6 +51,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include 'header.php'; ?>
 
     <main class="dope-dashboard">
+        <div class="add a new listing button wrapper">
         <h1 class="dashboard-title">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
         <p><strong>Member Since:</strong>
@@ -104,6 +105,8 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tbody>
                 </table>
             </div>
+           <div> <a href="create_listing.php">New Listing</a></div>
+        </div>
         <?php else: ?>
             <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
         <?php endif; ?>
