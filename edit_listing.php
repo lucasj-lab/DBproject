@@ -131,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,6 +139,38 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add the .image-gallery CSS styles to your existing CSS file */
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .image-gallery img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .image-gallery .image-item {
+            position: relative;
+            text-align: center;
+        }
+
+        .image-gallery input[type="radio"] {
+            margin-top: 5px;
+        }
+
+        .image-gallery label {
+            font-size: 0.8rem;
+            display: block;
+        }
+    </style>
     <script>
         function updateCities() {
             const stateSelect = document.getElementById('state');
@@ -170,7 +201,8 @@ $conn->close();
 
 <body>
     <?php include 'header.php'; ?>
-    <div class="create-listing-container">
+
+    <div class="edit-listing-container">
         <h1 class="edit-listing-title">Edit Listing</h1>
         <form id="create-listing-form" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
@@ -193,9 +225,8 @@ $conn->close();
                     </select>
                 </div>
 
-                <!-- Display current images -->
-                <div class="current-images">
-                    <h3>Current Images</h3>
+                <!-- Display current images as a gallery -->
+                <div class="image-gallery">
                     <?php foreach ($images as $image): ?>
                         <div class="image-item">
                             <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
