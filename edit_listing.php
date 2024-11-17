@@ -126,10 +126,6 @@ $conn->close();
                 <!-- Thumbnail Selection -->
                 <div class="form-group">
             <label>Thumbnail:</label>
-            <div class="thumbnail-selection">
-                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
-                <?php foreach ($additionalImages as $image): ?>
-                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
                     <label for="thumb-<?= htmlspecialchars($image); ?>">
                         <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
                     </label>
@@ -186,7 +182,6 @@ $conn->close();
         <!-- City -->
         <div class="form-group">
             <label for="city">City:</label>
-            <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
         </div>
 
 
