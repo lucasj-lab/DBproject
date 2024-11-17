@@ -140,20 +140,42 @@ $conn->close();
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Styles for the image gallery */
-        .image-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+        /* Styling for the selected thumbnail */
+        .main-image-container {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .image-gallery .image-item {
+        .main-image {
+            width: 300px;
+            height: auto;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+
+        .main-image-label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Styling for the combined image gallery */
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .image-item {
             position: relative;
             text-align: center;
         }
 
-        .image-gallery img {
+        .image-item img {
             width: 100px;
             height: 100px;
             object-fit: cover;
@@ -161,49 +183,75 @@ $conn->close();
             border-radius: 5px;
         }
 
-        .image-gallery input[type="radio"] {
-            margin-top: 5px;
-        }
-
-        .image-gallery label {
-            font-size: 0.8rem;
+        .thumbnail-radio {
             display: block;
+            margin-top: 5px;
+            cursor: pointer;
         }
 
-        /* File upload section styling */
-        .file-upload-container {
-            margin-top: 20px;
-            text-align: center;
+        .preview-image {
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .preview-image:hover {
+            border-color: lightgray;
+        }
+
+        .preview-image.selected {
+            border-color: rgba(0, 0, 0, 0.698);
         }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const imageInput = document.getElementById("images");
             const galleryContainer = document.querySelector(".image-gallery");
+            const mainImageContainer = document.querySelector(".main-image-container");
+            const mainImage = document.querySelector(".main-image");
 
+            // Handle new image previews
             imageInput.addEventListener("change", function () {
                 const files = Array.from(imageInput.files);
 
-                // Remove previous previews
-                const previewItems = galleryContainer.querySelectorAll(".preview-item");
-                previewItems.forEach(item => item.remove());
+                // Remove existing preview items
+                galleryContainer.querySelectorAll(".preview-item").forEach(item => item.remove());
 
-                // Display new previews
-                files.forEach(file => {
+                // Add new previews
+                files.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        const previewDiv = document.createElement("div");
-                        previewDiv.classList.add("image-item", "preview-item"); // Mark as preview for removal on new upload
+                        const imageItem = document.createElement("div");
+                        imageItem.classList.add("image-item", "preview-item"); // Mark as preview for easier management
 
-                        previewDiv.innerHTML = `
-                            <img src="${e.target.result}" alt="New Image Preview">
-                            <label>New Image</label>
-                        `;
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-image");
 
-                        galleryContainer.appendChild(previewDiv);
+                        const radio = document.createElement("input");
+                        radio.type = "radio";
+                        radio.name = "selected_thumbnail";
+                        radio.value = `preview-${index}`; // Unique value for previews
+                        radio.classList.add("thumbnail-radio");
+
+                        // Update main image when this radio is selected
+                        radio.addEventListener("change", function () {
+                            mainImage.src = img.src;
+                        });
+
+                        imageItem.appendChild(img);
+                        imageItem.appendChild(radio);
+                        galleryContainer.appendChild(imageItem);
                     };
                     reader.readAsDataURL(file);
                 });
+            });
+
+            // Handle existing image thumbnail selection
+            galleryContainer.addEventListener("change", function (e) {
+                if (e.target.name === "selected_thumbnail") {
+                    const selectedImage = e.target.closest(".image-item").querySelector("img").src;
+                    mainImage.src = selectedImage;
+                }
             });
         });
     </script>
@@ -212,7 +260,7 @@ $conn->close();
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="edit-listing-container">
+    <div class="create-listing-container">
         <h1 class="edit-listing-title">Edit Listing</h1>
         <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
@@ -220,7 +268,7 @@ $conn->close();
                 <textarea id="description" name="description" rows="4" placeholder="Description" required><?= htmlspecialchars($description); ?></textarea>
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" value="<?= htmlspecialchars($price); ?>" required>
 
-                <select id="state" name="state" onchange="updateCities()" required>
+                <select id="state" name="state" required>
                     <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
                     <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
                     <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
@@ -235,14 +283,19 @@ $conn->close();
                     </select>
                 </div>
 
+                <!-- Main Thumbnail Section -->
+                <div class="main-image-container">
+                    <img src="<?= htmlspecialchars($thumbnailImage); ?>" alt="Selected Thumbnail" class="main-image">
+                    <p class="main-image-label">Selected Thumbnail</p>
+                </div>
+
                 <!-- Combined Image Gallery -->
                 <div class="image-gallery">
                     <!-- Existing Images -->
                     <?php foreach ($images as $image): ?>
                         <div class="image-item">
                             <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
-                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
-                            <label>Set as Thumbnail</label>
+                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?> class="thumbnail-radio">
                         </div>
                     <?php endforeach; ?>
                 </div>
