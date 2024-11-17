@@ -284,10 +284,11 @@ $conn->close();
                     <label for="images" class="file-upload-button">Choose Files</label>
                     <span class="file-upload-text" id="file-upload-text"></span>
                 </div>
-            </div>
-            <div class="btn-container">
+                <div class="btn-container">
                 <button type="submit">Update</button>
             </div>
+            </div>
+         
         </form>
     </div>
 </body>
