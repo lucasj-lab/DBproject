@@ -2,7 +2,6 @@
 session_start();
 require 'database_connection.php';
 
-// Initialize MySQLi connection and process the form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
@@ -24,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['message'] = "Password must be at least 8 characters long.";
         $_SESSION['message_type'] = 'error';
     } else {
-        // Check if email is already registered using PDO
+        // Check if email is already registered
         $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
         $stmt->bindValue(1, $email, PDO::PARAM_STR);
         $stmt->execute();
@@ -34,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['message'] = "Email is already registered.";
             $_SESSION['message_type'] = 'error';
         } else {
-            // Insert new user using PDO
+            // Insert new user
             $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $stmt->bindValue(1, $name, PDO::PARAM_STR);
@@ -45,6 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Sign up successful! You can now log in.";
                 $_SESSION['message_type'] = 'success';
+
+                // Redirect to login page
+                header("Location: login.php");
+                exit();
             } else {
                 $_SESSION['message'] = "Sign up failed: " . $stmt->errorInfo()[2];
                 $_SESSION['message_type'] = 'error';
@@ -69,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="signup-container">
         <h2>Create an Account</h2>
 
-        <!-- Display session messages if they exist -->
+        <!-- Display session messages -->
         <?php if (isset($_SESSION['message'])): ?>
             <div class="message-box <?php echo ($_SESSION['message_type'] === 'success') ? 'success' : 'error'; ?>">
                 <p><?php echo $_SESSION['message']; ?></p>
@@ -95,24 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </form>
     </div>
 
-      
-    </div>
-
     <?php include 'footer.php'; ?>
-
-    <script>
-        // JavaScript for client-side password match validation
-        document.querySelector("form").addEventListener("submit", function (e) {
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm_password").value;
-
-            if (password !== confirmPassword) {
-                e.preventDefault(); // Prevent form submission
-                alert("Passwords do not match. Please try again.");
-            }
-        });
-    </script>
-
 </body>
-
 </html>
