@@ -9,51 +9,62 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirmPassword = isset($_POST['confirm_password']) ? trim($_POST['confirm_password']) : '';
     $dateJoined = date('Y-m-d');
 
-    // Basic validation
+    // Validation
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
         $_SESSION['message'] = "All fields are required.";
         $_SESSION['message_type'] = 'error';
+        header("Location: signup.php");
+        exit();
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['message'] = "Invalid email format.";
         $_SESSION['message_type'] = 'error';
+        header("Location: signup.php");
+        exit();
     } elseif ($password !== $confirmPassword) {
         $_SESSION['message'] = "Passwords do not match.";
         $_SESSION['message_type'] = 'error';
-    } elseif (strlen($password) < 8) {
-        $_SESSION['message'] = "Password must be at least 8 characters long.";
-        $_SESSION['message_type'] = 'error';
-    } else {
-        // Check if email is already registered
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
-        $stmt->bindValue(1, $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        header("Location: signup.php");
+        exit();
+    }
 
-        if ($result) {
+    try {
+        // Check if email already exists
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
             $_SESSION['message'] = "Email is already registered.";
             $_SESSION['message_type'] = 'error';
-        } else {
-            // Insert new user
-            $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined) VALUES (?, ?, ?, ?)");
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bindValue(1, $name, PDO::PARAM_STR);
-            $stmt->bindValue(2, $email, PDO::PARAM_STR);
-            $stmt->bindValue(3, $hashed_password, PDO::PARAM_STR);
-            $stmt->bindValue(4, $dateJoined, PDO::PARAM_STR);
-
-            if ($stmt->execute()) {
-                $_SESSION['message'] = "Sign up successful! You can now log in.";
-                $_SESSION['message_type'] = 'success';
-
-                // Redirect to login page
-                header("Location: login.php");
-                exit();
-            } else {
-                $_SESSION['message'] = "Sign up failed: " . $stmt->errorInfo()[2];
-                $_SESSION['message_type'] = 'error';
-            }
+            header("Location: signup.php");
+            exit();
         }
-        $stmt->closeCursor();
+
+        // Create a new user
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("INSERT INTO user (Name, Email, Password, Date_Joined, Is_Verified) VALUES (?, ?, ?, ?, 0)");
+        $stmt->execute([$name, $email, $hashed_password, $dateJoined]);
+
+        // Generate a verification token
+        $token = bin2hex(random_bytes(16));
+        $userId = $pdo->lastInsertId();
+        $stmt = $pdo->prepare("INSERT INTO email_verifications (User_ID, Token) VALUES (?, ?)");
+        $stmt->execute([$userId, $token]);
+
+        // Send verification email
+        $verificationLink = "http://yourdomain.com/verify_email.php?token=$token";
+        $subject = "Verify Your Email";
+        $message = "Click the following link to verify your email: $verificationLink";
+        mail($email, $subject, $message); // Ensure mail() is configured on your server
+
+        $_SESSION['message'] = "Sign up successful! Please check your email to verify your account.";
+        $_SESSION['message_type'] = 'success';
+        header("Location: login.php");
+        exit();
+    } catch (Exception $e) {
+        error_log("Error during signup: " . $e->getMessage());
+        $_SESSION['message'] = "An error occurred. Please try again.";
+        $_SESSION['message_type'] = 'error';
+        header("Location: signup.php");
+        exit();
     }
 }
 ?>
