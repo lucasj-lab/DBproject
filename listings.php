@@ -47,7 +47,7 @@ function getAllListings($conn) {
 
     $stmt->close();
     return $listings;
-}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
