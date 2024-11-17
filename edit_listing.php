@@ -157,12 +157,3 @@ $conn->close();
             </div>
         </body>
         </html>";
-        exit();
-    } else {
-        echo "Error updating listing.";
-    }
-    $updateStmt->close();
-}
-
-$conn->close();
-?>
