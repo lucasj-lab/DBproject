@@ -129,19 +129,12 @@ $conn->close();
             <div class="thumbnail-selection">
                 <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
                 <?php foreach ($additionalImages as $image): ?>
+                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
                     <label for="thumb-<?= htmlspecialchars($image); ?>">
                         <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-option" alt="Thumbnail Option">
-                </label>
+                    </label>
+                <?php endforeach; ?>
             </div>
-     
-     
-        <!-- Image Preview -->
-        <div id="imagePreviewContainer">
-            <?php foreach ($additionalImages as $image): ?>
-                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
-            <?php endforeach; ?>
-        </div>
-     
         </div>
         <!-- Image Upload -->
         <div class="file-upload-container">
@@ -149,6 +142,12 @@ $conn->close();
             <input type="file" id="images" name="images[]" multiple>
         </div>
 
+        <!-- Image Preview -->
+        <div id="imagePreviewContainer">
+            <?php foreach ($additionalImages as $image): ?>
+                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
+            <?php endforeach; ?>
+        </div>
 
         <!-- Title -->
         <div class="form-group">
