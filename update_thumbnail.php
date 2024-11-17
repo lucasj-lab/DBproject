@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'database_connection.php'; // Include your database connection
+require 'database_connection.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -20,16 +20,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        // Prepare and execute the query to update the thumbnail
-        $sql = "UPDATE listings SET Thumbnail_Image = :thumbnail WHERE Listing_ID = :listing_id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['thumbnail' => $newThumbnail, 'listing_id' => $listingId]);
+        // Start a transaction
+        $pdo->beginTransaction();
 
-        // Redirect to user dashboard with a success message
+        // Reset all thumbnails for the given listing
+        $resetSql = "UPDATE images SET Is_Thumbnail = 0 WHERE Listing_ID = :listing_id";
+        $resetStmt = $pdo->prepare($resetSql);
+        $resetStmt->execute(['listing_id' => $listingId]);
+
+        // Set the new thumbnail
+        $updateSql = "UPDATE images SET Is_Thumbnail = 1 WHERE Image_URL = :image_url AND Listing_ID = :listing_id";
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute(['image_url' => $newThumbnail, 'listing_id' => $listingId]);
+
+        // Optionally update the listings table for a quick reference to the thumbnail
+        $listingsSql = "UPDATE listings SET Thumbnail_Image = :thumbnail WHERE Listing_ID = :listing_id";
+        $listingsStmt = $pdo->prepare($listingsSql);
+        $listingsStmt->execute(['thumbnail' => $newThumbnail, 'listing_id' => $listingId]);
+
+        // Commit the transaction
+        $pdo->commit();
+
+        // Redirect with a success message
         header("Location: user_dashboard.php?msg=Thumbnail updated successfully");
         exit();
     } catch (PDOException $e) {
-        // Log the error and redirect with an error message
+        // Rollback transaction on failure
+        $pdo->rollBack();
         error_log("Database error: " . $e->getMessage());
         header("Location: user_dashboard.php?msg=Failed to update thumbnail. Please try again.");
         exit();
@@ -39,4 +56,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: user_dashboard.php?msg=Invalid request.");
     exit();
 }
-?>
