@@ -7,6 +7,21 @@ require 'database_connection.php';
 
 $error_message = ""; // Initialize error message variable
 
+$stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
+$stmt->execute([$email]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($user && password_verify($password, $user['Password'])) {
+    if ($user['Email_Verified']) {
+        $_SESSION['user_id'] = $user['User_ID'];
+        header("Location: user_dashboard.php");
+        exit();
+    } else {
+        $_SESSION['message'] = "Please verify your email before logging in.";
+        $_SESSION['message_type'] = 'error';
+        header("Location: login.php");
+
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
@@ -21,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = :email");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-
+    }
+}
         // Fetch the user data
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -40,6 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->closeCursor(); // Close the statement after use
     }
 }
+    
+
 ?>
 
 <!DOCTYPE html>
