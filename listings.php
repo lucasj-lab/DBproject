@@ -7,6 +7,7 @@ require 'database_connection.php';
 
 // Function to fetch all listings
 function getAllListings($conn) {
+    // Define the SQL query
     $sql = "
         SELECT 
             listings.Listing_ID,
@@ -26,7 +27,16 @@ function getAllListings($conn) {
         ORDER BY listings.Date_Posted DESC
     ";
 
+    // Debugging log for the query
+    error_log("Executing SQL Query: $sql");
+
+    // Prepare and execute the query
     $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        throw new Exception("SQL preparation failed: " . $conn->error);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
 
