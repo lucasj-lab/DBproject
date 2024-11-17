@@ -248,13 +248,19 @@ $conn->close();
         <h1 class="edit-listing-title">Edit Listing</h1>
         <form id="create-listing-form" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
-                   <!-- Display current images as a gallery -->
-                   <div class="image-gallery">
-                    <?php foreach ($images as $image): ?>
-                        <div class="image-item">
-                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
-                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
-                            <label>Set as Thumbnail</label>
+                    <!-- Image Gallery Section -->
+        <div class="image-gallery">
+            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image"
+                alt="Main Image">
+            <div class="thumbnail-container">
+                <?php foreach ($additionalImages as $image): ?>
+                    <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)"
+                        alt="Thumbnail">
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+                   
                         </div>
                     <?php endforeach; ?>
                 </div>
