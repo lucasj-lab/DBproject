@@ -1,121 +1,156 @@
 <?php
-// Start the session to check if the user is logged in, if needed
-session_start();
-
-// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require 'database_connection.php';
-require 'listing_queries.php'; 
 
-// Fetch search term from the request
-$searchTerm = $_GET['q'] ?? ''; // Using GET for search term
-$searchTermWildcard = '%' . $searchTerm . '%';
+// Get the search query from the request
+$searchQuery = $_GET['q'] ?? '';
 
-// SQL query to fetch listings based on search term
-$sql = "
+// Prepare and execute the query to fetch listings that match the search query
+$stmt = $conn->prepare("
     SELECT 
-        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-        user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+        l.Listing_ID, l.Title, l.Description, l.Price, l.Date_Posted,
+        u.Name AS User_Name, c.Category_Name, l.State, l.City,
+        GROUP_CONCAT(i.Image_URL) AS Images
     FROM 
-        listings
+        listings l
     JOIN 
-        user ON listings.User_ID = user.User_ID
+        user u ON l.User_ID = u.User_ID
     JOIN 
-        category ON listings.Category_ID = category.Category_ID
+        category c ON l.Category_ID = c.Category_ID
     LEFT JOIN 
-        images ON listings.Listing_ID = images.Listing_ID
+        images i ON l.Listing_ID = i.Listing_ID
     WHERE 
-        listings.Title LIKE :searchTerm OR listings.Description LIKE :searchTerm
+        l.Title LIKE CONCAT('%', ?, '%') OR 
+        l.Description LIKE CONCAT('%', ?, '%') OR 
+        c.Category_Name LIKE CONCAT('%', ?, '%') OR 
+        l.City LIKE CONCAT('%', ?, '%') OR 
+        l.State LIKE CONCAT('%', ?, '%')
+    GROUP BY 
+        l.Listing_ID
     ORDER BY 
-        listings.Date_Posted DESC
-";
+        l.Date_Posted DESC
+");
+$stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+$stmt->execute();
+$result = $stmt->get_result();
 
-try {
-    // Prepare and execute the query using PDO
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':searchTerm', $searchTermWildcard, PDO::PARAM_STR);
-    $stmt->execute();
-
-    // Fetch the listings
-    $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Format the date for each listing
-    foreach ($listings as &$listing) {
-        if (!empty($listing['Date_Posted'])) {
-            $datePosted = new DateTime($listing['Date_Posted']);
-            $listing['Formatted_Date'] = $datePosted->format('l, F jS, Y'); // Format the date
-        } else {
-            $listing['Formatted_Date'] = "Date not available";
-        }
-    }
-
-    // If no listings are found
-    if (empty($listings)) {
-        $listings = ["message" => "No listings found for your search."];
-    }
-
-} catch (PDOException $e) {
-    // Handle any PDO exceptions
-    echo "Error: " . $e->getMessage();
-    exit;
+// Prepare listings for display
+$listings = [];
+while ($row = $result->fetch_assoc()) {
+    $row['Images'] = $row['Images'] ? explode(',', $row['Images']) : [];
+    $listings[] = $row;
 }
 
-// Close the database connection
-$pdo = null;
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-
-    <header>
-        <?php include 'header.php'; ?>
-    </header>
-
-    <script>
-        function toggleMobileMenu() {
-            document.getElementById("mobileMenu").classList.toggle("active");
+    <title>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</title>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+    <style>
+        .listing-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
-    </script>
 
-    <main>
-        <section id="listings">
-            <?php if (!empty($listings[0]['Listing_ID'])): ?>
+        .listing-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .listing-price, .listing-user, .listing-location, .listing-date {
+            margin: 5px 0;
+        }
+
+        .image-gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-gallery img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .image-gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .image-gallery::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .image-gallery::-webkit-scrollbar-track {
+            background: #f9f9f9;
+        }
+
+        .view-button {
+            display: block;
+            margin: 10px 0;
+            padding: 8px 12px;
+            background-color: #1a73e8;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .view-button:hover {
+            background-color: #fbbc04;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<?php include 'header.php'; ?>
+<main>
+    <div class="listings">
+        <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
+        <?php if (!empty($listings)): ?>
+            <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
-                    <div class="listing-item">
-                        <img src="<?= htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
-                        <h3><?= htmlspecialchars($listing['Title']); ?></h3>
-                        <p><strong>Price:</strong> $<?= htmlspecialchars($listing['Price']); ?></p>
-                        <p><strong>Posted by:</strong> <?= htmlspecialchars($listing['User_Name']); ?></p>
-                        <p><strong>Category:</strong> <?= htmlspecialchars($listing['Category_Name']); ?></p>
-                        <p><strong>Location:</strong> <?= htmlspecialchars($listing['City']); ?>, <?= htmlspecialchars($listing['State']); ?></p>
-                        <p><strong>Posted on:</strong> <?= htmlspecialchars($listing['Formatted_Date']); ?></p>
-                        <button type="button" class="pill-button"
-                            onclick="window.location.href='listing_details.php?id=<?= isset($listing['Listing_ID']) ? htmlspecialchars($listing['Listing_ID']) : 0; ?>'">
-                            View Listing
-                        </button>
+                    <div class="listing-container">
+                        <div class="listing-title"><?php echo htmlspecialchars($listing['Title']); ?></div>
+                        <div class="listing-price">Price: $<?php echo htmlspecialchars($listing['Price']); ?></div>
+                        <div class="listing-user">Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></div>
+                        <div class="listing-location">Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></div>
+                        <div class="listing-date">Posted on: <?php echo htmlspecialchars($listing['Date_Posted']); ?></div>
+
+                        <!-- Image Gallery -->
+                        <?php if (!empty($listing['Images'])): ?>
+                            <div class="image-gallery">
+                                <?php foreach ($listing['Images'] as $image): ?>
+                                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Listing Image">
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p>No images available for this listing.</p>
+                        <?php endif; ?>
+
+                        <a href="listing_details.php?listing_id=<?php echo $listing['Listing_ID']; ?>" class="view-button">View Listing</a>
                     </div>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <p><?= htmlspecialchars($listings['message']); ?></p>
-            <?php endif; ?>
-        </section>
-    </main>
-
-    <footer>
-        <?php include 'footer.php'; ?>
-    </footer>
-
+            </div>
+        <?php else: ?>
+            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
+        <?php endif; ?>
+    </div>
+</main>
+<?php include 'footer.php'; ?>
 </body>
-
 </html>
