@@ -1,4 +1,6 @@
 
+<?php
+
 function generateCategoryOptions($conn, $selectedCategory = null) {
     $stmt = $conn->prepare("SELECT Category_ID, Category_Name FROM category");
     $stmt->execute();
@@ -10,3 +12,4 @@ function generateCategoryOptions($conn, $selectedCategory = null) {
     }
     return $options;
 }
+?>

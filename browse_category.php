@@ -1,51 +1,52 @@
 <?php 
-// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Include the database connection
 require 'database_connection.php';
-require 'listing_queries.php';
-// Check if category is set in the GET request
-$category = $_GET['category'] ?? ''; // Set $category from URL or default to an empty string
 
-// Prepare and execute a query to fetch listings by category name
+// Check if category is set in the GET request
+$category = $_GET['category'] ?? '';
+
+// Prepare and execute the query
 $stmt = $conn->prepare("
     SELECT 
-        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-        user.Name AS User_Name, category.Category_Name, listings.State, listings.City, images.Image_URL
+        l.Listing_ID, l.Title, l.Description, l.Price, l.Date_Posted, 
+        u.Name AS User_Name, c.Category_Name, l.State, l.City,
+        GROUP_CONCAT(i.Image_URL) AS Images
     FROM 
-        listings
+        listings l
     JOIN 
-        user ON listings.User_ID = user.User_ID
+        user u ON l.User_ID = u.User_ID
     JOIN 
-        category ON listings.Category_ID = category.Category_ID
+        category c ON l.Category_ID = c.Category_ID
     LEFT JOIN 
-        images ON listings.Listing_ID = images.Listing_ID
+        images i ON l.Listing_ID = i.Listing_ID
     WHERE 
-        category.Category_Name = ?
+        c.Category_Name = ?
+    GROUP BY 
+        l.Listing_ID
     ORDER BY 
-        listings.Date_Posted DESC
+        l.Date_Posted DESC
 ");
 $stmt->bind_param("s", $category);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Prepare listings for display
 $listings = [];
 while ($row = $result->fetch_assoc()) {
+    // Convert image URLs into an array
+    $row['Images'] = $row['Images'] ? explode(',', $row['Images']) : [];
     $listings[] = $row;
 }
 
 $stmt->close();
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Browse <?php echo htmlspecialchars($category ?? ''); ?> Listings</title>
+    <title>Browse <?php echo htmlspecialchars($category); ?> Listings</title>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -57,22 +58,20 @@ $conn->close();
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
                         <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
-                        <img src="<?php echo htmlspecialchars($listing['Image_URL'] ?? 'no_image.png'); ?>" alt="Listing Image" class="listing-image">
-                        <h3><?php echo htmlspecialchars($listing['Title'] ?? ''); ?></h3>
-                        <p>Price: $<?php echo htmlspecialchars($listing['Price'] ?? ''); ?></p>
-                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name'] ?? ''); ?></p>
+                        <img src="<?php echo htmlspecialchars($listing['Images'][0] ?? 'no_image.png'); ?>" alt="Thumbnail" class="listing-image">
+                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+                        <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                         <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
-                        <p>Posted on: <?= htmlspecialchars($listing['Formatted_Date'] ?? ''); ?></p> 
                         <button type="submit" class="pill-button">View Listing</button>
                     </form>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>No listings found in the <?php echo htmlspecialchars($category ?? ''); ?> category.</p>
+            <p>No listings found in the <?php echo htmlspecialchars($category); ?> category.</p>
         <?php endif; ?>
     </div>
 </main>
-
-    <?php include 'footer.php'; ?>
+<?php include 'footer.php'; ?>
 </body>
 </html>
