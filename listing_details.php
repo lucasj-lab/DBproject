@@ -48,12 +48,14 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listing Details</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <?php include 'header.php'; ?>
 
@@ -62,15 +64,12 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
 
         <!-- Image Gallery Section -->
         <div class="image-gallery">
-            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
+            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image"
+                alt="Main Image">
             <div class="thumbnail-container">
                 <?php foreach ($additionalImages as $image): ?>
-                    <img 
-                        src="<?= htmlspecialchars($image); ?>" 
-                        class="thumbnail-image" 
-                        onclick="changeMainImage(this.src)" 
-                        alt="Thumbnail"
-                    >
+                    <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)"
+                        alt="Thumbnail">
                 <?php endforeach; ?>
             </div>
         </div>
@@ -102,7 +101,9 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
                 <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
             </div>
         </div>
-
+        <div> <a href="user_profile.php?user_id=<?= $listing['User_ID'] ?>">
+                View Seller's Profile
+            </a></div>
         <!-- Back to Listings Button -->
         <div class="btn-container">
             <a href="listings.php" class="pill-button">Back to Listings</a>
@@ -118,4 +119,5 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
         }
     </script>
 </body>
+
 </html>
