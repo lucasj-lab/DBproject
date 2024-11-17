@@ -30,7 +30,8 @@ ini_set('display_errors', 1);
 require 'database_connection.php';
 
 // Function to get Category_ID from the Category table
-function getCategoryID($conn, $categoryName) {
+function getCategoryID($conn, $categoryName)
+{
     $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
     $stmt->bind_param("s", $categoryName);
     $stmt->execute();
@@ -121,61 +122,65 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Listing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <?php include 'header.php'; ?>
     <div class="create-listing-container">
-    <h1 class="edit-listing-title">Create New Listing</h1>
-    <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
-        <div class="listing-form-group">
-            <select id="category" name="category" required>
-                <option value="">--Select Category--</option>
-                <option value="Auto">Auto</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Furniture">Furniture</option>
-                <option value="Other">Other</option>
-            </select>
-
-            <input type="text" id="title" name="title" placeholder="Title" required>
-            <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
-            <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
-
-            <select id="state" name="state" onchange="updateCities()" required>
-                <option value="">--Select State--</option>
-                <option value="AL">Alabama</option>
-                <option value="AK">Alaska</option>
-                <option value="AZ">Arizona</option>
-                <option value="AR">Arkansas</option>
-                <option value="CA">California</option>
-                <option value="CO">Colorado</option>
-                <!-- Add other states as needed -->
-            </select>
-
-            <div class="listing-city-group">
-                <select id="city-dropdown" name="city" required>
-                    <option value="">--Select City--</option>
+        <h1 class="edit-listing-title">Create New Listing</h1>
+        <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
+            <div class="listing-form-group">
+                <select id="category" name="category" required>
+                    <option value="">--Select Category--</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Other">Other</option>
                 </select>
-            </div>
 
-            <div class="file-upload-container">
-            <label class="form-label" for="images"></label>
-            <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-            <label for="images" class="file-upload-button">Choose Files</label>
-            <span class="file-upload-text" id="file-upload-text"></span>
-        </div>
-        <div id="imagePreviewContainer"></div> <!-- Image Previews -->
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+
+                <select id="state" name="state" onchange="updateCities()" required>
+                    <option value="">--Select State--</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <!-- Add other states as needed -->
+                </select>
+
+                <div class="listing-city-group">
+                    <select id="city-dropdown" name="city" required>
+                        <option value="">--Select City--</option>
+                    </select>
+                </div>
+            </div>
+          
+            <div id="imagePreviewContainer"></div> <!-- Image Previews -->
     </div>
-    <div class="btn-container">
+    <div class="file-upload-container">
+        <label class="form-label" for="images"></label>
+        <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif"
+            multiple>
+        <label for="images" class="file-upload-button">Choose Files</label>
+        <span class="file-upload-text" id="file-upload-text"></span>
+        <div class="btn-container">
         <button type="submit">Submit</button>
     </div>
-</form>
-</div>       
-</div>
+    </div>
+    </form>
+    </div>
+    </div>
     </form>
 
     <script>
@@ -212,57 +217,57 @@ $conn->close();
         }
 
         // Debugging: Ensure JavaScript is loaded and functions are called correctly
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             console.log("JavaScript loaded, ready to update cities.");
         });
         function updateCities() {
-    const stateSelect = document.getElementById('state');
-    const cityDropdown = document.getElementById('city-dropdown');
-    const selectedState = stateSelect.value;
+            const stateSelect = document.getElementById('state');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const selectedState = stateSelect.value;
 
-    console.log("Selected state:", selectedState); // Debugging log
+            console.log("Selected state:", selectedState); // Debugging log
 
-    // Clear previous city options
-    cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+            // Clear previous city options
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
 
-    // Populate city dropdown if a valid state is selected
-    if (selectedState && statesAndCities[selectedState]) {
-        const cities = statesAndCities[selectedState];
-        cities.forEach(city => {
-            const option = document.createElement('option');
-            option.value = city;
-            option.textContent = city;
-            cityDropdown.appendChild(option);
+            // Populate city dropdown if a valid state is selected
+            if (selectedState && statesAndCities[selectedState]) {
+                const cities = statesAndCities[selectedState];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
+                });
+                console.log("Cities added:", cities); // Debugging log
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.querySelector("input[name='images[]']");
+            const previewContainer = document.getElementById("imagePreviewContainer");
+            const fileText = document.getElementById("file-upload-text");
+
+            imageInput.addEventListener("change", function () {
+                previewContainer.innerHTML = ""; // Clear previous previews
+                fileText.textContent = this.files.length > 0 ? `${this.files.length} files selected` : "No files chosen";
+
+                Array.from(this.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                // Ensure the container respects scrollable behavior
+                previewContainer.scrollLeft = 0; // Reset scroll position when new images are loaded
+            });
         });
-        console.log("Cities added:", cities); // Debugging log
-    }
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const imageInput = document.querySelector("input[name='images[]']");
-    const previewContainer = document.getElementById("imagePreviewContainer");
-    const fileText = document.getElementById("file-upload-text");
-
-    imageInput.addEventListener("change", function () {
-        previewContainer.innerHTML = ""; // Clear previous previews
-        fileText.textContent = this.files.length > 0 ? `${this.files.length} files selected` : "No files chosen";
-
-        Array.from(this.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // Ensure the container respects scrollable behavior
-        previewContainer.scrollLeft = 0; // Reset scroll position when new images are loaded
-    });
-});
 
 
         function showSuccessModal() {
@@ -275,23 +280,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-</script>
+    </script>
 
-<style>
-    #imagePreviewContainer {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
+    <style>
+        #imagePreviewContainer {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-    .preview-image {
-        max-width: 100px;
-        max-height: 100px;
-        object-fit: cover;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-</style>
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
 
 
 </body>
