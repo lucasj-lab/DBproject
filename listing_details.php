@@ -1,6 +1,5 @@
 <?php
 require 'database_connection.php';
-require 'listing_queries.php';
 
 // Validate and get the listing ID from the URL
 if (isset($_GET['listing_id']) && is_numeric($_GET['listing_id'])) {
@@ -9,15 +8,42 @@ if (isset($_GET['listing_id']) && is_numeric($_GET['listing_id'])) {
     die("Error: Invalid or missing listing ID.");
 }
 
-// Fetch the listing details
-$listing = getListingDetails($pdo, $listing_id);
+// Fetch the listing details, including the thumbnail and additional images
+$sql = "
+    SELECT 
+        l.Listing_ID, 
+        l.Title, 
+        l.Description, 
+        l.Price, 
+        l.State, 
+        l.City, 
+        i.Image_URL AS Thumbnail_Image
+    FROM 
+        listings l
+    LEFT JOIN 
+        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    WHERE 
+        l.Listing_ID = :listing_id
+";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['listing_id' => $listing_id]);
+$listing = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (empty($listing)) {
+// Check if the listing exists
+if (!$listing) {
     die("Error: Listing not found.");
 }
 
-$thumbnail = htmlspecialchars($listing['Thumbnail_Image']);
-$additionalImages = $listing['Images'];
+// Fetch additional images
+$images_sql = "
+    SELECT Image_URL 
+    FROM images 
+    WHERE Listing_ID = :listing_id
+";
+$images_stmt = $pdo->prepare($images_sql);
+$images_stmt->execute(['listing_id' => $listing_id]);
+$additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
+
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +64,7 @@ $additionalImages = $listing['Images'];
         <div class="image-gallery">
             <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
             <div class="thumbnail-container">
-                <?php foreach ($listing['Images'] as $image): ?>
+                <?php foreach ($additionalImages as $image): ?>
                     <img 
                         src="<?= htmlspecialchars($image); ?>" 
                         class="thumbnail-image" 
@@ -93,5 +119,3 @@ $additionalImages = $listing['Images'];
     </script>
 </body>
 </html>
-
-

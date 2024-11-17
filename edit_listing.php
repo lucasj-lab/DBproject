@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require 'database_connection.php';
 
+
 // Check if listing_id is provided in the URL
 if (!isset($_GET['listing_id'])) {
     die("No listing ID provided.");
@@ -53,24 +54,48 @@ $imageStmt->close();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle thumbnail selection
+    if (isset($_POST['selected_thumbnail'])) {
+        $selectedThumbnail = $_POST['selected_thumbnail'];
+
+        // Reset all Is_Thumbnail flags for the listing
+        $resetSql = "UPDATE images SET Is_Thumbnail = 0 WHERE Listing_ID = ?";
+        $stmt = $conn->prepare($resetSql);
+        $stmt->bind_param("i", $listing_id);
+        $stmt->execute();
+
+        // Set the selected image as the thumbnail
+        $updateSql = "UPDATE images SET Is_Thumbnail = 1 WHERE Image_URL = ? AND Listing_ID = ?";
+        $stmt = $conn->prepare($updateSql);
+        $stmt->bind_param("si", $selectedThumbnail, $listing_id);
+        $stmt->execute();
+
+        // Update the listing's thumbnail image
+        $updateListingSql = "UPDATE listings SET Thumbnail_Image = ? WHERE Listing_ID = ?";
+        $stmt = $conn->prepare($updateListingSql);
+        $stmt->bind_param("si", $selectedThumbnail, $listing_id);
+        $stmt->execute();
+    }
+
     // Handle listing update
     $title = $_POST['title'] ?? $title;
     $description = $_POST['description'] ?? $description;
     $price = $_POST['price'] ?? $price;
     $state = $_POST['state'] ?? $state;
     $city = $_POST['city'] ?? $city;
-    $newThumbnail = $_POST['thumbnail'] ?? $thumbnail_image;
+
     // Update the listing details
     $updateStmt = $conn->prepare("
         UPDATE listings 
-        SET Title = ?, Description = ?, Price = ?, State = ?, City = ?, Thumbnail_Image = ? 
+        SET Title = ?, Description = ?, Price = ?, State = ?, City = ? 
         WHERE Listing_ID = ? AND User_ID = ?
     ");
-    $updateStmt->bind_param("ssdssiii", $title, $description, $price, $state, $city, $newThumbnail, $listing_id, $user_id);
+    $updateStmt->bind_param("ssdssii", $title, $description, $price, $state, $city, $listing_id, $user_id);
     if (!$updateStmt->execute()) {
         echo "Error updating listing.";
     }
     $updateStmt->close();
+
     // Handle new image uploads
     if (!empty($_FILES['images']['name'][0])) {
         $uploadDirectory = 'uploads/';
@@ -87,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $targetFilePath = $uploadDirectory . $uniqueImageName;
                 if (move_uploaded_file($tmpName, $targetFilePath)) {
                     $imageUrl = $targetFilePath;
+
                     // Add image to the database
                     $imageStmt = $conn->prepare("
                         INSERT INTO images (Image_URL, Listing_ID) 
@@ -106,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $conn->close();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -120,31 +147,10 @@ $conn->close();
 <?php include 'header.php'; ?>
 
 <div class="edit-listing-container">
+    <h1>Edit Listing</h1>
     <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
+        <!-- Hidden input to pass listing ID -->
         <input type="hidden" name="listing_id" value="<?= htmlspecialchars($listing_id); ?>">
-
-                <!-- Thumbnail Selection -->
-                <div class="form-group">
-            <label>Thumbnail:</label>
-            <div class="thumbnail-selection">
-                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
-                <?php foreach ($additionalImages as $image): ?>
-                    <input type="radio" id="thumb-<?= htmlspecialchars($image); ?>" name="thumbnail" value="<?= htmlspecialchars($image); ?>" <?= $thumbnail_image === $image ? "checked" : ""; ?>>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <!-- Image Upload -->
-        <div class="file-upload-container">
-            <label for="images">Upload New Images:</label>
-            <input type="file" id="images" name="images[]" multiple>
-        </div>
-
-        <!-- Image Preview -->
-        <div id="imagePreviewContainer">
-            <?php foreach ($additionalImages as $image): ?>
-                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
-            <?php endforeach; ?>
-        </div>
 
         <!-- Title -->
         <div class="form-group">
@@ -155,7 +161,7 @@ $conn->close();
         <!-- Description -->
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea id="description" name="description" required><?= htmlspecialchars($description); ?></textarea>
+            <textarea id="description" name="description" rows="4" required><?= htmlspecialchars($description); ?></textarea>
         </div>
 
         <!-- Price -->
@@ -173,23 +179,57 @@ $conn->close();
                 <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
                 <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
                 <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                <!-- Add more states -->
+                <!-- Add more states as needed -->
             </select>
         </div>
 
-        <div class="listing-city-group">
-                <select id="city-dropdown" name="city" required>
-                    <option value="">--Select City--</option>
-                </select>
-            </div>
+        <!-- City -->
+        <div class="form-group">
+            <label for="city">City:</label>
+            <select id="city-dropdown" name="city" required>
+                <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
+            </select>
+        </div>
 
+        <!-- Thumbnail Selection -->
+        <div class="form-group">
+            <label>Thumbnail:</label>
+            <div class="thumbnail-selection">
+                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
+                <?php foreach ($additionalImages as $image): ?>
+                    <img 
+                        src="<?= htmlspecialchars($image); ?>" 
+                        class="thumbnail-option <?= $thumbnail_image === $image ? 'selected-thumbnail' : ''; ?>" 
+                        data-image-url="<?= htmlspecialchars($image); ?>" 
+                        alt="Thumbnail Option" 
+                        onclick="selectThumbnail(this)">
+                <?php endforeach; ?>
+            </div>
+            <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="<?= htmlspecialchars($thumbnail_image); ?>">
+        </div>
+
+        <!-- File Upload -->
+        <div class="file-upload-container">
+            <label class="form-label" for="images">Upload New Images:</label>
+            <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+            <label for="images" class="file-upload-button">Choose Files</label>
+            <span class="file-upload-text" id="file-upload-text"></span>
+        </div>
+        <div id="imagePreviewContainer">
+            <?php foreach ($additionalImages as $image): ?>
+                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
+            <?php endforeach; ?>
+        </div>
 
         <!-- Submit Button -->
-        <button type="submit" name="update_listing">Update Listing</button>
+        <div class="btn-container">
+            <button type="submit" name="update_listing">Update Listing</button>
+        </div>
     </form>
 </div>
 
 <script>
+    // Handle file preview
     document.addEventListener("DOMContentLoaded", function () {
         const imageInput = document.querySelector("#images");
         const previewContainer = document.getElementById("imagePreviewContainer");
@@ -208,29 +248,41 @@ $conn->close();
             });
         });
     });
+
+    // Handle thumbnail selection
+    function selectThumbnail(imgElement) {
+        document.querySelectorAll('.thumbnail-option').forEach(img => {
+            img.classList.remove('selected-thumbnail');
+        });
+        imgElement.classList.add('selected-thumbnail');
+        document.getElementById('selectedThumbnail').value = imgElement.getAttribute('data-image-url');
+    }
 </script>
 
+<style>
+    .thumbnail-option {
+        width: 100px;
+        height: auto;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border 0.3s ease, transform 0.3s ease;
+    }
+    .thumbnail-option:hover {
+        transform: scale(1.1);
+    }
+    .selected-thumbnail {
+        border: 2px solid #007bff;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
+    .preview-image {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+
 <?php include 'footer.php'; ?>
-</body>
-</html>
-
-    <style>
-        #imagePreviewContainer {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            overflow-x: auto;
-        }
-
-        .preview-image {
-            max-width: 100px;
-            max-height: 100px;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-    </style>
-
-    <?php include 'footer.php'; ?>
 </body>
 </html>

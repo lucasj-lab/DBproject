@@ -19,14 +19,20 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // Fetch user's listings with thumbnail
 $sql = "
     SELECT 
-        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-        listings.City, listings.State, images.Image_URL AS Thumbnail_Image
+        l.Listing_ID, 
+        l.Title, 
+        l.Description, 
+        l.Price, 
+        l.Date_Posted, 
+        l.City, 
+        l.State, 
+        i.Image_URL AS Thumbnail_Image
     FROM 
-        listings
+        listings l
     LEFT JOIN 
-        images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = TRUE
+        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
     WHERE 
-        listings.User_ID = :user_id
+        l.User_ID = :user_id
 ";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['user_id' => $user_id]);

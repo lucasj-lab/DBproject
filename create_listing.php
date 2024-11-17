@@ -29,9 +29,8 @@ ini_set('display_errors', 1);
 
 require 'database_connection.php';
 
-// Function to get Category_ID from Category table
-function getCategoryID($conn, $categoryName)
-{
+// Function to get Category_ID from the Category table
+function getCategoryID($conn, $categoryName) {
     $stmt = $conn->prepare("SELECT Category_ID FROM category WHERE Category_Name = ?");
     $stmt->bind_param("s", $categoryName);
     $stmt->execute();
@@ -42,23 +41,10 @@ function getCategoryID($conn, $categoryName)
         return false; // Category not found
     }
 }
-// Check if Imagick is installed and define the conversion function if it is
-if (class_exists('Imagick')) {
-    function convertToJpeg($inputPath, $outputPath) {
-        $imagick = new Imagick($inputPath);
-        $imagick->setImageFormat('jpeg');
-        $imagick->writeImage($outputPath);
-        $imagick->destroy();
-    }
-} else {
-    echo "Warning: Imagick is not installed, HEIC/HEIF images may not be supported.";
-}
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve user ID from session
-    $user_id = $_SESSION['user_id'] ?? null;
-
-    // Retrieve form data and check if they exist to prevent warnings
+// Handle the form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = $_SESSION['user_id'];
     $category = $_POST['category'] ?? null;
     $title = $_POST['title'] ?? null;
     $description = $_POST['description'] ?? null;
@@ -66,32 +52,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $state = $_POST['state'] ?? null;
     $city = $_POST['city'] ?? null;
 
-    // Validate that all required fields are present
     if (!$user_id || !$category || !$title || !$description || !$price || !$state || !$city) {
-        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+        echo "<script>alert('All fields are required.'); window.location.href='create_listing.php';</script>";
         exit();
     }
 
-    // Get the Category_ID using the function
+    // Get the Category_ID
     $category_id = getCategoryID($conn, $category);
-
     if ($category_id === false) {
-        echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
+        echo "<script>alert('Invalid category selected.'); window.location.href='create_listing.php';</script>";
         exit();
     }
 
-    // Prepare and execute the INSERT query
+    // Insert the listing
     $stmt = $conn->prepare("INSERT INTO listings (Title, Description, Price, Date_Posted, User_ID, Category_ID, State, City) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)");
-    
-    // Check if the statement was prepared successfully
     if ($stmt) {
         $stmt->bind_param("ssissss", $title, $description, $price, $user_id, $category_id, $state, $city);
-
-        // Execute the statement and check for success
         if ($stmt->execute()) {
             $listing_id = $stmt->insert_id;
 
-            // Handle image uploads if provided
+            // Handle image uploads
             if (!empty($_FILES['images']['name'][0])) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
                 $uploadDirectory = 'uploads/';
@@ -101,40 +81,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
                     $fileType = mime_content_type($tmpName);
-
-                    // Only process if the file is of an allowed type
                     if (in_array($fileType, $allowedTypes)) {
                         $imageName = basename($_FILES['images']['name'][$key]);
                         $uniqueImageName = time() . "_" . $imageName;
                         $targetFilePath = $uploadDirectory . $uniqueImageName;
 
                         if (move_uploaded_file($tmpName, $targetFilePath)) {
+                            $isThumbnail = ($key === 0) ? 1 : 0; // First image is the thumbnail
                             $imageUrl = $targetFilePath;
 
-                            // Insert image data into images table
-                            $imageSql = "INSERT INTO images (image_url, listing_id) VALUES (?, ?)";
+                            // Insert image into the images table
+                            $imageSql = "INSERT INTO images (Listing_ID, Image_URL, Is_Thumbnail) VALUES (?, ?, ?)";
                             $imgStmt = $conn->prepare($imageSql);
-                            $imgStmt->bind_param("si", $imageUrl, $listing_id);
+                            $imgStmt->bind_param("isi", $listing_id, $imageUrl, $isThumbnail);
                             $imgStmt->execute();
                             $imgStmt->close();
                         }
                     } else {
-                        echo json_encode(['success' => false, 'message' => "File type not allowed: " . htmlspecialchars($fileType)]);
+                        echo "<script>alert('File type not allowed: $fileType.'); window.location.href='create_listing.php';</script>";
                         exit();
                     }
                 }
             }
-            echo json_encode(['success' => true, 'message' => 'Listing created successfully!', 'listing_id' => $listing_id]);
+
+            echo "<script>alert('Listing created successfully!'); window.location.href='user_dashboard.php';</script>";
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to create listing.']);
+            echo "<script>alert('Failed to create listing. Please try again.'); window.location.href='create_listing.php';</script>";
         }
 
-        $stmt->close(); // Close the statement
+        $stmt->close();
     } else {
-        echo json_encode(['success' => false, 'message' => 'Database error: Failed to prepare statement.']);
+        echo "<script>alert('Database error: Failed to prepare statement.'); window.location.href='create_listing.php';</script>";
     }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 }
 
 $conn->close();
