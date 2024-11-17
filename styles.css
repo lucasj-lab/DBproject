@@ -2566,3 +2566,75 @@ img.thumbnail-option {
  width: -webkit-fill-available;
   }
 
+/* Main Thumbnail Section */
+.main-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-image {
+    width: 300px;
+    height: auto;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
+
+/* Image Gallery */
+.image-gallery {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    max-width: 100%; /* Ensure it stays within the container */
+    box-sizing: border-box;
+    white-space: nowrap; /* Prevent wrapping of images */
+}
+
+.image-item {
+    flex-shrink: 0; /* Prevent images from shrinking */
+    text-align: center;
+    position: relative;
+}
+
+.image-item img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.image-item img:hover {
+    transform: scale(1.1);
+    border-color: lightgray;
+}
+
+.thumbnail-radio {
+    display: block;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+/* Scrollbar styling */
+.image-gallery::-webkit-scrollbar {
+    height: 8px; /* Scrollbar height */
+}
+
+.image-gallery::-webkit-scrollbar-thumb {
+    background: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar */
+}
+
+.image-gallery::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* Darker thumb on hover */
+}
+
+.image-gallery::-webkit-scrollbar-track {
+    background: #f9f9f9; /* Scrollbar track color */
+}
