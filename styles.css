@@ -2051,7 +2051,8 @@ table td {
 /* Responsive table adjustments */
 @media (max-width: 500px) {
     .dashboard-table, .table-container {
-        display: inline-table; 
+        display: grid;
+        justify-items: center;
     }
 
     .dashboard-table thead {
