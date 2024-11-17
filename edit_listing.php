@@ -273,7 +273,7 @@ $conn->close();
                         <div class="image-item">
                             <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
                             <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
-                            <label>Set as Thumbnail</label>
+                         
                         </div>
                     <?php endforeach; ?>
                 </div>
