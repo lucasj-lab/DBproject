@@ -85,7 +85,6 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         /* Modify this style as per your requirements */
                                     }
                                 </style>
-                                <td>
                                 <td class="thumbnail-cell">
                 <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>" 
                      alt="Listing Thumbnail" class="thumbnail-image">
