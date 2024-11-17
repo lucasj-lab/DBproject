@@ -32,8 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     exit();
 }
 ?>
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,11 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Active Listings</title>
     <link rel="stylesheet" href="styles.css">
+  
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             fetchListings();
         });
 
+        
         function fetchListings() {
             fetch('listings.php?fetchListings=true')
                 .then(response => response.json())
@@ -61,39 +61,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 })
                 .catch(error => {
                     console.error('Error fetching listings:', error);
-                    document.getElementById("listings").innerHTML =
-                        "<p>Error loading listings. Please try again later.</p>";
+                    document.getElementById("listings").innerHTML = "<p>Error loading listings. Please try again later.</p>";
                 });
         }
-
         function displayListings(listings) {
-            const listingsContainer = document.getElementById("listings");
-            listingsContainer.innerHTML = ""; // Clear previous content
+    const listingsContainer = document.getElementById("listings");
+    listingsContainer.innerHTML = ""; // Clear previous content
 
-            listings.forEach(listing => {
-                const listingDiv = document.createElement("div");
-                listingDiv.className = "listing-item";
+    listings.forEach(listing => {
+        const listingDiv = document.createElement("div");
+        listingDiv.className = "listing-item";
 
-                // Use Thumbnail_Image with a fallback
-                const thumbnail = listing.Thumbnail_Image || "no_image.png";
+        // Use Thumbnail_Image with a fallback
+        const thumbnail = listing.Thumbnail_Image || "no_image.png";
 
-                listingDiv.innerHTML = `
-                    <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
-                    <h3>${listing.Title}</h3>
-                    <p><strong>Description:</strong> ${listing.Description}</p>
-                    <p><strong>Price:</strong> $${listing.Price}</p>
-                    <p><strong>Category:</strong> ${listing.Category_Name}</p>
-                    <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                    <p><strong>Posted by:</strong> ${listing.User_Name}</p>
-                    <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
-                    <button type="button" class="pill-button" 
-                        onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
-                        View Listing
-                    </button>
-                `;
-                listingsContainer.appendChild(listingDiv);
-            });
-        }
+        listingDiv.innerHTML = `
+            <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+            <h3>${listing.Title}</h3>
+            <p><strong>Description:</strong> ${listing.Description}</p>
+            <p><strong>Price:</strong> $${listing.Price}</p>
+            <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+            <p><strong>Category:</strong> ${listing.Category_Name}</p>
+            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+            <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+            <button type="button" class="pill-button" 
+                onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                View Listing
+            </button>
+        `;
+        listingsContainer.appendChild(listingDiv);
+    });
+}
     </script>
 </head>
 
@@ -109,5 +107,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     <?php include 'footer.php'; ?>
 </body>
-
 </html>
