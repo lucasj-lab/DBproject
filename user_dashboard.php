@@ -16,11 +16,18 @@ $stmt = $pdo->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID =
 $stmt->execute(['user_id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Fetch user's listings
-$sql = "SELECT listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
-               listings.City, listings.State, listings.Thumbnail_Image
-        FROM listings 
-        WHERE listings.User_ID = :user_id";
+// Fetch user's listings with thumbnail
+$sql = "
+    SELECT 
+        listings.Listing_ID, listings.Title, listings.Description, listings.Price, listings.Date_Posted, 
+        listings.City, listings.State, images.Image_URL AS Thumbnail_Image
+    FROM 
+        listings
+    LEFT JOIN 
+        images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = TRUE
+    WHERE 
+        listings.User_ID = :user_id
+";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['user_id' => $user_id]);
 $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -71,32 +78,20 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php
                                     echo htmlspecialchars(
                                         !empty($listing['Date_Posted'])
-                                        ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
-                                        : 'Date not available'
+                                            ? (new DateTime($listing['Date_Posted']))->format('l, F jS, Y')
+                                            : 'Date not available'
                                     );
                                     ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($listing['City']); ?></td>
                                 <td><?php echo htmlspecialchars($listing['State']); ?></td>
-                                <style>
-                                    /* CSS to set the user icon border color when logged in */
-                                    .user-icon.logged-in {
-                                        background-color: #008000;
-                                        /* Modify this style as per your requirements */
-                                    }
-                                </style>
                                 <td class="thumbnail-cell">
-                <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>" 
-                     alt="Listing Thumbnail" class="thumbnail-image">
-            </td>
-            <!-- Actions Cell -->
-            <td class="action-buttons-cell">
-                <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
-                <a href="delete_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button delete-button">Delete</a>
-            </td>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>" 
+                                         alt="Listing Thumbnail" class="thumbnail-image">
+                                </td>
+                                <td class="action-buttons-cell">
+                                    <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
+                                    <a href="delete_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button delete-button">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -110,3 +105,5 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php include 'footer.php'; ?>
 </body>
+
+</html>
