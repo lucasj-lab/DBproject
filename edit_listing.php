@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require 'database_connection.php';
 
-
 // Check if listing_id is provided in the URL
 if (!isset($_GET['listing_id'])) {
     die("No listing ID provided.");
@@ -18,83 +17,64 @@ if (!isset($_GET['listing_id'])) {
 $listing_id = intval($_GET['listing_id']);
 $user_id = $_SESSION['user_id'];
 
-// Initialize variables
-$title = $description = $state = $city = $thumbnail_image = "";
-$price = 0.0;
-$additionalImages = [];
-
-// Fetch listing details for pre-filling the form
+// Fetch listing details
 $stmt = $conn->prepare("
-    SELECT Title, Description, Price, State, City, Thumbnail_Image 
+    SELECT Title, Description, Price, State, City 
     FROM listings 
     WHERE Listing_ID = ? AND User_ID = ?
 ");
 $stmt->bind_param("ii", $listing_id, $user_id);
 $stmt->execute();
-$stmt->bind_result($title, $description, $price, $state, $city, $thumbnail_image);
+$stmt->bind_result($title, $description, $price, $state, $city);
 
 if (!$stmt->fetch()) {
     die("Listing not found or you do not have permission to edit this listing.");
 }
 $stmt->close();
 
-// Fetch additional images for the listing
+// Fetch images for the listing
 $imageStmt = $conn->prepare("
-    SELECT Image_URL 
+    SELECT Image_URL, Is_Thumbnail 
     FROM images 
     WHERE Listing_ID = ?
 ");
 $imageStmt->bind_param("i", $listing_id);
 $imageStmt->execute();
 $result = $imageStmt->get_result();
+$images = [];
 while ($row = $result->fetch_assoc()) {
-    $additionalImages[] = $row['Image_URL'];
+    $images[] = $row;
 }
 $imageStmt->close();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle thumbnail selection
-    if (isset($_POST['selected_thumbnail'])) {
-        $selectedThumbnail = $_POST['selected_thumbnail'];
+    // Update listing details
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+    $state = $_POST['state'];
+    $city = $_POST['city'];
+    $selectedThumbnail = $_POST['selected_thumbnail'];
 
-        // Reset all Is_Thumbnail flags for the listing
-        $resetSql = "UPDATE images SET Is_Thumbnail = 0 WHERE Listing_ID = ?";
-        $stmt = $conn->prepare($resetSql);
-        $stmt->bind_param("i", $listing_id);
-        $stmt->execute();
-
-        // Set the selected image as the thumbnail
-        $updateSql = "UPDATE images SET Is_Thumbnail = 1 WHERE Image_URL = ? AND Listing_ID = ?";
-        $stmt = $conn->prepare($updateSql);
-        $stmt->bind_param("si", $selectedThumbnail, $listing_id);
-        $stmt->execute();
-
-        // Update the listing's thumbnail image
-        $updateListingSql = "UPDATE listings SET Thumbnail_Image = ? WHERE Listing_ID = ?";
-        $stmt = $conn->prepare($updateListingSql);
-        $stmt->bind_param("si", $selectedThumbnail, $listing_id);
-        $stmt->execute();
-    }
-
-    // Handle listing update
-    $title = $_POST['title'] ?? $title;
-    $description = $_POST['description'] ?? $description;
-    $price = $_POST['price'] ?? $price;
-    $state = $_POST['state'] ?? $state;
-    $city = $_POST['city'] ?? $city;
-
-    // Update the listing details
+    // Update listing information
     $updateStmt = $conn->prepare("
         UPDATE listings 
         SET Title = ?, Description = ?, Price = ?, State = ?, City = ? 
         WHERE Listing_ID = ? AND User_ID = ?
     ");
     $updateStmt->bind_param("ssdssii", $title, $description, $price, $state, $city, $listing_id, $user_id);
-    if (!$updateStmt->execute()) {
-        echo "Error updating listing.";
-    }
+    $updateStmt->execute();
     $updateStmt->close();
+
+    // Update thumbnail
+    $resetThumbnailStmt = $conn->prepare("UPDATE images SET Is_Thumbnail = 0 WHERE Listing_ID = ?");
+    $resetThumbnailStmt->bind_param("i", $listing_id);
+    $resetThumbnailStmt->execute();
+
+    $setThumbnailStmt = $conn->prepare("UPDATE images SET Is_Thumbnail = 1 WHERE Image_URL = ? AND Listing_ID = ?");
+    $setThumbnailStmt->bind_param("si", $selectedThumbnail, $listing_id);
+    $setThumbnailStmt->execute();
 
     // Handle new image uploads
     if (!empty($_FILES['images']['name'][0])) {
@@ -110,39 +90,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $imageName = basename($_FILES['images']['name'][$key]);
                 $uniqueImageName = time() . "_" . $imageName;
                 $targetFilePath = $uploadDirectory . $uniqueImageName;
+
                 if (move_uploaded_file($tmpName, $targetFilePath)) {
+                    $isThumbnail = ($key === 0 && empty($selectedThumbnail)) ? 1 : 0;
                     $imageUrl = $targetFilePath;
 
-                    // Add image to the database
-                    $imageStmt = $conn->prepare("
-                        INSERT INTO images (Image_URL, Listing_ID) 
-                        VALUES (?, ?)
-                    ");
-                    $imageStmt->bind_param("si", $imageUrl, $listing_id);
+                    $imageStmt = $conn->prepare("INSERT INTO images (Listing_ID, Image_URL, Is_Thumbnail) VALUES (?, ?, ?)");
+                    $imageStmt->bind_param("isi", $listing_id, $imageUrl, $isThumbnail);
                     $imageStmt->execute();
-                    $imageStmt->close();
                 }
             }
         }
     }
+
     header("Location: user_dashboard.php");
     exit();
 }
 
 $conn->close();
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 <?php include 'header.php'; ?>
 
@@ -177,48 +151,37 @@ $conn->close();
                 <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
                 <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
                 <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
-                <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
-                <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                <!-- Add more states as needed -->
+                <!-- Add more states -->
             </select>
         </div>
 
         <!-- City -->
         <div class="form-group">
             <label for="city">City:</label>
-            <select id="city-dropdown" name="city" required>
-                <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
-            </select>
+            <input type="text" id="city" name="city" value="<?= htmlspecialchars($city); ?>" required>
         </div>
 
         <!-- Thumbnail Selection -->
         <div class="form-group">
             <label>Thumbnail:</label>
             <div class="thumbnail-selection">
-                <img src="<?= htmlspecialchars($thumbnail_image); ?>" class="current-thumbnail" alt="Current Thumbnail">
-                <?php foreach ($additionalImages as $image): ?>
+                <?php foreach ($images as $image): ?>
                     <img 
-                        src="<?= htmlspecialchars($image); ?>" 
-                        class="thumbnail-option <?= $thumbnail_image === $image ? 'selected-thumbnail' : ''; ?>" 
-                        data-image-url="<?= htmlspecialchars($image); ?>" 
+                        src="<?= htmlspecialchars($image['Image_URL']); ?>" 
+                        class="thumbnail-option <?= $image['Is_Thumbnail'] ? 'selected-thumbnail' : ''; ?>" 
+                        data-image-url="<?= htmlspecialchars($image['Image_URL']); ?>" 
                         alt="Thumbnail Option" 
                         onclick="selectThumbnail(this)">
                 <?php endforeach; ?>
             </div>
-            <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="<?= htmlspecialchars($thumbnail_image); ?>">
+            <input type="hidden" name="selected_thumbnail" id="selectedThumbnail" value="">
         </div>
 
         <!-- File Upload -->
         <div class="file-upload-container">
             <label class="form-label" for="images">Upload New Images:</label>
             <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-            <label for="images" class="file-upload-button">Choose Files</label>
             <span class="file-upload-text" id="file-upload-text"></span>
-        </div>
-        <div id="imagePreviewContainer">
-            <?php foreach ($additionalImages as $image): ?>
-                <img src="<?= htmlspecialchars($image); ?>" class="preview-image" alt="Image Preview">
-            <?php endforeach; ?>
         </div>
 
         <!-- Submit Button -->
@@ -229,31 +192,8 @@ $conn->close();
 </div>
 
 <script>
-    // Handle file preview
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageInput = document.querySelector("#images");
-        const previewContainer = document.getElementById("imagePreviewContainer");
-
-        imageInput.addEventListener("change", function () {
-            previewContainer.innerHTML = ""; // Clear previous previews
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.classList.add("preview-image");
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    });
-
-    // Handle thumbnail selection
     function selectThumbnail(imgElement) {
-        document.querySelectorAll('.thumbnail-option').forEach(img => {
-            img.classList.remove('selected-thumbnail');
-        });
+        document.querySelectorAll('.thumbnail-option').forEach(img => img.classList.remove('selected-thumbnail'));
         imgElement.classList.add('selected-thumbnail');
         document.getElementById('selectedThumbnail').value = imgElement.getAttribute('data-image-url');
     }
@@ -261,25 +201,12 @@ $conn->close();
 
 <style>
     .thumbnail-option {
-        width: 100px;
-        height: auto;
         border: 2px solid transparent;
         cursor: pointer;
-        transition: border 0.3s ease, transform 0.3s ease;
-    }
-    .thumbnail-option:hover {
-        transform: scale(1.1);
+        transition: 0.3s;
     }
     .selected-thumbnail {
-        border: 2px solid #007bff;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-    }
-    .preview-image {
-        max-width: 100px;
-        max-height: 100px;
-        object-fit: cover;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        border: 2px solid blue;
     }
 </style>
 
