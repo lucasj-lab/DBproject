@@ -42,12 +42,75 @@ while ($row = $result->fetch_assoc()) {
 $stmt->close();
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Browse <?php echo htmlspecialchars($category); ?> Listings</title>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+    <style>
+        .listing-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .listing-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .listing-price, .listing-user, .listing-location, .listing-date {
+            margin: 5px 0;
+        }
+
+        .image-gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-gallery img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .image-gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .image-gallery::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .image-gallery::-webkit-scrollbar-track {
+            background: #f9f9f9;
+        }
+
+        .view-button {
+            display: block;
+            margin: 10px 0;
+            padding: 8px 12px;
+            background-color: #1a73e8;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .view-button:hover {
+            background-color: #fbbc04;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 <?php include 'header.php'; ?>
@@ -56,15 +119,26 @@ $conn->close();
         <?php if (!empty($listings)): ?>
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
-                    <form class="listing-item" action="listing_details.php" method="GET">
-                        <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
-                        <img src="<?php echo htmlspecialchars($listing['Images'][0] ?? 'no_image.png'); ?>" alt="Thumbnail" class="listing-image">
-                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                        <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                        <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
-                        <button type="submit" class="pill-button">View Listing</button>
-                    </form>
+                    <div class="listing-container">
+                        <div class="listing-title"><?php echo htmlspecialchars($listing['Title']); ?></div>
+                        <div class="listing-price">Price: $<?php echo htmlspecialchars($listing['Price']); ?></div>
+                        <div class="listing-user">Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></div>
+                        <div class="listing-location">Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></div>
+                        <div class="listing-date">Posted on: <?php echo htmlspecialchars($listing['Date_Posted']); ?></div>
+
+                        <!-- Image Gallery -->
+                        <?php if (!empty($listing['Images'])): ?>
+                            <div class="image-gallery">
+                                <?php foreach ($listing['Images'] as $image): ?>
+                                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Listing Image">
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p>No images available for this listing.</p>
+                        <?php endif; ?>
+
+                        <a href="listing_details.php?listing_id=<?php echo $listing['Listing_ID']; ?>" class="view-button">View Listing</a>
+                    </div>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
