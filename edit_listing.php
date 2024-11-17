@@ -140,13 +140,17 @@ $conn->close();
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Add the .image-gallery CSS styles to your existing CSS file */
+        /* Styles for the image gallery */
         .image-gallery {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
             gap: 10px;
-            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .image-gallery .image-item {
+            position: relative;
+            text-align: center;
         }
 
         .image-gallery img {
@@ -157,11 +161,6 @@ $conn->close();
             border-radius: 5px;
         }
 
-        .image-gallery .image-item {
-            position: relative;
-            text-align: center;
-        }
-
         .image-gallery input[type="radio"] {
             margin-top: 5px;
         }
@@ -170,32 +169,43 @@ $conn->close();
             font-size: 0.8rem;
             display: block;
         }
+
+        /* File upload section styling */
+        .file-upload-container {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
     <script>
-        function updateCities() {
-            const stateSelect = document.getElementById('state');
-            const cityDropdown = document.getElementById('city-dropdown');
-            const selectedState = stateSelect.value;
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.getElementById("images");
+            const galleryContainer = document.querySelector(".image-gallery");
 
-            const statesAndCities = {
-                "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-                "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-                "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
-                "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
-                "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
-                "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"]
-            };
+            imageInput.addEventListener("change", function () {
+                const files = Array.from(imageInput.files);
 
-            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-            if (selectedState && statesAndCities[selectedState]) {
-                statesAndCities[selectedState].forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    cityDropdown.appendChild(option);
+                // Remove previous previews
+                const previewItems = galleryContainer.querySelectorAll(".preview-item");
+                previewItems.forEach(item => item.remove());
+
+                // Display new previews
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const previewDiv = document.createElement("div");
+                        previewDiv.classList.add("image-item", "preview-item"); // Mark as preview for removal on new upload
+
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="New Image Preview">
+                            <label>New Image</label>
+                        `;
+
+                        galleryContainer.appendChild(previewDiv);
+                    };
+                    reader.readAsDataURL(file);
                 });
-            }
-        }
+            });
+        });
     </script>
 </head>
 
@@ -204,7 +214,7 @@ $conn->close();
 
     <div class="edit-listing-container">
         <h1 class="edit-listing-title">Edit Listing</h1>
-        <form id="create-listing-form" method="POST" enctype="multipart/form-data">
+        <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
                 <input type="text" id="title" name="title" placeholder="Title" value="<?= htmlspecialchars($title); ?>" required>
                 <textarea id="description" name="description" rows="4" placeholder="Description" required><?= htmlspecialchars($description); ?></textarea>
@@ -225,8 +235,9 @@ $conn->close();
                     </select>
                 </div>
 
-                <!-- Display current images as a gallery -->
+                <!-- Combined Image Gallery -->
                 <div class="image-gallery">
+                    <!-- Existing Images -->
                     <?php foreach ($images as $image): ?>
                         <div class="image-item">
                             <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
@@ -240,9 +251,9 @@ $conn->close();
                 <div class="file-upload-container">
                     <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
                     <label for="images" class="file-upload-button">Choose Files</label>
-                    <span class="file-upload-text" id="file-upload-text"></span>
                 </div>
             </div>
+
             <div class="btn-container">
                 <button type="submit">Update</button>
             </div>
