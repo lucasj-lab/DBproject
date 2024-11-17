@@ -2563,5 +2563,6 @@ select#state {
 }
 
 img.thumbnail-option {
-    max-width: -webkit-fill-available;
+ width: -webkit-fill-available;
   }
+
