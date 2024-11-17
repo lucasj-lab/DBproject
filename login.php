@@ -1,64 +1,48 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 session_start();
 require 'database_connection.php';
 
-$error_message = ""; // Initialize error message variable
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Safely retrieve and sanitize user input
+    $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-$stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
-$stmt->execute([$email]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if ($user && password_verify($password, $user['Password'])) {
-    if ($user['Email_Verified']) {
-        $_SESSION['user_id'] = $user['User_ID'];
-        header("Location: user_dashboard.php");
-        exit();
-    } else {
-        $_SESSION['message'] = "Please verify your email before logging in.";
+    // Check if fields are empty
+    if (empty($email) || empty($password)) {
+        $_SESSION['message'] = "Email and password are required.";
         $_SESSION['message_type'] = 'error';
         header("Location: login.php");
-
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-
-    // Basic validation
-    if (empty($email) || empty($password)) {
-        $error_message = "Email and password are required.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Invalid email format.";
-    } else {
-        // Prepare and execute the query to fetch user details by email
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
+        exit();
     }
-}
-        // Fetch the user data
+
+    try {
+        // Check if email exists
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE Email = ?");
+        $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['Password'])) {
-            // Successful login
+            // Password is correct; log the user in
             $_SESSION['user_id'] = $user['User_ID'];
+            $_SESSION['user_name'] = $user['Name'];
             $_SESSION['message'] = "Login successful!";
             $_SESSION['message_type'] = 'success';
             header("Location: user_dashboard.php");
-            exit();
         } else {
-            // Invalid login credentials
-            $error_message = "Incorrect email or password.";
+            // Invalid login
+            $_SESSION['message'] = "Invalid email or password.";
+            $_SESSION['message_type'] = 'error';
+            header("Location: login.php");
         }
-
-        $stmt->closeCursor(); // Close the statement after use
+    } catch (Exception $e) {
+        error_log("Login error: " . $e->getMessage());
+        $_SESSION['message'] = "An error occurred. Please try again.";
+        $_SESSION['message_type'] = 'error';
+        header("Location: login.php");
     }
 }
-    
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
