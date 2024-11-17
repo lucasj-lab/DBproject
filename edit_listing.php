@@ -1,27 +1,32 @@
 <?php
 session_start();
+require 'database_connection.php'; // Ensure this includes $conn and initializes correctly
+
+// Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'var/www/html/php-error.log'); // Update this path to your desired log file
-// Check if the user is logged in
+
+// Redirect user to login if not authenticated
 if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "Please log in to edit a listing.";
+    $_SESSION['message_type'] = "error";
     header("Location: login.php");
     exit();
 }
 
-require 'database_connection.php';
-
-// Check if listing_id is provided in the URL
-if (!isset($_GET['listing_id'])) {
-    die("No listing ID provided.");
+// Validate the listing ID
+if (!isset($_GET['listing_id']) || !is_numeric($_GET['listing_id'])) {
+    $_SESSION['message'] = "Invalid listing ID.";
+    $_SESSION['message_type'] = "error";
+    header("Location: user_dashboard.php");
+    exit();
 }
 
 $listing_id = intval($_GET['listing_id']);
 $user_id = $_SESSION['user_id'];
 
-// Fetch listing details
+// Fetch the listing details
 $stmt = $conn->prepare("
     SELECT Title, Description, Price, State, City 
     FROM listings 
@@ -32,7 +37,10 @@ $stmt->execute();
 $stmt->bind_result($title, $description, $price, $state, $city);
 
 if (!$stmt->fetch()) {
-    die("Listing not found or you do not have permission to edit this listing.");
+    $_SESSION['message'] = "Listing not found or you do not have permission to edit this listing.";
+    $_SESSION['message_type'] = "error";
+    header("Location: user_dashboard.php");
+    exit();
 }
 $stmt->close();
 
@@ -60,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city = $_POST['city'] ?? '';
     $selected_thumbnail = $_POST['selected_thumbnail'] ?? null;
 
-    // Update the listing details
+    // Update listing details
     $updateStmt = $conn->prepare("
         UPDATE listings 
         SET Title = ?, Description = ?, Price = ?, State = ?, City = ? 
@@ -69,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateStmt->bind_param("ssdssii", $title, $description, $price, $state, $city, $listing_id, $user_id);
 
     if ($updateStmt->execute()) {
-        // Update thumbnail selection
+        // Update thumbnail if provided
         if ($selected_thumbnail) {
             $resetThumbnailStmt = $conn->prepare("UPDATE images SET Is_Thumbnail = 0 WHERE Listing_ID = ?");
             $resetThumbnailStmt->bind_param("i", $listing_id);
@@ -80,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $setThumbnailStmt->execute();
         }
 
-        // Handle new image uploads
+        // Handle image uploads
         if (!empty($_FILES['images']['name'][0])) {
             $uploadDirectory = 'uploads/';
             if (!is_dir($uploadDirectory)) {
@@ -106,6 +114,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+
+        // Redirect to success message page
+        $_SESSION['message'] = "Listing updated successfully!";
+        $_SESSION['message_type'] = "success";
+        header("Location: user_dashboard.php");
+        exit();
+    } else {
+        $_SESSION['message'] = "Error updating listing.";
+        $_SESSION['message_type'] = "error";
+    }
+    $updateStmt->close();
+}
+
+$conn->close();
+?>
+
+<!-- Include your edit listing form HTML -->
 
         // Success message display
         echo "
