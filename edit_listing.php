@@ -134,43 +134,85 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Listing</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add the .image-gallery CSS styles to your existing CSS file */
-        .image-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            gap: 10px;
-            margin-top: 20px;
-        }
+  
+<style> 
+/* Main Thumbnail Section */
+.main-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .image-gallery img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+.main-image {
+    width: 300px;
+    height: auto;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
 
-        .image-gallery .image-item {
-            position: relative;
-            text-align: center;
-        }
+/* Image Gallery */
+.image-gallery {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    max-width: 100%; /* Ensure it stays within the container */
+    box-sizing: border-box;
+    white-space: nowrap; /* Prevent wrapping of images */
+}
 
-        .image-gallery input[type="radio"] {
-            margin-top: 5px;
-        }
+.image-item {
+    flex-shrink: 0; /* Prevent images from shrinking */
+    text-align: center;
+    position: relative;
+}
 
-        .image-gallery label {
-            font-size: 0.8rem;
-            display: block;
-        }
-    </style>
+.image-item img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.image-item img:hover {
+    transform: scale(1.1);
+    border-color: lightgray;
+}
+
+.thumbnail-radio {
+    display: block;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+/* Scrollbar styling */
+.image-gallery::-webkit-scrollbar {
+    height: 8px; /* Scrollbar height */
+}
+
+.image-gallery::-webkit-scrollbar-thumb {
+    background: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar */
+}
+
+.image-gallery::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* Darker thumb on hover */
+}
+
+.image-gallery::-webkit-scrollbar-track {
+    background: #f9f9f9; /* Scrollbar track color */
+}
+</style>
     <script>
         function updateCities() {
             const stateSelect = document.getElementById('state');
@@ -202,55 +244,52 @@ $conn->close();
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="create-listing-container">
-    <h1 class="edit-listing-title">Edit Listing</h1>
-    <form id="edit-listing-form" method="POST" enctype="multipart/form-data">
-        <div class="listing-form-group">
-            <input type="text" id="title" name="title" placeholder="Title" value="<?= htmlspecialchars($title); ?>" required>
-            <textarea id="description" name="description" rows="4" placeholder="Description" required><?= htmlspecialchars($description); ?></textarea>
-            <input type="number" step="0.01" id="price" name="price" placeholder="Price" value="<?= htmlspecialchars($price); ?>" required>
+    <div class="edit-listing-container">
+        <h1 class="edit-listing-title">Edit Listing</h1>
+        <form id="create-listing-form" method="POST" enctype="multipart/form-data">
+            <div class="listing-form-group">
+                <input type="text" id="title" name="title" placeholder="Title" value="<?= htmlspecialchars($title); ?>" required>
+                <textarea id="description" name="description" rows="4" placeholder="Description" required><?= htmlspecialchars($description); ?></textarea>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Price" value="<?= htmlspecialchars($price); ?>" required>
 
-            <select id="state" name="state" required>
-                <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
-                <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
-                <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
-                <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
-                <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
-            </select>
-
-            <div class="listing-city-group">
-                <select id="city-dropdown" name="city" required>
-                    <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
+                <select id="state" name="state" onchange="updateCities()" required>
+                    <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
+                    <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
+                    <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
+                    <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
+                    <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
+                    <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
                 </select>
-            </div>
 
-            <!-- Main Thumbnail Section -->
-            <div class="main-image-container">
-                <img src="<?= htmlspecialchars($thumbnailImage); ?>" alt="Selected Thumbnail" class="main-image">
-                <p class="main-image-label">Selected Thumbnail</p>
-            </div>
+                <div class="listing-city-group">
+                    <select id="city-dropdown" name="city" required>
+                        <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
+                    </select>
+                </div>
 
-            <!-- Combined Image Gallery -->
-            <div class="image-gallery">
-                <!-- Existing Images -->
-                <?php foreach ($images as $image): ?>
-                    <div class="image-item">
-                        <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
-                        <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?> class="thumbnail-radio">
-                    </div>
-                <?php endforeach; ?>
-            </div>
+                <!-- Display current images as a gallery -->
+                <div class="image-gallery">
+                    <?php foreach ($images as $image): ?>
+                        <div class="image-item">
+                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
+                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>" <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
+                            <label>Set as Thumbnail</label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
 
-            <!-- Upload new images -->
-            <div class="file-upload-container">
-                <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-                <label for="images" class="file-upload-button">Choose Files</label>
+                <!-- Upload new images -->
+                <div class="file-upload-container">
+                    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
+                    <label for="images" class="file-upload-button">Choose Files</label>
+                    <span class="file-upload-text" id="file-upload-text"></span>
+                </div>
             </div>
-        </div>
+            <div class="btn-container">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</body>
 
-        <div class="btn-container">
-            <button type="submit">Update</button>
-        </div>
-    </form>
-</div>
+</html>
