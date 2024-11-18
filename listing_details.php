@@ -109,13 +109,14 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
     <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
         <a href="category.php?category=<?php echo urlencode($category); ?>" class="btn">Return to Category</a>
         <a href="all_listings.php" class="btn">All Listings</a>
-        <a href="profile.php?id=<?php echo htmlspecialchars($userId); ?>" class="btn">View Profile</a>
+        <a href="profile.php?id=<?php echo htmlspecialchars($userId); ?>">View Profile</a>
+
     </div>
     
     <!-- Buy Now Button -->
     <div>
-        <a href="buy_now.php?item=<?php echo htmlspecialchars($itemId); ?>" 
-           class="btn btn-large">BUY NOW</a>
+    <a href="buy_now.php?item=<?php echo htmlspecialchars($itemId); ?>" class="btn btn-large">BUY NOW</a>
+
     </div>
 </div>
 
@@ -130,4 +131,122 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
     </script>
 </body>
 
+</html>
+
+<?php
+// Sample listing details (replace with dynamic data from your database)
+$listingTitle = "Amazing Product";
+$listingPrice = "$100";
+$listingDescription = "This is a fantastic product you will love!";
+$listingId = 12345; // Replace with dynamic listing ID
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now Modal</title>
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Buy Now Button -->
+    <button id="buyNowBtn" class="btn">Buy Now</button>
+
+    <!-- Modal -->
+    <div id="buyNowModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Buy Now</h2>
+            <p><strong>Title:</strong> <?php echo htmlspecialchars($listingTitle); ?></p>
+            <p><strong>Price:</strong> <?php echo htmlspecialchars($listingPrice); ?></p>
+            <p><strong>Description:</strong> <?php echo htmlspecialchars($listingDescription); ?></p>
+            <form action="process_purchase.php" method="POST">
+                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listingId); ?>">
+                <button type="submit" class="btn">Confirm Purchase</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to Handle Modal
+        const modal = document.getElementById('buyNowModal');
+        const btn = document.getElementById('buyNowBtn');
+        const close = document.getElementById('closeModal');
+
+        // Open Modal
+        btn.onclick = function () {
+            modal.style.display = "flex";
+        };
+
+        // Close Modal
+        close.onclick = function () {
+            modal.style.display = "none";
+        };
+
+        // Close Modal when clicking outside the modal content
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
 </html>
