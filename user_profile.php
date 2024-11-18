@@ -2,10 +2,13 @@
 session_start();
 require 'database_connection.php';
 
-// Check if user_id is provided
-if (!isset($_GET['user_id'])) {
-    die("No user ID provided.");
+$userId = $_GET['userId'] ?? null; // Default to null if 'userId' is not set
+if ($userId) {
+    echo '<a href="profile.php?id=' . htmlspecialchars($userId) . '">View Seller\'s Profile</a>';
+} else {
+    echo 'User information unavailable';
 }
+
 
 $user_id = intval($_GET['user_id']);
 

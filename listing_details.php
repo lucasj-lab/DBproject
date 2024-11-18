@@ -1,6 +1,9 @@
 <?php
 require 'database_connection.php';
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Validate and get the listing ID from the URL
 if (isset($_GET['listing_id']) && is_numeric($_GET['listing_id'])) {
     $listing_id = intval($_GET['listing_id']);
@@ -101,14 +104,21 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
                 <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
             </div>
         </div>
-        <div> <a href="user_profile.php?user_id=<?= $listing['User_ID'] ?>">
-                View Seller's Profile
-            </a></div>
-        <!-- Back to Listings Button -->
-        <div class="btn-container">
-            <a href="listings.php" class="pill-button">Back to Listings</a>
-        </div>
+        <div style="text-align: center; margin-top: 20px;">
+    <!-- Top Row Links -->
+    <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+        <a href="category.php?category=<?php echo urlencode($category); ?>" class="btn">Return to Category</a>
+        <a href="all_listings.php" class="btn">All Listings</a>
+        <a href="profile.php?id=<?php echo htmlspecialchars($userId); ?>" class="btn">View Profile</a>
     </div>
+    
+    <!-- Buy Now Button -->
+    <div>
+        <a href="buy_now.php?item=<?php echo htmlspecialchars($itemId); ?>" 
+           class="btn btn-large">BUY NOW</a>
+    </div>
+</div>
+
 
     <?php include 'footer.php'; ?>
 

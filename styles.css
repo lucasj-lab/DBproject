@@ -2626,3 +2626,30 @@ img.thumbnail-option {
 .image-gallery::-webkit-scrollbar-track {
     background: #f9f9f9; /* Scrollbar track color */
 }
+
+
+.btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-large {
+    display: block;
+    width: calc(100% - 40px); /* Full width with 20px padding on each side */
+    margin: 0 auto;
+    padding: 15px 0;
+    text-align: center;
+    background-color: #28a745;
+}
+
+.btn-large:hover {
+    background-color: #218838;
+}
