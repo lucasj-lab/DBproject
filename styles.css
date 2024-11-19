@@ -2711,3 +2711,72 @@ img.thumbnail-option {
 .view-button:hover {
     background-color: #0056b3;
 }
+
+
+div#listings-container {
+    padding: 1.5rem auto;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-grid;
+    max-width: 300px;
+    background-color: #eef5ff8f;
+  }
+
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.listing-container {
+    display: grid;
+    gap: 10px; /* Space between listing items */
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Default: 4x4 Layout */
+.listing-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* 3x3 Layout for medium screens */
+@media (max-width: 768px) {
+    .listing-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 2x2 Layout for smaller screens */
+@media (max-width: 576px) {
+    .listing-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1x1 Layout for extra small screens */
+@media (max-width: 400px) {
+    .listing-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.listing-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    aspect-ratio: 1 / 1; /* Ensures items are perfect squares */
+    text-align: center;
+    overflow: hidden; /* Ensures content doesn't overflow */
+}
