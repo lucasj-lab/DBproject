@@ -4,17 +4,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($listingId) {
         // Add purchase processing logic here
-        // Example: Save purchase details to the database or initiate payment
         ?>
-        <div class="success-message">
-            <h1>Thank you for purchasing listing ID: <?php echo htmlspecialchars($listingId); ?></h1>
+        <div class="popup-overlay">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h1 class="popup-title">Thank You!</h1>
+                </div>
+                <div class="popup-body">
+                    <p class="popup-message">We appreciate your purchase of <strong>Listing ID: <?php echo htmlspecialchars($listingId); ?></strong>.</p>
+                    <p class="popup-message">Your transaction has been successfully processed. Enjoy your purchase!</p>
+                </div>
+                <div class="popup-footer">
+                    <button class="close-popup" onclick="closePopup()">Close</button>
+                </div>
+            </div>
         </div>
+        <script>
+            function closePopup() {
+                document.querySelector('.popup-overlay').style.display = 'none';
+            }
+        </script>
         <?php
     } else {
         ?>
-        <div class="success-message">
-            <h1>Invalid listing. Please try again.</h1>
+        <div class="popup-overlay">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h1 class="popup-title">Error</h1>
+                </div>
+                <div class="popup-body">
+                    <p class="popup-message">Invalid listing. Please try again.</p>
+                </div>
+                <div class="popup-footer">
+                    <button class="close-popup" onclick="closePopup()">Close</button>
+                </div>
+            </div>
         </div>
+        <script>
+            function closePopup() {
+                document.querySelector('.popup-overlay').style.display = 'none';
+            }
+        </script>
         <?php
     }
 }
