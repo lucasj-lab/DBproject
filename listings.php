@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     container.innerHTML = `<p>${data.message}</p>`;
                     return;
                 }
-                data.forEach(listing => {
+<footer>…</footer>                data.forEach(listing => {
                     const listingElement = document.createElement('div');
                     listingElement.className = 'listing-item';
 
