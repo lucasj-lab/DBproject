@@ -121,8 +121,7 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
 </div>
 
 
-    <?php include 'footer.php'; ?>
-
+   
     <script>
         // Function to update the main image when a thumbnail is clicked
         function changeMainImage(src) {
@@ -249,4 +248,7 @@ $listingId = 12345; // Replace with dynamic listing ID
         };
     </script>
 </body>
+
+<?php include 'footer.php'; ?>
+
 </html>
