@@ -1,23 +1,6 @@
 <?php
 
 require 'database_connection.php';
-
-$conn = new mysqli($servername, $username, $password, 'projectDB');
-
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-if (!$stmt) {
-    error_log("SQL preparation failed: " . $conn->error);
-    die("SQL Error: " . $conn->error);
-}
-
-
 // Function to fetch all listings
 function getAllListings($conn) {
     // Define the SQL query
