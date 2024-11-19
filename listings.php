@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+<?php include 'header.php'; ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -142,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     </style>
 </head>
 <body>
-<?php include 'header.php'; ?>
+
 <main class="listings">
     <h1>Listings</h1>
     <div id="listings-container" class="listing-container"></div>
@@ -182,6 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             .catch(error => console.error('Error fetching listings:', error));
     </script>
 </main>
-<?php include 'footer.php'; ?>
+
 </body>
+<?php include 'footer.php'; ?>
 </html>
