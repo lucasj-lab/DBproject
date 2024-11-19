@@ -1,76 +1,57 @@
 <?php
-
 require 'database_connection.php';
 
-// Verify connection
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Validate and get the listing ID from the URL
+if (isset($_GET['listing_id']) && is_numeric($_GET['listing_id'])) {
+    $listing_id = intval($_GET['listing_id']);
+} else {
+    die("Error: Invalid or missing listing ID.");
 }
 
-// Function to fetch all listings
-function getAllListings($conn) {
-    $sql = "
-        SELECT 
-            listings.Listing_ID,
-            listings.Title,
-            listings.Description,
-            listings.Price,
-            listings.Date_Posted,
-            listings.State,
-            listings.City,
-            category.Category_Name,
-            `user`.Name AS User_Name,
-            images.Image_URL AS Thumbnail_Image
-        FROM listings
-        LEFT JOIN category ON listings.Category_ID = category.Category_ID
-        LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
-        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-        ORDER BY listings.Date_Posted DESC
-    ";
+// Fetch the listing details, including the thumbnail and additional images
+$sql = "
+    SELECT 
+        l.Listing_ID, 
+        l.Title, 
+        l.Description, 
+        l.Price, 
+        l.State, 
+        l.City, 
+        COALESCE(i.Image_URL, 'no_image.png') AS Thumbnail_Image
+    FROM 
+        listings l
+    LEFT JOIN 
+        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    WHERE 
+        l.Listing_ID = ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $listing_id);
+$stmt->execute();
+$listing = $stmt->get_result()->fetch_assoc();
 
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL preparation failed: " . $conn->error);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $listings = [];
-    while ($row = $result->fetch_assoc()) {
-        // Add full URL for images if needed
-        $row['Thumbnail_Image'] = $row['Thumbnail_Image'] 
-            ? "http://3.146.237.94/uploads/" . $row['Thumbnail_Image']
-            : null;
-        $listings[] = $row;
-    }
-
-    return $listings;
+// Check if the listing exists
+if (!$listing) {
+    die("Error: Listing not found.");
 }
 
-// Check if API is being accessed
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
-    try {
-        $listings = getAllListings($conn);
+// Fetch additional images
+$images_sql = "
+    SELECT Image_URL 
+    FROM images 
+    WHERE Listing_ID = ?
+";
+$images_stmt = $conn->prepare($images_sql);
+$images_stmt->bind_param("i", $listing_id);
+$images_stmt->execute();
+$additionalImages = $images_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        if (empty($listings)) {
-            $response = ["message" => "No listings available."];
-        } else {
-            foreach ($listings as &$listing) {
-                $datePosted = $listing['Date_Posted'] ? new DateTime($listing['Date_Posted']) : null;
-                $listing['Formatted_Date'] = $datePosted ? $datePosted->format('l, F jS, Y') : "Date not available";
-            }
-            $response = $listings;
-        }
-
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    } catch (Exception $e) {
-        error_log("Error fetching listings: " . $e->getMessage());
-        echo json_encode(["error" => "Error fetching listings."]);
-    }
-    exit();
-}
+$stmt->close();
+$images_stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -78,80 +59,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listings</title>
-    <style>
-        .listing {
-            border: 1px solid #ddd;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .listing img {
-            max-width: 150px;
-            max-height: 150px;
-            margin-right: 20px;
-            border-radius: 5px;
-        }
-
-        .listing-info {
-            flex: 1;
-        }
-
-        .listing-title {
-            font-size: 1.5em;
-            margin: 0;
-        }
-
-        .listing-description {
-            margin: 10px 0;
-        }
-
-        .listing-price {
-            color: green;
-            font-weight: bold;
-        }
-    </style>
+    <title>Listing Details</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Listings</h1>
-    <div id="listings-container"></div>
+<?php include 'header.php'; ?>
 
-    <script>
-        // Fetch the listings data
-        fetch('http://3.146.237.94/listings.php?fetchListings=true')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('listings-container');
-                if (data.message) {
-                    container.innerHTML = `<p>${data.message}</p>`;
-                    return;
-                }
-                data.forEach(listing => {
-                    const listingElement = document.createElement('div');
-                    listingElement.className = 'listing';
+<div class="create-listing-container">
+    <h1 class="edit-listing-title">Listing Details</h1>
 
-                    const thumbnail = listing.Thumbnail_Image 
-                        ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}">`
-                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available">';
+    <!-- Image Gallery -->
+    <div class="image-gallery">
+        <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image" alt="Main Image">
+        <div class="thumbnail-container">
+            <?php foreach ($additionalImages as $image): ?>
+                <img src="<?= htmlspecialchars($image['Image_URL']); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)" alt="Thumbnail">
+            <?php endforeach; ?>
+        </div>
+    </div>
 
-                    listingElement.innerHTML = `
-                        ${thumbnail}
-                        <div class="listing-info">
-                            <h2 class="listing-title">${listing.Title}</h2>
-                            <p class="listing-description">${listing.Description}</p>
-                            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                            <p><strong>Category:</strong> ${listing.Category_Name}</p>
-                            <p class="listing-price">$${listing.Price}</p>
-                        </div>
-                    `;
+    <!-- Listing Details -->
+    <div class="listing-details-wrapper">
+        <div class="form-group">
+            <label><strong>Title:</strong></label>
+            <p><?= htmlspecialchars($listing['Title']); ?></p>
+        </div>
 
-                    container.appendChild(listingElement);
-                });
-            })
-            .catch(error => console.error('Error fetching listings:', error));
-    </script>
+        <div class="form-group">
+            <label><strong>Description:</strong></label>
+            <p><?= htmlspecialchars($listing['Description']); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label><strong>Price:</strong></label>
+            <p>$<?= htmlspecialchars(number_format($listing['Price'], 2)); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label><strong>State:</strong></label>
+            <p><?= htmlspecialchars($listing['State']); ?></p>
+        </div>
+
+        <div class="form-group">
+            <label><strong>City:</strong></label>
+            <p><?= htmlspecialchars($listing['City']); ?></p>
+        </div>
+    </div>
+
+    <!-- Navigation and Buy Now -->
+    <div style="text-align: center; margin-top: 20px;">
+        <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+            <a href="browse_categories.php?category=<?= urlencode($listing['Category_Name'] ?? ''); ?>" class="btn">Return to Category</a>
+            <a href="all_listings.php" class="btn">All Listings</a>
+            <a href="profile.php?id=<?= htmlspecialchars($listing['User_ID'] ?? ''); ?>" class="btn">View Profile</a>
+        </div>
+        <a href="buy_now.php?item=<?= htmlspecialchars($listing_id); ?>" class="btn btn-large">BUY NOW</a>
+    </div>
+</div>
+
+<script>
+    function changeMainImage(src) {
+        document.getElementById('mainImage').src = src;
+    }
+</script>
 </body>
 </html>
