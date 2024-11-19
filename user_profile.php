@@ -4,7 +4,7 @@ require 'database_connection.php';
 
 $userId = $_GET['userId'] ?? null; // Default to null if 'userId' is not set
 if ($userId) {
-    echo '<a href="profile.php?id=' . htmlspecialchars($userId) . '">View Seller\'s Profile</a>';
+    echo '<a href="user_profile.php?id=' . htmlspecialchars($userId) . '">View Seller\'s Profile</a>';
 } else {
     echo 'User information unavailable';
 }
