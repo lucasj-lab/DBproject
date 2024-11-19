@@ -1,58 +1,4 @@
-<?php
-require 'database_connection.php';
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Validate and get the listing ID from the URL
-if (isset($_GET['listing_id']) && is_numeric($_GET['listing_id'])) {
-    $listing_id = intval($_GET['listing_id']);
-} else {
-    die("Error: Invalid or missing listing ID.");
-}
-
-// Fetch the listing details, including the thumbnail and additional images
-$sql = "
-    SELECT 
-        l.Listing_ID, 
-        l.Title, 
-        l.Description, 
-        l.Price, 
-        l.State, 
-        l.City, 
-        i.Image_URL AS Thumbnail_Image
-    FROM 
-        listings l
-    LEFT JOIN 
-        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
-    WHERE 
-        l.Listing_ID = :listing_id
-";
-$stmt = $pdo->prepare($sql);
-$stmt->execute(['listing_id' => $listing_id]);
-$listing = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Check if the listing exists
-if (!$listing) {
-    die("Error: Listing not found.");
-}
-
-// Fetch additional images
-$images_sql = "
-    SELECT Image_URL 
-    FROM images 
-    WHERE Listing_ID = :listing_id
-";
-$images_stmt = $pdo->prepare($images_sql);
-$images_stmt->execute(['listing_id' => $listing_id]);
-$additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
-
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listing Details</title>
@@ -60,56 +6,137 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    
+
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rookielist</title>
+  <link rel="stylesheet" href="styles.css">
+
+
+
+  <header>
+    <div class="logo">
+      <h1>Rookielist</h1>
+    </div>
+
+    <nav class="desktop-menu">
+      <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="listings.php">View All Listings</a></li>
+        
+                  <li><a href="create_listing.php">New Listing</a></li>
+                      <li><a href="user_dashboard.php">User Dashboard</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+              </ul>
+    </nav>
+
+   <!-- User Icon -->
+<div class="user-icon logged-in" id="userIcon">
+    <a href="user_dashboard.php">
+        <img src="images/user-icon-white-black-back.svg" alt="User Icon">
+    </a>
+</div>
+
+
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="listings.php">View All Listings</a></li>
+        
+                  <li><a href="create_listing.php">New Listing</a></li>
+                      <li><a href="user_dashboard.php">User Dashboard</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+              </ul>
+    </div>
+  </header>
+
+  <!-- JavaScript -->
+  <script>
+    // Toggle mobile menu visibility
+    function toggleMobileMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
+
+    // Change user icon border color when logged in
+    document.addEventListener("DOMContentLoaded", function() {
+      const userIcon = document.getElementById("userIcon");
+      const isLoggedIn = true;
+      if (isLoggedIn) {
+        userIcon.classList.add("logged-in"); // Adds the class for styling if logged in
+      }
+    });
+  </script>
+
+  <style>
+    /* CSS to set the user icon border color when logged in */
+    .user-icon.logged-in {
+      border: 2px solid green; /* Modify this style as per your requirements */
+    }
+  </style>
+
+
+
 
     <div class="create-listing-container"> <!-- Main container for the listing -->
         <h1 class="edit-listing-title">Listing Details</h1>
 
         <!-- Image Gallery Section -->
         <div class="image-gallery">
-            <img id="mainImage" src="<?= htmlspecialchars($listing['Thumbnail_Image']); ?>" class="main-image"
-                alt="Main Image">
+            <img id="mainImage" src="uploads/1731835097_M965VL-CAMO_Camo-Hayden-Tote_1-1.jpg" class="main-image" alt="Main Image">
             <div class="thumbnail-container">
-                <?php foreach ($additionalImages as $image): ?>
-                    <img src="<?= htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)"
-                        alt="Thumbnail">
-                <?php endforeach; ?>
-            </div>
+                                    <img src="uploads/1731835097_M851VL-TCAMEL_Camel-Audrey-Purse_1-1.jpg" class="thumbnail-image" onclick="changeMainImage(this.src)" alt="Thumbnail">
+                                    <img src="uploads/1731835097_M965VL-CAMO_Camo-Hayden-Tote_1-1.jpg" class="thumbnail-image" onclick="changeMainImage(this.src)" alt="Thumbnail">
+                            </div>
         </div>
 
         <!-- Listing Details Wrapper -->
         <div class="listing-details-wrapper">
             <div class="form-group">
                 <label for="title"><strong>Title:</strong></label>
-                <p id="title"><?= htmlspecialchars($listing['Title']); ?></p>
+                <p id="title">Tv</p>
             </div>
 
             <div class="form-group">
                 <label for="description"><strong>Description:</strong></label>
-                <p id="description"><?= htmlspecialchars($listing['Description']); ?></p>
+                <p id="description">Big</p>
             </div>
 
             <div class="form-group">
                 <label for="price"><strong>Price:</strong></label>
-                <p id="price">$<?= htmlspecialchars(number_format($listing['Price'], 2)); ?></p>
+                <p id="price">$87.00</p>
             </div>
 
             <div class="form-group">
                 <label for="state"><strong>State:</strong></label>
-                <p id="state"><?= htmlspecialchars($listing['State']); ?></p>
+                <p id="state">AL</p>
             </div>
 
             <div class="form-group">
                 <label for="city"><strong>City:</strong></label>
-                <p id="city"><?= htmlspecialchars($listing['City']); ?></p>
+                <p id="city">Mobile</p>
             </div>
         </div>
         <div style="text-align: center; margin-top: 20px;">
     <!-- Top Row Links -->
-    <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
-        <a href="browse_category.php?category=<?php echo urlencode($category); ?>" class="btn">Return to Category</a>
+    <div style="display: inline-grid;justify-content: space-around;margin-bottom: 10px;flex-direction: column;">
+        <a href="browse_category.php?category=<br />
+<b>Warning</b>:  Undefined variable $category in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>110</b><br />
+<br />
+<b>Deprecated</b>:  urlencode(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>110</b><br />
+" class="btn">Return to Category</a>
         <a href="listings.php" class="btn">All Listings</a>
-        <a href="user_profile.php?id=<?php echo htmlspecialchars($userId); ?>">View Profile</a>
+        <button id="buyNowBtn" class="btn">Buy Now</button><a href="user_profile.php?listing_id=<br />
+<b>Warning</b>:  Undefined variable $userId in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>112</b><br />
+<br />
+<b>Deprecated</b>:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>112</b><br />
+">View Profile</a>
 
     </div>
     
@@ -124,21 +151,14 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
             document.getElementById('mainImage').src = src;
         }
     </script>
-</body>
 
-</html>
 
-<?php
-// Sample listing details (replace with dynamic data from your database)
-$listingTitle = "Amazing Product";
-$listingPrice = "$100";
-$listingDescription = "This is a fantastic product you will love!";
-$listingId = 12345; // Replace with dynamic listing ID
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+
+
+
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buy Now Modal</title>
@@ -200,21 +220,21 @@ $listingId = 12345; // Replace with dynamic listing ID
             background-color: #0056b3;
         }
     </style>
-</head>
-<body>
+
+
     <!-- Buy Now Button -->
-    <button id="buyNowBtn" class="btn">Buy Now</button>
+    
 
     <!-- Modal -->
     <div id="buyNowModal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
+            <span class="close" id="closeModal">×</span>
             <h2>Buy Now</h2>
-            <p><strong>Title:</strong> <?php echo htmlspecialchars($listingTitle); ?></p>
-            <p><strong>Price:</strong> <?php echo htmlspecialchars($listingPrice); ?></p>
-            <p><strong>Description:</strong> <?php echo htmlspecialchars($listingDescription); ?></p>
+            <p><strong>Title:</strong> Amazing Product</p>
+            <p><strong>Price:</strong> $100</p>
+            <p><strong>Description:</strong> This is a fantastic product you will love!</p>
             <form action="process_purchase.php" method="POST">
-                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listingId); ?>">
+                <input type="hidden" name="listingId" value="12345">
                 <button type="submit" class="btn">Confirm Purchase</button>
             </form>
         </div>
@@ -243,8 +263,27 @@ $listingId = 12345; // Replace with dynamic listing ID
             }
         };
     </script>
-</body>
 
-<?php include 'footer.php'; ?>
 
-</html>
+
+
+
+
+    <footer>
+    <div class="footer-content">
+        <p>© 2024 Rookie List 2.0 | All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="about.php">About Us</a></li>
+                <li><a href="contact.php">Contact</a></li>
+                <li><a href="privacy.php">Privacy Policy</a></li>
+            </ul>
+        </nav>
+    </div>
+</footer>
+
+
+
+  
+
+</div></body></html>
