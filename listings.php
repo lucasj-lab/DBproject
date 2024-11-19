@@ -124,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     <script>
         // Fetch the listings data
-        fetch('http:/3.146.2listings.php?fetchListings=true')
+        fetch('http://yourdomain.com/listings.php?fetchListings=true')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('listings-container');
