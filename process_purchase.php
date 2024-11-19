@@ -5,10 +5,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($listingId) {
         // Add purchase processing logic here
         // Example: Save purchase details to the database or initiate payment
-
-        echo "Thank you for purchasing listing ID: " . htmlspecialchars($listingId);
+        ?>
+        <div class="success-container">
+            <h1>Thank you for purchasing listing ID: <?php echo htmlspecialchars($listingId); ?></h1>
+        </div>
+        <?php
     } else {
-        echo "Invalid listing. Please try again.";
+        ?>
+        <div class="success-container">
+            <h1>Invalid listing. Please try again.</h1>
+        </div>
+        <?php
     }
 }
 ?>
