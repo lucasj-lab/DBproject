@@ -84,6 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
 
         main.listings {
@@ -98,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         .listing-container {
             display: grid;
-            gap: 10px; /* Space between listing items */
+            gap: 10px;
             width: 100%;
         }
 
@@ -130,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         .listing-item {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background-color: #007bff;
@@ -139,6 +142,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             aspect-ratio: 1 / 1; /* Ensures items are perfect squares */
             text-align: center;
             overflow: hidden; /* Ensures content doesn't overflow */
+        }
+
+        .listing-info {
+            padding: 10px;
+            text-align: left;
+            color: #ffffff;
+        }
+
+        .listing-info h2 {
+            font-size: 1rem;
+            margin: 0;
+            margin-bottom: 5px;
+        }
+
+        .listing-info p {
+            margin: 0;
         }
     </style>
 </head>
@@ -163,8 +182,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     listingElement.className = 'listing-item';
 
                     const thumbnail = listing.Thumbnail_Image 
-                        ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}">`
-                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available">';
+                        ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}" style="width: 100%; height: auto;">`
+                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
 
                     listingElement.innerHTML = `
                         ${thumbnail}
