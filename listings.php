@@ -16,23 +16,24 @@ if (!$stmt) {
 function getAllListings($conn) {
     // Define the SQL query
     $sql = "
-        SELECT 
-            listings.Listing_ID,
-            listings.Title,
-            listings.Description,
-            listings.Price,
-            listings.Date_Posted,
-            listings.State,
-            listings.City,
-            categories.Category_Name,
-            users.Name AS User_Name,
-            images.Image_URL AS Thumbnail_Image
-        FROM listings
-        LEFT JOIN categories ON listings.Category_ID = categories.Category_ID
-        LEFT JOIN users ON listings.User_ID = users.User_ID
-        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-        ORDER BY listings.Date_Posted DESC
-    ";
+    SELECT 
+        listings.Listing_ID,
+        listings.Title,
+        listings.Description,
+        listings.Price,
+        listings.Date_Posted,
+        listings.State,
+        listings.City,
+        category.Category_Name,
+        user.Name AS User_Name,
+        images.Image_URL AS Thumbnail_Image
+    FROM listings
+    LEFT JOIN category ON listings.Category_ID = category.Category_ID
+    LEFT JOIN user ON listings.User_ID = user.User_ID
+    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+    ORDER BY listings.Date_Posted DESC
+";
+
 
     // Debugging log for the query
     error_log("Executing SQL Query: $sql");
