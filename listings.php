@@ -1,9 +1,16 @@
 <?php
+
+require 'database_connection.php';
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'database_connection.php';
+if (!$stmt) {
+    error_log("SQL preparation failed: " . $conn->error);
+    die("SQL Error: " . $conn->error);
+}
+
 
 // Function to fetch all listings
 function getAllListings($conn) {
