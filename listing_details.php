@@ -109,7 +109,7 @@ $additionalImages = $images_stmt->fetchAll(PDO::FETCH_COLUMN);
     <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
         <a href="browse_category.php?category=<?php echo urlencode($category); ?>" class="btn">Return to Category</a>
         <a href="listings.php" class="btn">All Listings</a>
-        <a href="user_profile.php?listing_id=<?php echo htmlspecialchars($userId); ?>">View Profile</a>
+        <a href="user_profile.php?id=<?php echo htmlspecialchars($userId); ?>">View Profile</a>
 
     </div>
     
