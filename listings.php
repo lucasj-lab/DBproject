@@ -116,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     </style>
 </head>
 <body>
+<?php include 'header.php'; ?>
     <h1>Listings</h1>
     <div id="listings-container"></div>
 
@@ -154,4 +155,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             .catch(error => console.error('Error fetching listings:', error));
     </script>
 </body>
+<?php include 'footer.php'; ?>
 </html>

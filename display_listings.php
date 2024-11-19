@@ -64,7 +64,7 @@ require 'listing_queries.php';
                 <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
                 <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
                 <button type="button" class="pill-button"
-                    onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                    onclick="window.location.href='listing_details.php?listing_listing_id=${listing.Listing_ID}'">
                     View Listing
                 </button>
             `;
