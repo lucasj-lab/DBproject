@@ -2626,3 +2626,14 @@ img.thumbnail-option {
 .image-gallery::-webkit-scrollbar-track {
     background: #f9f9f9; /* Scrollbar track color */
 }
+
+.success-container {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px auto;
+    width: 80%;
+}
