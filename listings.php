@@ -80,102 +80,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listings</title>
     <style>
-        .listing {
-            border: 1px solid #ddd;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .listing img {
-            max-width: 150px;
-            max-height: 150px;
-            margin-right: 20px;
-            border-radius: 5px;
-        }
-
-        .listing-info {
-            flex: 1;
-        }
-
-        .listing-title {
-            font-size: 1.5em;
-            margin: 0;
-        }
-
-        .listing-description {
-            margin: 10px 0;
-        }
-
-        .listing-price {
-            color: green;
-            font-weight: bold;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
 
         main.listings {
-    width: 90%;
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-/* Listing Container */
-.listing-container {
-    display: grid;
-    gap: 10px; /* Space between listing items */
-    width: 100%;
-}
+        .listing-container {
+            display: grid;
+            gap: 10px; /* Space between listing items */
+            width: 100%;
+        }
 
-/* Default: 4x4 Layout */
-.listing-container {
-    grid-template-columns: repeat(4, 1fr);
-}
+        /* Default: 4x4 Layout */
+        .listing-container {
+            grid-template-columns: repeat(4, 1fr);
+        }
 
-/* 3x3 Layout for medium screens */
-@media (max-width: 768px) {
-    .listing-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+        /* 3x3 Layout for medium screens */
+        @media (max-width: 768px) {
+            .listing-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
 
-/* 2x2 Layout for smaller screens */
-@media (max-width: 576px) {
-    .listing-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+        /* 2x2 Layout for smaller screens */
+        @media (max-width: 576px) {
+            .listing-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-/* 1x1 Layout for extra small screens */
-@media (max-width: 400px) {
-    .listing-container {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
+        /* 1x1 Layout for extra small screens */
+        @media (max-width: 400px) {
+            .listing-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
 
-.listing-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #007bff;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 5px;
-    aspect-ratio: 1 / 1; /* Ensures items are perfect squares */
-    text-align: center;
-    overflow: hidden; /* Ensures content doesn't overflow */
-}
+        .listing-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            aspect-ratio: 1 / 1; /* Ensures items are perfect squares */
+            text-align: center;
+            overflow: hidden; /* Ensures content doesn't overflow */
+        }
     </style>
 </head>
 <body>
 <?php include 'header.php'; ?>
-<main>
+<main class="listings">
     <h1>Listings</h1>
-    <div id="listings-container"></div>
+    <div id="listings-container" class="listing-container"></div>
 
     <script>
         // Fetch the listings data
@@ -189,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                 }
                 data.forEach(listing => {
                     const listingElement = document.createElement('div');
-                    listingElement.className = 'listing';
+                    listingElement.className = 'listing-item';
 
                     const thumbnail = listing.Thumbnail_Image 
                         ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}">`
@@ -199,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                         ${thumbnail}
                         <div class="listing-info">
                             <h2 class="listing-title">${listing.Title}</h2>
-                            <p class="listing-description">${listing.Description}</p>
+                            <p>${listing.Description}</p>
                             <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
                             <p><strong>Category:</strong> ${listing.Category_Name}</p>
                             <p class="listing-price">$${listing.Price}</p>
@@ -211,8 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
             })
             .catch(error => console.error('Error fetching listings:', error));
     </script>
-
 </main>
-</body>
 <?php include 'footer.php'; ?>
+</body>
 </html>
