@@ -7,83 +7,28 @@ if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-// Prepare the SQL query
-$sql = "
-    SELECT 
-        listings.Listing_ID,
-        listings.Title,
-        listings.Description,
-        listings.Price,
-        listings.Date_Posted,
-        listings.State,
-        listings.City,
-        category.Category_Name,
-        `user`.Name AS User_Name,
-        images.Image_URL AS Thumbnail_Image
-    FROM listings
-    LEFT JOIN category ON listings.Category_ID = category.Category_ID
-    LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
-    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-    ORDER BY listings.Date_Posted DESC
-";
-
-$stmt = $conn->prepare($sql);
-
-// Check if preparation was successful
-if (!$stmt) {
-    error_log("SQL preparation failed: " . $conn->error);
-    die("SQL Error: " . $conn->error . " | Query: " . $sql);
-}
-
-// Execute the query
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Check if there are results
-if ($result->num_rows === 0) {
-    error_log("No listings found.");
-    die("No listings found.");
-}
-
-// Fetch results into an array
-$listings = [];
-while ($row = $result->fetch_assoc()) {
-    $listings[] = $row;
-}
-
-// Output results as JSON
-header('Content-Type: application/json');
-echo json_encode($listings);
-
 // Function to fetch all listings
 function getAllListings($conn) {
-    // Define the SQL query
     $sql = "
-    SELECT 
-        listings.Listing_ID,
-        listings.Title,
-        listings.Description,
-        listings.Price,
-        listings.Date_Posted,
-        listings.State,
-        listings.City,
-        category.Category_Name,
-        user.Name AS User_Name,
-        images.Image_URL AS Thumbnail_Image
-    FROM listings
-    LEFT JOIN category ON listings.Category_ID = category.Category_ID
-    LEFT JOIN user ON listings.User_ID = user.User_ID
-    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-    ORDER BY listings.Date_Posted DESC
-";
+        SELECT 
+            listings.Listing_ID,
+            listings.Title,
+            listings.Description,
+            listings.Price,
+            listings.Date_Posted,
+            listings.State,
+            listings.City,
+            category.Category_Name,
+            `user`.Name AS User_Name,
+            images.Image_URL AS Thumbnail_Image
+        FROM listings
+        LEFT JOIN category ON listings.Category_ID = category.Category_ID
+        LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
+        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+        ORDER BY listings.Date_Posted DESC
+    ";
 
-
-    // Debugging log for the query
-    error_log("Executing SQL Query: $sql");
-
-    // Prepare and execute the query
     $stmt = $conn->prepare($sql);
-
     if (!$stmt) {
         throw new Exception("SQL preparation failed: " . $conn->error);
     }
@@ -93,18 +38,22 @@ function getAllListings($conn) {
 
     $listings = [];
     while ($row = $result->fetch_assoc()) {
+        // Add full URL for images if needed
+        $row['Thumbnail_Image'] = $row['Thumbnail_Image'] 
+            ? "http://3.146.237.94/uploads/" . $row['Thumbnail_Image']
+            : null;
         $listings[] = $row;
     }
 
     return $listings;
 }
 
+// Check if API is being accessed
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
         $listings = getAllListings($conn);
 
         if (empty($listings)) {
-            error_log("No listings found");
             $response = ["message" => "No listings available."];
         } else {
             foreach ($listings as &$listing) {
@@ -116,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         header('Content-Type: application/json');
         echo json_encode($response);
-
     } catch (Exception $e) {
         error_log("Error fetching listings: " . $e->getMessage());
         echo json_encode(["error" => "Error fetching listings."]);
@@ -173,17 +121,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     <script>
         // Fetch the listings data
-        fetch('http:/3.146.237.94/listings.php?fetchListings=true')
+        fetch('http://3.146.237.94/listings.php?fetchListings=true')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('listings-container');
+                if (data.message) {
+                    container.innerHTML = `<p>${data.message}</p>`;
+                    return;
+                }
                 data.forEach(listing => {
                     const listingElement = document.createElement('div');
                     listingElement.className = 'listing';
 
                     const thumbnail = listing.Thumbnail_Image 
                         ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}">`
-                        : '<img src="default-thumbnail.jpg" alt="No Image Available">';
+                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available">';
 
                     listingElement.innerHTML = `
                         ${thumbnail}
