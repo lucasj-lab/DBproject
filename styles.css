@@ -2295,10 +2295,9 @@ select#state {
 /* Buttons styling */
 .create-listing-container .btn-container {
     display: flex;
-    justify-content: center;
     gap: 10px;
     margin-top: 20px;
-
+    flex-direction: column;
 }
 
 .create-listing-container button {
