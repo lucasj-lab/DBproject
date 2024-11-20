@@ -11,9 +11,9 @@ require 'database_connection.php';
   <title>Rookielist</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-
+<?php include 'header.php'; ?>
 <body>
-  <?php include 'header.php'; ?>
+
 
   <main>
     <!-- Hero Section -->

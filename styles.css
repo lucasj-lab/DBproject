@@ -86,8 +86,8 @@ header {
 
 h1 {
     color: #007bff;
-  }
-  
+}
+
 
 header h1 {
     color: #fff;
@@ -320,6 +320,7 @@ main {
     justify-self: center;
     text-align: center;
 }
+
 /* Form Styles */
 form {
     margin: 2rem auto;
@@ -496,7 +497,7 @@ form.category-item {
     display: inline-grid;
     max-width: 300px;
     background-color: #eef5ff8f;
-    
+
 }
 
 /* Categories Section */
@@ -929,8 +930,10 @@ nav ul li a {
 .user-icon.logged-in a {
     background-color: #4caf50;
     border-radius: 30px;
-    box-shadow: 0 0 5px 5px #4caf50; /* Wide-spread shadow */
-    transform: scale(1.1); /* Slight zoom for interactivity */
+    box-shadow: 0 0 5px 5px #4caf50;
+    /* Wide-spread shadow */
+    transform: scale(1.1);
+    /* Slight zoom for interactivity */
 }
 
 
@@ -1039,7 +1042,7 @@ button {
     flex-direction: column;
     gap: 15px;
     max-width: 350px;
-    margin: auto;       
+    margin: auto;
 }
 
 .listing-form-group input[type="text"],
@@ -1234,7 +1237,6 @@ input[type=number] {
     background-color: #f4f4f4;
     justify-self: center;
     color: #2196F3
-    
 }
 
 .dashboard-header-cell {
@@ -1321,6 +1323,8 @@ header,
 footer {
     width: 100%;
     padding: 1rem;
+    position: sticky;
+    top: 0;
 }
 
 /* Main dashboard styling */
@@ -1357,7 +1361,7 @@ table td {
 
 /* Style for Login Container */
 .login-container {
-  max-width: 500px;
+    max-width: 500px;
     margin: auto;
     padding: 2rem;
     border: 1px solid #0000001c;
@@ -1467,6 +1471,7 @@ table td {
     padding: 20px;
 
 }
+
 /* Style for Each Listing Item */
 .listing-item {
 
@@ -1543,7 +1548,7 @@ table td {
     color: #fff;
     background-color: #007BFF;
     border: none;
- border-radius: 30px;
+    border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: center;
@@ -1664,7 +1669,8 @@ table td {
     border-collapse: collapse;
 }
 
-.edit-listing-container th, .edit-listing-container td {
+.edit-listing-container th,
+.edit-listing-container td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -1706,8 +1712,8 @@ table td {
 }
 
 /* Optional styling for inputs in the table if needed */
-.edit-listing-container input[type="text"], 
-.edit-listing-container input[type="number"], 
+.edit-listing-container input[type="text"],
+.edit-listing-container input[type="number"],
 .edit-listing-container textarea {
     width: 100%;
     padding: 8px;
@@ -1721,22 +1727,27 @@ table td {
     .edit-listing-container {
         padding: 20px;
         margin: 0 auto;
-        width: 90%; /* Takes up most of the screen */
+        width: 90%;
+        /* Takes up most of the screen */
     }
 
     .edit-listing-container h2 {
-        font-size: 1.5rem; /* Smaller heading */
+        font-size: 1.5rem;
+        /* Smaller heading */
         text-align: center;
     }
 
     .form-group {
-        margin-bottom: 15px; /* Space between fields */
+        margin-bottom: 15px;
+        /* Space between fields */
         display: flex;
-        flex-direction: column; /* Stack labels and inputs vertically */
+        flex-direction: column;
+        /* Stack labels and inputs vertically */
     }
 
     .form-group label {
-        font-size: 0.9rem; /* Smaller label text */
+        font-size: 0.9rem;
+        /* Smaller label text */
         margin-bottom: 5px;
     }
 
@@ -1744,10 +1755,13 @@ table td {
     .form-group input[type="number"],
     .form-group select,
     .form-group textarea {
-        font-size: 1rem; /* Adjust font size */
+        font-size: 1rem;
+        /* Adjust font size */
         padding: 10px;
-        width: 100%; /* Full width input */
-        box-sizing: border-box; /* Prevent overflow */
+        width: 100%;
+        /* Full width input */
+        box-sizing: border-box;
+        /* Prevent overflow */
     }
 
     .image-gallery {
@@ -1757,7 +1771,8 @@ table td {
     }
 
     .image-gallery img {
-        width: 70px; /* Smaller preview size */
+        width: 70px;
+        /* Smaller preview size */
         margin: 5px;
         height: auto;
         object-fit: cover;
@@ -1767,16 +1782,20 @@ table td {
 
 /* Common styles for buttons inside actions-cell */
 .actions-cell a {
-    display: block;         /* Make the buttons block elements */
-    width: 7rem;           /* Set a fixed width (adjust as needed) */
-    margin: 5px;       /* Center the buttons horizontally */
-    text-align: center;     /* Center the text inside the buttons */
+    display: block;
+    /* Make the buttons block elements */
+    width: 7rem;
+    /* Set a fixed width (adjust as needed) */
+    margin: 5px;
+    /* Center the buttons horizontally */
+    text-align: center;
+    /* Center the text inside the buttons */
 }
 
 /* Edit Button - Green */
 .pill-button-edit {
     background-color: #4caf50;
-     /* Adjust padding for consistent height */
+    /* Adjust padding for consistent height */
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -1785,7 +1804,8 @@ table td {
 }
 
 .pill-button-edit:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #45a049;
+    /* Darker green on hover */
 }
 
 /* Delete Button - Red */
@@ -1799,13 +1819,15 @@ table td {
 }
 
 .pill-button-delete:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #d32f2f;
+    /* Darker red on hover */
 }
 
 /* Centered, primary color styling for Edit Listing page titles */
 .edit-listing-title {
     text-align: center;
-    color: #1a73e8; /* Primary color */
+    color: #1a73e8;
+    /* Primary color */
     font-size: 2rem;
     font-weight: bold;
     margin-top: 20px;
@@ -1814,7 +1836,8 @@ table td {
 
 .edit-listing-subtitle {
     text-align: center;
-    color: #1a73e8; /* Primary color */
+    color: #1a73e8;
+    /* Primary color */
     font-size: 1.5rem;
     margin-top: 15px;
     margin-bottom: 10px;
@@ -1823,8 +1846,10 @@ table td {
 
 /* Center align the submit button at the bottom of the form */
 .submit-button-container {
-    text-align: center; /* Centers the button */
-    margin-top: 20px; /* Space above the button */
+    text-align: center;
+    /* Centers the button */
+    margin-top: 20px;
+    /* Space above the button */
 }
 
 
@@ -1842,6 +1867,7 @@ table td {
     text-align: center;
     margin-top: 20px;
 }
+
 /* Style for Dope Dashboard Container */
 .dope-dashboard {
     max-width: 1000px;
@@ -1869,7 +1895,7 @@ table td {
     margin-top: 20px;
 }
 
-.dope-dashboard .dashboard-table th, 
+.dope-dashboard .dashboard-table th,
 .dope-dashboard .dashboard-table td {
     padding: 10px;
     border-bottom: 1px solid #000000;
@@ -2006,7 +2032,8 @@ table td {
     text-align: left;
 }
 
-.dashboard-table th, .dashboard-table td {
+.dashboard-table th,
+.dashboard-table td {
     padding: 0.8rem;
     border-bottom: 1px solid #ddd;
 }
@@ -2050,7 +2077,9 @@ table td {
 
 /* Responsive table adjustments */
 @media (max-width: 500px) {
-    .dashboard-table, .table-container {
+
+    .dashboard-table,
+    .table-container {
         display: grid;
         justify-items: center;
     }
@@ -2067,7 +2096,8 @@ table td {
     .dashboard-table td {
         display: flex;
         align-items: flex-end;
-        text-align: left; /* Align text to the left */
+        text-align: left;
+        /* Align text to the left */
         padding: 0.5rem;
         border-bottom: 0;
         flex-direction: row-reverse;
@@ -2120,7 +2150,7 @@ footer nav ul li a {
     /* background-color: #dfdfdf7a; */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top:50px;
+    margin-top: 50px;
 }
 
 /* Input Container */
@@ -2175,9 +2205,9 @@ footer nav ul li a {
 }
 
 select#state {
-  width: -webkit-fill-available;
-  padding-bottom: 10px;
-  padding-top: 10px;
+    width: -webkit-fill-available;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .dropdown-content {
@@ -2188,7 +2218,7 @@ select#state {
     max-height: 150px;
     overflow-y: auto;
     width: 100%;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
@@ -2221,6 +2251,7 @@ select#state {
 .dropdown-content div:hover {
     background-color: #ddd;
 }
+
 .create-listing-container {
     max-width: 600px;
     margin: 20px auto;
@@ -2239,7 +2270,8 @@ select#state {
     border-collapse: collapse;
 }
 
-.create-listing-container th, .create-listing-container td {
+.create-listing-container th,
+.create-listing-container td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -2282,8 +2314,8 @@ select#state {
 }
 
 /* Optional styling for inputs in the form if needed */
-.create-listing-container input[type="text"], 
-.create-listing-container input[type="number"], 
+.create-listing-container input[type="text"],
+.create-listing-container input[type="number"],
 .create-listing-container textarea,
 .create-listing-container select {
     width: 100%;
@@ -2298,13 +2330,15 @@ select#state {
     .create-listing-container {
         padding: 20px;
         margin: 0 auto;
-        width: 90%; /* Takes up most of the screen */
+        width: 90%;
+        /* Takes up most of the screen */
         margin-top: 50px;
         margin-bottom: 50px;
     }
 
     .create-listing-container h2 {
-        font-size: 1.5rem; /* Smaller heading */
+        font-size: 1.5rem;
+        /* Smaller heading */
         text-align: center;
     }
 }
@@ -2346,11 +2380,16 @@ select#state {
     display: flex;
     gap: 10px;
     margin-top: 10px;
-    max-width: 100%; /* Keep within the form's width */
-    overflow-x: auto; /* Enable horizontal scrolling if images exceed container width */
-    padding: 5px; /* Add some padding for aesthetics */
-    box-sizing: border-box; /* Ensure padding doesn't affect the width */
-    white-space: nowrap; /* Prevent wrapping of images */
+    max-width: 100%;
+    /* Keep within the form's width */
+    overflow-x: auto;
+    /* Enable horizontal scrolling if images exceed container width */
+    padding: 5px;
+    /* Add some padding for aesthetics */
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect the width */
+    white-space: nowrap;
+    /* Prevent wrapping of images */
     border: 1px solid #ddd;
     border-radius: 5px;
 }
@@ -2362,29 +2401,35 @@ select#state {
     object-fit: cover;
     border: 1px solid #ddd;
     border-radius: 5px;
-    flex-shrink: 0; /* Prevent images from shrinking */
+    flex-shrink: 0;
+    /* Prevent images from shrinking */
 }
 
 /* Scrollbar styling for a better user experience */
 #create-listing-form #imagePreviewContainer::-webkit-scrollbar,
 #edit-listing-form #imagePreviewContainer::-webkit-scrollbar {
-    height: 8px; /* Scrollbar height */
+    height: 8px;
+    /* Scrollbar height */
 }
 
 #create-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb,
 #edit-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb {
-    background: #ccc; /* Scrollbar thumb color */
-    border-radius: 4px; /* Rounded scrollbar */
+    background: #ccc;
+    /* Scrollbar thumb color */
+    border-radius: 4px;
+    /* Rounded scrollbar */
 }
 
 #create-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb:hover,
 #edit-listing-form #imagePreviewContainer::-webkit-scrollbar-thumb:hover {
-    background: #aaa; /* Darker thumb on hover */
+    background: #aaa;
+    /* Darker thumb on hover */
 }
 
 #create-listing-form #imagePreviewContainer::-webkit-scrollbar-track,
 #edit-listing-form #imagePreviewContainer::-webkit-scrollbar-track {
-    background: #f9f9f9; /* Scrollbar track color */
+    background: #f9f9f9;
+    /* Scrollbar track color */
 }
 
 .thumbnail-image {
@@ -2406,59 +2451,79 @@ select#state {
     border-color: rgba(0, 0, 0, 0.698);
 }
 
-        #imagePreviewContainer {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            overflow-x: auto;
-        }
+#imagePreviewContainer {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    overflow-x: auto;
+}
 
-        .preview-image {
-            max-width: 100px;
-            max-height: 100px;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+.preview-image {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
 /* CSS to style and control the size of images */
 .thumbnail-scroll-image {
-    max-width: 100%; /* Ensures images scale down to fit their container */
-    max-height: 150px; /* Limits the height of the image */
-    width: auto; /* Keeps the aspect ratio */
-    height: auto; /* Ensures proper scaling */
-    border: 1px solid #ccc; /* Optional: Add a border for aesthetics */
-    padding: 5px; /* Optional: Add padding around the image */
-    cursor: pointer; /* Indicates the image is clickable */
-    transition: transform 0.2s ease-in-out; /* Smooth effect for hover */
+    max-width: 100%;
+    /* Ensures images scale down to fit their container */
+    max-height: 150px;
+    /* Limits the height of the image */
+    width: auto;
+    /* Keeps the aspect ratio */
+    height: auto;
+    /* Ensures proper scaling */
+    border: 1px solid #ccc;
+    /* Optional: Add a border for aesthetics */
+    padding: 5px;
+    /* Optional: Add padding around the image */
+    cursor: pointer;
+    /* Indicates the image is clickable */
+    transition: transform 0.2s ease-in-out;
+    /* Smooth effect for hover */
 }
 
 .thumbnail-scroll-image:hover {
-    transform: scale(1.1); /* Optional: Slight zoom on hover */
+    transform: scale(1.1);
+    /* Optional: Slight zoom on hover */
 }
 
 
 /* Wrapper for the listing details section */
 .listing-details-wrapper {
-    background-color: #f3f3f3; /* Light gray background */
-    padding: 15px; /* Space between the border and the content */
-    border: 1px solid #ddd; /* Light border for definition */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    margin: 20px 0; /* Space above and below the wrapper */
-    max-width: 800px; /* Optional: Restrict width of the details wrapper */
-    width: 100%; /* Ensure responsiveness */
+    background-color: #f3f3f3;
+    /* Light gray background */
+    padding: 15px;
+    /* Space between the border and the content */
+    border: 1px solid #ddd;
+    /* Light border for definition */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    margin: 20px 0;
+    /* Space above and below the wrapper */
+    max-width: 800px;
+    /* Optional: Restrict width of the details wrapper */
+    width: 100%;
+    /* Ensure responsiveness */
 }
 
 /* Centering the wrapper */
 .listing-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
+    align-items: center;
+    /* Center items horizontally */
 }
 
 /* Styling for the listing details */
 .listing-details {
-    text-align: center; /* Center align text */
+    text-align: center;
+    /* Center align text */
 }
 
 .listing-details h1 {
@@ -2490,28 +2555,41 @@ select#state {
 
 /* Base style for the user icon button */
 .user-icon {
-    width: 50px; /* Adjust size as needed */
-    height: 50px; /* Adjust size as needed */
-    background-color: transparent; /* Transparent background */
-    border-radius: 50%; /* Make it circular */
-    border: none; /* Remove default border */
-    cursor: pointer; /* Pointer cursor for buttons */
-    overflow: hidden; /* Ensure the icon stays within the circle */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth shadow and scale transition */
+    width: 50px;
+    /* Adjust size as needed */
+    height: 50px;
+    /* Adjust size as needed */
+    background-color: transparent;
+    /* Transparent background */
+    border-radius: 50%;
+    /* Make it circular */
+    border: none;
+    /* Remove default border */
+    cursor: pointer;
+    /* Pointer cursor for buttons */
+    overflow: hidden;
+    /* Ensure the icon stays within the circle */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    /* Smooth shadow and scale transition */
 }
 
 /* Style for the SVG inside the button */
 .user-icon img {
-    width: 100%; /* Ensure the image fills the button */
+    width: 100%;
+    /* Ensure the image fills the button */
     height: 100%;
-    object-fit: cover; /* Maintain the aspect ratio */
-    border-radius: 50%; /* Ensure the image is circular */
+    object-fit: cover;
+    /* Maintain the aspect ratio */
+    border-radius: 50%;
+    /* Ensure the image is circular */
 }
 
 /* Shadow effect on hover */
 .user-icon:hover {
-    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3); /* Wide-spread shadow */
-    transform: scale(1.1); /* Slight zoom for interactivity */
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3);
+    /* Wide-spread shadow */
+    transform: scale(1.1);
+    /* Slight zoom for interactivity */
 }
 
 /* Style for the anchor tag inside the user icon */
@@ -2520,39 +2598,49 @@ select#state {
     align-items: center;
     width: 100%;
     height: 100%;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    /* Remove underline */
 }
 
 /* Style for the SVG inside the user icon */
 .user-icon img {
-    width: 100%; /* Ensure the image fills the container */
+    width: 100%;
+    /* Ensure the image fills the container */
     height: 100%;
-    object-fit: cover; /* Maintain the aspect ratio */
-    border-radius: 50%; /* Keep the circular look */
+    object-fit: cover;
+    /* Maintain the aspect ratio */
+    border-radius: 50%;
+    /* Keep the circular look */
 }
 
 .user-icon:hover {
-    box-shadow: 0 0 5px 5px rgb(0, 0, 0); /* Wide-spread shadow */
-    transform: scale(1.1); /* Slight zoom for interactivity */
+    box-shadow: 0 0 5px 5px rgb(0, 0, 0);
+    /* Wide-spread shadow */
+    transform: scale(1.1);
+    /* Slight zoom for interactivity */
 }
 
 .pill-button.delete-button {
-    background-color: #dc3545; /* Red color for delete button */
+    background-color: #dc3545;
+    /* Red color for delete button */
 }
 
 /* Hover effect */
 .pill-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slight zoom effect */
+    background-color: #0056b3;
+    /* Darker blue on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect */
 }
 
 .pill-button.delete-button:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
+    /* Darker red on hover */
 }
 
 img.thumbnail-option {
- width: -webkit-fill-available;
-  }
+    width: -webkit-fill-available;
+}
 
 /* Main Thumbnail Section */
 .main-image-container {
@@ -2577,13 +2665,16 @@ img.thumbnail-option {
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-    max-width: 100%; /* Ensure it stays within the container */
+    max-width: 100%;
+    /* Ensure it stays within the container */
     box-sizing: border-box;
-    white-space: nowrap; /* Prevent wrapping of images */
+    white-space: nowrap;
+    /* Prevent wrapping of images */
 }
 
 .image-item {
-    flex-shrink: 0; /* Prevent images from shrinking */
+    flex-shrink: 0;
+    /* Prevent images from shrinking */
     text-align: center;
     position: relative;
 }
@@ -2611,22 +2702,27 @@ img.thumbnail-option {
 
 /* Scrollbar styling */
 .image-gallery::-webkit-scrollbar {
-    height: 8px; /* Scrollbar height */
+    height: 8px;
+    /* Scrollbar height */
 }
 
 .image-gallery::-webkit-scrollbar-thumb {
-    background: #ccc; /* Scrollbar thumb color */
-    border-radius: 4px; /* Rounded scrollbar */
+    background: #ccc;
+    /* Scrollbar thumb color */
+    border-radius: 4px;
+    /* Rounded scrollbar */
 }
 
 .image-gallery::-webkit-scrollbar-thumb:hover {
-    background: #aaa; /* Darker thumb on hover */
+    background: #aaa;
+    /* Darker thumb on hover */
 }
 
 .image-gallery::-webkit-scrollbar-track {
-    background: #f9f9f9; /* Scrollbar track color */
+    background: #f9f9f9;
+    /* Scrollbar track color */
 }
-                                                                                                                            
+
 
 /* Overlay Styling */
 .popup-overlay {
@@ -2713,6 +2809,7 @@ img.thumbnail-option {
         transform: translateY(-50px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
