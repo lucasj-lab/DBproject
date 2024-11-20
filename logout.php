@@ -10,7 +10,10 @@ session_destroy();
 // Redirect to the home page
 header("Location: index.php");
 exit();
-<?>
+
+?>
+
+<?php include 'header.php'; ?>
 
 <!-- Logout Button -->
 <a href="#" class="pill-button logout-button" onclick="showLogoutModal()">Log Out</a>

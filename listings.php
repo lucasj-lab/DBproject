@@ -124,15 +124,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                         ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}" style="width: 100%; height: auto;">`
                         : '<img src="uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
 
-                    listingElement.innerHTML = `
-                        ${thumbnail}
-                        <div class="listing-info">
-                            <h2 class="listing-title">${listing.Title}</h2>
-                            <p>${listing.Description}</p>
-                            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                            <p><strong>Category:</strong> ${listing.Category_Name}</p>
-                            <p class="listing-price">$${listing.Price}</p>
-                        </div>
+                        listingDiv.innerHTML = `
+                <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+                <h3><strong>${listing.Title}</strong></h3>
+                <p><strong>Description:</strong> ${listing.Description}</p>
+                <p><strong>Price:</strong> $${listing.Price}</p>
+                <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                <button type="button" class="pill-button"
+                    onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                    View Listing
+                </button>
                     `;
 
                     container.appendChild(listingElement);
