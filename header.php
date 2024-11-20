@@ -92,6 +92,32 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
         userIcon.classList.add("logged-in"); // Adds the class for styling if logged in
       }
     });
+
+    const logoutModal = document.getElementById('logoutModal');
+    const confirmLogoutButton = document.getElementById('confirmLogout');
+    const cancelLogoutButton = document.getElementById('cancelLogout');
+
+    // Function to show the logout modal
+    function showLogoutModal() {
+        logoutModal.style.display = 'block';
+    }
+
+    // Cancel button logic to close the modal
+    cancelLogoutButton.onclick = () => {
+        logoutModal.style.display = 'none';
+    };
+
+    // Confirm button logic to log out the user
+    confirmLogoutButton.onclick = () => {
+        window.location.href = 'logout.php'; // Redirect to the logout page
+    };
+
+    // Close modal if user clicks outside the modal content
+    window.onclick = (event) => {
+        if (event.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    };
   </script>
 
   <style>
