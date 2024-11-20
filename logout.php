@@ -11,9 +11,19 @@ session_destroy();
 header("Location: index.php");
 exit();
 
-?>
+<?>
 
-<?php include 'header.php'; ?>
+<!DOCTYPE html>
+<lang="en">
+<body>
+    <?php include 'header.php'; ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings</title>
+ 
+</head>
+<body></body>
 
 <!-- Logout Button -->
 <a href="#" class="pill-button logout-button" onclick="showLogoutModal()">Log Out</a>
@@ -45,3 +55,11 @@ function hideLogoutModal() {
 
 
 </script>
+
+</body>
+
+<footer>
+    <?php include 'footer.php'; ?>
+  </footer>
+
+  </html>

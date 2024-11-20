@@ -45,13 +45,64 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .thumbnail-image {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
     <?php include 'header.php'; ?>
 
     <main class="dope-dashboard">
-        <div class="add a new listing button wrapper">
         <h1 class="dashboard-title">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
         <p><strong>Member Since:</strong>
@@ -93,26 +144,82 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($listing['City']); ?></td>
                                 <td><?php echo htmlspecialchars($listing['State']); ?></td>
                                 <td class="thumbnail-cell">
-                                    <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>" 
+                                    <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>"
                                          alt="Listing Thumbnail" class="thumbnail-image">
                                 </td>
                                 <td class="action-buttons-cell">
-                                    <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button">Edit</a>
-                                    <a href="delete_listing.php?listing_id=<?= $listing['Listing_ID']; ?>" class="pill-button delete-button">Delete</a>
+                                    <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>"
+                                       class="pill-button">Edit</a>
+                                    <button class="pill-button delete-button" onclick="showDeleteModal(<?= $listing['Listing_ID']; ?>)">Delete</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                                </div>
-           <div class="btn-container"><a href="create_listing.php">New Listing</a></div>
-        </div>
+            </div>
+            <div class="btn-container"><a href="create_listing.php">New Listing</a></div>
         <?php else: ?>
             <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
         <?php endif; ?>
     </main>
 
-    <?php include 'footer.php'; ?>
-</body>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Listing</h2>
+            <p>Are you sure you want to delete this listing? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button id="confirmDelete" class="btn btn-danger">Delete</button>
+                <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteButton = document.getElementById('confirmDelete');
+        const cancelDeleteButton = document.getElementById('cancelDelete');
+        let currentListingId = null;
+
+        function showDeleteModal(listingId) {
+            currentListingId = listingId;
+            deleteModal.style.display = 'block';
+        }
+
+        cancelDeleteButton.onclick = () => {
+            deleteModal.style.display = 'none';
+            currentListingId = null;
+        };
+
+        confirmDeleteButton.onclick = () => {
+            if (currentListingId) {
+                fetch(`delete_listing.php?listing_id=${currentListingId}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Listing deleted successfully.');
+                            location.reload();
+                        } else {
+                            alert('Error deleting listing: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the listing.');
+                    })
+                    .finally(() => {
+                        deleteModal.style.display = 'none';
+                        currentListingId = null;
+                    });
+            }
+        };
+
+        window.onclick = (event) => {
+            if (event.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                currentListingId = null;
+            }
+        };
+    </script>
+</body>
+<?php include 'footer.php'; ?>
 </html>
