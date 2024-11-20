@@ -6,14 +6,18 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if (!$stmt) {
-    error_log("SQL preparation failed: " . $conn->error);
-    die("SQL Error: " . $conn->error);
-}
-
-
-// Function to fetch all listings
+/**
+ * Function to fetch all listings
+ * 
+ * @param mysqli $conn The database connection object
+ * @return array The array of listings
+ * @throws Exception If there is a database or query error
+ */
 function getAllListings($conn) {
+    if (!$conn) {
+        throw new Exception("Invalid database connection.");
+    }
+
     // Define the SQL query
     $sql = "
     SELECT 
@@ -32,30 +36,33 @@ function getAllListings($conn) {
     LEFT JOIN user ON listings.User_ID = user.User_ID
     LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
     ORDER BY listings.Date_Posted DESC
-";
+    ";
 
-
-    // Debugging log for the query
     error_log("Executing SQL Query: $sql");
 
     // Prepare and execute the query
     $stmt = $conn->prepare($sql);
-
     if (!$stmt) {
         throw new Exception("SQL preparation failed: " . $conn->error);
     }
 
     $stmt->execute();
     $result = $stmt->get_result();
+    if (!$result) {
+        throw new Exception("Query execution failed: " . $conn->error);
+    }
 
+    // Fetch the data
     $listings = [];
     while ($row = $result->fetch_assoc()) {
         $listings[] = $row;
     }
 
+    $stmt->close(); // Clean up the statement
     return $listings;
 }
 
+// Handle GET request for fetching listings
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
         $listings = getAllListings($conn);
@@ -76,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     } catch (Exception $e) {
         error_log("Error fetching listings: " . $e->getMessage());
+        header('Content-Type: application/json');
         echo json_encode(["error" => "Error fetching listings."]);
     }
     exit();
@@ -178,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
     <script>
         // Fetch the listings data
-        fetch('http://3.146.237.94/listings.php?fetchListings=true')
+        fetch('listings.php?fetchListings=true')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('listings-container');
@@ -186,13 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     container.innerHTML = `<p>${data.message}</p>`;
                     return;
                 }
-<footer>…</footer>                data.forEach(listing => {
+
+                data.forEach(listing => {
                     const listingElement = document.createElement('div');
                     listingElement.className = 'listing-item';
 
                     const thumbnail = listing.Thumbnail_Image 
                         ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}" style="width: 100%; height: auto;">`
-                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
+                        : '<img src="uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
 
                     listingElement.innerHTML = `
                         ${thumbnail}
@@ -215,5 +224,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 </body>
 <?php include 'footer.php'; ?>
 </html>
-
-
