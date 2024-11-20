@@ -53,7 +53,7 @@ $pdo = null;
                         </p>
                         <!-- Back to Listings button -->
                         <a href="create_listing.php" class="pill-button">New Listing</a>
-                        <a href="edit_listing.php?id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>" class="pill-button">Edit Listing</a>
+                        <a href="edit_listing.php?id=<?php echo htmlspecialchars($listingId['Listing_ID']); ?>" class="pill-button">Edit Listing</a>
                     </li>
                 <?php endforeach; ?>
             </ul>

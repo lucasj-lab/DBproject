@@ -31,12 +31,13 @@ header("Location: index.php");
     <div class="modal-content">
         <h2>Confirm Logout</h2>
         <p>Are you sure you want to log out?</p>
-        <div class="modal-buttons">
-            <a href="logout.php" class="pill-button confirm-logout">Yes, Log Out</a>
-            <button class="pill-button cancel-logout" onclick="hideLogoutModal()">Cancel</button>
+        <div class="modal-actions">
+            <button id="confirmLogout" class="btn btn-danger">Logout</button>
+            <button id="cancelLogout" class="btn btn-secondary">Cancel</button>
         </div>
     </div>
 </div>
+
 
 <script>
 
