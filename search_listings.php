@@ -154,3 +154,29 @@ $conn->close();
 <?php include 'footer.php'; ?>
 </body>
 </html>
+
+
+
+
+<main>
+    <div class="listings">
+    <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
+        <?php if (!empty($listings)): ?>
+            <div class="listings-container">
+                <?php foreach ($listings as $listing): ?>
+                    <form class="listing-item" action="listing_details.php" method="GET">
+                        <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
+                        <img src="<?php echo htmlspecialchars($listing['Images'][0] ?? 'no_image.png'); ?>" alt="Thumbnail" class="listing-image">
+                        <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+                        <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                        <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
+                        <button type="submit" class="pill-button">View Listing</button>
+                    </form>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>No listings found in the <?php echo htmlspecialchars($category); ?> category.</p>
+        <?php endif; ?>
+    </div>
+</main>
