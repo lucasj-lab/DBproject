@@ -1,67 +1,111 @@
 <?php
-session_start();
+
 require 'database_connection.php';
 
-$userId = $_GET['userId'] ?? null; // Default to null if 'userId' is not set
-if ($userId) {
-    echo '<a href="user_profile.php?id=' . htmlspecialchars($userId) . '">View Seller\'s Profile</a>';
-} else {
-    echo 'User information unavailable';
+// Get the search query from the user input
+$searchQuery = $_GET['q'] ?? '';
+
+// Function to fetch search results
+function getSearchResults($conn, $searchQuery) {
+    $sql = "
+        SELECT 
+            listings.Listing_ID,
+            listings.Title,
+            listings.Description,
+            listings.Price,
+            listings.Date_Posted,
+            listings.State,
+            listings.City,
+            category.Category_Name,
+            `user`.Name AS User_Name,
+            thumbnails.Image_URL AS Thumbnail_Image
+        FROM listings
+        LEFT JOIN category ON listings.Category_ID = category.Category_ID
+        LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
+        LEFT JOIN (
+            SELECT Listing_ID, Image_URL
+            FROM images
+            WHERE Is_Thumbnail = 1
+            GROUP BY Listing_ID
+        ) AS thumbnails ON listings.Listing_ID = thumbnails.Listing_ID
+        WHERE listings.Title LIKE ? OR listings.Description LIKE ?
+        ORDER BY listings.Date_Posted DESC
+    ";
+
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("SQL preparation failed: " . $conn->error);
+    }
+
+    $searchTerm = '%' . $searchQuery . '%';
+    $stmt->bind_param('ss', $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $listings = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['Thumbnail_Image'] = $row['Thumbnail_Image'] 
+            ? "http://3.146.237.94/uploads/" . $row['Thumbnail_Image']
+            : null;
+        $listings[] = $row;
+    }
+
+    return $listings;
 }
 
-
-$user_id = intval($_GET['user_id']);
-
-// Fetch user details
-$stmt = $pdo->prepare("SELECT Name, Profile_Bio, Date_Joined FROM user WHERE User_ID = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    die("User not found.");
+// Fetch search results
+$listings = [];
+try {
+    if (!empty($searchQuery)) {
+        $listings = getSearchResults($conn, $searchQuery);
+    }
+} catch (Exception $e) {
+    error_log("Error fetching search results: " . $e->getMessage());
 }
-
-// Fetch user listings
-$listingStmt = $pdo->prepare("SELECT * FROM listings WHERE User_ID = ?");
-$listingStmt->execute([$user_id]);
-$listings = $listingStmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($user['Name']) ?>'s Profile</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Add your stylesheet -->
 </head>
 <body>
-    <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
+<main>
+    <div class="listings">
+        <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
+        <?php if (!empty($listings)): ?>
+            <div class="listings-container">
+                <?php foreach ($listings as $listing): ?>
+                    <div class="listing-container">
+                        <div class="listing-title"><?php echo htmlspecialchars($listing['Title']); ?></div>
+                        <div class="listing-price">Price: $<?php echo htmlspecialchars($listing['Price']); ?></div>
+                        <div class="listing-user">Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></div>
+                        <div class="listing-location">Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></div>
+                        <div class="listing-date">Posted on: <?php echo htmlspecialchars($listing['Date_Posted']); ?></div>
 
-    <div class="profile-container">
-        <h1><?= htmlspecialchars($user['Name']) ?>'s Profile</h1>
-        <p>Member since: <?= htmlspecialchars($user['Date_Joined']) ?></p>
-        <p>Bio: <?= htmlspecialchars($user['Profile_Bio'] ?? "No bio available.") ?></p>
+                        <!-- Image Thumbnail -->
+                        <?php if (!empty($listing['Thumbnail_Image'])): ?>
+                            <div class="image-gallery">
+                                <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image']); ?>" alt="Listing Image">
+                            </div>
+                        <?php else: ?>
+                            <p>No image available for this listing.</p>
+                        <?php endif; ?>
 
-        <h2>Listings by <?= htmlspecialchars($user['Name']) ?>:</h2>
-        <ul>
-            <?php foreach ($listings as $listing): ?>
-                <li>
-                    <a href="listing_details.php?listing_id=<?= $listing['Listing_ID'] ?>">
-                        <?= htmlspecialchars($listing['Title']) ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <h2>Send a Message</h2>
-        <form action="send_message.php" method="POST">
-            <input type="hidden" name="recipient_id" value="<?= $user_id ?>">
-            <textarea name="message_text" placeholder="Write your message here..." required></textarea>
-            <button type="submit">Send</button>
-        </form>
+                        <a href="listing_details.php?listing_id=<?php echo $listing['Listing_ID']; ?>" class="view-button">View Listing</a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
+        <?php endif; ?>
     </div>
-
-    <?php include 'footer.php'; ?>
+</main>
+<?php include 'footer.php'; ?>
 </body>
 </html>
