@@ -2,58 +2,15 @@
 
 require 'database_connection.php';
 
-// Verify connection
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Prepare the SQL query
-$sql = "
-    SELECT 
-        listings.Listing_ID,
-        listings.Title,
-        listings.Description,
-        listings.Price,
-        listings.Date_Posted,
-        listings.State,
-        listings.City,
-        category.Category_Name,
-        `user`.Name AS User_Name,
-        images.Image_URL AS Thumbnail_Image
-    FROM listings
-    LEFT JOIN category ON listings.Category_ID = category.Category_ID
-    LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
-    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-    ORDER BY listings.Date_Posted DESC
-";
-
-$stmt = $conn->prepare($sql);
-
-// Check if preparation was successful
 if (!$stmt) {
     error_log("SQL preparation failed: " . $conn->error);
-    die("SQL Error: " . $conn->error . " | Query: " . $sql);
+    die("SQL Error: " . $conn->error);
 }
 
-// Execute the query
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Check if there are results
-if ($result->num_rows === 0) {
-    error_log("No listings found.");
-    die("No listings found.");
-}
-
-// Fetch results into an array
-$listings = [];
-while ($row = $result->fetch_assoc()) {
-    $listings[] = $row;
-}
-
-// Output results as JSON
-header('Content-Type: application/json');
-echo json_encode($listings);
 
 // Function to fetch all listings
 function getAllListings($conn) {
@@ -124,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'header.php'; ?>
