@@ -18,11 +18,16 @@ function getSearchResults($conn, $searchQuery) {
             listings.City,
             category.Category_Name,
             `user`.Name AS User_Name,
-            images.Image_URL AS Thumbnail_Image
+            thumbnails.Image_URL AS Thumbnail_Image
         FROM listings
         LEFT JOIN category ON listings.Category_ID = category.Category_ID
         LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
-        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+        LEFT JOIN (
+            SELECT Listing_ID, Image_URL
+            FROM images
+            WHERE Is_Thumbnail = 1
+            GROUP BY Listing_ID
+        ) AS thumbnails ON listings.Listing_ID = thumbnails.Listing_ID
         WHERE listings.Title LIKE ? OR listings.Description LIKE ?
         ORDER BY listings.Date_Posted DESC
     ";
