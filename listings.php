@@ -21,22 +21,33 @@ function getAllListings($conn) {
     // Define the SQL query
     $sql = "
     SELECT 
-        listings.Listing_ID,
-        listings.Title,
-        listings.Description,
-        listings.Price,
-        listings.Date_Posted,
-        listings.State,
-        listings.City,
-        category.Category_Name,
-        user.Name AS User_Name,
-        images.Image_URL AS Thumbnail_Image
-    FROM listings
-    LEFT JOIN category ON listings.Category_ID = category.Category_ID
-    LEFT JOIN user ON listings.User_ID = user.User_ID
-    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
-    ORDER BY listings.Date_Posted DESC
-    ";
+        l.Listing_ID, 
+        l.Title, 
+        l.Description, 
+        l.Price, 
+        l.Date_Posted, 
+        l.State, 
+        l.City, 
+        c.Category_Name, 
+        u.Name AS User_Name, 
+        i.Image_URL AS Thumbnail_Image
+    FROM 
+        listings l
+    JOIN 
+        user u ON l.User_ID = u.User_ID
+    JOIN 
+        category c ON l.Category_ID = c.Category_ID
+    LEFT JOIN 
+        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    WHERE 
+        l.Title LIKE CONCAT('%', ?, '%') OR 
+        l.Description LIKE CONCAT('%', ?, '%') OR 
+        c.Category_Name LIKE CONCAT('%', ?, '%') OR 
+        l.City LIKE CONCAT('%', ?, '%') OR 
+        l.State LIKE CONCAT('%', ?, '%')
+    ORDER BY 
+        l.Date_Posted DESC
+";
 
     error_log("Executing SQL Query: $sql");
 
@@ -161,45 +172,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 </head>
 <body>
 
-<main class="listings">
-    <h1>Listings</h1>
-    <div id="listings-container" class="listing-container"></div>
-
-    <script>
-        // Fetch the listings data
-        fetch('listings.php?fetchListings=true')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('listings-container');
-                if (data.message) {
-                    container.innerHTML = `<p>${data.message}</p>`;
-                    return;
-                }
-
-                data.forEach(listing => {
-                    const listingElement = document.createElement('div');
-                    listingElement.className = 'listing-item';
-
-                    const thumbnail = listing.Thumbnail_Image 
-                        ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}" style="width: 100%; height: auto;">`
-                        : '<img src="uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
-
-                    listingElement.innerHTML = `
-                        ${thumbnail}
-                        <div class="listing-info">
-                            <h2 class="listing-title">${listing.Title}</h2>
-                            <p>${listing.Description}</p>
-                            <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
-                            <p><strong>Category:</strong> ${listing.Category_Name}</p>
-                            <p class="listing-price">$${listing.Price}</p>
-                        </div>
-                    `;
-
-                    container.appendChild(listingElement);
-                });
-            })
-            .catch(error => console.error('Error fetching listings:', error));
-    </script>
+<main>
+    <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
+    <div class="listings-container">
+        <?php if (!empty($listings)): ?>
+            <?php foreach ($listings as $listing): ?>
+                <div class="listing-item">
+                    <?php if ($listing['Thumbnail_Image']): ?>
+                        <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image']); ?>" alt="<?php echo htmlspecialchars($listing['Title']); ?>">
+                    <?php else: ?>
+                        <img src="uploads/default-thumbnail.jpg" alt="No Image Available">
+                    <?php endif; ?>
+                    <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+                    <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+                    <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                    <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+                    <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
+                    <p><strong>Posted On:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
+                    <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
+                        View Listing
+                    </button>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
+        <?php endif; ?>
+    </div>
 </main>
 
 </body>
