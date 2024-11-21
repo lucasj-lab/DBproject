@@ -92,11 +92,9 @@
         <div style="text-align: center; margin-top: 20px;">
             <!-- Top Row Links -->
             <div style="display: inline-grid;justify-content: space-around;margin-bottom: 10px;flex-direction: column;">
-                <a href="browse_category.php?category=<br />
-<b>Warning</b>:  Undefined variable $category in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>110</b><br />
-<br />
-<b>Deprecated</b>:  urlencode(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>110</b><br />
-" class="btn">Return to Category</a>
+               
+                <button onclick="history.back()" class="back-button">Back to Category</button>
+
                 <a href="listings.php" class="btn">All Listings</a>
                 <button id="buyNowBtn" class="btn">Buy Now</button><a href="user_profile.php?listing_id=<br />
 <b>Warning</b>:  Undefined variable $userId in <b>/var/www/html/DBproject/listing_details.php</b> on line <b>112</b><br />

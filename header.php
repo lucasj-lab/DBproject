@@ -23,6 +23,7 @@ $username = htmlspecialchars($_SESSION['name'] ?? 'User'); // Defaults to 'User'
   <header>
     <div class="logo">
       <h1><?php echo $isAdmin ? "Admin Dashboard" : "Rookielist"; ?></h1>
+      <a href="index.php"></a>
     </div>
 
     <nav class="desktop-menu">
