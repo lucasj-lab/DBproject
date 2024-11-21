@@ -107,5 +107,25 @@ try {
     </div>
 </main>
 <?php include 'footer.php'; ?>
+
+<div id="messagesContainer"></div>
+<form id="sendMessageForm">
+    <input type="hidden" name="sender_id" value="1">
+    <input type="hidden" name="receiver_id" value="2">
+    <textarea name="message_text" required></textarea>
+    <button type="submit">Send</button>
+</form>
+
+<script src="messaging.js"></script>
+<script>
+    // Fetch messages between these users
+    fetchMessages(1, 2);
+
+    // Send a message
+    document.getElementById('sendMessageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        sendMessage('sendMessageForm');
+    });
+</script>
 </body>
 </html>

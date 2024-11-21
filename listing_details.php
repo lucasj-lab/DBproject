@@ -103,6 +103,26 @@
 
 
         </div>
+        <div id="messagesContainer"></div>
+<form id="sendMessageForm">
+    <input type="hidden" name="sender_id" value="1">
+    <input type="hidden" name="receiver_id" value="2">
+    <input type="hidden" name="listing_id" value="123">
+    <textarea name="message_text" required></textarea>
+    <button type="submit">Send</button>
+</form>
+
+<script src="messaging.js"></script>
+<script>
+    // Fetch messages for this listing
+    fetchMessages(1, 2, 123);
+
+    // Send a message
+    document.getElementById('sendMessageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        sendMessage('sendMessageForm');
+    });
+</script>
 
 
 

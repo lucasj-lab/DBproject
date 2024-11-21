@@ -1,28 +1,27 @@
 <?php
-session_start();
 require 'database_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $sender_id = $_SESSION['user_id'];
-    $recipient_id = intval($_POST['recipient_id']);
-    $message_text = trim($_POST['message_text']);
+    $senderId = $_POST['sender_id'];
+    $receiverId = $_POST['receiver_id'];
+    $messageText = $_POST['message_text'];
+    $listingId = $_POST['listing_id'] ?? null;
 
-    if (empty($message_text)) {
-        $_SESSION['message'] = "Message cannot be empty.";
-        header("Location: user_profile.php?user_id=$recipient_id");
-        exit();
-    }
+    if ($senderId && $receiverId && $messageText) {
+        $stmt = $pdo->prepare("
+            INSERT INTO message (Message_Text, Date_Sent, Sender_ID, Receiver_ID, Listing_ID)
+            VALUES (:message_text, NOW(), :sender_id, :receiver_id, :listing_id)
+        ");
+        $stmt->execute([
+            'message_text' => $messageText,
+            'sender_id' => $senderId,
+            'receiver_id' => $receiverId,
+            'listing_id' => $listingId
+        ]);
 
-    try {
-        $stmt = $pdo->prepare("INSERT INTO messages (Sender_ID, Recipient_ID, Message_Text) VALUES (?, ?, ?)");
-        $stmt->execute([$sender_id, $recipient_id, $message_text]);
-
-        $_SESSION['message'] = "Message sent successfully!";
-        header("Location: user_profile.php?user_id=$recipient_id");
-    } catch (Exception $e) {
-        error_log("Message error: " . $e->getMessage());
-        $_SESSION['message'] = "Failed to send message.";
-        header("Location: user_profile.php?user_id=$recipient_id");
+        echo json_encode(['success' => true, 'message' => 'Message sent successfully.']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'All fields are required.']);
     }
 }
 ?>
