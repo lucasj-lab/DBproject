@@ -11,11 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h1 class="popup-title">Thank You!</h1>
                 </div>
                 <div class="popup-body">
-                    <p class="popup-message">We appreciate you purchase<br>
-                        <br><strong>Listing ID: 12345</strong>.
+                    <p class="popup-message">We appreciate your purchase<br>
+                        <br><strong>Listing ID: <?php echo htmlspecialchars($listingId); ?></strong>.
                     </p>
                     <p class="popup-message">Your transaction has been successfully processed. <br>
-                        Enjoy your purchase!</p>
+                        Enjoy!</p>
                 </div>
                 <div class="popup-footer">
                     <button class="close-popup" onclick="closePopup()">Close</button>
@@ -26,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script>
             function closePopup() {
                 document.querySelector('.popup-overlay').style.display = 'none';
+                // Redirect to home page
+                window.location.href = 'index.php'; // Replace 'index.php' with your actual home page URL
             }
         </script>
         <?php
@@ -44,17 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
+
+        <script>
+            function closePopup() {
+                document.querySelector('.popup-overlay').style.display = 'none';
+                // Redirect to home page
+                window.location.href = 'index.php'; // Replace 'index.php' with your actual home page URL
+            }
+        </script>
         <?php
     }
 }
 ?>
-
-<script>
-    function closePopup()
-     {
-        document.querySelector('.popup-overlay').style.display = 'none';
-    }
-</script>
 
 <style>
     /* Overlay Styling */
