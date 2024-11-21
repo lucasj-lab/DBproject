@@ -2726,10 +2726,6 @@ img.thumbnail-option {
 }
 
 
-button.back-button {
-    margin-bottom: 0px;
-  }
-
 /* Mobile-Friendly */
 @media (max-width: 600px) {
     .popup-container {
