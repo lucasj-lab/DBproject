@@ -89,14 +89,14 @@
                 <p id="city">Mobile</p>
             </div>
         </div>
-
+        <div style="text-align: center; margin-top: 20px;">
+            <!-- Top Row Links -->
             <div style="display: inline-grid;justify-content: space-around;margin-bottom: 10px;flex-direction: column;">
                
                 <button onclick="history.back()" class="back-button">Back to Category</button>
                 <a href="listings.php" class="btn">All Listings</a>
-                <button id="buyNowBtn" class="btn">Buy Now</button>
+                <button id="buyNowBtn" class="btn">Buy Now</button><a href="user_profile.php?listing_id=<br />
                 <a href="user_profile.php?user_id=<?php echo htmlspecialchars($user['User_ID']); ?>">View Profile</a>
-
 
             </div>
 
