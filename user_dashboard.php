@@ -173,7 +173,26 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+    <div class="message-inbox">
+        <h1>Inbox</h1>
+        
+        <?php if ($messages): ?>
+            <div class="messages-list">
+                <?php foreach ($messages as $message): ?>
+                    <div class="message-item">
+                        <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Username']); ?></p>
+                        <p><strong>To:</strong> <?php echo htmlspecialchars($message['Receiver_Username']); ?></p>
+                        <p><strong>Message:</strong> <?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+                        <p><small>Sent at: <?php echo htmlspecialchars($message['Date_Sent']); ?></small></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>No messages found.</p>
+        <?php endif; ?>
 
+        <a href="send_message.php">Send a new message</a>
+    </div>
     <script>
         const deleteModal = document.getElementById('deleteModal');
         const confirmDeleteButton = document.getElementById('confirmDelete');
@@ -220,6 +239,19 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         };
     </script>
+
+<div id="dashboardNotification">
+    <?php if (!empty($_GET['success'])): ?>
+        <div class="alert success">
+            <?php echo htmlspecialchars($_GET['success']); ?>
+        </div>
+    <?php elseif (!empty($_GET['error'])): ?>
+        <div class="alert error">
+            <?php echo htmlspecialchars($_GET['error']); ?>
+        </div>
+    <?php endif; ?>
+</div>
+
 </body>
 <?php include 'footer.php'; ?>
 </html>

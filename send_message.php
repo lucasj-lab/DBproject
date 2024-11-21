@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode(['success' => true, 'message' => 'Message sent successfully.']);
     } else {
-        echo json_encode(['success' => false, 'error' => 'All fields are required.']);
+        echo json_encode(['success' => false, 'error' => 'Failed to send the message. Please try again.']);
     }
 }
 ?>
