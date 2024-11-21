@@ -38,6 +38,8 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['user_id' => $user_id]);
 $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -219,6 +221,23 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 currentListingId = null;
             }
         };
+
+        confirmDeleteButton.onclick = () => {
+    if (currentListingId) {
+        fetch(`delete_listing.php?listing_id=${currentListingId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Listing deleted successfully.');
+                    location.reload();
+                } else {
+                    alert('Error deleting listing: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+};
+
     </script>
 </body>
 <?php include 'footer.php'; ?>

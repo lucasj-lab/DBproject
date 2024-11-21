@@ -1,32 +1,34 @@
 <?php
-session_start();
 require 'database_connection.php';
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $listingId = filter_input(INPUT_GET, 'listing_id', FILTER_VALIDATE_INT);
+
+    if ($listingId) {
+        try {
+            // Check if the listing exists
+            $checkStmt = $pdo->prepare("SELECT * FROM listings WHERE Listing_ID = :listing_id");
+            $checkStmt->execute(['listing_id' => $listingId]);
+            $listing = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$listing) {
+                echo json_encode(['success' => false, 'error' => 'Listing not found.']);
+                exit();
+            }
+
+            // Delete the listing (cascading will handle related data)
+            $stmt = $pdo->prepare("DELETE FROM listings WHERE Listing_ID = :listing_id");
+            $stmt->execute(['listing_id' => $listingId]);
+
+            echo json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            error_log("Error deleting listing: " . $e->getMessage());
+            echo json_encode(['success' => false, 'error' => 'Database error occurred.']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Invalid listing ID.']);
+    }
+} else {
+    echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
 }
-
-// Verify the listing_id parameter
-if (!isset($_GET['listing_id']) || !is_numeric($_GET['listing_id'])) {
-    die("Invalid listing ID.");
-}
-
-$listing_id = intval($_GET['listing_id']);
-$user_id = $_SESSION['user_id'];
-
-try {
-    // Prepare a delete query with a check to ensure the listing belongs to the logged-in user
-    $stmt = $pdo->prepare("DELETE FROM listings WHERE Listing_ID = :listing_id AND User_ID = :user_id");
-    $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Redirect back to user dashboard with a success message
-    header("Location: user_dashboard.php?message=Listing deleted successfully");
-    exit();
-
-} catch (PDOException $e) {
-    echo "Error deleting listing: " . $e->getMessage();
-}
+?>
