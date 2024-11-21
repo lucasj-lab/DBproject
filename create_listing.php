@@ -174,7 +174,7 @@ $conn->close();
                     <span class="file-upload-text" id="file-upload-text"></span>
                 </div>
                 <div class="btn-container">
-                <button type="submit">Update</button>
+                <button type="submit">Create Listing</button>
             </div>
             </div>
     </div>

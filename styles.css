@@ -1476,8 +1476,7 @@ table td {
 
 /* Style for Each Listing Item */
 .listing-item {
-
-    flex-direction: column;
+    flex-direction: grid;
     align-items: center;
     padding: 1.5rem;
     border: 1px solid #ddd;
