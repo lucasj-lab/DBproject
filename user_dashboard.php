@@ -173,26 +173,50 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-    <div class="message-inbox">
-        <h1>Inbox</h1>
-        
-        <?php if ($messages): ?>
-            <div class="messages-list">
-                <?php foreach ($messages as $message): ?>
-                    <div class="message-item">
-                        <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Username']); ?></p>
-                        <p><strong>To:</strong> <?php echo htmlspecialchars($message['Receiver_Username']); ?></p>
-                        <p><strong>Message:</strong> <?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
-                        <p><small>Sent at: <?php echo htmlspecialchars($message['Date_Sent']); ?></small></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php else: ?>
-            <p>No messages found.</p>
-        <?php endif; ?>
+    <?php
+require 'database_connection.php';
 
-        <a href="send_message.php">Send a new message</a>
-    </div>
+// Fetch messages for the logged-in user
+$userId = $_SESSION['user_id']; // Ensure the user is logged in and `user_id` is in the session
+
+$stmt = $pdo->prepare("
+    SELECT 
+        m.Message_ID,
+        m.Message_Text,
+        m.Date_Sent,
+        u1.username AS Sender_Username,
+        u2.username AS Receiver_Username
+    FROM message m
+    JOIN user u1 ON m.Sender_ID = u1.user_id
+    JOIN user u2 ON m.Receiver_ID = u2.user_id
+    WHERE m.Receiver_ID = :user_id
+    ORDER BY m.Date_Sent DESC
+");
+$stmt->execute(['user_id' => $userId]);
+$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<div class="message-inbox">
+    <h1>Inbox</h1>
+    
+    <?php if (!empty($messages)): ?>
+        <div class="messages-list">
+            <?php foreach ($messages as $message): ?>
+                <div class="message-item">
+                    <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Username']); ?></p>
+                    <p><strong>To:</strong> <?php echo htmlspecialchars($message['Receiver_Username']); ?></p>
+                    <p><strong>Message:</strong> <?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+                    <p><small>Sent at: <?php echo htmlspecialchars($message['Date_Sent']); ?></small></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>No messages found.</p>
+    <?php endif; ?>
+
+    <a href="send_message.php">Send a new message</a>
+</div>
+
     <script>
         const deleteModal = document.getElementById('deleteModal');
         const confirmDeleteButton = document.getElementById('confirmDelete');
