@@ -113,7 +113,29 @@ try {
 
         .pill-button:hover {
             background-color: #0056b3;
+
         }
+
+
+        /* Responsive Layouts */
+@media (max-width: 1200px) {
+    .listings-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for large tablets/small desktops */
+    }
+}
+
+@media (max-width: 800px) {
+    .listings-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets/landscape phones */
+    }
+}
+
+@media (max-width: 500px) {
+    .listings-container {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for small phones */
+    }
+}
+
     </style>
 </head>
 <body>
