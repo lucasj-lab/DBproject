@@ -18,7 +18,6 @@ function getAllListings($conn) {
         throw new Exception("Invalid database connection.");
     }
 
-    // Define the SQL query
     $sql = "
     SELECT 
         listings.Listing_ID,
@@ -36,9 +35,9 @@ function getAllListings($conn) {
     LEFT JOIN user ON listings.User_ID = user.User_ID
     LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
     ORDER BY listings.Date_Posted DESC
-    ";
+";
 
-    error_log("Executing SQL Query: $sql");
+error_log("Executing SQL Query: $sql");
 
     // Prepare and execute the query
     $stmt = $conn->prepare($sql);
