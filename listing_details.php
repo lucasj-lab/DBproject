@@ -94,7 +94,7 @@
                <div style="display: inline-grid;justify-content: space-around;margin-bottom: 10px;flex-direction: column;">
 
                <button id="buyNowBtn" class="btn">Buy Now</button>
-                <button <a href="listings.php" class="btn">All Listings</a></button>
+               <a><button href="listings.php" class="btn">All Listings</button></a>
                 <button onclick="history.back()" class="back-button">Go Back</button>
              
 
