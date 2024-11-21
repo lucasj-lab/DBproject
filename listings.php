@@ -2,56 +2,32 @@
 
 require 'database_connection.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Verify connection
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
 
-/**
- * Function to fetch all listings
- * 
- * @param mysqli $conn The database connection object
- * @return array The array of listings
- * @throws Exception If there is a database or query error
- */
+// Function to fetch all listings
 function getAllListings($conn) {
-    if (!$conn) {
-        throw new Exception("Invalid database connection.");
-    }
-
-    // Define the SQL query
     $sql = "
-    SELECT 
-        l.Listing_ID, 
-        l.Title, 
-        l.Description, 
-        l.Price, 
-        l.Date_Posted, 
-        l.State, 
-        l.City, 
-        c.Category_Name, 
-        u.Name AS User_Name, 
-        i.Image_URL AS Thumbnail_Image
-    FROM 
-        listings l
-    JOIN 
-        user u ON l.User_ID = u.User_ID
-    JOIN 
-        category c ON l.Category_ID = c.Category_ID
-    LEFT JOIN 
-        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
-    WHERE 
-        l.Title LIKE CONCAT('%', ?, '%') OR 
-        l.Description LIKE CONCAT('%', ?, '%') OR 
-        c.Category_Name LIKE CONCAT('%', ?, '%') OR 
-        l.City LIKE CONCAT('%', ?, '%') OR 
-        l.State LIKE CONCAT('%', ?, '%')
-    ORDER BY 
-        l.Date_Posted DESC
-";
+        SELECT 
+            listings.Listing_ID,
+            listings.Title,
+            listings.Description,
+            listings.Price,
+            listings.Date_Posted,
+            listings.State,
+            listings.City,
+            category.Category_Name,
+            `user`.Name AS User_Name,
+            images.Image_URL AS Thumbnail_Image
+        FROM listings
+        LEFT JOIN category ON listings.Category_ID = category.Category_ID
+        LEFT JOIN `user` ON listings.User_ID = `user`.User_ID
+        LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+        ORDER BY listings.Date_Posted DESC
+    ";
 
-    error_log("Executing SQL Query: $sql");
-
-    // Prepare and execute the query
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         throw new Exception("SQL preparation failed: " . $conn->error);
@@ -59,27 +35,25 @@ function getAllListings($conn) {
 
     $stmt->execute();
     $result = $stmt->get_result();
-    if (!$result) {
-        throw new Exception("Query execution failed: " . $conn->error);
-    }
 
-    // Fetch the data
     $listings = [];
     while ($row = $result->fetch_assoc()) {
+        // Add full URL for images if needed
+        $row['Thumbnail_Image'] = $row['Thumbnail_Image'] 
+            ? "http://3.146.237.94/uploads/" . $row['Thumbnail_Image']
+            : null;
         $listings[] = $row;
     }
 
-    $stmt->close(); // Clean up the statement
     return $listings;
 }
 
-// Handle GET request for fetching listings
+// Check if API is being accessed
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     try {
         $listings = getAllListings($conn);
 
         if (empty($listings)) {
-            error_log("No listings found");
             $response = ["message" => "No listings available."];
         } else {
             foreach ($listings as &$listing) {
@@ -91,10 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 
         header('Content-Type: application/json');
         echo json_encode($response);
-
     } catch (Exception $e) {
         error_log("Error fetching listings: " . $e->getMessage());
-        header('Content-Type: application/json');
         echo json_encode(["error" => "Error fetching listings."]);
     }
     exit();
@@ -109,96 +81,130 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listings</title>
     <style>
-        .listings-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        main.listings {
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
             padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .listing-container {
+            display: grid;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Default: 4x4 Layout */
+        .listing-container {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* 3x3 Layout for medium screens */
+        @media (max-width: 768px) {
+            .listing-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 2x2 Layout for smaller screens */
+        @media (max-width: 576px) {
+            .listing-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 1x1 Layout for extra small screens */
+        @media (max-width: 400px) {
+            .listing-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
         }
 
         .listing-item {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .listing-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .listing-item h3 {
-            margin: 10px 0;
-        }
-
-        .pill-button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            aspect-ratio: 1 / 1; /* Ensures items are perfect squares */
+            text-align: center;
+            overflow: hidden; /* Ensures content doesn't overflow */
         }
 
-        .pill-button:hover {
-            background-color: #0056b3;
-
+        .listing-info {
+            padding: 10px;
+            text-align: left;
+            color: #ffffff;
         }
 
+        .listing-info h2 {
+            font-size: 1rem;
+            margin: 0;
+            margin-bottom: 5px;
+        }
 
-        /* Responsive Layouts */
-@media (max-width: 1200px) {
-    .listings-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for large tablets/small desktops */
-    }
-}
-
-@media (max-width: 800px) {
-    .listings-container {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets/landscape phones */
-    }
-}
-
-@media (max-width: 500px) {
-    .listings-container {
-        grid-template-columns: repeat(1, 1fr); /* 1 column for small phones */
-    }
-}
-
+        .listing-info p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
 
-<main>
-    <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
-    <div class="listings-container">
-        <?php if (!empty($listings)): ?>
-            <?php foreach ($listings as $listing): ?>
-                <div class="listing-item">
-                    <?php if ($listing['Thumbnail_Image']): ?>
-                        <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image']); ?>" alt="<?php echo htmlspecialchars($listing['Title']); ?>">
-                    <?php else: ?>
-                        <img src="uploads/default-thumbnail.jpg" alt="No Image Available">
-                    <?php endif; ?>
-                    <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                    <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-                    <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                    <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                    <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-                    <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted On:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
-                    <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
-                        View Listing
-                    </button>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
-        <?php endif; ?>
-    </div>
+<main class="listings">
+    <h1>Listings</h1>
+    <div id="listings-container" class="listing-container"></div>
+
+    <script>
+        // Fetch the listings data
+        fetch('http://3.146.237.94/listings.php?fetchListings=true')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('listings-container');
+                if (data.message) {
+                    container.innerHTML = `<p>${data.message}</p>`;
+                    return;
+                }
+<footer>…</footer>                data.forEach(listing => {
+                    const listingElement = document.createElement('div');
+                    listingElement.className = 'listing-item';
+
+                    const thumbnail = listing.Thumbnail_Image 
+                        ? `<img src="${listing.Thumbnail_Image}" alt="${listing.Title}" style="width: 100%; height: auto;">`
+                        : '<img src="http://3.146.237.94/uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
+
+                    listingElement.innerHTML = `
+                         <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
+                <h3><strong>${listing.Title}</strong></h3>
+                <p><strong>Description:</strong> ${listing.Description}</p>
+                <p><strong>Price:</strong> $${listing.Price}</p>
+                <p><strong>Posted by:</strong> ${listing.User_Name}</p>
+                <p><strong>Category:</strong> ${listing.Category_Name}</p>
+                <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
+                <p><strong>Posted On:</strong> ${listing.Formatted_Date}</p>
+                <button type="button" class="pill-button"
+                    onclick="window.location.href='listing_details.php?listing_id=${listing.Listing_ID}'">
+                    View Listing
+                </button>
+            `;
+
+                    container.appendChild(listingElement);
+                });
+            })
+            .catch(error => console.error('Error fetching listings:', error));
+    </script>
 </main>
 
 </body>
