@@ -89,7 +89,6 @@ try {
             border-radius: 8px;
             padding: 15px;
             background-color: #f9f9f9;
-            text-align: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -118,6 +117,7 @@ try {
     </style>
 </head>
 <body>
+<?php include 'header.php'; ?>
 <main>
     <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
     <div class="listings-container">
@@ -147,4 +147,5 @@ try {
     </div>
 </main>
 </body>
+<?php include 'footer.php'; ?>
 </html>
