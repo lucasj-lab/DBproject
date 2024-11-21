@@ -2726,6 +2726,10 @@ img.thumbnail-option {
 }
 
 
+button.back-button {
+    margin-bottom: 0px;
+  }
+
 /* Mobile-Friendly */
 @media (max-width: 600px) {
     .popup-container {
@@ -2883,6 +2887,3 @@ transition: background-color 0.3s;
 background: #0056b3;
 }
 
-button.back-button {
-    margin-bottom: 0px;
-  }
