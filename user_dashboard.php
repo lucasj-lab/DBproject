@@ -360,7 +360,7 @@ $messages = $messageStmt->fetchAll(PDO::FETCH_ASSOC);
 </html>
 
 <body>
-    <?php include 'header.php'; ?>
+
 
     <main class="dope-dashboard">
         <h1 class="dashboard-title">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
