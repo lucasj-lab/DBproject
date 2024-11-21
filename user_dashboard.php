@@ -184,11 +184,11 @@ $stmt = $pdo->prepare("
         m.Message_ID,
         m.Message_Text,
         m.Date_Sent,
-        u1.username AS Sender_Username,
-        u2.username AS Receiver_Username
+        u1.Name AS Sender_Username, -- Use the correct column name
+        u2.Name AS Receiver_Username -- Use the correct column name
     FROM message m
-    JOIN user u1 ON m.Sender_ID = u1.user_id
-    JOIN user u2 ON m.Receiver_ID = u2.user_id
+    JOIN user u1 ON m.Sender_ID = u1.User_ID
+    JOIN user u2 ON m.Receiver_ID = u2.User_ID
     WHERE m.Receiver_ID = :user_id
     ORDER BY m.Date_Sent DESC
 ");
