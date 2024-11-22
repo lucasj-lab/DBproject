@@ -2313,7 +2313,7 @@ select#state {
 
 .thumbnail-container {
     display:flex;
-
+    flex-direction: row-reverse;
 }
 
 .thumbnail-image {
@@ -2615,19 +2615,42 @@ img.thumbnail-option {
 
 /* Image Gallery */
 .image-gallery {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 10px;
+    display: flex; /* Align items horizontally */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Disable vertical scrolling */
+    gap: 10px; /* Space between images */
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-    max-width: 100%;
-    /* Ensure it stays within the container */
+    max-width: 100%; /* Container fits within its parent */
     box-sizing: border-box;
-    white-space: nowrap;
-    /* Prevent wrapping of images */
+    white-space: nowrap; /* Prevent wrapping of items */
+    justify-content: flex-start; /* Align images to the left */
+    align-items: center; /* Vertically center the images */
+}
+
+/* Style for individual images */
+.image-gallery img {
+    height: 100px; /* Set a uniform height for all images */
+    width: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Crop the image to fit without distortion */
+    border-radius: 5px; /* Optional: rounded corners */
+    cursor: pointer; /* Pointer cursor for interactivity */
+}
+
+/* Scrollbar styling (optional, for modern browsers) */
+.image-gallery::-webkit-scrollbar {
+    height: 8px; /* Adjust scrollbar height */
+}
+
+.image-gallery::-webkit-scrollbar-thumb {
+    background: #ccc; /* Style the scrollbar thumb */
+    border-radius: 4px; /* Rounded scrollbar edges */
+}
+
+.image-gallery::-webkit-scrollbar-track {
+    background: #f9f9f9; /* Style the scrollbar track */
 }
 
 .image-item {
