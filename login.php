@@ -25,20 +25,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Password is correct; log the user in
             $_SESSION['user_id'] = $user['User_ID'];
             $_SESSION['user_name'] = $user['Name'];
+            $_SESSION['user_logged_in'] = true; // Added flag for login state
             $_SESSION['message'] = "Login successful!";
             $_SESSION['message_type'] = 'success';
             header("Location: user_dashboard.php");
+            exit();
         } else {
             // Invalid login
             $_SESSION['message'] = "Invalid email or password.";
             $_SESSION['message_type'] = 'error';
             header("Location: login.php");
+            exit();
         }
     } catch (Exception $e) {
         error_log("Login error: " . $e->getMessage());
         $_SESSION['message'] = "An error occurred. Please try again.";
         $_SESSION['message_type'] = 'error';
         header("Location: login.php");
+        exit();
     }
 }
 ?>
@@ -54,7 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 
-    <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
+<?php include 'session_message.php'; ?>
+
 
     <div class="login-container">
         <h2>User Log In</h2>
