@@ -127,8 +127,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                     listingElement.className = 'listing-item';
 
                     const thumbnail = listing.Thumbnail_Image
-                        ? `<img src="${sanitizeHTML(listing.Thumbnail_Image)}" alt="${sanitizeHTML(listing.Title)}" style="width: 100%; height: auto;">`
-                        : '<img src="uploads/default-thumbnail.jpg" alt="No Image Available" style="width: 100%; height: auto;">';
+    ? `
+        <div class="thumbnail-container">
+            <img src="${sanitizeHTML(listing.Thumbnail_Image)}" alt="${sanitizeHTML(listing.Title)}" class="thumbnail-image">
+        </div>
+    `
+    : `
+        <div class="thumbnail-container">
+            <img src="uploads/default-thumbnail.jpg" alt="No Image Available" class="thumbnail-image">
+        </div>
+    `;
 
                     listingElement.innerHTML = `
                         <div>

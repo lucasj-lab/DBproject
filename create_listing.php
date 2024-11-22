@@ -115,6 +115,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Database error: Failed to prepare statement.'); window.location.href='create_listing.php';</script>";
     }
 }
+function resizeImage($source, $destination, $width, $height) {
+    $imageInfo = getimagesize($source);
+    $sourceWidth = $imageInfo[0];
+    $sourceHeight = $imageInfo[1];
+    $sourceType = $imageInfo[2];
+
+    // Create source image
+    switch ($sourceType) {
+        case IMAGETYPE_JPEG:
+            $sourceImage = imagecreatefromjpeg($source);
+            break;
+        case IMAGETYPE_PNG:
+            $sourceImage = imagecreatefrompng($source);
+            break;
+        case IMAGETYPE_GIF:
+            $sourceImage = imagecreatefromgif($source);
+            break;
+        default:
+            throw new Exception("Unsupported image type.");
+    }
+
+    // Create resized image
+    $resizedImage = imagecreatetruecolor($width, $height);
+    imagecopyresampled($resizedImage, $sourceImage, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight);
+
+    // Save resized image
+    switch ($sourceType) {
+        case IMAGETYPE_JPEG:
+            imagejpeg($resizedImage, $destination);
+            break;
+        case IMAGETYPE_PNG:
+            imagepng($resizedImage, $destination);
+            break;
+        case IMAGETYPE_GIF:
+            imagegif($resizedImage, $destination);
+            break;
+    }
+
+    // Free memory
+    imagedestroy($sourceImage);
+    imagedestroy($resizedImage);
+}
 
 $conn->close();
 ?>
