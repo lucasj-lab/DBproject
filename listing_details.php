@@ -46,26 +46,49 @@ if ($listingId) {
             </div>
         </div>
 
-        <!-- Listing Details -->
         <div class="listing-details-wrapper">
-            <div class="form-group">
-                <label for="description"><strong>Description:</strong></label>
-                <p id="description"><?php echo htmlspecialchars($listing['Description']); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="price"><strong>Price:</strong></label>
-                <p id="price">$<?php echo htmlspecialchars($listing['Price']); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="location"><strong>Location:</strong></label>
-                <p id="location"><?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="title"><strong>Title:</strong></label>
+        <p id="title"><?php echo htmlspecialchars($listing['Title']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="description"><strong>Description:</strong></label>
+        <p id="description"><?php echo htmlspecialchars($listing['Description']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="price"><strong>Price:</strong></label>
+        <p id="price">$<?php echo htmlspecialchars($listing['Price']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="date_posted"><strong>Date Posted:</strong></label>
+        <p id="date_posted"><?php echo htmlspecialchars(date("F j, Y, g:i a", strtotime($listing['Date_Posted']))); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="category"><strong>Category:</strong></label>
+        <p id="category"><?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="user"><strong>Posted By:</strong></label>
+        <p id="user"><?php echo htmlspecialchars($listing['User_Name']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="location"><strong>Location:</strong></label>
+        <p id="location"><?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="condition"><strong>Condition:</strong></label>
+        <p id="condition"><?php echo htmlspecialchars($listing['Condition']); ?></p>
+    </div>
+    <div class="form-group">
+        <label for="shipping"><strong>Shipping Options:</strong></label>
+        <p id="shipping"><?php echo htmlspecialchars($listing['Shipping']); ?></p>
+    </div>
+</div>
 
         <!-- Action Buttons -->
         <div style="text-align: center; margin-top: 20px;">
             <a href="listings.php" class="btn">All Listings</a>
-            <button onclick="history.back()" class="back-button">Go Back</button>
+            <button onclick="history.back()" class="btn">Go Back</button>
         </div>
 
         <!-- Messaging Section -->
@@ -97,6 +120,38 @@ if ($listingId) {
     <script>
         function changeMainImage(src) {
             document.getElementById('mainImage').src = src;
+
+            // Handle Modal Logic
+const modal = document.getElementById('buyNowModal');
+const btn = document.getElementById('buyNowBtn');
+const close = document.getElementById('closeModal');
+
+// Open Modal
+btn.onclick = function () {
+    modal.style.display = "flex";
+};
+
+// Close Modal
+close.onclick = function () {
+    modal.style.display = "none";
+};
+
+// Close Modal on Click Outside
+window.onclick = function (event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
+
+// Handle Messaging
+document.getElementById('sendMessageForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    sendMessage('sendMessageForm');
+});
+
+// Fetch and Send Messages (Ensure fetchMessages and sendMessage are defined in messaging.js)
+fetchMessages(1, 2, 123);
+
         }
     </script>
 </body>
