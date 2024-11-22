@@ -57,12 +57,33 @@ $conn->close();
             <div class="listings-container">
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
-                        <input type="hidden" name="listing_id" value="<?php echo $listing['Listing_ID']; ?>">
+                        <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
+                        
+                        <!-- Thumbnail Image -->
                         <img src="<?php echo htmlspecialchars($listing['Images'][0] ?? 'no_image.png'); ?>" alt="Thumbnail" class="listing-image">
+
+                        <!-- Title -->
                         <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                        <p>Price: $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                        <p>Posted by: <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                        <p>Location: <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
+
+                        <!-- Description -->
+                        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
+
+                        <!-- Price -->
+                        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+
+                        <!-- Posted By -->
+                        <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+
+                        <!-- Category -->
+                        <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+
+                        <!-- Location -->
+                        <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
+
+                        <!-- Date Posted -->
+                        <p><strong>Posted on:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+
+                        <!-- View Listing Button -->
                         <button type="submit" class="pill-button">View Listing</button>
                     </form>
                 <?php endforeach; ?>
@@ -72,6 +93,7 @@ $conn->close();
         <?php endif; ?>
     </div>
 </main>
+
 <?php include 'footer.php'; ?>
 </body>
 </html>
