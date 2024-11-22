@@ -76,67 +76,6 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
-    <style>
-        .listings-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .listing-item {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .listing-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .listing-item h3 {
-            margin: 10px 0;
-        }
-
-        .pill-button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 20px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .pill-button:hover {
-            background-color: #0056b3;
-
-        }
-
-
-        /* Responsive Layouts */
-@media (max-width: 1200px) {
-    .listings-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for large tablets/small desktops */
-    }
-}
-
-@media (max-width: 800px) {
-    .listings-container {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets/landscape phones */
-    }
-}
-
-@media (max-width: 500px) {
-    .listings-container {
-        grid-template-columns: repeat(1, 1fr); /* 1 column for small phones */
-    }
-}
-
-    </style>
 </head>
 <body>
 <?php include 'header.php'; ?>
