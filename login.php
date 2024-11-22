@@ -70,12 +70,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
+    width: 100%;
 }
 
 .session-message.error {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+    width: 100%;
 }
 
 </style>
