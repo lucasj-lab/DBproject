@@ -26,12 +26,11 @@
 }
 
 img.listing-image {
-    max-width: 100%;
-    height: auto;
-    /* Maintains aspect ratio while resizing */
-    display: block;
-    /* Removes extra space below the image */
-    border-radius: 8px;
+    width: 100%; /* Fill the parent container */
+    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
+    object-fit: cover; /* Crop excess parts of the image */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    display: block; /* Remove extra space below the image */
 }
 
 .hero {
@@ -1154,12 +1153,11 @@ button.search-btn {
 
 
 .category-image {
-    width: 100px;
-    /* Set desired width */
-    height: auto;
-    margin-bottom: 8px;
-    display: block;
-    border-radius: 15px;
+    width: 100%; /* Fill the parent container */
+    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
+    object-fit: cover; /* Crop excess parts of the image */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    display: block; /* Remove extra space below the image */
 }
 
 
@@ -1639,10 +1637,11 @@ table td {
 }
 
 .preview-image {
-    width: 100px;
-    height: auto;
-    margin: 5px;
-    border: 1px solid #ddd;
+    width: 100%; /* Fill the parent container */
+    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
+    object-fit: cover; /* Crop excess parts of the image */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    display: block; /* Remove extra space below the image */
 }
 
 
@@ -2354,9 +2353,11 @@ select#state {
 }
 
 .thumbnail-image {
-    width: 100px;
-    height: auto;
-    cursor: pointer;
+    width: 100%; /* Fill the parent container */
+    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
+    object-fit: cover; /* Crop excess parts of the image */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    display: block; /* Remove extra space below the image */
     border: 1px solid #ccc;
     transition: transform 0.2s ease;
 }
@@ -2642,8 +2643,11 @@ img.thumbnail-option {
 }
 
 .main-image {
-    width: 300px;
-    height: auto;
+    width: 100%; /* Fill the parent container */
+    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
+    object-fit: cover; /* Crop excess parts of the image */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    display: block; /* Remove extra space below the image */
     border: 2px solid #000;
     border-radius: 5px;
 }
