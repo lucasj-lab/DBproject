@@ -2956,13 +2956,37 @@ background: #0056b3;
     border-radius: 8px; /* Optional: Add rounded corners */
     display: block; /* Remove extra space below the image */
 }
-
-
-.listings-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+.listing-container {
+    display: grid; /* Switch to a grid layout */
+    gap: 20px; /* Add space between items */
     padding: 20px;
+    justify-content: center; /* Center the grid horizontally */
+}
+
+/* Default: Show 4 items per row */
+.listing-container {
+    grid-template-columns: repeat(4, 1fr); /* 4 equally sized columns */
+}
+
+/* When the screen is narrower, show 3 items per row */
+@media (max-width: 1200px) {
+    .listing-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    }
+}
+
+/* On smaller screens, show 2 items per row */
+@media (max-width: 800px) {
+    .listing-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    }
+}
+
+/* On very small screens or zoomed in, show 1 item per row */
+@media (max-width: 500px) {
+    .listing-container {
+        grid-template-columns: 1fr; /* 1 column */
+    }
 }
 
 .listing-item {
@@ -2996,24 +3020,3 @@ background: #0056b3;
     background-color: #0056b3;
 
 }
-
-
-/* Responsive Layouts */
-@media (max-width: 1200px) {
-.listings-container {
-grid-template-columns: repeat(3, 1fr); /* 3 columns for large tablets/small desktops */
-}
-}
-
-@media (max-width: 800px) {
-.listings-container {
-grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets/landscape phones */
-}
-}
-
-@media (max-width: 500px) {
-.listings-container {
-grid-template-columns: repeat(1, 1fr); /* 1 column for small phones */
-}
-}
-
