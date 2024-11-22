@@ -2643,11 +2643,8 @@ img.thumbnail-option {
 }
 
 .main-image {
-    width: 100%; /* Fill the parent container */
-    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
-    object-fit: cover; /* Crop excess parts of the image */
-    border-radius: 8px; /* Optional: Add rounded corners */
-    display: block; /* Remove extra space below the image */
+    width: 300px;
+    height: auto;
     border: 2px solid #000;
     border-radius: 5px;
 }
