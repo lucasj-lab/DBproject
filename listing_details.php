@@ -3,8 +3,7 @@ require 'database_connection.php';
 
 $listingId = $_GET['listing_id'] ?? null;
 
-if ($listingId) {
-    $stmt = $pdo->prepare("
+$stmt = $pdo->prepare("
     SELECT 
         l.Listing_ID,
         l.Title,
@@ -14,16 +13,22 @@ if ($listingId) {
         l.State,
         l.City,
         u.Name AS User_Name, 
-        c.Category_Name
+        c.Category_Name,
+        GROUP_CONCAT(i.Image_URL) AS Images
     FROM listings l
     LEFT JOIN user u ON l.User_ID = u.User_ID
     LEFT JOIN category c ON l.Category_ID = c.Category_ID
+    LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
     WHERE l.Listing_ID = ?
+    GROUP BY l.Listing_ID
 ");
 $stmt->execute([$listingId]);
 $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Extract images into an array
 $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
-} else {
+
+else {
     echo "Listing ID is missing.";
     exit;
 }
