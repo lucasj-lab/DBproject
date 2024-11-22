@@ -56,6 +56,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>User Log In</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    .session-message {
+    margin: 20px auto;
+    padding: 10px 20px;
+    width: 80%;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.session-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.session-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+</style>
 <body>
 
 <?php include 'header.php'; ?>
