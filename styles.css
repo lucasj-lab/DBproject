@@ -2609,7 +2609,7 @@ img.thumbnail-option {
 }
 
 .main-image {
-    width: 300px;
+    min-width: 200px;
     height: auto;
     border: 2px solid #000;
     border-radius: 5px;
