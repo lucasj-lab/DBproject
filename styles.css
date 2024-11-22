@@ -2605,13 +2605,26 @@ img.thumbnail-option {
     text-align: center;
     margin-bottom: 20px;
 }
-
+/* Main Image Styling */
 .main-image {
-    min-width: 200px;
-    height: auto;
-    border: 2px solid #000;
-    border-radius: 5px;
+    width: 100%; /* Ensure it fits within the parent container */
+    max-width: 600px; /* Set a maximum width for larger screens */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Crop the image to fit without distortion */
+    border-radius: 5px; /* Optional: rounded corners */
+    display: block;
+    margin: 0 auto; /* Center the image */
 }
+
+/* Responsive Adjustment for Small Screens */
+@media (max-width: 300px) {
+    .main-image {
+        width: 100%; /* Ensure the image fits within the parent container */
+        max-width: 100%; /* Prevent overflow */
+        height: auto; /* Maintain aspect ratio */
+    }
+}
+
 
 /* Image Gallery */
 .image-gallery {
