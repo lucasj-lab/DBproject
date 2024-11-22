@@ -248,38 +248,7 @@
         </script>
 
 </div>
-<div id="messageNotification"></div>
-<form id="sendMessageForm">
-    <input type="hidden" name="sender_id" value="1"> <!-- Replace with dynamic sender ID -->
-    <input type="hidden" name="receiver_id" value="2"> <!-- Replace with dynamic receiver ID -->
-    <input type="hidden" name="listing_id" value="123"> <!-- Replace with dynamic listing ID -->
-    <textarea name="message_text" placeholder="Type your message here..." required></textarea>
-    <button type="submit">Send Message</button>
-</form>
 
-<script>
-document.getElementById('sendMessageForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent form from submitting normally
-
-    const formData = new FormData(this);
-
-    fetch('send_message.php', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            const notification = document.getElementById('messageNotification');
-            if (data.success) {
-                notification.innerHTML = `<div class="alert success">${data.message}</div>`;
-                this.reset(); // Clear the form
-            } else {
-                notification.innerHTML = `<div class="alert error">${data.error}</div>`;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-});
-</script>
 
 
 </body>
