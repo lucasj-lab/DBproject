@@ -1458,6 +1458,7 @@ table td {
     /* Default 4x4 layout for large screens */
     gap: 20px;
     padding: 20px;
+    display: grid;                          
 }
 
 /* Media query for screens between 1024px and 1366px */
