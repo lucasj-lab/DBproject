@@ -81,7 +81,13 @@ $conn->close();
                         <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
 
                         <!-- Date Posted -->
-                        <p><strong>Posted on:</strong> <?php echo htmlspecialchars($listing['Date_Posted']); ?></p>
+                        <?php 
+                        // Format the Date_Posted
+                        $formattedDate = !empty($listing['Date_Posted']) 
+                            ? (new DateTime($listing['Date_Posted']))->format('l, F, js, Y') 
+                            : "Date not available"; 
+                        ?>
+                        <p><strong>Posted on:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
 
                         <!-- View Listing Button -->
                         <button type="submit" class="pill-button">View Listing</button>
