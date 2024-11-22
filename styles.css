@@ -2312,10 +2312,8 @@ select#state {
 }
 
 .thumbnail-container {
-    display: grid;
-    gap: 10px;
-    overflow-y: auto;
-    flex-direction: column;
+    display:flex;
+
 }
 
 .thumbnail-image {
