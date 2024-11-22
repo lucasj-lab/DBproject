@@ -103,51 +103,54 @@ try {
 
         <!-- Action Buttons -->
         <div style="text-align: center; margin-top: 20px;">
+            <button id="buyNowBtn" class="btn">Buy Now</button>
             <a href="listings.php" class="btn">All Listings</a>
             <button onclick="history.back()" class="btn">Go Back</button>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="buyNowModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">×</span>
+            <h2>Buy Now</h2>
+            <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
+            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
+            <form action="process_purchase.php" method="POST">
+                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
+                <button type="submit" class="btn">Confirm Purchase</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Change the main image when a thumbnail is clicked
         function changeMainImage(src) {
             document.getElementById('mainImage').src = src;
         }
 
-        function changeMainImage(src) {
-            document.getElementById('mainImage').src = src;
+        // Modal Logic
+        const modal = document.getElementById('buyNowModal');
+        const btn = document.getElementById('buyNowBtn');
+        const close = document.getElementById('closeModal');
 
-            // Handle Modal Logic
-const modal = document.getElementById('buyNowModal');
-const btn = document.getElementById('buyNowBtn');
-const close = document.getElementById('closeModal');
+        // Open Modal
+        btn.onclick = function () {
+            modal.style.display = "flex";
+        };
 
-// Open Modal
-btn.onclick = function () {
-    modal.style.display = "flex";
-};
+        // Close Modal
+        close.onclick = function () {
+            modal.style.display = "none";
+        };
 
-// Close Modal
-close.onclick = function () {
-    modal.style.display = "none";
-};
-
-// Close Modal on Click Outside
-window.onclick = function (event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-};
-
-// Handle Messaging
-document.getElementById('sendMessageForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    sendMessage('sendMessageForm');
-});
-
-// Fetch and Send Messages (Ensure fetchMessages and sendMessage are defined in messaging.js)
-fetchMessages(1, 2, 123);
-
-        }
+        // Close Modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
     </script>
 </body>
 <footer>
