@@ -2314,7 +2314,8 @@ select#state {
 .thumbnail-container {
     display: flex;
     gap: 10px;
-    overflow-x: auto;
+    overflow-y: auto;
+    flex-direction: column;
 }
 
 .thumbnail-image {
