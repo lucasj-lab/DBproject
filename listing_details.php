@@ -5,17 +5,24 @@ $listingId = $_GET['listing_id'] ?? null;
 
 if ($listingId) {
     $stmt = $pdo->prepare("
-        SELECT 
-            l.*, 
-            GROUP_CONCAT(i.Image_URL) AS Images 
-        FROM listings l
-        LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
-        WHERE l.Listing_ID = ?
-        GROUP BY l.Listing_ID
-    ");
-    $stmt->execute([$listingId]);
-    $listing = $stmt->fetch(PDO::FETCH_ASSOC);
-    $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
+    SELECT 
+        l.Listing_ID,
+        l.Title,
+        l.Description,
+        l.Price,
+        l.Date_Posted,
+        l.State,
+        l.City,
+        u.Name AS User_Name, 
+        c.Category_Name
+    FROM listings l
+    LEFT JOIN user u ON l.User_ID = u.User_ID
+    LEFT JOIN category c ON l.Category_ID = c.Category_ID
+    WHERE l.Listing_ID = ?
+");
+$stmt->execute([$listingId]);
+$listing = $stmt->fetch(PDO::FETCH_ASSOC);
+$images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
 } else {
     echo "Listing ID is missing.";
     exit;
@@ -49,39 +56,35 @@ if ($listingId) {
         <div class="listing-details-wrapper">
     <div class="form-group">
         <label for="title"><strong>Title:</strong></label>
-        <p id="title"><?php echo htmlspecialchars($listing['Title']); ?></p>
+        <p id="title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
     </div>
     <div class="form-group">
         <label for="description"><strong>Description:</strong></label>
-        <p id="description"><?php echo htmlspecialchars($listing['Description']); ?></p>
+        <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
     </div>
     <div class="form-group">
         <label for="price"><strong>Price:</strong></label>
-        <p id="price">$<?php echo htmlspecialchars($listing['Price']); ?></p>
+        <p id="price">$<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
     </div>
     <div class="form-group">
         <label for="date_posted"><strong>Date Posted:</strong></label>
-        <p id="date_posted"><?php echo htmlspecialchars(date("F j, Y, g:i a", strtotime($listing['Date_Posted']))); ?></p>
+        <p id="date_posted">
+            <?php echo $listing['Date_Posted'] 
+                ? htmlspecialchars(date("F j, Y", strtotime($listing['Date_Posted']))) 
+                : 'Not Available'; ?>
+        </p>
     </div>
     <div class="form-group">
         <label for="category"><strong>Category:</strong></label>
-        <p id="category"><?php echo htmlspecialchars($listing['Category_Name']); ?></p>
+        <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
     </div>
     <div class="form-group">
         <label for="user"><strong>Posted By:</strong></label>
-        <p id="user"><?php echo htmlspecialchars($listing['User_Name']); ?></p>
+        <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
     </div>
     <div class="form-group">
         <label for="location"><strong>Location:</strong></label>
-        <p id="location"><?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State']); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="condition"><strong>Condition:</strong></label>
-        <p id="condition"><?php echo htmlspecialchars($listing['Condition']); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="shipping"><strong>Shipping Options:</strong></label>
-        <p id="shipping"><?php echo htmlspecialchars($listing['Shipping']); ?></p>
+        <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
     </div>
 </div>
 
