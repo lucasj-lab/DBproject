@@ -3,33 +3,40 @@ require 'database_connection.php';
 
 $listingId = $_GET['listing_id'] ?? null;
 
-$stmt = $pdo->prepare("
-    SELECT 
-        l.Listing_ID,
-        l.Title,
-        l.Description,
-        l.Price,
-        l.Date_Posted,
-        l.State,
-        l.City,
-        u.Name AS User_Name, 
-        c.Category_Name,
-        GROUP_CONCAT(i.Image_URL) AS Images
-    FROM listings l
-    LEFT JOIN user u ON l.User_ID = u.User_ID
-    LEFT JOIN category c ON l.Category_ID = c.Category_ID
-    LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
-    WHERE l.Listing_ID = ?
-    GROUP BY l.Listing_ID
-");
-$stmt->execute([$listingId]);
-$listing = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Extract images into an array
-$images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
-
-else {
+// Check if listing ID is provided
+if (!$listingId) {
     echo "Listing ID is missing.";
+    exit;
+}
+
+try {
+    // Prepare and execute query to fetch listing details
+    $stmt = $pdo->prepare("
+        SELECT 
+            l.Listing_ID,
+            l.Title,
+            l.Description,
+            l.Price,
+            l.Date_Posted,
+            l.State,
+            l.City,
+            u.Name AS User_Name, 
+            c.Category_Name,
+            GROUP_CONCAT(i.Image_URL) AS Images
+        FROM listings l
+        LEFT JOIN user u ON l.User_ID = u.User_ID
+        LEFT JOIN category c ON l.Category_ID = c.Category_ID
+        LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
+        WHERE l.Listing_ID = ?
+        GROUP BY l.Listing_ID
+    ");
+    $stmt->execute([$listingId]);
+    $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Extract images into an array
+    $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
+} catch (Exception $e) {
+    echo "An error occurred while fetching listing details: " . $e->getMessage();
     exit;
 }
 ?>
@@ -46,7 +53,7 @@ else {
     <?php include 'header.php'; ?>
 
     <div class="create-listing-container">
-        <h1 class="edit-listing-title"><?php echo htmlspecialchars($listing['Title']); ?></h1>
+        <h1 class="edit-listing-title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></h1>
 
         <!-- Image Gallery -->
         <div class="image-gallery">
@@ -58,74 +65,54 @@ else {
             </div>
         </div>
 
+        <!-- Listing Details -->
         <div class="listing-details-wrapper">
-    <div class="form-group">
-        <label for="title"><strong>Title:</strong></label>
-        <p id="title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="description"><strong>Description:</strong></label>
-        <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="price"><strong>Price:</strong></label>
-        <p id="price">$<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="date_posted"><strong>Date Posted:</strong></label>
-        <p id="date_posted">
-            <?php echo $listing['Date_Posted'] 
-                ? htmlspecialchars(date("F j, Y", strtotime($listing['Date_Posted']))) 
-                : 'Not Available'; ?>
-        </p>
-    </div>
-    <div class="form-group">
-        <label for="category"><strong>Category:</strong></label>
-        <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="user"><strong>Posted By:</strong></label>
-        <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
-    </div>
-    <div class="form-group">
-        <label for="location"><strong>Location:</strong></label>
-        <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
-    </div>
-</div>
+            <div class="form-group">
+                <label for="title"><strong>Title:</strong></label>
+                <p id="title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="description"><strong>Description:</strong></label>
+                <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="price"><strong>Price:</strong></label>
+                <p id="price">$<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="date_posted"><strong>Date Posted:</strong></label>
+                <p id="date_posted">
+                    <?php echo $listing['Date_Posted'] 
+                        ? htmlspecialchars(date("F j, Y", strtotime($listing['Date_Posted']))) 
+                        : 'Not Available'; ?>
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="category"><strong>Category:</strong></label>
+                <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="user"><strong>Posted By:</strong></label>
+                <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="location"><strong>Location:</strong></label>
+                <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
+            </div>
+        </div>
 
         <!-- Action Buttons -->
         <div style="text-align: center; margin-top: 20px;">
             <a href="listings.php" class="btn">All Listings</a>
             <button onclick="history.back()" class="btn">Go Back</button>
         </div>
-
-        <!-- Messaging Section -->
-        <div id="messagesContainer"></div>
-        <form id="sendMessageForm">
-            <input type="hidden" name="sender_id" value="1">
-            <input type="hidden" name="receiver_id" value="2">
-            <input type="hidden" name="listing_id" value="123">
-            <textarea name="message_text" required></textarea>
-            <button type="submit">Send</button>
-        </form>
-    </div>
-
-    <!-- Modal -->
-    <div id="buyNowModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">×</span>
-            <h2>Buy Now</h2>
-            <p><strong>Title:</strong> Amazing Product</p>
-            <p><strong>Price:</strong> $100</p>
-            <p><strong>Description:</strong> This is a fantastic product you will love!</p>
-            <form action="process_purchase.php" method="POST">
-                <input type="hidden" name="listingId" value="12345">
-                <button type="submit" class="btn">Confirm Purchase</button>
-            </form>
-        </div>
     </div>
 
     <script>
+        function changeMainImage(src) {
+            document.getElementById('mainImage').src = src;
+        }
+
         function changeMainImage(src) {
             document.getElementById('mainImage').src = src;
 
