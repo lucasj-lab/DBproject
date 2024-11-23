@@ -71,15 +71,15 @@ $conn->close();
                         <!-- Price -->
                         <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
 
-                        <!-- Posted By -->
-                        <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-
                         <!-- Category -->
                         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
 
                         <!-- Location -->
                         <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
 
+                           <!-- Posted By -->
+                           <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                           
                         <!-- Date Posted -->
                         <?php 
                         // Format the Date_Posted
@@ -87,7 +87,7 @@ $conn->close();
                             ? (new DateTime($listing['Date_Posted']))->format('l, F, js, Y') 
                             : "Date not available"; 
                         ?>
-                        <p><strong>Posted on:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
+                        <p><strong>Added:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
 
                         <!-- View Listing Button -->
                         <button type="submit" class="pill-button">View Listing</button>

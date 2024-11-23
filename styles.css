@@ -3000,7 +3000,7 @@ background: #0056b3;
 .listing-item {
     display: flex;
     flex-direction: column; /* Stack content vertically */
-    align-items: center; /* Center-align content inside each item */
+    align-items: inherit; /* Center-align content inside each item */
     text-align: center;
     background-color: #fff;
     border: 1px solid #ddd; /* Optional border for separation */
