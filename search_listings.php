@@ -5,55 +5,55 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Get the search query
-$searchQuery = trim($_GET['q'] ?? '');
+try {
+    // Get the search query
+    $searchQuery = trim($_GET['q'] ?? '');
 
-// Validate input
-if (empty($searchQuery)) {
-    $listings = [];
-    echo "No search term provided.";
-    exit;
-}
+    // Validate input
+    if (empty($searchQuery)) {
+        $listings = [];
+        echo "No search term provided.";
+        exit;
+    }
 
-// Prepare the SQL query
-$sql = "
-    SELECT 
-        l.Listing_ID, 
-        l.Title, 
-        l.Description, 
-        l.Price, 
-        l.Date_Posted, 
-        l.State, 
-        l.City, 
-        c.Category_Name, 
-        u.Name AS User_Name, 
-        i.Image_URL AS Thumbnail_Image
-    FROM 
-        listings l
-    JOIN 
-        user u ON l.User_ID = u.User_ID
-    JOIN 
-        category c ON l.Category_ID = c.Category_ID
-    LEFT JOIN 
-        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
-    WHERE 
-        l.Title LIKE CONCAT('%', ?, '%') OR 
-        l.Description LIKE CONCAT('%', ?, '%') OR 
-        c.Category_Name LIKE CONCAT('%', ?, '%') OR 
-        l.City LIKE CONCAT('%', ?, '%') OR 
-        l.State LIKE CONCAT('%', ?, '%')
-    ORDER BY 
-        l.Date_Posted DESC
-";
+    // Prepare the SQL query
+    $sql = "
+        SELECT 
+            l.Listing_ID, 
+            l.Title, 
+            l.Description, 
+            l.Price, 
+            l.Date_Posted, 
+            l.State, 
+            l.City, 
+            c.Category_Name, 
+            u.Name AS User_Name, 
+            i.Image_URL AS Thumbnail_Image
+        FROM 
+            listings l
+        JOIN 
+            user u ON l.User_ID = u.User_ID
+        JOIN 
+            category c ON l.Category_ID = c.Category_ID
+        LEFT JOIN 
+            images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+        WHERE 
+            l.Title LIKE CONCAT('%', ?, '%') OR 
+            l.Description LIKE CONCAT('%', ?, '%') OR 
+            c.Category_Name LIKE CONCAT('%', ?, '%') OR 
+            l.City LIKE CONCAT('%', ?, '%') OR 
+            l.State LIKE CONCAT('%', ?, '%')
+        ORDER BY 
+            l.Date_Posted DESC
+    ";
 
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    error_log("SQL preparation failed: " . $conn->error);
-    throw new Exception("SQL preparation failed.");
-}
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("SQL preparation failed: " . $conn->error);
+    }
 
-$stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
-$stmt->execute();
+    $stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+    $stmt->execute();
 
     $result = $stmt->get_result();
     if (!$result) {
@@ -70,8 +70,7 @@ $stmt->execute();
 
     $stmt->close();
     $conn->close();
-
-catch (Exception $e) {
+} catch (Exception $e) {
     error_log("Error fetching listings: " . $e->getMessage());
     $listings = [];
 }
