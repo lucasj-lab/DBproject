@@ -2941,12 +2941,13 @@ background: #0056b3;
 }
 
 
+/* Consistent image sizes for listing images */
 .listing-image {
-    width: 100%; /* Fill the parent container */
-    height: 100%; /* Maintain aspect ratio if container enforces square dimensions */
-    object-fit: cover; /* Crop excess parts of the image */
-    border-radius: 8px; /* Optional: Add rounded corners */
-    display: block; /* Remove extra space below the image */
+    width: 100%; /* Image spans full width of its container */
+    height: 200px; /* Set a fixed height for consistency */
+    object-fit: cover; /* Crop images proportionally to fill the space */
+    border-radius: 5px; /* Match item border radius for a unified look */
+    margin-bottom: 10px; /* Spacing between image and content */
 }
 
 
