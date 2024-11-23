@@ -3129,7 +3129,7 @@ background: #0056b3;
     color: #fff;
     padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
     text-align: center;
 }
@@ -3144,7 +3144,7 @@ background: #0056b3;
     color: #fff;
     padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius:30px;
     cursor: pointer;
     text-align: center;
 }
