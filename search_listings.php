@@ -5,18 +5,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Get the search query from the request
+$searchQuery = $_GET['q'] ?? '';
+
 try {
-    // Get the search query
-    $searchQuery = trim($_GET['q'] ?? '');
-
-    // Validate input
-    if (empty($searchQuery)) {
-        $listings = [];
-        echo "No search term provided.";
-        exit;
-    }
-
-    // Prepare the SQL query
+    // Prepare the query to fetch listings
     $sql = "
         SELECT 
             l.Listing_ID, 
@@ -52,9 +45,9 @@ try {
         throw new Exception("SQL preparation failed: " . $conn->error);
     }
 
+    // Bind parameters and execute the query
     $stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
     $stmt->execute();
-
     $result = $stmt->get_result();
     if (!$result) {
         throw new Exception("Query execution failed: " . $conn->error);
@@ -70,6 +63,7 @@ try {
 
     $stmt->close();
     $conn->close();
+
 } catch (Exception $e) {
     error_log("Error fetching listings: " . $e->getMessage());
     $listings = [];
@@ -99,10 +93,10 @@ try {
                     <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
                     <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
                     <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                    <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                     <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
                     <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted On:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
+                    <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                    <p><strong>Added:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
                     <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
                         View Listing
                     </button>

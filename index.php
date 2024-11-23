@@ -25,16 +25,16 @@ require 'database_connection.php';
         </div>
       </div>
     </section>
-
-    <!-- Search Form -->
-    <form action="search_listings.php" method="get" class="search-form">
-      <div class="search-container">
-        <input type="text" id="title" name="title" placeholder="Search" class="search-input" required>
-        <button type="submit" class="search-btn">
-          <label>Search</label>
-        </button>
-      </div>
-    </form>
+    
+<!-- Search Form -->
+<form action="search_listings.php" method="get" class="search-form">
+  <div class="search-container">
+    <input type="text" id="q" name="q" placeholder="Search" class="search-input" required>
+    <button type="submit" class="search-btn">
+      <label>Search</label>
+    </button>
+  </div>
+</form>
 
     <!-- Categories Section -->
     <section class="browse-categories">
