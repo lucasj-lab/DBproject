@@ -152,9 +152,30 @@ try {
                 modal.style.display = "none";
             }
         };
+    // AJAX Form Submission
+    buyNowForm.onsubmit = function (e) {
+            e.preventDefault();
+            const formData = new FormData(buyNowForm);
+
+            fetch('process_purchase.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Thank you! Your purchase was successful for Listing ID: ${data.listingId}`);
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+                modal.style.display = "none";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred. Please try again later.');
+                modal.style.display = "none";
+            });
+        };
     </script>
 </body>
-<footer>
-    <?php include 'footer.php'; ?>
-</footer>
 </html>
