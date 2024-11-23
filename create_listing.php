@@ -380,6 +380,36 @@ $conn->close();
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
+        .choose-files-button,
+.update-button {
+    min-width: 150px; /* Minimum button width */
+    text-align: center;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.choose-files-button {
+    background-color: #007bff; /* Blue */
+    color: #fff;
+}
+
+.choose-files-button:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+
+.update-button {
+    background-color: #28a745; /* Green */
+    color: #fff;
+}
+
+.update-button:hover {
+    background-color: #218838; /* Darker green */
+}
+
     </style>
 
 

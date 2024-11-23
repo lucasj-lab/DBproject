@@ -58,7 +58,21 @@ require 'listing_queries.php';
                 <img src="${thumbnail}" alt="Thumbnail Image" class="listing-thumbnail">
                 <h3><strong>${listing.Title}</strong></h3>
                 <p><strong>Description:</strong> ${listing.Description}</p>
-                <p><strong>Price:</strong> $${listing.Price}</p>
+            <p>
+    <strong>Price:</strong> 
+    ${listing.Price !== null && listing.Price !== undefined
+        ? listing.Price === 0
+            ? "Free"
+            : `$${sanitizeHTML(
+                new Intl.NumberFormat("en-US", {
+                    style: "decimal",
+                    minimumFractionDigits: 2,
+                }).format(listing.Price)
+              )}`
+        : "N/A"
+    }
+</p>
+
                 <p><strong>Posted by:</strong> ${listing.User_Name}</p>
                 <p><strong>Category:</strong> ${listing.Category_Name}</p>
                 <p><strong>Location:</strong> ${listing.City}, ${listing.State}</p>
