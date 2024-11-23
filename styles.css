@@ -2329,7 +2329,7 @@ select#state {
 
 .thumbnail-image:hover {
     transform: scale(1.1);
-    border-color: #000;
+    border-color: #ffffff;
 }
 
 
