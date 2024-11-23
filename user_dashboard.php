@@ -84,7 +84,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
     color: white;
     text-decoration: none;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
     text-align: center;
 }
