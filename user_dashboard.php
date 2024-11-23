@@ -159,7 +159,9 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tbody>
                 </table>
             </div>
-            <div <button class="btn"><a href="create_listing.php">New Listing</a></button></div>
+            <div 
+            <button class="btn" onclick="window.location.href='create_listing.php'">New Listing</button> 
+        </div>
         <?php else: ?>
             <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
         <?php endif; ?>
