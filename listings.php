@@ -13,7 +13,8 @@ error_reporting(E_ALL);
  * @return array The array of listings
  * @throws Exception If there is a database or query error
  */
-function getAllListings($conn) {
+function getAllListings($conn)
+{
     if (!$conn) {
         throw new Exception("Invalid database connection.");
     }
@@ -93,50 +94,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'header.php'; ?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listings</title>
 </head>
+
 <body>
 
-<main class="listings">
-    <h1>Listings</h1>
-    <div id="listings-container" class="listing-container"></div>
+    <main class="listings">
+        <h1>Listings</h1>
+        <div id="listings-container" class="listing-container"></div>
 
-    <script>
-        // Function to sanitize dynamic content
-        function sanitizeHTML(str) {
-            const tempDiv = document.createElement('div');
-            tempDiv.textContent = str;
-            return tempDiv.innerHTML;
-        }
+        <script>
+            // Function to sanitize dynamic content
+            function sanitizeHTML(str) {
+                const tempDiv = document.createElement('div');
+                tempDiv.textContent = str;
+                return tempDiv.innerHTML;
+            }
 
-        // Fetch the listings data
-        fetch('listings.php?fetchListings=true')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('listings-container');
-                if (data.message) {
-                    container.innerHTML = `<p>${sanitizeHTML(data.message)}</p>`;
-                    return;
-                }
+            // Fetch the listings data
+            fetch('listings.php?fetchListings=true')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('listings-container');
+                    if (data.message) {
+                        container.innerHTML = `<p>${sanitizeHTML(data.message)}</p>`;
+                        return;
+                    }
 
-                data.forEach(listing => {
-                    const listingElement = document.createElement('div');
-                    listingElement.className = 'listing-item';
+                    data.forEach(listing => {
+                        const listingElement = document.createElement('div');
+                        listingElement.className = 'listing-item';
 
-                    const thumbnail = listing.Thumbnail_Image
-    ? `<img src="${sanitizeHTML(listing.Thumbnail_Image)}" alt="${sanitizeHTML(listing.Title)}" class="listing-image">`
-    : `<img src="uploads/default-thumbnail.jpg" alt="No Image Available" class="listing-image">`;
+                        const thumbnail = listing.Thumbnail_Image
+                            ? `<img src="${sanitizeHTML(listing.Thumbnail_Image)}" alt="${sanitizeHTML(listing.Title)}" class="listing-image">`
+                            : `<img src="uploads/default-thumbnail.jpg" alt="No Image Available" class="listing-image">`;
 
 
-                    listingElement.innerHTML = `
+                        listingElement.innerHTML = `
                         <div>
                             ${thumbnail}
                             <h3><strong>${sanitizeHTML(listing.Title)}</strong></h3>
                             <p><strong>Description:</strong> ${sanitizeHTML(listing.Description)}</p>
-                            <p><strong>Price:</strong> $${listing.Price !== null && listing.Price !== undefined ? sanitizeHTML(listing.Price.toString()) : "N/A"}</p>
+                          <p>
+    <strong>Price:</strong> ${listing.Price !== null && listing.Price !== undefined
+                                ? listing.Price === 0
+                                    ? "Free"
+                                    : sanitizeHTML(
+                                        new Intl.NumberFormat("en-US", {
+                                            style: "decimal",
+                                            minimumFractionDigits: 2,
+                                        }).format(listing.Price)
+                                    )
+                                : "N/A"
+                            }
+</p>
                             <p><strong>Category:</strong> ${sanitizeHTML(listing.Category_Name)}</p>
                             <p><strong>Location:</strong> ${sanitizeHTML(listing.City)}, ${sanitizeHTML(listing.State)}</p>
                             <p><strong>Posted:</strong> ${sanitizeHTML(listing.User_Name)}</p>
@@ -148,17 +163,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                         </div>
                     `;
 
-                    container.appendChild(listingElement);
+                        container.appendChild(listingElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching listings:', error);
+                    const container = document.getElementById('listings-container');
+                    container.innerHTML = `<p>Unable to load listings. Please try again later.</p>`;
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching listings:', error);
-                const container = document.getElementById('listings-container');
-                container.innerHTML = `<p>Unable to load listings. Please try again later.</p>`;
-            });
-    </script>
-</main>
+        </script>
+    </main>
 
 </body>
 <?php include 'footer.php'; ?>
+
 </html>

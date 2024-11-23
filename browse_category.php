@@ -69,7 +69,19 @@ $conn->close();
                         <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
 
                         <!-- Price -->
-                        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                        <p><strong>Price:</strong> 
+    <?php 
+        if (isset($listing['Price'])) {
+            $price = (float)$listing['Price'];
+            echo $price === 0.0 
+                ? 'Free' 
+                : '$' . number_format($price, 2);
+        } else {
+            echo 'N/A';
+        }
+    ?>
+</p>
+
 
                         <!-- Category -->
                         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>

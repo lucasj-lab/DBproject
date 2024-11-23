@@ -88,9 +88,18 @@ if (!$listing) {
                 <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
             </div>
             <div class="form-group">
-                <label for="price"><strong>Price:</strong></label>
-                <p id="price">$<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
-            </div>
+    <label for="price"><strong>Price:</strong></label>
+    <p id="price">
+        <?php 
+            if (isset($listing['Price'])) {
+                $price = (float)$listing['Price'];
+                echo $price === 0.0 ? 'Free' : '$' . number_format($price, 2);
+            } else {
+                echo 'Not Available';
+            }
+        ?>
+    </p>
+</div>
             <div class="form-group">
                 <label for="category"><strong>Category:</strong></label>
                 <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>

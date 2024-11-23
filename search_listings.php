@@ -92,7 +92,19 @@ try {
                     <?php endif; ?>
                     <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
                     <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-                    <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Price:</strong> 
+    <?php 
+        if (isset($listing['Price'])) {
+            $price = (float)$listing['Price'];
+            echo $price === 0.0 
+                ? 'Free' 
+                : '$' . number_format($price, 2);
+        } else {
+            echo 'N/A';
+        }
+    ?>
+</p>
+
                     <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
                     <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
                     <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>

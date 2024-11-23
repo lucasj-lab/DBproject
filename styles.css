@@ -3123,30 +3123,29 @@ background: #0056b3;
     background-color: #218838;
 }
 
-/* Style for "Choose Files" button */
-.choose-files-button {
-    background-color: #007bff; /* Blue */
-    color: #fff;
+.choose-files-button,
+.update-button {
+    min-width: 150px; /* Minimum button width */
+    text-align: center;
     padding: 10px 15px;
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    text-align: center;
+    font-size: 16px;
+}
+
+.choose-files-button {
+    background-color: #007bff; /* Blue */
+    color: #fff;
 }
 
 .choose-files-button:hover {
     background-color: #0056b3; /* Darker blue */
 }
 
-/* Style for "Update" button */
 .update-button {
     background-color: #28a745; /* Green */
     color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius:30px;
-    cursor: pointer;
-    text-align: center;
 }
 
 .update-button:hover {
