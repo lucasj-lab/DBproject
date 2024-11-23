@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                           <p>
     <strong>Price:</strong> ${listing.Price !== null && listing.Price !== undefined
                                 ? listing.Price === 0
-                                    ? "Free"
+                                    ? "Free" : '$' :
                                     : sanitizeHTML(
                                         new Intl.NumberFormat("en-US", {
                                             style: "decimal",
