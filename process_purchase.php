@@ -86,30 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         animation: slideIn 0.3s ease-out;
     }
 
-    .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999; /* Ensures it appears above other content */
-  }
-  
-.popup-container {
-  background: #ffffff;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  overflow: hidden;
-  animation: slideIn 0.3s ease-out;
-  margin: 0 auto; /* Center the popup */
-}
 
 /* Responsive styles for smaller screens */
 @media (max-width: 600px) {
