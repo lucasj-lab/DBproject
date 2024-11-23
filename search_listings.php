@@ -5,49 +5,56 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Get the search query from the request
-$searchQuery = $_GET['q'] ?? '';
+// Get the search query
+$searchQuery = trim($_GET['q'] ?? '');
 
-try {
-    // Prepare the query to fetch listings
-    $sql = "
-        SELECT 
-            l.Listing_ID, 
-            l.Title, 
-            l.Description, 
-            l.Price, 
-            l.Date_Posted, 
-            l.State, 
-            l.City, 
-            c.Category_Name, 
-            u.Name AS User_Name, 
-            i.Image_URL AS Thumbnail_Image
-        FROM 
-            listings l
-        JOIN 
-            user u ON l.User_ID = u.User_ID
-        JOIN 
-            category c ON l.Category_ID = c.Category_ID
-        LEFT JOIN 
-            images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
-        WHERE 
-            l.Title LIKE CONCAT('%', ?, '%') OR 
-            l.Description LIKE CONCAT('%', ?, '%') OR 
-            c.Category_Name LIKE CONCAT('%', ?, '%') OR 
-            l.City LIKE CONCAT('%', ?, '%') OR 
-            l.State LIKE CONCAT('%', ?, '%')
-        ORDER BY 
-            l.Date_Posted DESC
-    ";
+// Validate input
+if (empty($searchQuery)) {
+    $listings = [];
+    echo "No search term provided.";
+    exit;
+}
 
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL preparation failed: " . $conn->error);
-    }
+// Prepare the SQL query
+$sql = "
+    SELECT 
+        l.Listing_ID, 
+        l.Title, 
+        l.Description, 
+        l.Price, 
+        l.Date_Posted, 
+        l.State, 
+        l.City, 
+        c.Category_Name, 
+        u.Name AS User_Name, 
+        i.Image_URL AS Thumbnail_Image
+    FROM 
+        listings l
+    JOIN 
+        user u ON l.User_ID = u.User_ID
+    JOIN 
+        category c ON l.Category_ID = c.Category_ID
+    LEFT JOIN 
+        images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    WHERE 
+        l.Title LIKE CONCAT('%', ?, '%') OR 
+        l.Description LIKE CONCAT('%', ?, '%') OR 
+        c.Category_Name LIKE CONCAT('%', ?, '%') OR 
+        l.City LIKE CONCAT('%', ?, '%') OR 
+        l.State LIKE CONCAT('%', ?, '%')
+    ORDER BY 
+        l.Date_Posted DESC
+";
 
-    // Bind parameters and execute the query
-    $stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
-    $stmt->execute();
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    error_log("SQL preparation failed: " . $conn->error);
+    throw new Exception("SQL preparation failed.");
+}
+
+$stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+$stmt->execute();
+
     $result = $stmt->get_result();
     if (!$result) {
         throw new Exception("Query execution failed: " . $conn->error);
@@ -57,7 +64,7 @@ try {
     $listings = [];
     while ($row = $result->fetch_assoc()) {
         $datePosted = $row['Date_Posted'] ? new DateTime($row['Date_Posted']) : null;
-        $row['Formatted_Date'] = $datePosted ? $datePosted->format('l, F jS, Y') : "Date not available";
+        $row['Formatted_Date'] = $datePosted ? $datePosted->format('F j, Y') : "Date not available";
         $listings[] = $row;
     }
 
@@ -93,10 +100,10 @@ try {
                     <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
                     <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
                     <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
-                    <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                     <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
                     <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted On:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
+                    <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                    <p><strong>Added:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
                     <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
                         View Listing
                     </button>
