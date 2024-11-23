@@ -132,6 +132,16 @@ function resizeImage($source, $destination, $width, $height) {
         case IMAGETYPE_GIF:
             $sourceImage = imagecreatefromgif($source);
             break;
+        case IMAGETYPE_WEBP:
+            $sourceImage = imagecreatefromwebp($source);
+            break;
+        case IMAGETYPE_AVIF: // Only supported in PHP 8.1 or later
+            if (function_exists('imagecreatefromavif')) {
+                $sourceImage = imagecreatefromavif($source);
+            } else {
+                throw new Exception("AVIF format not supported on this server.");
+            }
+            break;
         default:
             throw new Exception("Unsupported image type.");
     }
@@ -151,12 +161,23 @@ function resizeImage($source, $destination, $width, $height) {
         case IMAGETYPE_GIF:
             imagegif($resizedImage, $destination);
             break;
+        case IMAGETYPE_WEBP:
+            imagewebp($resizedImage, $destination);
+            break;
+        case IMAGETYPE_AVIF: // Only supported in PHP 8.1 or later
+            if (function_exists('imageavif')) {
+                imageavif($resizedImage, $destination);
+            } else {
+                throw new Exception("AVIF format not supported on this server.");
+            }
+            break;
     }
 
     // Free memory
     imagedestroy($sourceImage);
     imagedestroy($resizedImage);
 }
+
 
 $conn->close();
 ?>
