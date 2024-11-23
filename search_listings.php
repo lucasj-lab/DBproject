@@ -71,7 +71,7 @@ $stmt->execute();
     $stmt->close();
     $conn->close();
 
-} catch (Exception $e) {
+catch (Exception $e) {
     error_log("Error fetching listings: " . $e->getMessage());
     $listings = [];
 }
@@ -100,10 +100,10 @@ $stmt->execute();
                     <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
                     <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
                     <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price']); ?></p>
+                    <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                     <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
                     <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                    <p><strong>Added:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
+                    <p><strong>Posted On:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
                     <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
                         View Listing
                     </button>
