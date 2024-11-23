@@ -96,15 +96,15 @@ if (!$listing) {
                 <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
             </div>
             <div class="form-group">
-                <label for="user"><strong>Posted By:</strong></label>
-                <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
-            </div>
-            <div class="form-group">
                 <label for="location"><strong>Location:</strong></label>
                 <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
             </div>
             <div class="form-group">
-                <label for="date_posted"><strong>Date Posted:</strong></label>
+                <label for="user"><strong>Posted By:</strong></label>
+                <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
+            </div>
+            <div class="form-group">
+                <label for="date_posted"><strong>Added:</strong></label>
                 <p id="date_posted">
                     <?php echo $listing['Date_Posted'] 
                         ? htmlspecialchars(date("F j, Y", strtotime($listing['Date_Posted']))) 

@@ -84,7 +84,7 @@ $conn->close();
                         <?php 
                         // Format the Date_Posted
                         $formattedDate = !empty($listing['Date_Posted']) 
-                            ? (new DateTime($listing['Date_Posted']))->format('l, F, js, Y') 
+                            ? (new DateTime($listing['Date_Posted']))->format('F j, Y') 
                             : "Date not available"; 
                         ?>
                         <p><strong>Added:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
