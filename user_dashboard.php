@@ -116,7 +116,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="dashboard-title">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
         <p><strong>Member Since:</strong>
-            <?php echo htmlspecialchars((new DateTime($user['Date_Joined']))->format('l, F jS, Y')); ?>
+            <?php echo htmlspecialchars((new DateTime($user['Date_Joined']))->format('F jS, Y')); ?>
         </p>
 
         <h2>Your Listings</h2>
