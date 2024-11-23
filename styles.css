@@ -2958,11 +2958,14 @@ background: #0056b3;
     display: block; /* Remove extra space below the image */
 }
 .listing-container {
-    display: grid; /* Switch to a grid layout */
-    gap: 20px; /* Add space between items */
-    padding: 20px;
-    justify-content: center; /* Center the grid horizontally */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
+    gap: 20px; /* Space between grid items */
+    justify-items: center; /* Center-align items horizontally */
+    align-items: start; /* Align items at the top */
+    padding: 10px; /* Optional padding for spacing around the grid */
 }
+
 
 /* Default: Show 4 items per row */
 .listing-container {
