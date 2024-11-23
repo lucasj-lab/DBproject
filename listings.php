@@ -137,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
                             <h3><strong>${sanitizeHTML(listing.Title)}</strong></h3>
                             <p><strong>Description:</strong> ${sanitizeHTML(listing.Description)}</p>
                             <p><strong>Price:</strong> $${listing.Price !== null && listing.Price !== undefined ? sanitizeHTML(listing.Price.toString()) : "N/A"}</p>
-                            <p><strong>Posted by:</strong> ${sanitizeHTML(listing.User_Name)}</p>
                             <p><strong>Category:</strong> ${sanitizeHTML(listing.Category_Name)}</p>
+                            <p><strong>Posted by:</strong> ${sanitizeHTML(listing.User_Name)}</p>
                             <p><strong>Location:</strong> ${sanitizeHTML(listing.City)}, ${sanitizeHTML(listing.State)}</p>
                             <p><strong>Added:</strong> ${sanitizeHTML(listing.Formatted_Date)}</p>
                             <button type="button" class="pill-button"
