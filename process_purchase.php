@@ -86,6 +86,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         animation: slideIn 0.3s ease-out;
     }
 
+    .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensures it appears above other content */
+  }
+  
+.popup-container {
+  background: #ffffff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+  margin: 0 auto; /* Center the popup */
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 600px) {
+  .popup-container {
+    width: 95%; /* Make it slightly narrower on small screens */
+    max-width: 100%; /* Allow full width if needed */
+    border-radius: 8px; /* Slightly reduce the border radius */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Adjust shadow for smaller screens */
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
     /* Popup Header */
     .popup-header {
         background: #28a745;
