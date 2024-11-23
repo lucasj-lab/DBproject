@@ -1651,7 +1651,6 @@ table td {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 20px;
 }
 
 .edit-listing-container button {
@@ -2147,8 +2146,8 @@ footer nav ul li a {
 /* File Upload */
 .file-upload-container {
     display: flex;
-    align-items: center;
     gap: 10px;
+    flex-direction: column;
 }
 
 .file-upload-button {
