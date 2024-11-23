@@ -203,7 +203,7 @@ $conn->close();
 
 <body>
     <?php include 'header.php'; ?>
-    <div class="create-listing-container">
+    <div class="edit-listing-container">
         <h1 class="edit-listing-title">Create New Listing</h1>
         <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
