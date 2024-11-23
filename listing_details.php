@@ -1,16 +1,26 @@
 <?php
 require 'database_connection.php';
 
+// Handle form submission (Buy Now button)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $listingId = $_POST['listingId'] ?? null;
+
+    if ($listingId) {
+        $successMessage = "Thank you! Your purchase was successful for Listing ID: $listingId.";
+    } else {
+        $errorMessage = "An error occurred. Invalid listing.";
+    }
+}
+
+// Fetch listing details
 $listingId = $_GET['listing_id'] ?? null;
 
-// Check if listing ID is provided
 if (!$listingId) {
     echo "Listing ID is missing.";
     exit;
 }
 
 try {
-    // Prepare and execute query to fetch listing details
     $stmt = $pdo->prepare("
         SELECT 
             l.Listing_ID,
@@ -33,14 +43,17 @@ try {
     $stmt->execute([$listingId]);
     $listing = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Extract images into an array
     $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
 } catch (Exception $e) {
     echo "An error occurred while fetching listing details: " . $e->getMessage();
     exit;
 }
-?>
 
+if (!$listing) {
+    echo "Listing not found.";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,22 +121,40 @@ try {
         </div>
     </div>
 
-    <!-- Modal -->
-   <!-- Modal -->
-<div id="buyNowModal" class="modal">
-    <div class="modal-content popup-container">
-        <span class="close" id="closeModal">×</span>
-        <h2>Buy Now</h2>
-        <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
-        <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
-        <form action="process_purchase.php" method="POST">
-            <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
-            <button type="submit" class="btn">Confirm Purchase</button>
-        </form>
-    </div>
-</div>
+    <!-- Popup for Success/Error Messages -->
+    <?php if (isset($successMessage) || isset($errorMessage)): ?>
+        <div class="popup-overlay">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h1 class="popup-title">
+                        <?php echo isset($successMessage) ? "Thank You!" : "Error"; ?>
+                    </h1>
+                </div>
+                <div class="popup-body">
+                    <p class="popup-message">
+                        <?php echo isset($successMessage) ? htmlspecialchars($successMessage) : htmlspecialchars($errorMessage); ?>
+                    </p>
+                </div>
+                <div class="popup-footer">
+                    <button class="close-popup" onclick="closePopup()">Close</button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
+    <!-- Buy Now Modal -->
+    <div id="buyNowModal" class="modal">
+        <div class="modal-content popup-container">
+            <span class="close" id="closeModal">×</span>
+            <h2>Buy Now</h2>
+            <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
+            <form method="POST">
+                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
+                <button type="submit" class="btn">Confirm Purchase</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Change the main image when a thumbnail is clicked
@@ -131,7 +162,6 @@ try {
             document.getElementById('mainImage').src = src;
         }
 
-        // Modal Logic
         const modal = document.getElementById('buyNowModal');
         const btn = document.getElementById('buyNowBtn');
         const close = document.getElementById('closeModal');
@@ -152,30 +182,12 @@ try {
                 modal.style.display = "none";
             }
         };
-    // AJAX Form Submission
-    buyNowForm.onsubmit = function (e) {
-            e.preventDefault();
-            const formData = new FormData(buyNowForm);
 
-            fetch('process_purchase.php', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Thank you! Your purchase was successful for Listing ID: ${data.listingId}`);
-                } else {
-                    alert(`Error: ${data.message}`);
-                }
-                modal.style.display = "none";
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An unexpected error occurred. Please try again later.');
-                modal.style.display = "none";
-            });
-        };
+        // Close Popup
+        function closePopup() {
+            const popup = document.querySelector('.popup-overlay');
+            if (popup) popup.style.display = 'none';
+        }
     </script>
 </body>
 </html>
