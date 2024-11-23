@@ -13,13 +13,12 @@ if (!is_dir($targetDirectory)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
     $image = $_FILES['image'];
 
-    // Validate file type
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'heic/heif'];
-    if (!in_array($image['type'], $allowedTypes)) {
-        echo json_encode(["error" => "Only JPG, PNG, and GIF formats are allowed."]);
-        exit();
-    }
-
+ // Validate file type
+ $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif', 'heic/heif'];
+ if (!in_array($image['type'], $allowedTypes)) {
+     echo json_encode(["error" => "Only JPG, PNG, GIF, WebP, AVIF, and HEIC/HEIF formats are allowed."]);
+     exit();
+ }
     // Generate a unique file name to prevent overwriting
     $fileName = uniqid() . "-" . basename($image['name']);
     $targetFilePath = $targetDirectory . $fileName;
