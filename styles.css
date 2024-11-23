@@ -1649,8 +1649,8 @@ table td {
 /* Buttons styling */
 .edit-listing-container .btn-container {
     display: flex;
-    justify-content: flex-end;
     gap: 10px;
+    flex-direction: column;
 }
 
 .edit-listing-container button {
