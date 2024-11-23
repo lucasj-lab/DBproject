@@ -78,7 +78,7 @@ $conn->close();
                         <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
 
                            <!-- Posted By -->
-                           <p><strong>Posted by:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+                           <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
                            
                         <!-- Date Posted -->
                         <?php 

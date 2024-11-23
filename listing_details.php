@@ -100,7 +100,7 @@ if (!$listing) {
                 <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
             </div>
             <div class="form-group">
-                <label for="user"><strong>Posted By:</strong></label>
+                <label for="user"><strong>Posted:</strong></label>
                 <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
             </div>
             <div class="form-group">
