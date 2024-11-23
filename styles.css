@@ -2266,8 +2266,8 @@ select#state {
 }
 
 .create-listing-container button:hover {
-    background-color: #fbbc04;
-    color: #000;
+    background-color: #3F51B5;
+    color: #ffffff;
 }
 
 /* Optional styling for inputs in the form if needed */
