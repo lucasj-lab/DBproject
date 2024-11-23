@@ -83,7 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
             $fileType = mime_content_type($tmpName);
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
+            $allowedTypes = [
+                'image/jpeg', // For JPG and JPEG
+                'image/png',  // For PNG
+                'image/gif',  // For GIF
+                'image/webp', // For WebP
+                'image/avif', // For AVIF
+                'image/heic', // For HEIC
+                'image/heif'  // For HEIF
+            ];
             if (in_array($fileType, $allowedTypes)) {
                 $imageName = basename($_FILES['images']['name'][$key]);
                 $uniqueImageName = time() . "_" . $imageName;
@@ -278,15 +286,17 @@ $conn->close();
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Upload new images -->
-                <div class="file-upload-container">
-                    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-                    <label for="images" class="file-upload-button">Choose Files</label>
-                    <span class="file-upload-text" id="file-upload-text"></span>
-                </div>
-                <div class="btn-container">
-                <button type="submit">Update</button>
-            </div>
+           <!-- Upload new images -->
+<div class="file-upload-container">
+    <label for="images" class="file-upload-button">Choose Files</label>
+    <input type="file" id="images" name="images[]" class="file-input" 
+        accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple>
+    <span class="file-upload-text" id="file-upload-text"></span>
+    
+    <!-- Update button -->
+    <button type="submit" class="update-button">Update</button>
+</div>
+
             </div>
          
         </form>
