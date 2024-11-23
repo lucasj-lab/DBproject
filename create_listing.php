@@ -240,8 +240,8 @@ $conn->close();
    
 
             <div class="file-upload-container">
-    <!-- File upload button -->
-    <button type="button" class="file-upload-button" onclick="document.getElementById('images').click();">Choose Files</button>
+    <!-- File upload button with unique class -->
+    <button type="button" class="file-upload-button choose-files-button" onclick="document.getElementById('images').click();">Choose Files</button>
     
     <!-- Hidden file input -->
     <input type="file" 
@@ -255,7 +255,8 @@ $conn->close();
     <span class="file-upload-text" id="file-upload-text"></span>
 </div>
 <div class="btn-container">
-    <button type="submit">Create</button>
+    <!-- Update button with unique class -->
+    <button type="submit" class="update-button">create</button>
 </div>
 
             </div>

@@ -3122,3 +3122,33 @@ background: #0056b3;
 .message-form .btn:hover {
     background-color: #218838;
 }
+
+/* Style for "Choose Files" button */
+.choose-files-button {
+    background-color: #007bff; /* Blue */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.choose-files-button:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+
+/* Style for "Update" button */
+.update-button {
+    background-color: #28a745; /* Green */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.update-button:hover {
+    background-color: #218838; /* Darker green */
+}
