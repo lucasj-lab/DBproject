@@ -238,23 +238,26 @@ $conn->close();
             </div>
             <div id="imagePreviewContainer"></div> <!-- Image Previews -->
    
+
             <div class="file-upload-container">
+    <!-- File upload button -->
+    <button type="button" class="file-upload-button" onclick="document.getElementById('images').click();">Choose Files</button>
+    
+    <!-- Hidden file input -->
     <input type="file" 
            id="images" 
            name="images[]" 
            class="file-input" 
            accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" 
-           multiple>
-           
-           <div class="form-container">
-    <!-- File upload button -->
-    <label for="images" class="file-upload-button">Choose Files</label>
-    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple>
+           multiple hidden>
+    
+    <!-- Optional text feedback -->
     <span class="file-upload-text" id="file-upload-text"></span>
-
-    <!-- Create listing button -->
-    <button type="submit">Create Listing</button>
 </div>
+<div class="btn-container">
+    <button type="submit">Create</button>
+</div>
+
             </div>
     </div>
     </div>

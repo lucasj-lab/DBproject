@@ -286,17 +286,24 @@ $conn->close();
                     <?php endforeach; ?>
                 </div>
 
-           <!-- Upload new images -->
-<div class="file-upload-container">
-    <label for="images" class="file-upload-button">Choose Files</label>
-    <input type="file" id="images" name="images[]" class="file-input" 
-        accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple>
-    <span class="file-upload-text" id="file-upload-text"></span>
+                <div class="file-upload-container">
+    <!-- File upload button -->
+    <button type="button" class="file-upload-button" onclick="document.getElementById('images').click();">Choose Files</button>
     
-    <!-- Update button -->
-    <button type="submit" class="update-button">Update</button>
+    <!-- Hidden file input -->
+    <input type="file" 
+           id="images" 
+           name="images[]" 
+           class="file-input" 
+           accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" 
+           multiple hidden>
+    
+    <!-- Optional text feedback -->
+    <span class="file-upload-text" id="file-upload-text"></span>
 </div>
-
+<div class="btn-container">
+    <button type="submit">Update</button>
+</div>
             </div>
          
         </form>
