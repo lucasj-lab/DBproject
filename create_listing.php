@@ -256,7 +256,7 @@ $conn->close();
 </div>
 <div class="btn-container">
     <!-- Update button with unique class -->
-    <button type="submit" class="update-button">create</button>
+    <button type="submit" class="update-button">Create</button>
 </div>
 
             </div>
