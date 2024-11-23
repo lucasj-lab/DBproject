@@ -1661,6 +1661,7 @@ table td {
     color: #fff;
     background-color: #1a73e8;
     transition: background-color 0.3s ease;
+    border-radius: 30px;
 }
 
 .edit-listing-container button:hover {
