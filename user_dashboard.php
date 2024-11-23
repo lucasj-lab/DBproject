@@ -78,11 +78,19 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+.btn:hover {
+    background-color: #0056b3;
+}
 
         .btn-danger {
             background-color: #dc3545;
