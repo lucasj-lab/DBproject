@@ -74,7 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Handle image uploads
             if (!empty($_FILES['images']['name'][0])) {
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
+                $allowedTypes = [
+                    'image/jpeg', // For JPG and JPEG
+                    'image/png',  // For PNG
+                    'image/gif',  // For GIF
+                    'image/webp', // For WebP
+                    'image/avif', // For AVIF
+                    'image/heic', // For HEIC
+                    'image/heif'  // For HEIF
+                ];
                 $uploadDirectory = 'uploads/';
                 if (!is_dir($uploadDirectory)) {
                     mkdir($uploadDirectory, 0777, true);
@@ -230,15 +238,23 @@ $conn->close();
             </div>
             <div id="imagePreviewContainer"></div> <!-- Image Previews -->
    
-                  <!-- Upload new images -->
-                  <div class="file-upload-container">
-                    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .heic, .heif" multiple>
-                    <label for="images" class="file-upload-button">Choose Files</label>
-                    <span class="file-upload-text" id="file-upload-text"></span>
-                </div>
-                <div class="btn-container">
-                <button type="submit">Create Listing</button>
-            </div>
+            <div class="file-upload-container">
+    <input type="file" 
+           id="images" 
+           name="images[]" 
+           class="file-input" 
+           accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" 
+           multiple>
+           
+           <div class="form-container">
+    <!-- File upload button -->
+    <label for="images" class="file-upload-button">Choose Files</label>
+    <input type="file" id="images" name="images[]" class="file-input" accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple>
+    <span class="file-upload-text" id="file-upload-text"></span>
+
+    <!-- Create listing button -->
+    <button type="submit">Create Listing</button>
+</div>
             </div>
     </div>
     </div>
