@@ -231,54 +231,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button id="confirmDeleteButton" class="btn delete-btn">Yes, Delete</button>
             <button onclick="document.getElementById('confirmDeleteModal').style.display='none'"
                 class="btn">Cancel</button>
+                <button id="closeModalButton" class="btn">Close</button>
+
         </div>
     </div>
 
     <script>
+    // Function to handle delete confirmation
     function confirmDelete(form) {
-    const confirmModal = document.getElementById('confirmDeleteModal');
-    const deleteConfirmButton = document.getElementById('confirmDeleteButton');
+        const confirmModal = document.getElementById('confirmDeleteModal');
+        const deleteConfirmButton = document.getElementById('confirmDeleteButton');
 
-    // Show the modal
-    confirmModal.style.display = 'block';
+        // Show the modal
+        confirmModal.style.display = 'block';
 
-    // Handle confirmation
-    deleteConfirmButton.onclick = () => {
-        confirmModal.style.display = 'none'; // Close modal
-        form.submit(); // Submit the form
+        // Handle confirmation
+        deleteConfirmButton.onclick = () => {
+            confirmModal.style.display = 'none'; // Close modal
+            form.submit(); // Submit the form
+        };
+
+        // Prevent form submission until confirmed
+        return false;
+    }
+
+    // Close the modal when clicking outside it
+    window.onclick = (event) => {
+        const modal = document.getElementById('confirmDeleteModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
     };
 
-    // Prevent form submission until confirmed
-    return false;
-}
+    // Close the modal when clicking the "Close" button
+    document.getElementById('closeModalButton').onclick = function () {
+        document.getElementById('confirmDeleteModal').style.display = 'none';
+    };
 
-// Close the modal when clicking outside it
-window.onclick = (event) => {
-    const modal = document.getElementById('confirmDeleteModal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    // Example of server-side validation logic (for reference, not active in JavaScript)
+    function validateMessageOwnership($messageID, $userId, $pdo) {
+        $query = `
+            SELECT Message_ID
+            FROM messages
+            WHERE Message_ID = :message_id AND (Sender_ID = :user_id OR Recipient_ID = :user_id)
+        `;
+        const stmt = $pdo.prepare($query);
+        stmt.execute({ ':message_id': $messageID, ':user_id': $userId });
+
+        return stmt.fetch() !== false;
     }
-};
 
-function validateMessageOwnership($messageID, $userId, $pdo) {
-    $query = "
-        SELECT Message_ID
-        FROM messages
-        WHERE Message_ID = :message_id AND (Sender_ID = :user_id OR Recipient_ID = :user_id)
-    ";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
+    // Example displayFeedback logic
+    function displayFeedback($message, $type = 'success') {
+        const classType = $type === 'success' ? 'success' : 'error';
+        console.log(`<p class="${classType}">${$message}</p>`);
+    }
 
-    return $stmt->fetch() !== false;
-}
+    // Feedback example
+    if (typeof $success_message !== 'undefined' && $success_message) {
+        displayFeedback($success_message);
+    }
 
-if (!validateMessageOwnership($messageID, $userId, $pdo)) {
-    echo "<div class='error-message'>Invalid operation: Message does not belong to you.</div>";
-    exit;
-}
+    if (typeof $error_message !== 'undefined' && $error_message) {
+        displayFeedback($error_message, 'error');
+    }
+</script>
 
-
-    </script>
 
 
     <?php include 'footer.php'; ?>
