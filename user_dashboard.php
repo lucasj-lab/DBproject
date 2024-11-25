@@ -1,4 +1,4 @@
-<?php
+<div?php
 session_start();
 require 'database_connection.php';
 require 'listing_queries.php';
@@ -112,7 +112,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <?php include 'header.php'; ?>
 
-    <main class="dope-dashboard">
+    < class="dope-dashboard">
         <h1 class="dashboard-title">Welcome, <?php echo htmlspecialchars($user['Name']); ?></h1>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
         <p><strong>Member Since:</strong>
@@ -169,8 +169,10 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div 
             <button class="btn" onclick="window.location.href='create_listing.php'">New Listing</button> 
+                                </div>
+                                <div>
              <button class="btn" onclick="window.location.href='messages.php'">Messages</a></button>
-
+             </div>
         </div>
         <?php else: ?>
             <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
