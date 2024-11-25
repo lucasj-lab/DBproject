@@ -2993,17 +2993,17 @@ background: #0056b3;
     }
 }
 
-/* Style each listing item */
+
 .listing-item {
-    flex-direction: column; /* Stack content vertically */
-    align-items: inherit; /* Center-align content inside each item */
+    flex-direction: column;
+    align-items: inherit; 
     text-align: center;
     background-color: #fff;
-    border: 1px solid #ddd; /* Optional border for separation */
-    border-radius: 5px; /* Optional rounded corners */
-    padding: 10px; /* Padding inside each item */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
-    width: 100%; /* Ensure item width adapts to grid column */
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    padding: 10px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
 }
 
 .listing-item img {
@@ -3054,13 +3054,13 @@ background: #0056b3;
     font-size: 16px;
 }
 
-/* Action Buttons */
+
 .action-buttons {
     text-align: center;
     margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 15px; /* Space between buttons */
+    gap: 15px; 
 }
 
 .action-buttons .btn {
@@ -3085,7 +3085,7 @@ background: #0056b3;
     background-color: #5a6268;
 }
 
-/* Message Form */
+
 .message-form {
     margin-top: 20px;
     text-align: center;
@@ -3120,7 +3120,7 @@ background: #0056b3;
 
 .choose-files-button,
 .update-button {
-    min-width: 150px; /* Minimum button width */
+    min-width: 150px; 
     text-align: center;
     padding: 10px 15px;
     border: none;
@@ -3130,26 +3130,26 @@ background: #0056b3;
 }
 
 .choose-files-button {
-    background-color: #007bff; /* Blue */
+    background-color: #007bff; 
     color: #fff;
 }
 
 .choose-files-button:hover {
-    background-color: #0056b3; /* Darker blue */
+    background-color: #0056b3; 
 }
 
 .update-button {
-    background-color: #28a745; /* Green */
+    background-color: #28a745; 
     color: #fff;
 }
 
 .update-button:hover {
-    background-color: #218838; /* Darker green */
+    background-color: #218838; 
 }
 
 .send-message-container {
     max-width: 500px;
-    margin: 50px auto; /* Center the container */
+    margin: 50px auto; 
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -3158,16 +3158,16 @@ background: #0056b3;
     text-align: center;
 }
 
-/* Form title */
+
 .send-message-container h2 {
     font-size: 24px;
     margin-bottom: 20px;
     color: #333;
 }
 
-/* Error and Success Messages */
+
 .error {
-       color: #ffffff; /* Green for success */
+       color: #ffffff; 
     margin-bottom: 15px;
     background-color: #ff0000;
     text-align: center;
@@ -3175,21 +3175,21 @@ background: #0056b3;
 }
 
 .success {
-    color: #ffffff; /* Green for success */
+    color: #ffffff; 
     margin-bottom: 15px;
     background-color: #28a745;
     text-align: center;
     font-size:x-large
 }
 
-/* Form styling */
+
 .message-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Input fields and textarea */
+
 .message-fields textarea {
     width: 100%;
     height: 100px;
@@ -3206,7 +3206,7 @@ background: #0056b3;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
 }
 
-/* Button styling */
+
 .message-fields .btn {
     padding: 10px 20px;
     background-color: #007bff;
@@ -3221,7 +3221,7 @@ background: #0056b3;
     background-color: #0056b3;
 }
 
-/* Container for messages page */
+
 .messages-container {
     max-width: 800px;
     margin: 20px auto;
@@ -3232,14 +3232,14 @@ background: #0056b3;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Title of the page */
+
 .messages-title {
     font-size: 28px;
     margin-bottom: 20px;
     text-align: center;
 }
 
-/* Navigation tabs */
+
 .tabs {
     display: flex;
     justify-content: center;
@@ -3261,7 +3261,7 @@ background: #0056b3;
     text-decoration: underline;
 }
 
-/* Section styling */
+
 .messages-section {
     margin-bottom: 30px;
 }
@@ -3272,7 +3272,7 @@ background: #0056b3;
     color: #333;
 }
 
-/* Message list */
+
 .messages-list {
     list-style: none;
     padding: 0;
@@ -3288,7 +3288,7 @@ background: #0056b3;
     color: #999;
 }
 
-/* Buttons */
+
 .btn {
     padding: 8px 16px;
     background-color: #007bff;
@@ -3311,14 +3311,13 @@ background: #0056b3;
     background-color: #c82333;
 }
 
-/* Error message */
 .error-message {
     color: #ff0000;
     text-align: center;
     margin-bottom: 15px;
 }
 .modal {
-    display: none; /* Hidden by default */
+    display: none; 
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -3348,7 +3347,7 @@ background: #0056b3;
 }
 
 .restore-btn {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
 }
 
 .restore-btn:hover {
@@ -3356,26 +3355,24 @@ background: #0056b3;
 }
 
 .delete-forever-btn {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545; 
 }
 
 .delete-forever-btn:hover {
     background-color: #c82333;
 }
 .feedback .success {
-    color: #ffffff; /* Green for success */
+    color: #ffffff; 
     margin-bottom: 15px;
     background-color: #28a745;
     text-align: center;
     font-size:x-large
 }
 .feedback .error {
-    color: #dc3545; /* Red for errors */
+    color: #dc3545; 
     margin-bottom: 15px;
 }
 
-
-/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -3384,7 +3381,7 @@ body {
     color: #333;
 }
 
-/* Container for the Compose Message Page */
+
 .compose-message-container {
     max-width: 600px;
     margin: 50px auto;
@@ -3395,7 +3392,7 @@ body {
     text-align: center;
 }
 
-/* Page Title */
+
 .page-title {
     font-size: 24px;
     font-weight: bold;
@@ -3403,19 +3400,19 @@ body {
     color: #333;
 }
 
-/* Form Styles */
+
 .compose-message-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Form Group */
+
 .form-group {
     text-align: left;
 }
 
-/* Label Styles */
+
 .form-label {
     font-size: 14px;
     font-weight: bold;
@@ -3424,7 +3421,7 @@ body {
     color: #555;
 }
 
-/* Textarea Styles */
+
 .message-textarea {
     width: 100%;
     padding: 10px;
@@ -3434,7 +3431,7 @@ body {
     resize: none;
 }
 
-/* Actions Section */
+
 .form-actions {
     display: flex;
     justify-content: center;
