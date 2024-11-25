@@ -1,5 +1,5 @@
 <?php
-// Include the header file
+require 'database_connection.php';
 include 'header.php'; 
 
 // Your messages.php logic starts here
