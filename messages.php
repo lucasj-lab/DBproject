@@ -4,10 +4,10 @@ include 'header.php';
 
 // Ensure user is logged in
 if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id']; // Correctly defined variable
+    $userId = $_SESSION['user_id'];
 } else {
     echo "<div class='error-message'>Error: User is not logged in.</div>";
-    exit; // Stop further execution if the user is not logged in
+    exit;
 }
 
 try {
@@ -38,8 +38,7 @@ try {
     // Fetch Trash Messages
     $trashQuery = "
         SELECT m.Message_ID, m.Message_Text, m.Created_At, 
-        IF(m.Sender_ID = :user_id, u.Name, 'You') AS Other_User,
-        m.Deleted_Status
+        IF(m.Sender_ID = :user_id, u.Name, 'You') AS Other_User
         FROM messages m
         JOIN user u ON (m.Sender_ID = u.User_ID OR m.Recipient_ID = u.User_ID)
         WHERE (m.Sender_ID = :user_id OR m.Recipient_ID = :user_id) AND m.Deleted_Status = 1
@@ -53,191 +52,244 @@ try {
     exit;
 }
 
-// Handle delete action
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id'])) {
-    $messageID = $_POST['delete_message_id'];
-
-    try {
+// Handle delete, restore, and delete forever actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete_message_id'])) {
+        $messageID = $_POST['delete_message_id'];
         $updateQuery = "
             UPDATE messages
             SET Deleted_Status = 1
             WHERE Message_ID = :message_id AND (Sender_ID = :user_id OR Recipient_ID = :user_id)
         ";
         $stmt = $pdo->prepare($updateQuery);
-        $stmt->execute([
-            ':message_id' => $messageID,
-            ':user_id' => $userId
-        ]);
-
-        // Redirect to prevent re-submission
+        $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
         header("Location: messages.php");
         exit;
-    } catch (PDOException $e) {
-        echo "<div class='error-message'>Error deleting message: " . htmlspecialchars($e->getMessage()) . "</div>";
     }
-}
 
-//restore/deleteforever 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['restore_message_id'])) {
         $messageID = $_POST['restore_message_id'];
-
-        try {
-            $updateQuery = "
-                UPDATE messages
-                SET Deleted_Status = 0
-                WHERE Message_ID = :message_id AND Recipient_ID = :user_id
-            ";
-            $stmt = $pdo->prepare($updateQuery);
-            $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
-
-            $success_message = 'Message restored successfully!';
-        } catch (PDOException $e) {
-            $error_message = 'Error restoring message: ' . htmlspecialchars($e->getMessage());
-        }
+        $updateQuery = "
+            UPDATE messages
+            SET Deleted_Status = 0
+            WHERE Message_ID = :message_id AND Recipient_ID = :user_id
+        ";
+        $stmt = $pdo->prepare($updateQuery);
+        $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
+        header("Location: messages.php");
+        exit;
     }
 
     if (isset($_POST['delete_forever_message_id'])) {
         $messageID = $_POST['delete_forever_message_id'];
-
-        try {
-            $deleteQuery = "
-                DELETE FROM messages
-                WHERE Message_ID = :message_id AND Recipient_ID = :user_id
-            ";
-            $stmt = $pdo->prepare($deleteQuery);
-            $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
-
-            $success_message = 'Message permanently deleted!';
-        } catch (PDOException $e) {
-            $error_message = 'Error deleting message permanently: ' . htmlspecialchars($e->getMessage());
-        }
+        $deleteQuery = "
+            DELETE FROM messages
+            WHERE Message_ID = :message_id AND Recipient_ID = :user_id
+        ";
+        $stmt = $pdo->prepare($deleteQuery);
+        $stmt->execute([':message_id' => $messageID, ':user_id' => $userId]);
+        header("Location: messages.php");
+        exit;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Ensure you have styles.css linked -->
+    <title>Email Platform</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    
-<div class="feedback">
-    <?php if (!empty($success_message)): ?>
-        <p class="success"><?php echo htmlspecialchars($success_message); ?></p>
-    <?php endif; ?>
-    <?php if (!empty($error_message)): ?>
-        <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
-    <?php endif; ?>
-</div>
-
-    <div class="messages-container">
-        <h1 class="messages-title">Messages</h1>
-
-        <!-- Navigation Tabs -->
-        <ul class="tabs">
-            <li><a href="#inbox">Inbox</a></li>
-            <li><a href="#sent">Sent Mail</a></li>
-            <li><a href="#trash">Trash</a></li>
-        </ul>
-
-        <!-- Inbox Section -->
-        <div id="inbox" class="messages-section">
-            <h2 class="section-title">Inbox</h2>
-            <ul class="messages-list">
-                <?php if (!empty($inboxMessages)): ?>
-                    <?php foreach ($inboxMessages as $message): ?>
-                        <li class="message-item">
-                            <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-                            <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
-                            <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
-                            <form method="POST" class="delete-form">
-                                <input type="hidden" name="delete_message_id"
-                                    value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
-                                <button type="submit" class="btn delete-btn">Delete</button>
-                            </form>
-                        </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li class="no-messages">No messages in your inbox.</li>
-                <?php endif; ?>
+    <div class="email-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="email-nav">
+                <li onclick="showSection('inbox')">Inbox</li>
+                <li onclick="showSection('drafts')">Drafts</li>
+                <li onclick="showSection('sent')">Sent</li>
+                <li onclick="showSection('trash')">Trash</li>
+                <li onclick="showSection('deleted')">Deleted</li>
             </ul>
         </div>
 
-        <!-- Sent Mail Section -->
-        <div id="sent" class="messages-section">
-            <h2 class="section-title">Sent Mail</h2>
-            <ul class="messages-list">
-                <?php if (!empty($sentMessages)): ?>
-                    <?php foreach ($sentMessages as $message): ?>
-                        <li class="message-item">
-                            <p><strong>To:</strong> <?php echo htmlspecialchars($message['Recipient_Name']); ?></p>
-                            <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
-                            <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
-                            <form method="POST" onsubmit="return confirmDelete(this);" class="delete-form">
-                                <input type="hidden" name="delete_message_id"
-                                    value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
-                                <button type="submit" class="btn delete-btn">Delete</button>
-                            </form>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Inbox Section -->
+            <div id="inbox" class="email-section">
+                <h2>Inbox</h2>
+                <table class="email-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($inboxMessages as $message): ?>
+                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                                <td>
+                                    <div class="email-thumbnail">
+                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Listing Thumbnail">
+                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                    </div>
+                                </td>
+                                <td class="email-preview">
+                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                                </td>
+                                <td class="email-view">
+                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-                        </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li class="no-messages">No sent messages.</li>
-                <?php endif; ?>
-            </ul>
-        </div>
+            <!-- Drafts Section -->
+            <div id="drafts" class="email-section" style="display: none;">
+                <h2>Drafts</h2>
+                <table class="email-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($draftMessages as $message): ?>
+                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                                <td>
+                                    <div class="email-thumbnail">
+                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Draft Thumbnail">
+                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                    </div>
+                                </td>
+                                <td class="email-preview">
+                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                                </td>
+                                <td class="email-view">
+                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Trash Section -->
-        <div id="trash" class="messages-section">
-            <h2 class="section-title">Trash</h2>
-            <ul class="messages-list">
-                <?php if (!empty($trashMessages)): ?>
-                    <?php foreach ($trashMessages as $message): ?>
-                        <li class="message-item">
-    <p><strong>User:</strong> <?php echo htmlspecialchars($message['Other_User']); ?></p>
-    <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
-    <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
-    <form method="POST" class="restore-form">
-        <input type="hidden" name="restore_message_id" value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
-        <button type="submit" class="btn restore-btn">Restore</button>
-    </form>
-    <form method="POST" class="delete-forever-form">
-        <input type="hidden" name="delete_forever_message_id" value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
-        <button type="submit" class="btn delete-forever-btn">Delete Forever</button>
-    </form>
-</li>
+            <!-- Sent Section -->
+            <div id="sent" class="email-section" style="display: none;">
+                <h2>Sent Mail</h2>
+                <table class="email-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($sentMessages as $message): ?>
+                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                                <td>
+                                    <div class="email-thumbnail">
+                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Sent Thumbnail">
+                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                    </div>
+                                </td>
+                                <td class="email-preview">
+                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                                </td>
+                                <td class="email-view">
+                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li class="no-messages">No messages in the trash.</li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </div>
-    <div id="confirmDeleteModal" class="modal">
-        <div class="modal-content">
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete this message?</p>
-            <input type="hidden" id="deleteMessageId" value="">
-            <button id="confirmDeleteButton" class="btn delete-btn">Yes, Delete</button>
-            <button onclick="document.getElementById('confirmDeleteModal').style.display='none'"
-                class="btn">Cancel</button>
-                <button id="closeModalButton" class="btn">Close</button>
+            <!-- Trash Section -->
+            <div id="trash" class="email-section" style="display: none;">
+                <h2>Trash</h2>
+                <table class="email-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($trashMessages as $message): ?>
+                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                                <td>
+                                    <div class="email-thumbnail">
+                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Trash Thumbnail">
+                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                    </div>
+                                </td>
+                                <td class="email-preview">
+                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                                </td>
+                                <td class="email-view">
+                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
+            <!-- Deleted Section -->
+            <div id="deleted" class="email-section" style="display: none;">
+                <h2>Deleted</h2>
+                <table class="email-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($deletedMessages as $message): ?>
+                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                                <td>
+                                    <div class="email-thumbnail">
+                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Deleted Thumbnail">
+                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                    </div>
+                                </td>
+                                <td class="email-preview">
+                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                                </td>
+                                <td class="email-view">
+                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-    // Function to handle delete confirmation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.email-section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function viewMessage(messageId) {
+            console.log('View message:', messageId);
+            // Add logic for viewing full message details (modal or new page).
+        }
     function confirmDelete(form) {
         const confirmModal = document.getElementById('confirmDeleteModal');
         const deleteConfirmButton = document.getElementById('confirmDeleteButton');
@@ -268,38 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.getElementById('confirmDeleteModal').style.display = 'none';
     };
 
-    // Example of server-side validation logic (for reference, not active in JavaScript)
-    function validateMessageOwnership($messageID, $userId, $pdo) {
-        $query = `
-            SELECT Message_ID
-            FROM messages
-            WHERE Message_ID = :message_id AND (Sender_ID = :user_id OR Recipient_ID = :user_id)
-        `;
-        const stmt = $pdo.prepare($query);
-        stmt.execute({ ':message_id': $messageID, ':user_id': $userId });
-
-        return stmt.fetch() !== false;
-    }
-
-    // Example displayFeedback logic
-    function displayFeedback($message, $type = 'success') {
-        const classType = $type === 'success' ? 'success' : 'error';
-        console.log(`<p class="${classType}">${$message}</p>`);
-    }
-
-    // Feedback example
-    if (typeof $success_message !== 'undefined' && $success_message) {
-        displayFeedback($success_message);
-    }
-
-    if (typeof $error_message !== 'undefined' && $error_message) {
-        displayFeedback($error_message, 'error');
-    }
-</script>
-
-
-
-    <?php include 'footer.php'; ?>
+    </script>
 </body>
 
 </html>
