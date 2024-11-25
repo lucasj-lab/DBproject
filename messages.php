@@ -1,8 +1,14 @@
 <?php
-require 'database_connection.php';
+// Include the header file
+include 'header.php'; 
 
-// Get the logged-in user's ID
-$userID = $_SESSION['user_id']; // Assume user_id is stored in session
+// Your messages.php logic starts here
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    echo "User ID: " . $userId;
+} else {
+    echo "User is not logged in.";
+}
 
 // Fetch Inbox Messages
 $inboxQuery = "
@@ -61,10 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id']))
         die("Error deleting message: " . $e->getMessage());
     }
 }
+include 'footer.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+< lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
