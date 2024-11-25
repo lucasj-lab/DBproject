@@ -17,7 +17,7 @@ $pageTitles = [
     'user_dashboard' => 'Dashboard',
     'admin_dashboard' => 'Admin Dashboard',
     'create_listing' => 'Create Listing',
-    'login' => 'Login',
+    'login' => 'Log In',
     'signup' => 'Signup'
 ];
 
@@ -37,10 +37,11 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
 
 <body>
   <header>
-    <div class="logo">
-      <h1><?php echo htmlspecialchars($logoTitle); ?></h1>
-      <a href="index.php"></a>
-    </div>
+  <div class="logo">
+  <h1><?php echo htmlspecialchars($logoTitle); ?></h1>
+  <a href="index.php">Home</a> <!-- Add text or an element like an image here -->
+</div>
+
 
     <nav class="desktop-menu">
       <ul>
