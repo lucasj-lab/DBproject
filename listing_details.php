@@ -53,7 +53,13 @@ if (!$listing) {
     echo "Listing not found.";
     exit;
 }
+
+if ($listing) {
+    $listingID = $listing['Listing_ID'];   // Get the listing ID
+    $recipientID = $listing['Recipient_ID']; // Get the listing owner's User ID
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,7 +133,9 @@ if (!$listing) {
             <button id="buyNowBtn" class="btn">Buy Now</button>
             <button onclick="location.href='listings.php';" class="btn">All Listings</button>
             <button onclick="history.back()" class="btn">Go Back</button>
-            <button onclick="location.href="compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>" class="btn">Message Owner</a></button>
+            <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
+
+
         </div>
     </div>
 
