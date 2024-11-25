@@ -2,24 +2,29 @@
 require 'database_connection.php';
 include 'header.php';
 
+session_start(); // Ensure session is started if not already
+
 $error_message = '';
 $success_message = '';
 
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $listingID = $_POST['listing_id'] ?? null;
-    $recipientID = $_POST['recipient_id'] ?? null;
-    $messageText = $_POST['message_text'] ?? null;
-    $senderID = $_SESSION['user_id'] ?? null; // Assuming the logged-in user's ID is stored in session
+    $listingID = intval($_POST['listing_id'] ?? 0);
+    $recipientID = intval($_POST['recipient_id'] ?? 0);
+    $subject = trim($_POST['subject'] ?? 'No Subject');
+    $messageText = trim($_POST['message_text'] ?? '');
+    $senderID = intval($_SESSION['user_id'] ?? 0); // Assuming the logged-in user's ID is stored in session
 
-    if (!$listingID || !$recipientID || !$messageText) {
+    // Validate input fields
+    if (!$listingID || !$recipientID || !$messageText || !$senderID) {
         $error_message = 'All fields are required.';
     } else {
         // Check if the recipient exists in the user table
-        $sql = "SELECT User_ID FROM user WHERE User_ID = :recipient_id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([':recipient_id' => $recipientID]);
-        $recipientExists = $stmt->fetch();
+        $sql = "SELECT User_ID FROM user WHERE User_ID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $recipientID);
+        $stmt->execute();
+        $recipientExists = $stmt->get_result()->fetch_assoc();
 
         if (!$recipientExists) {
             $error_message = 'Error: Recipient does not exist.';
@@ -27,23 +32,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 // Insert the message into the database
                 $insertSQL = "
-                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Message_Text)
-                    VALUES (:listing_id, :sender_id, :recipient_id, :message_text)
+                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
+                    VALUES (?, ?, ?, ?, ?, NOW())
                 ";
 
-                $stmt = $pdo->prepare($insertSQL);
-                $stmt->execute([
-                    ':listing_id' => $listingID,
-                    ':sender_id' => $senderID,
-                    ':recipient_id' => $recipientID,
-                    ':message_text' => $messageText,
-                ]);
+                $stmt = $conn->prepare($insertSQL);
+                $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
+                $stmt->execute();
 
-                $success_message = 'Message sent successfully!';
-                // Redirect to the listing details or messages page
-                header("Location: listing_details.php?listing_id=$listingID");
-                exit;
-            } catch (PDOException $e) {
+                if ($stmt->affected_rows > 0) {
+                    $success_message = 'Message sent successfully!';
+                    // Redirect to the listing details or messages page
+                    header("Location: listing_details.php?listing_id=$listingID&message=success");
+                    exit;
+                } else {
+                    $error_message = 'Failed to send message. Please try again.';
+                }
+            } catch (Exception $e) {
                 $error_message = 'Error sending message: ' . $e->getMessage();
             }
         }
@@ -74,13 +79,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form action="send_message.php" method="POST" class="message-form">
-            <div class="message-fields">
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input 
+                    type="text" 
+                    name="subject" 
+                    id="subject" 
+                    placeholder="Enter a subject" 
+                    value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>" 
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="message_text">Message:</label>
                 <textarea 
                     name="message_text" 
+                    id="message_text" 
                     placeholder="Type your message here..." 
-                    required><?php echo htmlspecialchars($messageText ?? ''); ?></textarea>
-                <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($_GET['listing_id'] ?? ''); ?>">
-                <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($_GET['recipient_id'] ?? ''); ?>">
+                    rows="5" 
+                    required><?php echo htmlspecialchars($_POST['message_text'] ?? ''); ?></textarea>
+            </div>
+            <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($_GET['listing_id'] ?? ''); ?>">
+            <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($_GET['recipient_id'] ?? ''); ?>">
+            <div class="form-actions">
                 <button type="submit" class="btn">Send Message</button>
             </div>
         </form>
