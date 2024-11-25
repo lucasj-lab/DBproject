@@ -89,20 +89,17 @@ function getListingDetails($conn, $listingID)
     WHERE listings.Listing_ID = ?
     ";
     $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL preparation failed: " . $conn->error);
-    }
     $stmt->bind_param("i", $listingID);
     $stmt->execute();
     $result = $stmt->get_result();
     $listing = $result->fetch_assoc();
     $stmt->close();
-
+    
     if (!$listing) {
-        throw new Exception("Listing not found.");
+        die("Listing not found.");
     }
-
-    // Fetch images for the listing
+    
+    // Fetch images
     $images = [];
     $sql = "SELECT Image_URL FROM images WHERE Listing_ID = ?";
     $stmt = $conn->prepare($sql);
