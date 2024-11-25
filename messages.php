@@ -101,6 +101,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Platform</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .message-view {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+            background: #f9f9f9;
+            grid-column: 1 / -1;
+        }
+        .message-view h3 {
+            margin-top: 0;
+        }
+        .message-view .message-content {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="email-layout">
@@ -117,179 +132,117 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Inbox Section -->
-            <div id="inbox" class="email-section">
-                <h2>Inbox</h2>
+            <!-- Shared Table Structure -->
+            <template id="email-table-template">
                 <table class="email-table">
                     <thead>
                         <tr>
+                            <th>Thumbnail</th>
                             <th>Subject</th>
                             <th>Message</th>
                             <th>Details</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php foreach ($inboxMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Listing Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
+                <!-- Inline Message View -->
+                <div class="message-view" id="messageView">
+                    <button onclick="closeMessageView()" style="float: right;">Close</button>
+                    <h3 id="messageSubject">Message Subject</h3>
+                    <p><strong>From:</strong> <span id="messageSender"></span></p>
+                    <p><strong>Date:</strong> <span id="messageDate"></span></p>
+                    <div class="message-content" id="messageContent"></div>
+                </div>
+            </template>
+
+            <!-- Inbox Section -->
+            <div id="inbox" class="email-section">
+                <h2>Inbox</h2>
+                <div id="inboxTable"></div>
             </div>
 
             <!-- Drafts Section -->
             <div id="drafts" class="email-section" style="display: none;">
                 <h2>Drafts</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($draftMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Draft Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <div id="draftsTable"></div>
             </div>
 
             <!-- Sent Section -->
             <div id="sent" class="email-section" style="display: none;">
                 <h2>Sent Mail</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($sentMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Sent Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <div id="sentTable"></div>
             </div>
 
             <!-- Trash Section -->
             <div id="trash" class="email-section" style="display: none;">
                 <h2>Trash</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($trashMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Trash Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <div id="trashTable"></div>
             </div>
 
             <!-- Deleted Section -->
             <div id="deleted" class="email-section" style="display: none;">
                 <h2>Deleted</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($deletedMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Deleted Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <div id="deletedTable"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // Data Placeholder (Should be populated with PHP in production)
+        const emailSections = {
+            inbox: <?php echo json_encode($inboxMessages); ?>,
+            drafts: <?php echo json_encode($draftMessages); ?>,
+            sent: <?php echo json_encode($sentMessages); ?>,
+            trash: <?php echo json_encode($trashMessages); ?>,
+            deleted: <?php echo json_encode($deletedMessages); ?>
+        };
+
+        // Populate sections
+        Object.keys(emailSections).forEach(section => {
+            const tableTemplate = document.getElementById('email-table-template').content.cloneNode(true);
+            const tbody = tableTemplate.querySelector('tbody');
+            const sectionData = emailSections[section] || [];
+            sectionData.forEach(message => {
+                const row = document.createElement('tr');
+                row.onclick = () => openMessageView(message);
+                row.innerHTML = `
+                    <td>
+                        <img src="${message.Thumbnail_URL || 'uploads/default-thumbnail.jpg'}" alt="Thumbnail">
+                    </td>
+                    <td>${message.Title || 'No Subject'}</td>
+                    <td>${message.Message_Text.slice(0, 50)}...</td>
+                    <td><button onclick="openMessageView(${JSON.stringify(message)})">View</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+            document.getElementById(`${section}Table`).appendChild(tableTemplate);
+        });
+
+        // Show Section
         function showSection(sectionId) {
-            const sections = document.querySelectorAll('.email-section');
-            sections.forEach(section => section.style.display = 'none');
+            document.querySelectorAll('.email-section').forEach(section => {
+                section.style.display = 'none';
+            });
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        function viewMessage(messageId) {
-            console.log('View message:', messageId);
-            // Add logic for viewing full message details (modal or new page).
+        // Open Message View
+        function openMessageView(message) {
+            document.getElementById('messageSubject').textContent = message.Title || 'No Subject';
+            document.getElementById('messageSender').textContent = message.Sender_Name || 'Unknown Sender';
+            document.getElementById('messageDate').textContent = new Date(message.Created_At).toLocaleString();
+            document.getElementById('messageContent').textContent = message.Message_Text || 'No content';
+            document.getElementById('messageView').style.display = 'block';
         }
+
+        // Close Message View
+        function closeMessageView() {
+            document.getElementById('messageView').style.display = 'none';
+        }
+
+        // Default Section
+        showSection('inbox');
+        
     function confirmDelete(form) {
         const confirmModal = document.getElementById('confirmDeleteModal');
         const deleteConfirmButton = document.getElementById('confirmDeleteButton');

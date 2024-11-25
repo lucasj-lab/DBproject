@@ -2,7 +2,7 @@
 require 'database_connection.php';
 include 'header.php';
 
-session_start(); // Ensure session is started
+
 
 // Get the listing and recipient details from the URL
 $listingID = intval($_GET['listing_id'] ?? 0);
