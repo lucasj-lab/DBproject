@@ -3359,10 +3359,12 @@ background: #0056b3;
     background-color: #c82333;
 }
 .feedback .success {
-    color: #28a745; /* Green for success */
+    color: #ffffff; /* Green for success */
     margin-bottom: 15px;
+    background-color: #28a745;
+    text-align: center;
+    font-size:x-large
 }
-
 .feedback .error {
     color: #dc3545; /* Red for errors */
     margin-bottom: 15px;
