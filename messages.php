@@ -6,7 +6,7 @@ include 'header.php';
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id']; // Correctly defined variable
 } else {
-    echo "Error: User is not logged in.";
+    echo "<div class='error-message'>Error: User is not logged in.</div>";
     exit; // Stop further execution if the user is not logged in
 }
 
@@ -48,7 +48,8 @@ try {
     $trashStmt->execute([':user_id' => $userId]);
     $trashMessages = $trashStmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    die("Error fetching messages: " . $e->getMessage());
+    echo "<div class='error-message'>Error fetching messages: " . htmlspecialchars($e->getMessage()) . "</div>";
+    exit;
 }
 
 // Handle delete action
@@ -71,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id']))
         header("Location: messages.php");
         exit;
     } catch (PDOException $e) {
-        die("Error deleting message: " . $e->getMessage());
+        echo "<div class='error-message'>Error deleting message: " . htmlspecialchars($e->getMessage()) . "</div>";
     }
 }
 ?>
@@ -85,77 +86,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id']))
     <link rel="stylesheet" href="styles.css"> <!-- Ensure you have styles.css linked -->
 </head>
 <body>
-    <h1>Messages</h1>
+    <div class="messages-container">
+        <h1 class="messages-title">Messages</h1>
 
-    <!-- Navigation Tabs -->
-    <ul class="tabs">
-        <li><a href="#inbox">Inbox</a></li>
-        <li><a href="#sent">Sent Mail</a></li>
-        <li><a href="#trash">Trash</a></li>
-    </ul>
-
-    <!-- Inbox Section -->
-    <div id="inbox">
-        <h2>Inbox</h2>
-        <ul>
-            <?php if (!empty($inboxMessages)): ?>
-                <?php foreach ($inboxMessages as $message): ?>
-                    <li>
-                        <strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?><br>
-                        <?php echo htmlspecialchars($message['Message_Text']); ?><br>
-                        <small><?php echo $message['Created_At']; ?></small><br>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="delete_message_id" value="<?php echo $message['Message_ID']; ?>">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <li>No messages in your inbox.</li>
-            <?php endif; ?>
+        <!-- Navigation Tabs -->
+        <ul class="tabs">
+            <li><a href="#inbox">Inbox</a></li>
+            <li><a href="#sent">Sent Mail</a></li>
+            <li><a href="#trash">Trash</a></li>
         </ul>
-    </div>
 
-    <!-- Sent Mail Section -->
-    <div id="sent">
-        <h2>Sent Mail</h2>
-        <ul>
-            <?php if (!empty($sentMessages)): ?>
-                <?php foreach ($sentMessages as $message): ?>
-                    <li>
-                        <strong>To:</strong> <?php echo htmlspecialchars($message['Recipient_Name']); ?><br>
-                        <?php echo htmlspecialchars($message['Message_Text']); ?><br>
-                        <small><?php echo $message['Created_At']; ?></small><br>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="delete_message_id" value="<?php echo $message['Message_ID']; ?>">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <li>No sent messages.</li>
-            <?php endif; ?>
-        </ul>
-    </div>
+        <!-- Inbox Section -->
+        <div id="inbox" class="messages-section">
+            <h2 class="section-title">Inbox</h2>
+            <ul class="messages-list">
+                <?php if (!empty($inboxMessages)): ?>
+                    <?php foreach ($inboxMessages as $message): ?>
+                        <li class="message-item">
+                            <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
+                            <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
+                            <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
+                            <form method="POST" class="delete-form">
+                                <input type="hidden" name="delete_message_id" value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
+                                <button type="submit" class="btn delete-btn">Delete</button>
+                            </form>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="no-messages">No messages in your inbox.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
 
-    <!-- Trash Section -->
-    <div id="trash">
-        <h2>Trash</h2>
-        <ul>
-            <?php if (!empty($trashMessages)): ?>
-                <?php foreach ($trashMessages as $message): ?>
-                    <li>
-                        <strong>User:</strong> <?php echo htmlspecialchars($message['Other_User']); ?><br>
-                        <?php echo htmlspecialchars($message['Message_Text']); ?><br>
-                        <small><?php echo $message['Created_At']; ?></small>
-                    </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <li>No messages in the trash.</li>
-            <?php endif; ?>
-        </ul>
-    </div>
+        <!-- Sent Mail Section -->
+        <div id="sent" class="messages-section">
+            <h2 class="section-title">Sent Mail</h2>
+            <ul class="messages-list">
+                <?php if (!empty($sentMessages)): ?>
+                    <?php foreach ($sentMessages as $message): ?>
+                        <li class="message-item">
+                            <p><strong>To:</strong> <?php echo htmlspecialchars($message['Recipient_Name']); ?></p>
+                            <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
+                            <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
+                            <form method="POST" class="delete-form">
+                                <input type="hidden" name="delete_message_id" value="<?php echo htmlspecialchars($message['Message_ID']); ?>">
+                                <button type="submit" class="btn delete-btn">Delete</button>
+                            </form>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="no-messages">No sent messages.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
 
+        <!-- Trash Section -->
+        <div id="trash" class="messages-section">
+            <h2 class="section-title">Trash</h2>
+            <ul class="messages-list">
+                <?php if (!empty($trashMessages)): ?>
+                    <?php foreach ($trashMessages as $message): ?>
+                        <li class="message-item">
+                            <p><strong>User:</strong> <?php echo htmlspecialchars($message['Other_User']); ?></p>
+                            <p><?php echo htmlspecialchars($message['Message_Text']); ?></p>
+                            <small><?php echo htmlspecialchars($message['Created_At']); ?></small>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="no-messages">No messages in the trash.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
     <?php include 'footer.php'; ?>
 </body>
 </html>
