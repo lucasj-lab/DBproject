@@ -1,43 +1,32 @@
 <?php
 require 'database_connection.php';
+session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $senderId = filter_input(INPUT_POST, 'sender_id', FILTER_VALIDATE_INT);
-    $receiverId = filter_input(INPUT_POST, 'receiver_id', FILTER_VALIDATE_INT);
-    $messageText = trim($_POST['message_text'] ?? '');
+// Get the form data
+$listingID = $_POST['listing_id'];
+$recipientID = $_POST['recipient_id'];
+$messageText = $_POST['message_text'];
+$senderID = $_SESSION['user_id']; // Assuming the logged-in user's ID is stored in session
 
-    if ($senderId && $receiverId && !empty($messageText)) {
-        $pdo->beginTransaction();
+try {
+    // Insert the message into the database
+    $insertSQL = "
+        INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Message_Text)
+        VALUES (:listing_id, :sender_id, :recipient_id, :message_text)
+    ";
 
-        try {
-            $stmt = $pdo->prepare("
-                INSERT INTO message (Message_Text, Date_Sent, Sender_ID, Receiver_ID)
-                VALUES (:message_text, NOW(), :sender_id, :receiver_id)
-            ");
-            $stmt->execute([
-                'message_text' => $messageText,
-                'sender_id' => $senderId,
-                'receiver_id' => $receiverId
-            ]);
+    $stmt = $pdo->prepare($insertSQL);
+    $stmt->execute([
+        ':listing_id' => $listingID,
+        ':sender_id' => $senderID,
+        ':recipient_id' => $recipientID,
+        ':message_text' => $messageText,
+    ]);
 
-            $notificationStmt = $pdo->prepare("
-                INSERT INTO notification (Notification_Text, Date_Sent, User_ID)
-                VALUES (:notification_text, NOW(), :user_id)
-            ");
-            $notificationStmt->execute([
-                'notification_text' => "You have a new message from User ID $senderId.",
-                'user_id' => $receiverId
-            ]);
-
-            $pdo->commit();
-            echo json_encode(['success' => true, 'message' => 'Message sent successfully.']);
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            error_log("Error: " . $e->getMessage());
-            echo json_encode(['success' => false, 'error' => 'Message could not be sent.']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'error' => 'Invalid data.']);
-    }
+    echo "Message sent successfully!";
+    // Redirect to the listing details or messages page
+    header("Location: listing_details.php?listing_id=$listingID");
+} catch (PDOException $e) {
+    die("Error sending message: " . $e->getMessage());
 }
 ?>

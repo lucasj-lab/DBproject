@@ -127,6 +127,7 @@ if (!$listing) {
             <button id="buyNowBtn" class="btn">Buy Now</button>
             <button onclick="location.href='listings.php';" class="btn">All Listings</button>
             <button onclick="history.back()" class="btn">Go Back</button>
+            <button onclick="location.href="compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>" class="btn">Message Owner</a></button>
         </div>
     </div>
 
