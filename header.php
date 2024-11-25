@@ -37,7 +37,10 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
 
 <body>
   <header>
-  <div class="logo">
+    <div class="logo">
+      <h1><?php echo htmlspecialchars($logoTitle); ?></h1>
+      <a href="index.php"></a>
+    </div>
 
     <nav class="desktop-menu">
       <ul>
