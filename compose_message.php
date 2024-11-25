@@ -15,6 +15,8 @@ $recipientID = $_GET['recipient_id'];
     <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
 </head>
 <body>
+<?php include 'header.php'; ?>
+
     <div class="compose-message-container">
         <h1 class="page-title">Send a Message</h1>
         <form action="send_message.php" method="POST" class="compose-message-form">
