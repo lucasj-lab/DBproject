@@ -1430,7 +1430,6 @@ table td {
 
 /* Style for Each Listing Item */
 .listing-item {
-    flex-direction: grid;
     align-items: center;
     padding: 1.5rem;
     border: 1px solid #ddd;
@@ -2996,7 +2995,6 @@ background: #0056b3;
 
 /* Style each listing item */
 .listing-item {
-    display: flex;
     flex-direction: column; /* Stack content vertically */
     align-items: inherit; /* Center-align content inside each item */
     text-align: center;
