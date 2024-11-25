@@ -143,7 +143,6 @@ nav ul li a:hover {
 /* Image Styling */
 .listing-item img {
     max-width: 100%;
-    height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
 }
@@ -1445,7 +1444,6 @@ table td {
 
 .listing-item img {
     max-width: 100%;
-    height: auto;
     border-radius: 8px;
     margin-bottom: 1rem;
 }
@@ -2965,7 +2963,7 @@ background: #0056b3;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
     gap: 20px; /* Space between grid items */
     justify-items: center; /* Center-align items horizontally */
-    align-items: start; /* Align items at the top */
+    align-items: center; /* Align items at the top */
     padding: 10px; /* Optional padding for spacing around the grid */
 }
 
@@ -3012,7 +3010,6 @@ background: #0056b3;
 
 .listing-item img {
     max-width: 100%;
-    height: auto;
     border-radius: 5px;
 }
 
