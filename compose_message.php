@@ -1,5 +1,5 @@
 <?php
-require 'connection_database.php';
+require 'database_connection.php';
 
 // Get the listing and recipient details from the URL
 $listingID = $_GET['listing_id'];

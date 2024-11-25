@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'database_connection.php';
 
 $user_id = $_SESSION['user_id'];

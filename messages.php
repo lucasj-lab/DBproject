@@ -1,6 +1,5 @@
 <?php
-require 'db_connection.php';
-session_start();
+require 'database_connection.php';
 
 // Get the logged-in user's ID
 $userID = $_SESSION['user_id']; // Assume user_id is stored in session
