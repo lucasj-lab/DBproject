@@ -1,4 +1,4 @@
-<?php 
+<?php  
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -59,8 +59,15 @@ $conn->close();
                     <form class="listing-item" action="listing_details.php" method="GET">
                         <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
                         
-                        <!-- Thumbnail Image -->
-                        <img src="<?php echo htmlspecialchars($listing['Images'][0] ?? 'no_image.png'); ?>" alt="Thumbnail" class="listing-image">
+                        <!-- Thumbnail Image with Fallback -->
+                        <?php 
+                        $imagePath = $listing['Images'][0] ?? 'no_image.png';
+                        $imageSrc = file_exists($imagePath) ? $imagePath : 'no_image.png';
+                        ?>
+                        <picture>
+                            <source srcset="<?php echo htmlspecialchars($imageSrc); ?>" type="image/webp">
+                            <img src="<?php echo htmlspecialchars($imageSrc); ?>" alt="Thumbnail" class="listing-image">
+                        </picture>
 
                         <!-- Title -->
                         <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
@@ -70,18 +77,17 @@ $conn->close();
 
                         <!-- Price -->
                         <p><strong>Price:</strong> 
-    <?php 
-        if (isset($listing['Price'])) {
-            $price = (float)$listing['Price'];
-            echo $price === 0.0 
-                ? 'Free' 
-                : '$' . number_format($price, 2);
-        } else {
-            echo 'N/A';
-        }
-    ?>
-</p>
-
+                         <?php 
+                            if (isset($listing['Price'])) {
+                                $price = (float)$listing['Price'];
+                                echo $price === 0.0 
+                                    ? 'Free' 
+                                    : '$' . number_format($price, 2);
+                            } else {
+                                echo 'N/A';
+                            }
+                        ?>
+                        </p>
 
                         <!-- Category -->
                         <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
@@ -89,9 +95,9 @@ $conn->close();
                         <!-- Location -->
                         <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
 
-                           <!-- Posted By -->
-                           <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                           
+                        <!-- Posted By -->
+                        <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
+
                         <!-- Date Posted -->
                         <?php 
                         // Format the Date_Posted

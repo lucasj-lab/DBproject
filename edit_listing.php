@@ -258,12 +258,58 @@ $conn->close();
             const selectedState = stateSelect.value;
 
             const statesAndCities = {
-                "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-                "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-                "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
-                "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
-                "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
-                "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"]
+                const statesAndCities = {
+        "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+        "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+        "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+        "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+        "California": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+        "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+        "Connecticut": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
+        "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+        "Florida": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
+        "Georgia": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
+        "Hawaii": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
+        "Idaho": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
+        "Illinois": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
+        "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+        "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+        "Kansas": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+        "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+        "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+        "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+        "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+        "Massachusetts": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
+        "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
+        "Minnesota": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
+        "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+        "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+        "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+        "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+        "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+        "New Hampshire": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
+        "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+        "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+        "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
+        "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+        "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+        "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+        "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+        "Oregon": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
+        "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+        "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+        "South Carolina": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+        "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+        "Tennessee": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
+        "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+        "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+        "Vermont": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
+        "Virginia": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
+        "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+        "West Virginia": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
+        "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+        "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
+      };
             };
 
             cityDropdown.innerHTML = '<option value="">--Select City--</option>';
@@ -291,12 +337,57 @@ $conn->close();
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" value="<?= htmlspecialchars($price); ?>" required>
 
                 <select id="state" name="state" onchange="updateCities()" required>
-                    <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
-                    <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
-                    <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
-                    <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
-                    <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                    <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
+                <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
+<option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
+<option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
+<option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
+<option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
+<option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
+<option value="CT" <?= $state === "CT" ? "selected" : ""; ?>>Connecticut</option>
+<option value="DE" <?= $state === "DE" ? "selected" : ""; ?>>Delaware</option>
+<option value="FL" <?= $state === "FL" ? "selected" : ""; ?>>Florida</option>
+<option value="GA" <?= $state === "GA" ? "selected" : ""; ?>>Georgia</option>
+<option value="HI" <?= $state === "HI" ? "selected" : ""; ?>>Hawaii</option>
+<option value="ID" <?= $state === "ID" ? "selected" : ""; ?>>Idaho</option>
+<option value="IL" <?= $state === "IL" ? "selected" : ""; ?>>Illinois</option>
+<option value="IN" <?= $state === "IN" ? "selected" : ""; ?>>Indiana</option>
+<option value="IA" <?= $state === "IA" ? "selected" : ""; ?>>Iowa</option>
+<option value="KS" <?= $state === "KS" ? "selected" : ""; ?>>Kansas</option>
+<option value="KY" <?= $state === "KY" ? "selected" : ""; ?>>Kentucky</option>
+<option value="LA" <?= $state === "LA" ? "selected" : ""; ?>>Louisiana</option>
+<option value="ME" <?= $state === "ME" ? "selected" : ""; ?>>Maine</option>
+<option value="MD" <?= $state === "MD" ? "selected" : ""; ?>>Maryland</option>
+<option value="MA" <?= $state === "MA" ? "selected" : ""; ?>>Massachusetts</option>
+<option value="MI" <?= $state === "MI" ? "selected" : ""; ?>>Michigan</option>
+<option value="MN" <?= $state === "MN" ? "selected" : ""; ?>>Minnesota</option>
+<option value="MS" <?= $state === "MS" ? "selected" : ""; ?>>Mississippi</option>
+<option value="MO" <?= $state === "MO" ? "selected" : ""; ?>>Missouri</option>
+<option value="MT" <?= $state === "MT" ? "selected" : ""; ?>>Montana</option>
+<option value="NE" <?= $state === "NE" ? "selected" : ""; ?>>Nebraska</option>
+<option value="NV" <?= $state === "NV" ? "selected" : ""; ?>>Nevada</option>
+<option value="NH" <?= $state === "NH" ? "selected" : ""; ?>>New Hampshire</option>
+<option value="NJ" <?= $state === "NJ" ? "selected" : ""; ?>>New Jersey</option>
+<option value="NM" <?= $state === "NM" ? "selected" : ""; ?>>New Mexico</option>
+<option value="NY" <?= $state === "NY" ? "selected" : ""; ?>>New York</option>
+<option value="NC" <?= $state === "NC" ? "selected" : ""; ?>>North Carolina</option>
+<option value="ND" <?= $state === "ND" ? "selected" : ""; ?>>North Dakota</option>
+<option value="OH" <?= $state === "OH" ? "selected" : ""; ?>>Ohio</option>
+<option value="OK" <?= $state === "OK" ? "selected" : ""; ?>>Oklahoma</option>
+<option value="OR" <?= $state === "OR" ? "selected" : ""; ?>>Oregon</option>
+<option value="PA" <?= $state === "PA" ? "selected" : ""; ?>>Pennsylvania</option>
+<option value="RI" <?= $state === "RI" ? "selected" : ""; ?>>Rhode Island</option>
+<option value="SC" <?= $state === "SC" ? "selected" : ""; ?>>South Carolina</option>
+<option value="SD" <?= $state === "SD" ? "selected" : ""; ?>>South Dakota</option>
+<option value="TN" <?= $state === "TN" ? "selected" : ""; ?>>Tennessee</option>
+<option value="TX" <?= $state === "TX" ? "selected" : ""; ?>>Texas</option>
+<option value="UT" <?= $state === "UT" ? "selected" : ""; ?>>Utah</option>
+<option value="VT" <?= $state === "VT" ? "selected" : ""; ?>>Vermont</option>
+<option value="VA" <?= $state === "VA" ? "selected" : ""; ?>>Virginia</option>
+<option value="WA" <?= $state === "WA" ? "selected" : ""; ?>>Washington</option>
+<option value="WV" <?= $state === "WV" ? "selected" : ""; ?>>West Virginia</option>
+<option value="WI" <?= $state === "WI" ? "selected" : ""; ?>>Wisconsin</option>
+<option value="WY" <?= $state === "WY" ? "selected" : ""; ?>>Wyoming</option>
+
                 </select>
 
                 <div class="listing-city-group">
