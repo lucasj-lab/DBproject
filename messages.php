@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id']))
         die("Error deleting message: " . $e->getMessage());
     }
 }
-include 'footer.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -140,5 +140,6 @@ include 'footer.php';
             <?php endforeach; ?>
         </ul>
     </div>
+   <?php include 'footer.php';?>
 </body>
 </html>
