@@ -57,29 +57,109 @@ function getAllListings($conn)
     return $listings;
 }
 
-// Handle GET request for fetching listings
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
-    try {
-        $listings = getAllListings($conn);
+/**
+ * Function to fetch details and images for a single listing
+ * 
+ * @param mysqli $conn The database connection object
+ * @param int $listingID The ID of the listing
+ * @return array The listing details and images
+ * @throws Exception If there is a database or query error
+ */
+function getListingDetails($conn, $listingID)
+{
+    if (!$conn) {
+        throw new Exception("Invalid database connection.");
+    }
 
-        if (empty($listings)) {
-            error_log("No listings found");
-            $response = ["message" => "No listings available."];
-        } else {
-            foreach ($listings as &$listing) {
-                $datePosted = $listing['Date_Posted'] ? new DateTime($listing['Date_Posted']) : null;
-                $listing['Formatted_Date'] = $datePosted ? $datePosted->format('F j, Y') : "Date not available";
+    // Fetch listing details
+    $sql = "
+    SELECT 
+        listings.Listing_ID,
+        listings.Title,
+        listings.Description,
+        listings.Price,
+        listings.Date_Posted,
+        listings.State,
+        listings.City,
+        category.Category_Name,
+        user.Name AS User_Name
+    FROM listings
+    LEFT JOIN category ON listings.Category_ID = category.Category_ID
+    LEFT JOIN user ON listings.User_ID = user.User_ID
+    WHERE listings.Listing_ID = ?
+    ";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("SQL preparation failed: " . $conn->error);
+    }
+    $stmt->bind_param("i", $listingID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $listing = $result->fetch_assoc();
+    $stmt->close();
+
+    if (!$listing) {
+        throw new Exception("Listing not found.");
+    }
+
+    // Fetch images for the listing
+    $images = [];
+    $sql = "SELECT Image_URL FROM images WHERE Listing_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $listingID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $images[] = $row['Image_URL'];
+    }
+    $stmt->close();
+
+    $listing['Images'] = $images;
+    return $listing;
+}
+
+// Handle GET requests
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    try {
+        // Check if fetching all listings
+        if (isset($_GET['fetchListings'])) {
+            $listings = getAllListings($conn);
+
+            if (empty($listings)) {
+                error_log("No listings found");
+                $response = ["message" => "No listings available."];
+            } else {
+                foreach ($listings as &$listing) {
+                    $datePosted = $listing['Date_Posted'] ? new DateTime($listing['Date_Posted']) : null;
+                    $listing['Formatted_Date'] = $datePosted ? $datePosted->format('F j, Y') : "Date not available";
+                }
+                $response = $listings;
             }
-            $response = $listings;
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit();
         }
 
+        // Check if fetching a single listing's details
+        if (isset($_GET['listing_id'])) {
+            $listingID = intval($_GET['listing_id']);
+            $listingDetails = getListingDetails($conn, $listingID);
+
+            header('Content-Type: application/json');
+            echo json_encode($listingDetails);
+            exit();
+        }
+
+        // If no valid parameters are provided
         header('Content-Type: application/json');
-        echo json_encode($response);
+        echo json_encode(["error" => "Invalid request."]);
+        exit();
 
     } catch (Exception $e) {
-        error_log("Error fetching listings: " . $e->getMessage());
+        error_log("Error: " . $e->getMessage());
         header('Content-Type: application/json');
-        echo json_encode(["error" => "Error fetching listings."]);
+        echo json_encode(["error" => $e->getMessage()]);
     }
     exit();
 }
