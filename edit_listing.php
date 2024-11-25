@@ -156,7 +156,6 @@ $conn->close();
 
 .main-image {
     width: 300px;
-    height: auto;
     border: 2px solid #000;
     border-radius: 5px;
 }
@@ -164,7 +163,6 @@ $conn->close();
 /* Image Gallery */
 .image-gallery {
     display: flex;
-    overflow-x: auto;
     overflow-y: hidden;
     gap: 10px;
     padding: 10px;

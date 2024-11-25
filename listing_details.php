@@ -1,66 +1,90 @@
 <?php
+
 require 'database_connection.php';
 
-// Handle form submission (Buy Now button)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $listingId = $_POST['listingId'] ?? null;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-    if ($listingId) {
-        $successMessage = "Thank you! Your purchase was successful for Listing ID: $listingId.";
-    } else {
-        $errorMessage = "An error occurred. Invalid listing.";
+/**
+ * Function to fetch all listings
+ * 
+ * @param mysqli $conn The database connection object
+ * @return array The array of listings
+ * @throws Exception If there is a database or query error
+ */
+function getAllListings($conn)
+{
+    if (!$conn) {
+        throw new Exception("Invalid database connection.");
     }
+
+    // Define the SQL query
+    $sql = "
+    SELECT 
+        listings.Listing_ID,
+        listings.Title,
+        listings.Description,
+        listings.Price,
+        listings.Date_Posted,
+        listings.State,
+        listings.City,
+        category.Category_Name,
+        user.Name AS User_Name,
+        images.Image_URL AS Thumbnail_Image
+    FROM listings
+    LEFT JOIN category ON listings.Category_ID = category.Category_ID
+    LEFT JOIN user ON listings.User_ID = user.User_ID
+    LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+    ORDER BY listings.Date_Posted DESC
+    ";
+
+    error_log("Executing SQL Query: $sql");
+
+    // Prepare and execute the query
+    $result = $conn->query($sql);
+    if (!$result) {
+        throw new Exception("Query execution failed: " . $conn->error);
+    }
+
+    // Fetch the data
+    $listings = [];
+    while ($row = $result->fetch_assoc()) {
+        $listings[] = $row;
+    }
+
+    $result->free(); // Free the result set
+    return $listings;
 }
 
-// Fetch listing details
-$listingId = $_GET['listing_id'] ?? null;
+// Handle GET request for fetching listings
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetchListings'])) {
+    try {
+        $listings = getAllListings($conn);
 
-if (!$listingId) {
-    echo "Listing ID is missing.";
-    exit;
-}
+        if (empty($listings)) {
+            error_log("No listings found");
+            $response = ["message" => "No listings available."];
+        } else {
+            foreach ($listings as &$listing) {
+                $datePosted = $listing['Date_Posted'] ? new DateTime($listing['Date_Posted']) : null;
+                $listing['Formatted_Date'] = $datePosted ? $datePosted->format('F j, Y') : "Date not available";
+            }
+            $response = $listings;
+        }
 
-try {
-    $stmt = $pdo->prepare("
-        SELECT 
-    l.Listing_ID,
-    l.Title,
-    l.Description,
-    l.Price,
-    l.Date_Posted,
-    l.State,
-    l.City,
-    l.User_ID, -- Explicitly select User_ID
-    u.Name AS User_Name, 
-    c.Category_Name,
-    GROUP_CONCAT(i.Image_URL) AS Images
-FROM listings l
-LEFT JOIN user u ON l.User_ID = u.User_ID
-LEFT JOIN category c ON l.Category_ID = c.Category_ID
-LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
-WHERE l.Listing_ID = ?
-GROUP BY l.Listing_ID
+        header('Content-Type: application/json');
+        echo json_encode($response);
 
-    ");
-    $stmt->execute([$listingId]);
-    $listing = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
-} catch (Exception $e) {
-    echo "An error occurred while fetching listing details: " . $e->getMessage();
-    exit;
-}
-
-if (!$listing) {
-    echo "Listing not found.";
-    exit;
-}
-
-if ($listing) {
-    $listingID = $listing['Listing_ID'];   // Get the listing ID
-    $recipientID = $listing['User_ID']; // Get the listing owner's User ID
+    } catch (Exception $e) {
+        error_log("Error fetching listings: " . $e->getMessage());
+        header('Content-Type: application/json');
+        echo json_encode(["error" => "Error fetching listings."]);
+    }
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
