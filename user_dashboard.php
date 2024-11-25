@@ -122,6 +122,10 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Your Listings</h2>
 
         <?php if (!empty($listings)): ?>
+            <div>
+    <button class="btn" onclick="window.location.href='create_listing.php'">New Listing</button>
+    <button class="btn" onclick="window.location.href='messages.php'">Messages</button>
+</div>
             <div class="table-container">
                 <table class="dashboard-table">
                     <thead>
@@ -167,10 +171,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tbody>
                 </table>
             </div>
-            <div>
-    <button class="btn" onclick="window.location.href='create_listing.php'">New Listing</button>
-    <button class="btn" onclick="window.location.href='messages.php'">Messages</button>
-</div>
+           
 
         <?php else: ?>
             <p>You have no listings yet. <a href="create_listing.php" class="pill-button">Create one here</a>.</p>
