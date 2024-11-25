@@ -1,13 +1,14 @@
-<?php
+<?php 
 require 'database_connection.php';
 include 'header.php'; 
 
 // Your messages.php logic starts here
 if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
+    $userId = $_SESSION['user_id']; // Correctly defined variable
     echo "User ID: " . $userId;
 } else {
     echo "User is not logged in.";
+    exit; // Stop further execution if user is not logged in
 }
 
 // Fetch Inbox Messages
@@ -19,7 +20,7 @@ $inboxQuery = "
     ORDER BY m.Created_At DESC
 ";
 $inboxStmt = $pdo->prepare($inboxQuery);
-$inboxStmt->execute([':user_id' => $userID]);
+$inboxStmt->execute([':user_id' => $userId]); // Use $userId
 $inboxMessages = $inboxStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Sent Messages
@@ -31,7 +32,7 @@ $sentQuery = "
     ORDER BY m.Created_At DESC
 ";
 $sentStmt = $pdo->prepare($sentQuery);
-$sentStmt->execute([':user_id' => $userID]);
+$sentStmt->execute([':user_id' => $userId]); // Use $userId
 $sentMessages = $sentStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Trash Messages
@@ -44,7 +45,7 @@ $trashQuery = "
     ORDER BY m.Created_At DESC
 ";
 $trashStmt = $pdo->prepare($trashQuery);
-$trashStmt->execute([':user_id' => $userID]);
+$trashStmt->execute([':user_id' => $userId]); // Use $userId
 $trashMessages = $trashStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Handle delete action
@@ -58,7 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_message_id']))
             WHERE Message_ID = :message_id AND (Sender_ID = :user_id OR Recipient_ID = :user_id)
         ";
         $stmt = $pdo->prepare($updateQuery);
-        $stmt->execute([':message_id' => $messageID, ':user_id' => $userID]);
+        $stmt->execute([
+            ':message_id' => $messageID,
+            ':user_id' => $userId // Use $userId
+        ]);
 
         // Redirect to prevent re-submission
         header("Location: messages.php");
