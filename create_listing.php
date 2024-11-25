@@ -2,27 +2,7 @@
 session_start(); // Start session to access user information
 
 // Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    echo "
-    <!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Not Logged In</title>
-        <link rel='stylesheet' href='styles.css'>
-    </head>
-    <body>
-        <div class='redirect-message-container'>
-            <div class='redirect-message'>
-                <h2>You must be logged in to create a listing.</h2>
-                <p>Please <a href='login.php'>log in</a> or <a href='signup.php'>sign up</a> to continue.</p>
-            </div>
-        </div>
-    </body>
-    </html>";
-    exit();
-}
+if (!isset($_SESSION['user_id'])) 
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
