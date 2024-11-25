@@ -56,7 +56,7 @@ if (!$listing) {
 
 if ($listing) {
     $listingID = $listing['Listing_ID'];   // Get the listing ID
-    $recipientID = $listing['Recipient_ID']; // Get the listing owner's User ID
+    $recipientID = $listing['User_ID']; // Get the listing owner's User ID
 }
 ?>
 
