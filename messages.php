@@ -147,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="message_id" value="<?php echo $message['Message_ID']; ?>">
                                         <input type="hidden" name="action" value="delete">
-                                        <button type="submit">Delete</button>
+                                        <button onclick="openWarningModal(<?php echo $message['Message_ID']; ?>, 'delete')">Delete</button>
+
                                     </form>
                                     <button onclick="replyMessage(<?php echo $message['Message_ID']; ?>)">Reply</button>
                                 </td>
@@ -221,7 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="message_id" value="<?php echo $message['Message_ID']; ?>">
                                         <input type="hidden" name="action" value="restore">
-                                        <button type="submit">Restore</button>
+                                        <button onclick="openWarningModal(<?php echo $message['Message_ID']; ?>, 'restore')">Restore</button>
+
                                     </form>
                                 </td>
                             </tr>
@@ -231,6 +233,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+<!-- Warning Modal -->
+<div id="warningModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h2 id="warningTitle">Warning</h2>
+        <p id="warningMessage">Are you sure you want to perform this action?</p>
+        <div class="modal-actions">
+            <button id="confirmActionBtn" class="btn btn-danger">Yes</button>
+            <button onclick="closeWarningModal()" class="btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Modal Styling */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-actions button {
+    margin: 5px;
+}
+</style>
 
     <script>
         function showSection(sectionId) {
@@ -246,6 +288,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function replyMessage(messageId) {
             alert("Reply to message ID: " + messageId);
         }
-    </script>
+    
+        let actionForm = null;
+
+function openWarningModal(messageId, actionType) {
+    // Update modal content
+    const modal = document.getElementById('warningModal');
+    const warningMessage = document.getElementById('warningMessage');
+
+    if (actionType === 'delete') {
+        warningMessage.textContent = "Are you sure you want to move this message to Trash?";
+    } else if (actionType === 'restore') {
+        warningMessage.textContent = "Are you sure you want to restore this message?";
+    }
+
+    // Prepare the form for the action
+    actionForm = document.createElement('form');
+    actionForm.method = 'POST';
+    actionForm.style.display = 'none';
+
+    const messageIdInput = document.createElement('input');
+    messageIdInput.type = 'hidden';
+    messageIdInput.name = 'message_id';
+    messageIdInput.value = messageId;
+
+    const actionInput = document.createElement('input');
+    actionInput.type = 'hidden';
+    actionInput.name = 'action';
+    actionInput.value = actionType;
+
+    actionForm.appendChild(messageIdInput);
+    actionForm.appendChild(actionInput);
+    document.body.appendChild(actionForm);
+
+    // Show modal
+    modal.style.display = 'flex';
+}
+
+function closeWarningModal() {
+    const modal = document.getElementById('warningModal');
+    modal.style.display = 'none';
+    if (actionForm) {
+        document.body.removeChild(actionForm);
+        actionForm = null;
+    }
+}
+
+document.getElementById('confirmActionBtn').onclick = function () {
+    if (actionForm) {
+        actionForm.submit();
+    }
+};
+</script>
+
 </body>
 </html>
