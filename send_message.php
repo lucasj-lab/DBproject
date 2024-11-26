@@ -2,7 +2,6 @@
 require 'database_connection.php';
 include 'header.php';
 
-session_start(); // Ensure session is started if not already
 
 $error_message = '';
 $success_message = '';

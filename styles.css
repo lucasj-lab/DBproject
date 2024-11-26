@@ -3574,3 +3574,19 @@ body {
 input#subject {
     width: -webkit-fill-available;
 }
+
+table.email-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjust table styles for smaller screens */
+    table.email-table {
+      font-size: 14px;
+    }
+    table.email-table th,
+    table.email-table td {
+     
+    }
+  }

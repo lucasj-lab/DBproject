@@ -11,11 +11,13 @@ if (isset($_SESSION['user_id'])) {
 }
 
 try {
-    // Fetch Inbox Messages
+    // Fetch Inbox Messages with Listing Details
     $inboxQuery = "
-        SELECT m.Message_ID, m.Message_Text, m.Created_At, u.Name AS Sender_Name
+        SELECT m.Message_ID, m.Message_Text, m.Created_At, u.Name AS Sender_Name, 
+               l.Title AS Listing_Title, l.Listing_ID
         FROM messages m
         JOIN user u ON m.Sender_ID = u.User_ID
+        JOIN listings l ON m.Listing_ID = l.Listing_ID
         WHERE m.Recipient_ID = :user_id AND m.Deleted_Status = 0
         ORDER BY m.Created_At DESC
     ";
@@ -23,11 +25,13 @@ try {
     $inboxStmt->execute([':user_id' => $userId]);
     $inboxMessages = $inboxStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Sent Messages
+    // Fetch Sent Messages with Listing Details
     $sentQuery = "
-        SELECT m.Message_ID, m.Message_Text, m.Created_At, u.Name AS Recipient_Name
+        SELECT m.Message_ID, m.Message_Text, m.Created_At, u.Name AS Recipient_Name, 
+               l.Title AS Listing_Title, l.Listing_ID
         FROM messages m
         JOIN user u ON m.Recipient_ID = u.User_ID
+        JOIN listings l ON m.Listing_ID = l.Listing_ID
         WHERE m.Sender_ID = :user_id AND m.Deleted_Status = 0
         ORDER BY m.Created_At DESC
     ";
@@ -35,12 +39,14 @@ try {
     $sentStmt->execute([':user_id' => $userId]);
     $sentMessages = $sentStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Trash Messages
+    // Fetch Trash Messages with Listing Details
     $trashQuery = "
         SELECT m.Message_ID, m.Message_Text, m.Created_At, 
-        IF(m.Sender_ID = :user_id, u.Name, 'You') AS Other_User
+               IF(m.Sender_ID = :user_id, u.Name, 'You') AS Other_User,
+               l.Title AS Listing_Title, l.Listing_ID
         FROM messages m
         JOIN user u ON (m.Sender_ID = u.User_ID OR m.Recipient_ID = u.User_ID)
+        JOIN listings l ON m.Listing_ID = l.Listing_ID
         WHERE (m.Sender_ID = :user_id OR m.Recipient_ID = :user_id) AND m.Deleted_Status = 1
         ORDER BY m.Created_At DESC
     ";
@@ -94,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <table class="email-table">
                     <thead>
                         <tr>
-                            <th>Subject</th>
+                            <th>Listing</th>
                             <th>Message</th>
                             <th>Details</th>
                         </tr>
@@ -133,136 +140,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
                                 <td>
                                     <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Listing Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Drafts Section -->
-            <div id="drafts" class="email-section" style="display: none;">
-                <h2>Drafts</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($draftMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Draft Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Sent Section -->
-            <div id="sent" class="email-section" style="display: none;">
-                <h2>Sent Mail</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($sentMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Sent Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Trash Section -->
-            <div id="trash" class="email-section" style="display: none;">
-                <h2>Trash</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($trashMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Trash Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
-                                    </div>
-                                </td>
-                                <td class="email-preview">
-                                    <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
-                                </td>
-                                <td class="email-view">
-                                    <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Deleted Section -->
-            <div id="deleted" class="email-section" style="display: none;">
-                <h2>Deleted</h2>
-                <table class="email-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($deletedMessages as $message): ?>
-                            <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
-                                <td>
-                                    <div class="email-thumbnail">
-                                        <img src="<?php echo htmlspecialchars($message['Thumbnail_URL']); ?>" alt="Deleted Thumbnail">
-                                        <span><?php echo htmlspecialchars($message['Title']); ?></span>
+                                        <?php if (!empty($message['Listing_ID'])): ?>
+                                            <span><?php echo htmlspecialchars($message['Title'] ?? 'No Title'); ?></span>
+                                        <?php else: ?>
+                                            <span>No Listing</span>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="email-preview">
@@ -278,6 +160,163 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.email-section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function viewMessage(messageId) {
+            console.log('View message:', messageId);
+            // Add logic to fetch and display full message details dynamically
+        }
+    </script>
+
+
+            <!-- Drafts Section -->
+           <!-- Drafts Section -->
+<div id="drafts" class="email-section" style="display: none;">
+    <h2>Drafts</h2>
+    <table class="email-table">
+        <thead>
+            <tr>
+                <th>Listing</th>
+                <th>Message</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($draftMessages as $message): ?>
+                <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                    <td>
+                        <div class="email-thumbnail">
+                            <?php if (!empty($message['Listing_ID'])): ?>
+                                <span><?php echo htmlspecialchars($message['Title'] ?? 'No Title'); ?></span>
+                            <?php else: ?>
+                                <span>No Listing</span>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td class="email-preview">
+                        <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                    </td>
+                    <td class="email-view">
+                        <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Sent Section -->
+<div id="sent" class="email-section" style="display: none;">
+    <h2>Sent Mail</h2>
+    <table class="email-table">
+        <thead>
+            <tr>
+                <th>Listing</th>
+                <th>Message</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($sentMessages as $message): ?>
+                <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                    <td>
+                        <div class="email-thumbnail">
+                            <?php if (!empty($message['Listing_ID'])): ?>
+                                <span><?php echo htmlspecialchars($message['Title'] ?? 'No Title'); ?></span>
+                            <?php else: ?>
+                                <span>No Listing</span>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td class="email-preview">
+                        <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                    </td>
+                    <td class="email-view">
+                        <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+
+           <!-- Trash Section -->
+<div id="trash" class="email-section" style="display: none;">
+    <h2>Trash</h2>
+    <table class="email-table">
+        <thead>
+            <tr>
+                <th>Listing</th>
+                <th>Message</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($trashMessages as $message): ?>
+                <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                    <td>
+                        <div class="email-thumbnail">
+                            <?php if (!empty($message['Listing_ID'])): ?>
+                                <span><?php echo htmlspecialchars($message['Title'] ?? 'No Title'); ?></span>
+                            <?php else: ?>
+                                <span>No Listing</span>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td class="email-preview">
+                        <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                    </td>
+                    <td class="email-view">
+                        <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+       <!-- Deleted Section -->
+<div id="deleted" class="email-section" style="display: none;">
+    <h2>Deleted</h2>
+    <table class="email-table">
+        <thead>
+            <tr>
+                <th>Listing</th>
+                <th>Message</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($deletedMessages as $message): ?>
+                <tr onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">
+                    <td>
+                        <div class="email-thumbnail">
+                            <?php if (!empty($message['Listing_ID'])): ?>
+                                <span><?php echo htmlspecialchars($message['Title'] ?? 'No Title'); ?></span>
+                            <?php else: ?>
+                                <span>No Listing</span>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td class="email-preview">
+                        <?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...
+                    </td>
+                    <td class="email-view">
+                        <button onclick="viewMessage('<?php echo htmlspecialchars($message['Message_ID']); ?>')">View</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
 <script>
         function showSection(sectionId) {
