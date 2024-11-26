@@ -59,20 +59,18 @@ $trashStmt->execute();
 $trashMessages = $trashStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $trashStmt->close();
 
-// Handle Actions (Delete, Restore, Mark as Read)
+// Handle Actions (Delete, Restore)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $messageId = intval($_POST['message_id'] ?? 0);
 
     if ($messageId && $action) {
         if ($action === 'delete') {
-            // Move message to Trash
             $updateQuery = "UPDATE messages SET Deleted_Status = 1 WHERE Message_ID = ? AND (Sender_ID = ? OR Recipient_ID = ?)";
             $stmt = $conn->prepare($updateQuery);
             $stmt->bind_param("iii", $messageId, $userId, $userId);
             $stmt->execute();
         } elseif ($action === 'restore') {
-            // Restore message from Trash
             $updateQuery = "UPDATE messages SET Deleted_Status = 0 WHERE Message_ID = ? AND Recipient_ID = ?";
             $stmt = $conn->prepare($updateQuery);
             $stmt->bind_param("ii", $messageId, $userId);
