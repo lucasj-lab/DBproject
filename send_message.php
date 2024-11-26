@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $listingID = intval($_POST['listing_id'] ?? 0);
     $recipientID = intval($_POST['recipient_id'] ?? 0);
     $subject = trim($_POST['subject'] ?? 'No Subject');
-    $messageText = trim($_POST['message_text'] ?? '');
+    $messageText = trim($_POST['messages_text'] ?? '');
     $senderID = intval($_SESSION['user_id'] ?? 0); // Assuming the logged-in user's ID is stored in session
 
     // Validate input fields

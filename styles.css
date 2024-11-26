@@ -332,7 +332,7 @@ input[type="number"],
 textarea,
 select,
 button {
-    border-radius: 3px;
+    border-radius: 12px;
     /* Pill shape */
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -1675,7 +1675,10 @@ table td {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
 }
+
 
 /* Mobile styles for Edit Listing container */
 @media only screen and (max-width: 600px) {
@@ -3566,4 +3569,8 @@ body {
 
 .email-view button:hover {
     background-color: #0056b3;
+}
+
+input#subject {
+    width: -webkit-fill-available;
 }
