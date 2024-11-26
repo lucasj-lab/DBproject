@@ -2,7 +2,6 @@
 require 'database_connection.php';
 include 'header.php';
 
-
 $error_message = '';
 $success_message = '';
 
@@ -11,12 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $listingID = intval($_POST['listing_id'] ?? 0);
     $recipientID = intval($_POST['recipient_id'] ?? 0);
     $subject = trim($_POST['subject'] ?? 'No Subject');
-    $messageText = trim($_POST['messages_text'] ?? '');
-    $senderID = intval($_SESSION['user_id'] ?? 0); // Assuming the logged-in user's ID is stored in session
+    $messageText = trim($_POST['message_text'] ?? ''); // Fixed the field name
+    $senderID = intval($_SESSION['user_id'] ?? 0);
 
     // Validate input fields
-    if (!$listingID || !$recipientID || !$messageText || !$senderID) {
-        $error_message = 'All fields are required.';
+    if (!$messageText || !$senderID) {
+        $error_message = 'Message text and logged-in user are required.';
     } else {
         // Check if the recipient exists in the user table
         $sql = "SELECT User_ID FROM user WHERE User_ID = ?";
@@ -24,32 +23,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("i", $recipientID);
         $stmt->execute();
         $recipientExists = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
 
         if (!$recipientExists) {
             $error_message = 'Error: Recipient does not exist.';
         } else {
-            try {
-                // Insert the message into the database
-                $insertSQL = "
-                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
-                    VALUES (?, ?, ?, ?, ?, NOW())
+            // Insert the message into the database
+            $insertSQL = "
+                INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
+                VALUES (?, ?, ?, ?, ?, NOW())
+            ";
+            $stmt = $conn->prepare($insertSQL);
+            $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
+
+            if ($stmt->execute()) {
+                // Check if the listing has a thumbnail and link it in the success message
+                $thumbnailQuery = "
+                    SELECT Image_URL 
+                    FROM images 
+                    WHERE Listing_ID = ? AND Is_Thumbnail = 1 
+                    LIMIT 1
                 ";
+                $thumbStmt = $conn->prepare($thumbnailQuery);
+                $thumbStmt->bind_param("i", $listingID);
+                $thumbStmt->execute();
+                $thumbnail = $thumbStmt->get_result()->fetch_assoc();
+                $thumbStmt->close();
 
-                $stmt = $conn->prepare($insertSQL);
-                $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
-                $stmt->execute();
-
-                if ($stmt->affected_rows > 0) {
-                    $success_message = 'Message sent successfully!';
-                    // Redirect to the listing details or messages page
-                    header("Location: listing_details.php?listing_id=$listingID&message=success");
-                    exit;
-                } else {
-                    $error_message = 'Failed to send message. Please try again.';
+                $thumbnailMessage = '';
+                if (!empty($thumbnail['Image_URL'])) {
+                    $thumbnailMessage = "<img src='" . htmlspecialchars($thumbnail['Image_URL']) . "' alt='Thumbnail' class='thumbnail-preview'>";
                 }
-            } catch (Exception $e) {
-                $error_message = 'Error sending message: ' . $e->getMessage();
+
+                $success_message = "Message sent successfully! $thumbnailMessage";
+                header("Location: messages.php?status=success");
+                exit;
+            } else {
+                $error_message = 'Failed to send message. Please try again.';
             }
+
+            $stmt->close();
         }
     }
 }
@@ -62,6 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Message</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .thumbnail-preview {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="send-message-container">

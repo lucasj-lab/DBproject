@@ -1,10 +1,18 @@
 <?php
-require 'database_connection.php';
+require 'database_connection.php'; // Ensure $conn is a valid MySQLi connection
 
-$senderId = $_GET['sender_id'];
-$receiverId = $_GET['receiver_id'];
-$listingId = $_GET['listing_id'] ?? null;
+$senderId = intval($_GET['sender_id'] ?? 0);
+$receiverId = intval($_GET['receiver_id'] ?? 0);
+$listingId = intval($_GET['listing_id'] ?? 0);
 
+// Validate input
+if (!$senderId || !$receiverId) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid sender or receiver ID']);
+    exit;
+}
+
+// Build the SQL query
 $sql = "
     SELECT 
         m.Message_ID,
@@ -17,29 +25,36 @@ $sql = "
     FROM message m
     JOIN user u1 ON m.Sender_ID = u1.user_id
     JOIN user u2 ON m.Receiver_ID = u2.user_id
-    WHERE (m.Sender_ID = :sender_id AND m.Receiver_ID = :receiver_id)
-       OR (m.Sender_ID = :receiver_id AND m.Receiver_ID = :sender_id)
+    WHERE (m.Sender_ID = ? AND m.Receiver_ID = ?)
+       OR (m.Sender_ID = ? AND m.Receiver_ID = ?)
 ";
 
+// Add condition for listing ID if provided
 if ($listingId) {
-    $sql .= " AND m.Listing_ID = :listing_id";
+    $sql .= " AND m.Listing_ID = ?";
 }
 
+// Order by date sent
 $sql .= " ORDER BY m.Date_Sent ASC";
 
-$stmt = $pdo->prepare($sql);
-$params = [
-    'sender_id' => $senderId,
-    'receiver_id' => $receiverId
-];
+// Prepare the statement
+$stmt = $conn->prepare($sql);
 
+// Bind parameters dynamically based on whether listingId is provided
 if ($listingId) {
-    $params['listing_id'] = $listingId;
+    $stmt->bind_param("iiiii", $senderId, $receiverId, $receiverId, $senderId, $listingId);
+} else {
+    $stmt->bind_param("iiii", $senderId, $receiverId, $receiverId, $senderId);
 }
 
-$stmt->execute($params);
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Execute the query
+$stmt->execute();
 
+// Fetch results
+$result = $stmt->get_result();
+$messages = $result->fetch_all(MYSQLI_ASSOC);
+
+// Output results as JSON
 header('Content-Type: application/json');
 echo json_encode($messages);
 ?>
