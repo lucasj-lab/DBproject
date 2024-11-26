@@ -156,6 +156,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </table>
             </div>
 
+    <!-- Reply Modal -->
+    <div id="replyModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Reply to Message</h2>
+            <form method="POST" id="replyForm">
+                <input type="hidden" name="action" value="reply">
+                <input type="hidden" name="reply_to_message_id" id="replyToMessageId">
+                <input type="hidden" name="recipient_id" id="recipientId">
+                <input type="hidden" name="listing_id" id="listingId">
+                <div class="form-group">
+                    <textarea name="reply_message_text" id="replyMessageText" rows="5" placeholder="Type your reply..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Send Reply</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeReplyModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
             <!-- Sent Section -->
             <div id="sent" class="email-section" style="display:none;">
                 <h2>Sent</h2>
@@ -273,14 +294,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </style>
 
     <script>
+        
+        function openReplyModal(messageId, recipientId, listingId) {
+            document.getElementById('replyToMessageId').value = messageId;
+            document.getElementById('recipientId').value = recipientId;
+            document.getElementById('listingId').value = listingId;
+            document.getElementById('replyModal').style.display = 'flex';
+        }
+
+        function closeReplyModal() {
+            document.getElementById('replyModal').style.display = 'none';
+            document.getElementById('replyForm').reset();
+        }
+
         function showSection(sectionId) {
             const sections = document.querySelectorAll('.email-section');
             sections.forEach(section => section.style.display = 'none');
             document.getElementById(sectionId).style.display = 'block';
-        }
-
-        function viewMessage(messageId) {
-            alert("View message ID: " + messageId);
         }
 
         function replyMessage(messageId) {
