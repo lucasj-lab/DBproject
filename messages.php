@@ -93,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             margin: 0;
             font-family: Arial, sans-serif;
+            flex-wrap: wrap;
         }
 
         .sidebar {
@@ -100,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             top: 0;
             width: 200px;
             height: 100vh;
-            background-color: #333;
+            background-color: #1ec1b2;
             color: #fff;
             padding: 20px 10px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
