@@ -20,7 +20,7 @@ if (!$listingId) {
     exit;
 }
 
-// Fetch the listing details and images
+// Fetch the listing details and all associated images
 $query = "
     SELECT 
         l.Listing_ID,
@@ -37,7 +37,7 @@ $query = "
     FROM listings l
     LEFT JOIN user u ON l.User_ID = u.User_ID
     LEFT JOIN category c ON l.Category_ID = c.Category_ID
-    LEFT JOIN images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
     WHERE l.Listing_ID = ?
     GROUP BY l.Listing_ID
 ";
