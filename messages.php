@@ -319,54 +319,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
         let actionForm = null;
 
-function openWarningModal(messageId, actionType) {
-    // Update modal content
-    const modal = document.getElementById('warningModal');
-    const warningMessage = document.getElementById('warningMessage');
+        function confirmAction(actionType, messageId) {
+            const warningMessage = document.getElementById('warningMessage');
+            const confirmActionBtn = document.getElementById('confirmActionBtn');
 
-    if (actionType === 'delete') {
-        warningMessage.textContent = "Are you sure you want to move this message to Trash?";
-    } else if (actionType === 'restore') {
-        warningMessage.textContent = "Are you sure you want to restore this message?";
-    }
+            if (actionType === 'delete') {
+                warningMessage.textContent = "Are you sure you want to move this message to Trash?";
+            } else if (actionType === 'restore') {
+                warningMessage.textContent = "Are you sure you want to restore this message?";
+            }
 
-    // Prepare the form for the action
-    actionForm = document.createElement('form');
-    actionForm.method = 'POST';
-    actionForm.style.display = 'none';
+            confirmActionBtn.onclick = () => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.style.display = 'none';
 
-    const messageIdInput = document.createElement('input');
-    messageIdInput.type = 'hidden';
-    messageIdInput.name = 'message_id';
-    messageIdInput.value = messageId;
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = actionType;
 
-    const actionInput = document.createElement('input');
-    actionInput.type = 'hidden';
-    actionInput.name = 'action';
-    actionInput.value = actionType;
+                const messageIdInput = document.createElement('input');
+                messageIdInput.type = 'hidden';
+                messageIdInput.name = 'message_id';
+                messageIdInput.value = messageId;
 
-    actionForm.appendChild(messageIdInput);
-    actionForm.appendChild(actionInput);
-    document.body.appendChild(actionForm);
+                form.appendChild(actionInput);
+                form.appendChild(messageIdInput);
+                document.body.appendChild(form);
 
-    // Show modal
-    modal.style.display = 'flex';
-}
+                form.submit();
+            };
 
-function closeWarningModal() {
-    const modal = document.getElementById('warningModal');
-    modal.style.display = 'none';
-    if (actionForm) {
-        document.body.removeChild(actionForm);
-        actionForm = null;
-    }
-}
+            document.getElementById('warningModal').style.display = 'flex';
+        }
 
-document.getElementById('confirmActionBtn').onclick = function () {
-    if (actionForm) {
-        actionForm.submit();
-    }
-};
+        function closeWarningModal() {
+            document.getElementById('warningModal').style.display = 'none';
+        }
 </script>
 
 </body>
