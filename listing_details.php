@@ -3,7 +3,7 @@ require 'database_connection.php';
 
 // Handle form submission (Buy Now button)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $listingId = $_POST['listingId'] ?? null;
+    $listingId = intval($_POST['listingId'] ?? 0);
 
     if ($listingId) {
         $successMessage = "Thank you! Your purchase was successful for Listing ID: $listingId.";
@@ -13,55 +13,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch listing details
-$listingId = $_GET['listing_id'] ?? null;
+$listingId = intval($_GET['listing_id'] ?? 0);
 
 if (!$listingId) {
     echo "Listing ID is missing.";
     exit;
 }
 
-try {
-    $stmt = $pdo->prepare("
-        SELECT 
-    l.Listing_ID,
-    l.Title,
-    l.Description,
-    l.Price,
-    l.Date_Posted,
-    l.State,
-    l.City,
-    l.User_ID, -- Explicitly select User_ID
-    u.Name AS User_Name, 
-    c.Category_Name,
-    GROUP_CONCAT(i.Image_URL) AS Images
-FROM listings l
-LEFT JOIN user u ON l.User_ID = u.User_ID
-LEFT JOIN category c ON l.Category_ID = c.Category_ID
-LEFT JOIN images i ON l.Listing_ID = i.Listing_ID
-WHERE l.Listing_ID = ?
-GROUP BY l.Listing_ID
+// Fetch the listing details and images
+$query = "
+    SELECT 
+        l.Listing_ID,
+        l.Title,
+        l.Description,
+        l.Price,
+        l.Date_Posted,
+        l.State,
+        l.City,
+        l.User_ID,
+        u.Name AS User_Name,
+        c.Category_Name,
+        GROUP_CONCAT(i.Image_URL) AS Images
+    FROM listings l
+    LEFT JOIN user u ON l.User_ID = u.User_ID
+    LEFT JOIN category c ON l.Category_ID = c.Category_ID
+    LEFT JOIN images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
+    WHERE l.Listing_ID = ?
+    GROUP BY l.Listing_ID
+";
 
-    ");
-    $stmt->execute([$listingId]);
-    $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $listingId);
+$stmt->execute();
+$result = $stmt->get_result();
+$listing = $result->fetch_assoc();
 
-    $images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
-} catch (Exception $e) {
-    echo "An error occurred while fetching listing details: " . $e->getMessage();
-    exit;
-}
+$images = $listing && $listing['Images'] ? explode(',', $listing['Images']) : [];
 
 if (!$listing) {
     echo "Listing not found.";
     exit;
 }
 
-if ($listing) {
-    $listingID = $listing['Listing_ID'];   // Get the listing ID
-    $recipientID = $listing['User_ID']; // Get the listing owner's User ID
-}
+// Get the owner ID for messaging
+$listingID = $listing['Listing_ID'] ?? null;
+$recipientID = $listing['User_ID'] ?? null;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,20 +66,63 @@ if ($listing) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($listing['Title'] ?? 'Listing Details'); ?></title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Main Thumbnail Section */
+        .main-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .thumbnail-image {
+            height: 100px;
+            width: auto;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .thumbnail-image:hover {
+            transform: scale(1.1);
+            border-color: lightgray;
+        }
+    </style>
 </head>
 <body>
     <?php include 'header.php'; ?>
 
     <div class="create-listing-container">
         <h1 class="edit-listing-title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></h1>
-        <img id="mainImage" src="<?php echo htmlspecialchars($images[0] ?? 'uploads/default-image.jpg'); ?>" class="main-image" alt="Main Image">
+        <div class="main-image-container">
+            <img id="mainImage" src="<?php echo htmlspecialchars($images[0] ?? 'uploads/default-image.jpg'); ?>" class="main-image" alt="Main Image">
+        </div>
+
         <!-- Image Gallery -->
         <div class="image-gallery">
-            <div class="thumbnail-container">
-                <?php foreach ($images as $image): ?>
-                    <img src="<?php echo htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)" alt="Thumbnail">
-                <?php endforeach; ?>
-            </div>
+            <?php foreach ($images as $image): ?>
+                <img src="<?php echo htmlspecialchars($image); ?>" class="thumbnail-image" onclick="changeMainImage(this.src)" alt="Thumbnail">
+            <?php endforeach; ?>
         </div>
 
         <!-- Listing Details -->
@@ -96,18 +136,18 @@ if ($listing) {
                 <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
             </div>
             <div class="form-group">
-    <label for="price"><strong>Price:</strong></label>
-    <p id="price">
-        <?php 
-            if (isset($listing['Price'])) {
-                $price = (float)$listing['Price'];
-                echo $price === 0.0 ? 'Free' : '$' . number_format($price, 2);
-            } else {
-                echo 'Not Available';
-            }
-        ?>
-    </p>
-</div>
+                <label for="price"><strong>Price:</strong></label>
+                <p id="price">
+                    <?php 
+                        if (isset($listing['Price'])) {
+                            $price = (float)$listing['Price'];
+                            echo $price === 0.0 ? 'Free' : '$' . number_format($price, 2);
+                        } else {
+                            echo 'Not Available';
+                        }
+                    ?>
+                </p>
+            </div>
             <div class="form-group">
                 <label for="category"><strong>Category:</strong></label>
                 <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
@@ -136,8 +176,6 @@ if ($listing) {
             <button onclick="location.href='listings.php';" class="btn">All Listings</button>
             <button onclick="history.back()" class="btn">Go Back</button>
             <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
-
-
         </div>
     </div>
 
@@ -161,20 +199,6 @@ if ($listing) {
             </div>
         </div>
     <?php endif; ?>
-
-    <!-- Buy Now Modal -->
-    <div id="buyNowModal" class="modal">
-        <div class="modal-content popup-container">
-            <span class="close" id="closeModal">×</span>
-            <h2>Buy Now</h2>
-            <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
-            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
-            <form method="POST">
-                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
-                <button type="submit" class="btn">Confirm Purchase</button>
-            </form>
-        </div>
-    </div>
 
     <script>
         // Change the main image when a thumbnail is clicked
