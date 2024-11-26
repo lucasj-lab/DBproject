@@ -1055,7 +1055,7 @@ button[type="submit"] {
     padding: 10px 25px 10px 15px;
     /* Right padding for the button */
     font-size: 16px;
-    border-radius: 2px;
+    border-radius: 12px;
     /* Optional rounded corners */
     outline: none;
 }
