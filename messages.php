@@ -161,21 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script>
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.email-section');
-            sections.forEach(section => section.style.display = 'none');
-            document.getElementById(sectionId).style.display = 'block';
-        }
-
-        function viewMessage(messageId) {
-            console.log('View message:', messageId);
-            // Add logic to fetch and display full message details dynamically
-        }
-    </script>
 
 
-            <!-- Drafts Section -->
            <!-- Drafts Section -->
 <div id="drafts" class="email-section" style="display: none;">
     <h2>Drafts</h2>
@@ -319,6 +306,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
+
+    
+function showSection(sectionId) {
+            const sections = document.querySelectorAll('.email-section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function viewMessage(messageId) {
+            console.log('View message:', messageId);
+            // Add logic to fetch and display full message details dynamically
+        }
+
+
         function showSection(sectionId) {
             const sections = document.querySelectorAll('.email-section');
             sections.forEach(section => section.style.display = 'none');
