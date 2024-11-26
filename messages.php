@@ -99,9 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .sidebar {
             position: sticky;
             top: 0;
-            width: 200px;
+            width: 100px;
             height: 100vh;
-            background-color: #1ec1b2;
+            background-color: #062247;
             color: #fff;
             padding: 20px 10px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
