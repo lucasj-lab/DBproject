@@ -2502,7 +2502,7 @@ select#state {
     /* Adjust size as needed */
     height: 50px;
     /* Adjust size as needed */
-    background-color: transparent;
+    background-color: #062247;
     /* Transparent background */
     border-radius: 50%;
     /* Make it circular */
