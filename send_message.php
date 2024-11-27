@@ -1,8 +1,7 @@
 <?php
+session_start(); // Ensure session is started before any output
 require 'database_connection.php';
 include 'header.php';
-
-session_start();
 
 $error_message = '';
 $success_message = '';
@@ -22,30 +21,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Check if the recipient exists
         $sql = "SELECT User_ID FROM user WHERE User_ID = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $recipientID);
-        $stmt->execute();
-        $recipientExists = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        if (!$recipientExists) {
-            $error_message = 'Error: Recipient does not exist.';
+        if (!$stmt) {
+            $error_message = "Database error: " . $conn->error;
         } else {
-            // Insert the message into the database
-            $insertSQL = "
-                INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
-                VALUES (?, ?, ?, ?, ?, NOW())
-            ";
-            $stmt = $conn->prepare($insertSQL);
-            $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
-
-            if ($stmt->execute()) {
-                $success_message = 'Message sent successfully!';
-                header("Location: messages.php?status=success");
-                exit;
-            } else {
-                $error_message = 'Failed to send message. Please try again.';
-            }
+            $stmt->bind_param("i", $recipientID);
+            $stmt->execute();
+            $recipientExists = $stmt->get_result()->fetch_assoc();
             $stmt->close();
+
+            if (!$recipientExists) {
+                $error_message = 'Error: Recipient does not exist.';
+            } else {
+                // Insert the message into the database
+                $insertSQL = "
+                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
+                    VALUES (?, ?, ?, ?, ?, NOW())
+                ";
+                $stmt = $conn->prepare($insertSQL);
+
+                if (!$stmt) {
+                    $error_message = "Failed to prepare statement: " . $conn->error;
+                } else {
+                    $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
+                    if ($stmt->execute()) {
+                        $success_message = 'Message sent successfully!';
+                        header("Location: messages.php?status=success");
+                        exit;
+                    } else {
+                        $error_message = 'Failed to send message. Please try again.';
+                    }
+                    $stmt->close();
+                }
+            }
         }
     }
 }
