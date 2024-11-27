@@ -146,7 +146,7 @@ $conn->close();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Listing</title>
 <link rel="stylesheet" href="styles.css">
-
+<script src="dynamic_cities.js"></script>
 <style>
     /* Main Thumbnail Section */
     .main-image-container {
