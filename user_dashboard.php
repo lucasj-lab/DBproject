@@ -143,7 +143,12 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tbody>
                         <?php foreach ($listings as $listing): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($listing['Title']); ?></td>
+                            <td class="thumbnail-cell">
+                                    <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>"
+                                         alt="Listing Thumbnail" class="thumbnail-image">
+                                </td>    
+                            <td><?php echo htmlspecialchars($listing['Title']); ?></td>
+                                
                                 <td><?php echo htmlspecialchars($listing['Description']); ?></td>
                                 <td>$<?php echo htmlspecialchars(number_format($listing['Price'], 2)); ?></td>
                                 <td>
@@ -157,10 +162,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                                 <td><?php echo htmlspecialchars($listing['City']); ?></td>
                                 <td><?php echo htmlspecialchars($listing['State']); ?></td>
-                                <td class="thumbnail-cell">
-                                    <img src="<?= htmlspecialchars($listing['Thumbnail_Image'] ?? 'placeholder.jpg'); ?>"
-                                         alt="Listing Thumbnail" class="thumbnail-image">
-                                </td>
+                               
                                 <td class="action-buttons-cell">
                                     <a href="edit_listing.php?listing_id=<?= $listing['Listing_ID']; ?>"
                                        class="pill-button">Edit</a>
