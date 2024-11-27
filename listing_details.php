@@ -128,45 +128,45 @@ $recipientID = $listing['User_ID'] ?? null;
         <!-- Listing Details -->
         <div class="listing-details-wrapper">
             <div class="form-group">
-                <label for="title"><strong>Title:</strong></label>
-                <p id="title"><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="description"><strong>Description:</strong></label>
-                <p id="description"><?php echo htmlspecialchars($listing['Description'] ?? 'Not Available'); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="price"><strong>Price:</strong></label>
-                <p id="price">
-                    <?php 
-                        if (isset($listing['Price'])) {
-                            $price = (float)$listing['Price'];
-                            echo $price === 0.0 ? 'Free' : '$' . number_format($price, 2);
-                        } else {
-                            echo 'Not Available';
-                        }
-                    ?>
-                </p>
-            </div>
-            <div class="form-group">
-                <label for="category"><strong>Category:</strong></label>
-                <p id="category"><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="location"><strong>Location:</strong></label>
-                <p id="location"><?php echo htmlspecialchars(($listing['City'] ?? 'Not Available') . ', ' . ($listing['State'] ?? 'Not Available')); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="user"><strong>Posted:</strong></label>
-                <p id="user"><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></p>
-            </div>
-            <div class="form-group">
-                <label for="date_posted"><strong>Added:</strong></label>
-                <p id="date_posted">
-                    <?php echo $listing['Date_Posted'] 
-                        ? htmlspecialchars(date("F j, Y", strtotime($listing['Date_Posted']))) 
-                        : 'Not Available'; ?>
-                </p>
+       <table border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Title</strong></td>
+            <td>Dresser</td>
+        </tr>
+        <tr>
+            <td><strong>Description</strong></td>
+            <td>Hard Wood Dresser</td>
+        </tr>
+        <tr>
+            <td><strong>Price</strong></td>
+            <td>$300.00</td>
+        </tr>
+        <tr>
+            <td><strong>Category</strong></td>
+            <td>Furniture</td>
+        </tr>
+        <tr>
+            <td><strong>Location</strong></td>
+            <td>Fort Collins, CO</td>
+        </tr>
+        <tr>
+            <td><strong>Posted</strong></td>
+            <td>spooky</td>
+        </tr>
+        <tr>
+            <td><strong>Added</strong></td>
+            <td>November 25, 2024</td>
+        </tr>
+    </tbody>
+</table>
+
             </div>
         </div>
 

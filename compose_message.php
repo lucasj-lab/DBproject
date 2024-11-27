@@ -126,10 +126,10 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
             <input type="hidden" name="listing_id" value="<?php echo $listingID; ?>">
             <input type="hidden" name="recipient_id" value="<?php echo $recipientID; ?>">
             <div>
-                <label for="message_text">Message:</label>
-                <textarea name="message_text" id="message_text" rows="5" required></textarea>
+                <label for="message_text"></label>
+                <textarea name="message_text" id="message_text" rows="5" required>Message</textarea>
             </div>
-            <button type="submit">Send Message</button>
+            <button type="submit">Send</button>
         </form>
     </div>
     <script>
