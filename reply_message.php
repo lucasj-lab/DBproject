@@ -1,34 +1,22 @@
 <?php
-require 'database_connection.php'; // Ensure this initializes a $mysqli connection object
+require 'database_connection.php';
 
-// Get the original message and recipient details from the URL
-$originalMessageID = $_GET['message_id'] ?? null;
-$recipientID = $_GET['recipient_id'] ?? null;
+$messageID = intval($_GET['message_id']);
 
-if (!$originalMessageID || !$recipientID) {
-    echo "Error: Missing information to reply to the message.";
-    exit;
-}
+$query = "SELECT * FROM messages WHERE Message_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $messageID);
+$stmt->execute();
+$result = $stmt->get_result();
 
-// Fetch the original message (for context)
-$query = "
-    SELECT m.Message_Text, u.Name AS Sender_Name
-    FROM messages m
-    JOIN user u ON m.Sender_ID = u.User_ID
-    WHERE m.Message_ID = ?
-";
-
-if ($stmt = $mysqli->prepare($query)) {
-    $stmt->bind_param('i', $originalMessageID); // Bind the parameter as an integer
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $originalMessage = $result->fetch_assoc();
-    $stmt->close();
+if ($result->num_rows > 0) {
+    $message = $result->fetch_assoc();
+    echo "<p>{$message['Message_Text']}</p>";
 } else {
-    echo "Error preparing the query: " . htmlspecialchars($mysqli->error);
-    exit;
+    echo "Message not found.";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
