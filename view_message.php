@@ -2,9 +2,6 @@
 require 'database_connection.php';
 include 'header.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 // Fetch the message details
 $messageId = intval($_GET['message_id'] ?? 0);
 
@@ -12,13 +9,14 @@ if (!$messageId) {
     die("Invalid message ID.");
 }
 
+// Correct the table name to `user` instead of `users`
 $sql = "SELECT 
             messages.Message_Text, 
             messages.Created_At, 
-            users.Name AS Sender_Name, 
-            users.User_ID AS Sender_ID
+            user.Name AS Sender_Name, 
+            user.User_ID AS Sender_ID
         FROM messages
-        JOIN users ON messages.Sender_ID = user.User_ID
+        JOIN user ON messages.Sender_ID = user.User_ID
         WHERE messages.Message_ID = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt) {
