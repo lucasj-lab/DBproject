@@ -36,7 +36,7 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
         if ($section === 'inbox') {
             include 'inbox.php';
         } elseif ($section === 'sent') {
-            include 'sent.php'; // Create and integrate this file later
+            include 'sent_messages.php'; // Create and integrate this file later
         } elseif ($section === 'trash') {
             include 'trash.php'; // Create and integrate this file later
         } else {
