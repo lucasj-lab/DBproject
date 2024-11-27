@@ -97,11 +97,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <form action="login.php" method="POST">
             <div class="log-in-fields">
-                <input type="email" name="email" placeholder="Enter your email address"
+                <input type="email" name="email" placeholder="Email address"
                     value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit">Log In</button>
-                <p>Wanna be a Rookie? <a href="signup.php">Sign up here</a></p>
+                <p>Not signed up? <a href="signup.php">Sign up here</a></p>
             </div>
         </form>
     </div>
