@@ -2,6 +2,9 @@
 require 'database_connection.php';
 include 'header.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 // Fetch the message details
 $messageId = intval($_GET['message_id'] ?? 0);
 
@@ -117,7 +120,8 @@ if (!$message) {
         <div class="message-container">
             <h2>Message Details</h2>
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-            <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject'] ?: 'No Subject'); ?></p>
+           <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject'] ?: 'No Subject'); ?></p>
+
             <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
             <p><strong>Message:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
@@ -214,3 +218,5 @@ if (!$message) {
     </script>
 </body>
 </html>
+
+

@@ -11,7 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $listingID = intval($_POST['listing_id'] ?? 0);
     $recipientID = intval($_POST['recipient_id'] ?? 0);
     $messageText = trim($_POST['message_text'] ?? '');
+    $subject = trim($_POST['subject'] ?? ''); // Accept optional subject
     $senderID = intval($_SESSION['user_id'] ?? 0);
+
+    // Default subject if none provided
+    if ($subject === '') {
+        $subject = 'No Subject';
+    }
 
     if (!$messageText || !$senderID || !$recipientID) {
         $error_message = 'Message text, sender, and recipient are required.';
@@ -28,12 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($recipientExists) {
                 // Insert the message into the database
                 $insertSQL = "
-                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Message_Text, Created_At)
-                    VALUES (?, ?, ?, ?, NOW())
+                    INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Subject, Message_Text, Created_At)
+                    VALUES (?, ?, ?, ?, ?, NOW())
                 ";
                 $stmt = $conn->prepare($insertSQL);
                 if ($stmt) {
-                    $stmt->bind_param("iiis", $listingID, $senderID, $recipientID, $messageText);
+                    $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
                     if ($stmt->execute()) {
                         $success_message = 'Message sent successfully!';
                         header("Location: messages.php?status=success");
@@ -56,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Message</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div>
