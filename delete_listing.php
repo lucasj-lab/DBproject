@@ -42,7 +42,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['success' => false, 'error' => 'Invalid listing ID.']);
     }
-} else {
-    echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
+    exit(); // Ensure no further output after handling the request
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Listing</title>
+</head>
+<body>
+    <button id="deleteListingButton">Delete Listing</button>
+
+    <script>
+        document.getElementById('deleteListingButton').addEventListener('click', function () {
+            // Replace 123 with the actual listing ID
+            const listingId = 123; 
+
+            fetch('delete_listing.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ listing_id: listingId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        // Optionally, redirect or reload the page after deletion
+                        window.location.reload();
+                    } else {
+                        console.error(data.error);
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An unexpected error occurred. Please try again later.');
+                });
+        });
+    </script>
+</body>
+</html>

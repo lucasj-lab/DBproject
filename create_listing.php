@@ -492,9 +492,6 @@ $conn->close();
         imageToRemove = null; // Reset tracked image
     });
 });
-
-
-
     </script>
 
     <style>
