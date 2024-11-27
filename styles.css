@@ -3654,3 +3654,161 @@ p {
       padding: 8px; /* Adjust cell padding */
     }
   }
+
+  .message-container {
+    width: 70%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    color: #062247;
+    margin-bottom: 10px;
+}
+h3 {
+    color: #444;
+    margin-bottom: 15px;
+}
+p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+.message-footer {
+    margin-top: 20px;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #062247;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.btn:hover {
+    background-color: #444;
+}
+
+@media (max-width: 768px) { /* Adjust the breakpoint as needed */
+    .main-content {
+      width: 100%; /* Make it take full width on mobile */
+      padding: 10px; /* Reduce padding for smaller screens */
+      font-size: 14px; /* Adjust font size */
+      box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    }
+  
+    .main-content h2 {
+      font-size: 1.5em; /* Adjust heading size */
+    }
+  
+    .main-content label,
+    .main-content select {
+      display: block; /* Stack form elements vertically */
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .main-content table.email-table {
+      width: 100%; /* Make table responsive */
+      overflow-x: auto; /* Enable horizontal scrolling if needed */
+    }
+  
+    .main-content table.email-table td,
+    .main-content table.email-table th {
+      padding: 8px; /* Adjust cell padding */
+    }
+  }
+
+  .message-container-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5; /* Light background for contrast */
+    padding: 20px; /* Ensure proper spacing */
+}
+
+.message-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.message-container h2 {
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.message-container p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.message-container p strong {
+    color: #333;
+}
+
+.message-container .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.message-container .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .message-container {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .message-container h2 {
+        font-size: 1.5em;
+    }
+
+    .message-container p {
+        font-size: 1em;
+    }
+
+    .message-container .btn {
+        width: 100%; /* Button spans full width on mobile */
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .message-container {
+        padding: 10px;
+    }
+
+    .message-container h2 {
+        font-size: 1.2em;
+    }
+
+    .message-container p {
+        font-size: 0.9em;
+    }
+
+    .message-container .btn {
+        font-size: 0.9em;
+    }
+}
