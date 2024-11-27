@@ -84,16 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="success"><?php echo htmlspecialchars($success_message); ?></p>
         <?php endif; ?>
 
-        <form action="send_message.php" method="POST" class="message-form">
-            <div class="form-group">
-                <label for="subject">Subject (Optional):</label>
-                <input 
-                    type="text" 
-                    name="subject" 
-                    id="subject" 
-                    placeholder="Enter a subject (Optional)" 
-                    value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>">
-            </div>
+
             <div class="form-group">
                 <label for="message_text">Message:</label>
                 <textarea 
