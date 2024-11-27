@@ -122,15 +122,6 @@ nav ul li a:hover {
     transform: scale(1.05);
 }
 
-.listing-item {
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin: .5rem;
-}
-
-
 .category-grid {
     /* display: inline-grid; */
     grid-template-columns: none;
@@ -1431,7 +1422,7 @@ table td {
 /* Style for Each Listing Item */
 .listing-item {
     align-items: center;
-    padding: 1.5rem;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
