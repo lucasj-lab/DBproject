@@ -56,3 +56,15 @@ function fetchMessages(senderId, receiverId, listingId = null) {
             container.innerHTML = `<p class="error">An error occurred while fetching messages. Please try again later.</p>`;
         });
 }
+
+// Apply filter for messages
+function applyFilter() {
+    const filter = document.getElementById('filter').value; // Get selected filter value
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Set the filter parameter
+    urlParams.set('filter', filter);
+
+    // Reload the page with the updated URL
+    window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+}
