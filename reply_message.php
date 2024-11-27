@@ -1,5 +1,5 @@
 <?php
-require 'database_connection.php';
+require 'database_connection.php'; // Ensure this initializes a $mysqli connection object
 
 // Get the original message and recipient details from the URL
 $originalMessageID = $_GET['message_id'] ?? null;
@@ -11,22 +11,24 @@ if (!$originalMessageID || !$recipientID) {
 }
 
 // Fetch the original message (for context)
-try {
-    $stmt = $pdo->prepare("
-        SELECT m.Message_Text, u.Name AS Sender_Name
-        FROM messages m
-        JOIN user u ON m.Sender_ID = u.User_ID
-        WHERE m.Message_ID = :message_id
-    ");
-    $stmt->execute([':message_id' => $originalMessageID]);
-    $originalMessage = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Error fetching the original message: " . htmlspecialchars($e->getMessage());
+$query = "
+    SELECT m.Message_Text, u.Name AS Sender_Name
+    FROM messages m
+    JOIN user u ON m.Sender_ID = u.User_ID
+    WHERE m.Message_ID = ?
+";
+
+if ($stmt = $mysqli->prepare($query)) {
+    $stmt->bind_param('i', $originalMessageID); // Bind the parameter as an integer
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $originalMessage = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    echo "Error preparing the query: " . htmlspecialchars($mysqli->error);
     exit;
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,6 +38,9 @@ try {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    
+<?php include 'header.php'; ?>
+
     <div class="reply-message-container">
         <h1 class="page-title">Reply to Message</h1>
         
@@ -58,5 +63,6 @@ try {
             </div>
         </form>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
