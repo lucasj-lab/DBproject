@@ -157,61 +157,65 @@ if (!$message) {
             replyModal.style.display = 'none';
         });
 
-        // Save draft functionality
-        saveDraftButton.addEventListener('click', () => {
-            const draftText = replyText.value.trim();
-            if (draftText) {
-                fetch('save_draft.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message_text: draftText,
-                        original_message_id: <?php echo $messageId; ?>
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Draft saved successfully!');
-                    } else {
-                        alert(data.error || 'Failed to save draft.');
-                    }
-                })
-                .catch(err => console.error('Error saving draft:', err));
-            } else {
-                alert('Draft cannot be empty.');
-            }
-        });
+        <script>
+    // Save Draft
+    document.getElementById('saveDraft').addEventListener('click', () => {
+        const messageText = document.getElementById('replyText').value.trim();
+        if (!messageText) {
+            alert('Draft cannot be empty.');
+            return;
+        }
 
-        // Send reply functionality
-        sendReplyButton.addEventListener('click', () => {
-            const messageText = replyText.value.trim();
-            if (messageText) {
-                fetch('send_reply.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        original_message_id: <?php echo $messageId; ?>,
-                        message_text: messageText,
-                        recipient_id: <?php echo $message['Sender_ID']; ?>
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Reply sent successfully!');
-                        replyModal.style.display = 'none';
-                        replyText.value = ''; // Clear reply textarea
-                    } else {
-                        alert(data.error || 'Failed to send reply.');
-                    }
-                })
-                .catch(err => console.error('Error sending reply:', err));
-            } else {
-                alert('Reply cannot be empty.');
-            }
-        });
-    </script>
+        fetch('saved_drafts.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                original_message_id: <?php echo $messageId; ?>,
+                recipient_id: <?php echo $message['Sender_ID']; ?>,
+                message_text: messageText
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert(data.error || 'Failed to save draft.');
+                }
+            })
+            .catch(err => console.error('Error saving draft:', err));
+    });
+
+    // Send Reply
+    document.getElementById('sendReply').addEventListener('click', () => {
+        const messageText = document.getElementById('replyText').value.trim();
+        if (!messageText) {
+            alert('Reply cannot be empty.');
+            return;
+        }
+
+        fetch('send_reply.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                original_message_id: <?php echo $messageId; ?>,
+                recipient_id: <?php echo $message['Sender_ID']; ?>,
+                message_text: messageText
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('replyModal').style.display = 'none';
+                } else {
+                    alert(data.error || 'Failed to send reply.');
+                }
+            })
+            .catch(err => console.error('Error sending reply:', err));
+    });
+</script>
+
 </body>
 </html>
 

@@ -3,33 +3,26 @@ require 'database_connection.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $originalMessageID = $_POST['original_message_id'] ?? null;
-    $recipientID = $_POST['recipient_id'] ?? null;
-    $messageText = $_POST['message_text'] ?? null;
-    $senderID = $_SESSION['user_id'] ?? null;
+    $originalMessageID = intval($_POST['original_message_id'] ?? 0);
+    $recipientID = intval($_POST['recipient_id'] ?? 0);
+    $messageText = trim($_POST['message_text'] ?? '');
+    $senderID = intval($_SESSION['user_id'] ?? 0);
 
     if (!$originalMessageID || !$recipientID || !$messageText || !$senderID) {
-        echo "Error: Missing required fields.";
+        echo json_encode(['success' => false, 'error' => 'Missing required fields.']);
         exit;
     }
 
     try {
-        // Insert the reply into the messages table
-        $stmt = $pdo->prepare("
-            INSERT INTO messages (Listing_ID, Sender_ID, Recipient_ID, Message_Text, Original_Message_ID)
-            VALUES (NULL, :sender_id, :recipient_id, :message_text, :original_message_id)
-        ");
-        $stmt->execute([
-            ':sender_id' => $senderID,
-            ':recipient_id' => $recipientID,
-            ':message_text' => $messageText,
-            ':original_message_id' => $originalMessageID,
-        ]);
+        $query = "INSERT INTO messages (Sender_ID, Recipient_ID, Message_Text, Original_Message_ID, Created_At)
+                  VALUES (?, ?, ?, ?, NOW())";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iisi", $senderID, $recipientID, $messageText, $originalMessageID);
+        $stmt->execute();
 
-        header("Location: messages.php?success=reply_sent");
-        exit;
-    } catch (PDOException $e) {
-        echo "Error sending reply: " . htmlspecialchars($e->getMessage());
+        echo json_encode(['success' => true, 'message' => 'Reply sent successfully.']);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Error sending reply: ' . $e->getMessage()]);
     }
 }
 ?>

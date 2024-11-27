@@ -124,3 +124,46 @@ function unselectAllMessages() {
 function confirmDelete() {
     return confirm("Are you sure you want to delete the selected messages?");
 }
+
+document.querySelectorAll('.send-reply-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const form = button.closest('form');
+        const formData = new FormData(form);
+
+        fetch('send_reply.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Reply sent successfully!');
+                    form.reset();
+                } else {
+                    alert('Failed to send reply.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+});
+
+document.querySelectorAll('.save-draft-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const form = button.closest('form');
+        const formData = new FormData(form);
+
+        fetch('saved_drafts.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Draft saved successfully!');
+                } else {
+                    alert('Failed to save draft.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+});
