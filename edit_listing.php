@@ -261,145 +261,6 @@ $conn->close();
         /* Darker green */
     }
 </style>
-<script>
-
-        const statesAndCities = {
-            "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-            "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-            "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
-            "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
-            "California": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
-            "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
-            "Connecticut": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
-            "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
-            "Florida": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
-            "Georgia": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
-            "Hawaii": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
-            "Idaho": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
-            "Illinois": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
-            "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
-            "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
-            "Kansas": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
-            "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
-            "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
-            "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
-            "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
-            "Massachusetts": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
-            "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
-            "Minnesota": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
-            "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
-            "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
-            "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
-            "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
-            "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
-            "New Hampshire": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
-            "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
-            "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
-            "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
-            "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
-            "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
-            "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
-            "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
-            "Oregon": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
-            "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
-            "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
-            "South Carolina": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
-            "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
-            "Tennessee": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
-            "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
-            "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
-            "Vermont": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
-            "Virginia": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
-            "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
-            "West Virginia": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
-            "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
-            "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
-        };
-
-
-    cityDropdown.innerHTML = '<option value="">--Select City--</option>';
-    if (selectedState && statesAndCities[selectedState]) {
-        statesAndCities[selectedState].forEach(city => {
-            const option = document.createElement('option');
-            option.value = city;
-            option.textContent = city;
-            cityDropdown.appendChild(option);
-        });
-    }
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const imageInput = document.querySelector("input[name='images[]']");
-        const previewContainer = document.getElementById("imagePreviewContainer");
-        const thumbnailInput = document.getElementById("thumbnailInput");
-        const removedImagesInput = document.getElementById("removedImagesInput");
-
-        const modal = document.getElementById("removeImageModal");
-        const confirmRemoveButton = document.getElementById("confirmRemoveImage");
-        const cancelRemoveButton = document.getElementById("cancelRemoveImage");
-        let imageToRemove = null; // Track image to be removed
-
-        imageInput.addEventListener("change", function () {
-            previewContainer.innerHTML = ""; // Clear previous previews
-            Array.from(this.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const imgWrapper = document.createElement("div");
-                    imgWrapper.classList.add("image-wrapper");
-
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.classList.add("preview-image");
-                    img.dataset.fileName = file.name; // Use filename to track images
-
-                    // Left-click: Designate as thumbnail
-                    img.addEventListener("click", function () {
-                        // Clear previous thumbnail designation
-                        const allImages = previewContainer.querySelectorAll(".preview-image");
-                        allImages.forEach(image => image.classList.remove("thumbnail"));
-
-                        // Highlight as thumbnail
-                        this.classList.add("thumbnail");
-                        thumbnailInput.value = file.name; // Set thumbnail input value
-                    });
-
-                    // Right-click: Remove image
-                    img.addEventListener("contextmenu", function (event) {
-                        event.preventDefault();
-                        imageToRemove = imgWrapper; // Track the wrapper for removal
-                        modal.style.display = "flex"; // Show modal
-                    });
-
-                    imgWrapper.appendChild(img);
-                    previewContainer.appendChild(imgWrapper);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        // Confirm image removal
-        confirmRemoveButton.addEventListener("click", function () {
-            if (imageToRemove) {
-                const fileName = imageToRemove.querySelector("img").dataset.fileName;
-                // Add the file to removed images list
-                const removedImages = removedImagesInput.value ? removedImagesInput.value.split(",") : [];
-                removedImages.push(fileName);
-                removedImagesInput.value = removedImages.join(",");
-
-                // Remove from preview
-                previewContainer.removeChild(imageToRemove);
-            }
-            modal.style.display = "none"; // Hide modal
-        });
-
-        // Cancel image removal
-        cancelRemoveButton.addEventListener("click", function () {
-            modal.style.display = "none"; // Hide modal
-            imageToRemove = null; // Reset tracked image
-        });
-    });
-
-</script>
 </head>
 
 <body>
@@ -527,7 +388,148 @@ $conn->close();
 
 
 
-    <script src="dynamic_cities.js"></script>
+    <script>
+
+const statesAndCities = {
+    "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+    "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+    "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+    "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+    "California": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+    "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+    "Connecticut": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
+    "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+    "Florida": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
+    "Georgia": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
+    "Hawaii": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
+    "Idaho": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
+    "Illinois": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
+    "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+    "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+    "Kansas": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+    "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+    "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+    "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+    "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+    "Massachusetts": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
+    "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
+    "Minnesota": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
+    "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+    "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+    "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+    "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+    "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+    "New Hampshire": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
+    "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+    "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+    "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
+    "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+    "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+    "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+    "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+    "Oregon": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
+    "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+    "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+    "South Carolina": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+    "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+    "Tennessee": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
+    "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+    "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+    "Vermont": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
+    "Virginia": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
+    "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+    "West Virginia": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
+    "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+    "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
+};
+
+
+cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+if (selectedState && statesAndCities[selectedState]) {
+statesAndCities[selectedState].forEach(city => {
+    const option = document.createElement('option');
+    option.value = city;
+    option.textContent = city;
+    cityDropdown.appendChild(option);
+});
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+const imageInput = document.querySelector("input[name='images[]']");
+const previewContainer = document.getElementById("imagePreviewContainer");
+const thumbnailInput = document.getElementById("thumbnailInput");
+const removedImagesInput = document.getElementById("removedImagesInput");
+
+const modal = document.getElementById("removeImageModal");
+const confirmRemoveButton = document.getElementById("confirmRemoveImage");
+const cancelRemoveButton = document.getElementById("cancelRemoveImage");
+let imageToRemove = null; // Track image to be removed
+
+imageInput.addEventListener("change", function () {
+    previewContainer.innerHTML = ""; // Clear previous previews
+    Array.from(this.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imgWrapper = document.createElement("div");
+            imgWrapper.classList.add("image-wrapper");
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.classList.add("preview-image");
+            img.dataset.fileName = file.name; // Use filename to track images
+
+            // Left-click: Designate as thumbnail
+            img.addEventListener("click", function () {
+                // Clear previous thumbnail designation
+                const allImages = previewContainer.querySelectorAll(".preview-image");
+                allImages.forEach(image => image.classList.remove("thumbnail"));
+
+                // Highlight as thumbnail
+                this.classList.add("thumbnail");
+                thumbnailInput.value = file.name; // Set thumbnail input value
+            });
+
+            // Right-click: Remove image
+            img.addEventListener("contextmenu", function (event) {
+                event.preventDefault();
+                imageToRemove = imgWrapper; // Track the wrapper for removal
+                modal.style.display = "flex"; // Show modal
+            });
+
+            imgWrapper.appendChild(img);
+            previewContainer.appendChild(imgWrapper);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+// Confirm image removal
+confirmRemoveButton.addEventListener("click", function () {
+    if (imageToRemove) {
+        const fileName = imageToRemove.querySelector("img").dataset.fileName;
+        // Add the file to removed images list
+        const removedImages = removedImagesInput.value ? removedImagesInput.value.split(",") : [];
+        removedImages.push(fileName);
+        removedImagesInput.value = removedImages.join(",");
+
+        // Remove from preview
+        previewContainer.removeChild(imageToRemove);
+    }
+    modal.style.display = "none"; // Hide modal
+});
+
+// Cancel image removal
+cancelRemoveButton.addEventListener("click", function () {
+    modal.style.display = "none"; // Hide modal
+    imageToRemove = null; // Reset tracked image
+});
+});
+
+</script>
+ 
+    
+
 
 </body>
 

@@ -354,7 +354,7 @@ $conn->close();
 
 
 
-<script>
+            <script>
                 // List of cities for each state
                 const statesAndCities = {
                     "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
@@ -419,7 +419,7 @@ $conn->close();
 
                     const selectedState = stateDropdown.value;
                     if (selectedState && statesAndCities[selectedState]) {
-                       statesAndCities[selectedState].forEach(city => {
+                        statesAndCities[selectedState].forEach(city => {
                             const option = document.createElement("option");
                             option.value = city;
                             option.textContent = city;
@@ -427,6 +427,80 @@ $conn->close();
                         });
                     }
                 }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const imageInput = document.querySelector("input[name='images[]']");
+                    const previewContainer = document.getElementById("imagePreviewContainer");
+                    const thumbnailInput = document.getElementById("thumbnailInput");
+                    const removedImagesInput = document.getElementById("removedImagesInput");
+
+                    const modal = document.getElementById("removeImageModal");
+                    const confirmRemoveButton = document.getElementById("confirmRemoveImage");
+                    const cancelRemoveButton = document.getElementById("cancelRemoveImage");
+                    let imageToRemove = null; // Track image to be removed
+
+                    imageInput.addEventListener("change", function () {
+                        previewContainer.innerHTML = ""; // Clear previous previews
+                        Array.from(this.files).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const imgWrapper = document.createElement("div");
+                                imgWrapper.classList.add("image-wrapper");
+
+                                const img = document.createElement("img");
+                                img.src = e.target.result;
+                                img.classList.add("preview-image");
+                                img.dataset.fileName = file.name; // Use filename to track images
+
+                                // Left-click: Designate as thumbnail
+                                img.addEventListener("click", function () {
+                                    // Clear previous thumbnail designation
+                                    const allImages = previewContainer.querySelectorAll(".preview-image");
+                                    allImages.forEach(image => image.classList.remove("thumbnail"));
+
+                                    // Highlight as thumbnail
+                                    this.classList.add("thumbnail");
+                                    thumbnailInput.value = file.name; // Set thumbnail input value
+                                });
+
+                                // Right-click: Remove image
+                                img.addEventListener("contextmenu", function (event) {
+                                    event.preventDefault();
+                                    imageToRemove = imgWrapper; // Track the wrapper for removal
+                                    modal.style.display = "flex"; // Show modal
+                                });
+
+                                imgWrapper.appendChild(img);
+                                previewContainer.appendChild(imgWrapper);
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                    });
+
+                    // Confirm image removal
+                    confirmRemoveButton.addEventListener("click", function () {
+                        if (imageToRemove) {
+                            const fileName = imageToRemove.querySelector("img").dataset.fileName;
+                            // Add the file to removed images list
+                            const removedImages = removedImagesInput.value ? removedImagesInput.value.split(",") : [];
+                            removedImages.push(fileName);
+                            removedImagesInput.value = removedImages.join(",");
+
+                            // Remove from preview
+                            previewContainer.removeChild(imageToRemove);
+                        }
+                        modal.style.display = "none"; // Hide modal
+                    });
+
+                    // Cancel image removal
+                    cancelRemoveButton.addEventListener("click", function () {
+                        modal.style.display = "none"; // Hide modal
+                        imageToRemove = null; // Reset tracked image
+                    });
+                });
+
+
             </script>
-            </body>
+</body>
+
 </html>
