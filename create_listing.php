@@ -418,8 +418,8 @@ $conn->close();
                     cityDropdown.innerHTML = '<option value="">--Select City--</option>';
 
                     const selectedState = stateDropdown.value;
-                    if (selectedState && citiesByState[selectedState]) {
-                        citiesByState[selectedState].forEach(city => {
+                    if (selectedState && statesAndCities[selectedState]) {
+                       statesAndCities[selectedState].forEach(city => {
                             const option = document.createElement("option");
                             option.value = city;
                             option.textContent = city;
