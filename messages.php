@@ -292,67 +292,66 @@ $trashStmt->close();
     </div>
     
     <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.email-section');
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
+    function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.email-section');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
 
-            // Show the selected section
-            const selectedSection = document.getElementById(sectionId);
-            if (selectedSection) {
-                selectedSection.style.display = 'block';
-            }
+        // Show the selected section
+        const selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+        }
+    }
+
+    function openWarningModal(messageId, actionType) {
+        const modal = document.getElementById('warningModal');
+        const warningMessage = document.getElementById('warningMessage');
+
+        // Update warning message based on action type
+        if (actionType === 'delete') {
+            warningMessage.textContent = "Are you sure you want to move this message to Trash?";
+        } else if (actionType === 'restore') {
+            warningMessage.textContent = "Are you sure you want to restore this message?";
+        } else if (actionType === 'delete_forever') {
+            warningMessage.textContent = "Are you sure you want to delete this message permanently?";
         }
 
-        let actionForm = null;
+        // Set up the confirm button's action
+        const confirmActionBtn = document.getElementById('confirmActionBtn');
+        confirmActionBtn.onclick = () => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/handle-action'; // Update with your server endpoint
+            form.style.display = 'none';
 
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.email-section');
-            sections.forEach(section => section.style.display = 'none');
-            document.getElementById(sectionId).style.display = 'block';
-        }
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = actionType;
 
-        function openWarningModal(messageId, actionType) {
-            const modal = document.getElementById('warningModal');
-            const warningMessage = document.getElementById('warningMessage');
+            const messageIdInput = document.createElement('input');
+            messageIdInput.type = 'hidden';
+            messageIdInput.name = 'message_id';
+            messageIdInput.value = messageId;
 
-            if (actionType === 'delete') {
-                warningMessage.textContent = "Are you sure you want to move this message to Trash?";
-            } else if (actionType === 'restore') {
-                warningMessage.textContent = "Are you sure you want to restore this message?";
-            }
+            form.appendChild(actionInput);
+            form.appendChild(messageIdInput);
+            document.body.appendChild(form);
 
-            document.getElementById('confirmActionBtn').onclick = () => {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.style.display = 'none';
+            form.submit();
+        };
 
-                const actionInput = document.createElement('input');
-                actionInput.type = 'hidden';
-                actionInput.name = 'action';
-                actionInput.value = actionType;
+        modal.style.display = 'flex';
+    }
 
-                const messageIdInput = document.createElement('input');
-                messageIdInput.type = 'hidden';
-                messageIdInput.name = 'message_id';
-                messageIdInput.value = messageId;
+    function closeWarningModal() {
+        const modal = document.getElementById('warningModal');
+        modal.style.display = 'none';
+    }
+</script>
 
-                form.appendChild(actionInput);
-                form.appendChild(messageIdInput);
-                document.body.appendChild(form);
-
-                form.submit();
-            };
-
-            modal.style.display = 'flex';
-        }
-
-        function closeWarningModal() {
-            const modal = document.getElementById('warningModal');
-            modal.style.display = 'none';
-        }
-    </script>
 </body>
 </html>
