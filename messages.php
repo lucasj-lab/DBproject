@@ -279,79 +279,16 @@ $trashStmt->close();
             </table>
         </div>
     </div>
-  <!-- Warning Modal -->
-  <div id="warningModal" class="modal">
-        <div class="modal-content">
-            <h2 id="warningTitle">Warning</h2>
-            <p id="warningMessage">Are you sure you want to perform this action?</p>
-            <div class="modal-actions">
-                <button id="confirmActionBtn" class="btn btn-danger">Yes</button>
-                <button onclick="closeWarningModal()" class="btn">Cancel</button>
-            </div>
+    <div id="warningModal" class="modal">
+    <div class="modal-content">
+        <h2 id="warningTitle">Warning</h2>
+        <p id="warningMessage">Are you sure you want to perform this action?</p>
+        <div class="modal-actions">
+            <button id="confirmActionBtn" class="btn btn-danger">Yes</button>
+            <button onclick="closeWarningModal()" class="btn">Cancel</button>
         </div>
     </div>
-    
-    <script>
-    function showSection(sectionId) {
-        // Hide all sections
-        const sections = document.querySelectorAll('.email-section');
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-
-        // Show the selected section
-        const selectedSection = document.getElementById(sectionId);
-        if (selectedSection) {
-            selectedSection.style.display = 'block';
-        }
-    }
-
-    function openWarningModal(messageId, actionType) {
-        const modal = document.getElementById('warningModal');
-        const warningMessage = document.getElementById('warningMessage');
-
-        // Update warning message based on action type
-        if (actionType === 'delete') {
-            warningMessage.textContent = "Are you sure you want to move this message to Trash?";
-        } else if (actionType === 'restore') {
-            warningMessage.textContent = "Are you sure you want to restore this message?";
-        } else if (actionType === 'delete_forever') {
-            warningMessage.textContent = "Are you sure you want to delete this message permanently?";
-        }
-
-        // Set up the confirm button's action
-        const confirmActionBtn = document.getElementById('confirmActionBtn');
-        confirmActionBtn.onclick = () => {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/handle-action'; // Update with your server endpoint
-            form.style.display = 'none';
-
-            const actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'action';
-            actionInput.value = actionType;
-
-            const messageIdInput = document.createElement('input');
-            messageIdInput.type = 'hidden';
-            messageIdInput.name = 'message_id';
-            messageIdInput.value = messageId;
-
-            form.appendChild(actionInput);
-            form.appendChild(messageIdInput);
-            document.body.appendChild(form);
-
-            form.submit();
-        };
-
-        modal.style.display = 'flex';
-    }
-
-    function closeWarningModal() {
-        const modal = document.getElementById('warningModal');
-        modal.style.display = 'none';
-    }
-</script>
-
+</div>
+<script src="messaging.js"></script>
 </body>
 </html>
