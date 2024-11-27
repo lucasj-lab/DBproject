@@ -68,3 +68,59 @@ function applyFilter() {
     // Reload the page with the updated URL
     window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
 }
+
+// View a specific message
+function viewMessage(messageId) {
+    // Redirect to the view_message.php page with the message ID
+    window.location.href = `view_message.php?message_id=${messageId}`;
+}
+
+// Open a warning modal for actions like restore or delete
+function openWarningModal(messageId, actionType) {
+    const confirmation = confirm(
+        actionType === "restore"
+            ? "Are you sure you want to restore this message?"
+            : "Are you sure you want to permanently delete this message?"
+    );
+
+    if (confirmation) {
+        // Send a request to the server to perform the action
+        fetch("mark_notification_read.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `message_id=${messageId}&action=${actionType}`
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(); // Refresh the page to update the UI
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again later.");
+            });
+    }
+}
+
+// Select all messages
+function selectAllMessages() {
+    document.querySelectorAll('input[name="selected_messages[]"]').forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+// Unselect all messages
+function unselectAllMessages() {
+    document.querySelectorAll('input[name="selected_messages[]"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+// Confirm deletion of selected messages
+function confirmDelete() {
+    return confirm("Are you sure you want to delete the selected messages?");
+}

@@ -108,9 +108,6 @@ $trashStmt->close();
             <?php endif; ?>
         </tbody>
     </table>
-
-    <footer>
-        <?php include 'footer.php'; ?>
-    </footer>
+    <script src="messaging.js"></script>
 </body>
-</html>
+    

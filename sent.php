@@ -99,3 +99,5 @@ $sentStmt->close();
         <?php endif; ?>
     </tbody>
 </table>
+<script src="messaging.js"></script>
+        </body>
