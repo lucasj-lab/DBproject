@@ -10,6 +10,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+if (isset($_SESSION['message'])) {
+    echo "<div class='session-message {$_SESSION['message_type']}'>" . $_SESSION['message'] . "</div>";
+    unset($_SESSION['message'], $_SESSION['message_type']); // Clear after displaying
+}
 
 // Fetch user data
 $stmt = $pdo->prepare("SELECT Name, Email, Date_Joined FROM user WHERE User_ID = :user_id");

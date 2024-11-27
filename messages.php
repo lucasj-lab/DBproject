@@ -7,7 +7,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = intval($_SESSION['user_id']);
-
+if (isset($_SESSION['message'])) {
+    echo "<div class='session-message {$_SESSION['message_type']}'>" . htmlspecialchars($_SESSION['message']) . "</div>";
+    unset($_SESSION['message'], $_SESSION['message_type']); // Clear after displaying
+}
 // Determine which section to load
 $section = $_GET['section'] ?? 'inbox';
 $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter

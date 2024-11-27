@@ -1,6 +1,12 @@
 <?php
 session_start();
 require 'database_connection.php';
+if ($stmt->execute()) {
+    $_SESSION['message'] = 'Message sent successfully!';
+    $_SESSION['message_type'] = 'success';
+    header("Location: messages.php");
+    exit;
+}
 
 // Initialize variables
 $error_message = '';
