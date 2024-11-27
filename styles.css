@@ -323,7 +323,7 @@ input[type="number"],
 textarea,
 select,
 button {
-    border-radius: 30px;
+    border-radius: 10px;
     /* Pill shape */
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -1020,7 +1020,6 @@ button {
     flex: 1;
 }
 
-/* Submit button styling */
 button[type="submit"] {
     background-color: #007bff;
     color: #fff;
@@ -1029,6 +1028,7 @@ button[type="submit"] {
     cursor: pointer;
     transition: background-color 0.3s ease;
     border-radius: 30px;
+    width: 100%;
 }
 
 
@@ -3809,3 +3809,7 @@ p {
         font-size: 0.9em;
     }
 }
+
+textarea#message_text {
+    width: 100%;
+  }
