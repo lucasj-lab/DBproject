@@ -236,14 +236,14 @@ $conn->close();
 
 <body>
     <?php include 'header.php'; ?>
-   
-   
-   
+
+
+
     <div class="edit-listing-container">
         <h1 class="edit-listing-title">Create New Listing</h1>
         <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
-            <select id="category" name="category" required>
+                <select id="category" name="category" required>
                     <option value="">--Select Category--</option>
                     <option value="Auto">Auto</option>
                     <option value="Electronics">Electronics</option>
@@ -258,57 +258,58 @@ $conn->close();
                 <div class="listing-form-group">
                     <select id="state" name="state" onchange="updateCities()" required>
                         <option value="">--Select State--</option>
-                        <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
-                        <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
-                        <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
-                        <option value="AR" <?= $state === "AR" ? "selected" : ""; ?>>Arkansas</option>
-                        <option value="CA" <?= $state === "CA" ? "selected" : ""; ?>>California</option>
-                        <option value="CO" <?= $state === "CO" ? "selected" : ""; ?>>Colorado</option>
-                        <option value="CT" <?= $state === "CT" ? "selected" : ""; ?>>Connecticut</option>
-                        <option value="DE" <?= $state === "DE" ? "selected" : ""; ?>>Delaware</option>
-                        <option value="FL" <?= $state === "FL" ? "selected" : ""; ?>>Florida</option>
-                        <option value="GA" <?= $state === "GA" ? "selected" : ""; ?>>Georgia</option>
-                        <option value="HI" <?= $state === "HI" ? "selected" : ""; ?>>Hawaii</option>
-                        <option value="ID" <?= $state === "ID" ? "selected" : ""; ?>>Idaho</option>
-                        <option value="IL" <?= $state === "IL" ? "selected" : ""; ?>>Illinois</option>
-                        <option value="IN" <?= $state === "IN" ? "selected" : ""; ?>>Indiana</option>
-                        <option value="IA" <?= $state === "IA" ? "selected" : ""; ?>>Iowa</option>
-                        <option value="KS" <?= $state === "KS" ? "selected" : ""; ?>>Kansas</option>
-                        <option value="KY" <?= $state === "KY" ? "selected" : ""; ?>>Kentucky</option>
-                        <option value="LA" <?= $state === "LA" ? "selected" : ""; ?>>Louisiana</option>
-                        <option value="ME" <?= $state === "ME" ? "selected" : ""; ?>>Maine</option>
-                        <option value="MD" <?= $state === "MD" ? "selected" : ""; ?>>Maryland</option>
-                        <option value="MA" <?= $state === "MA" ? "selected" : ""; ?>>Massachusetts</option>
-                        <option value="MI" <?= $state === "MI" ? "selected" : ""; ?>>Michigan</option>
-                        <option value="MN" <?= $state === "MN" ? "selected" : ""; ?>>Minnesota</option>
-                        <option value="MS" <?= $state === "MS" ? "selected" : ""; ?>>Mississippi</option>
-                        <option value="MO" <?= $state === "MO" ? "selected" : ""; ?>>Missouri</option>
-                        <option value="MT" <?= $state === "MT" ? "selected" : ""; ?>>Montana</option>
-                        <option value="NE" <?= $state === "NE" ? "selected" : ""; ?>>Nebraska</option>
-                        <option value="NV" <?= $state === "NV" ? "selected" : ""; ?>>Nevada</option>
-                        <option value="NH" <?= $state === "NH" ? "selected" : ""; ?>>New Hampshire</option>
-                        <option value="NJ" <?= $state === "NJ" ? "selected" : ""; ?>>New Jersey</option>
-                        <option value="NM" <?= $state === "NM" ? "selected" : ""; ?>>New Mexico</option>
-                        <option value="NY" <?= $state === "NY" ? "selected" : ""; ?>>New York</option>
-                        <option value="NC" <?= $state === "NC" ? "selected" : ""; ?>>North Carolina</option>
-                        <option value="ND" <?= $state === "ND" ? "selected" : ""; ?>>North Dakota</option>
-                        <option value="OH" <?= $state === "OH" ? "selected" : ""; ?>>Ohio</option>
-                        <option value="OK" <?= $state === "OK" ? "selected" : ""; ?>>Oklahoma</option>
-                        <option value="OR" <?= $state === "OR" ? "selected" : ""; ?>>Oregon</option>
-                        <option value="PA" <?= $state === "PA" ? "selected" : ""; ?>>Pennsylvania</option>
-                        <option value="RI" <?= $state === "RI" ? "selected" : ""; ?>>Rhode Island</option>
-                        <option value="SC" <?= $state === "SC" ? "selected" : ""; ?>>South Carolina</option>
-                        <option value="SD" <?= $state === "SD" ? "selected" : ""; ?>>South Dakota</option>
-                        <option value="TN" <?= $state === "TN" ? "selected" : ""; ?>>Tennessee</option>
-                        <option value="TX" <?= $state === "TX" ? "selected" : ""; ?>>Texas</option>
-                        <option value="UT" <?= $state === "UT" ? "selected" : ""; ?>>Utah</option>
-                        <option value="VT" <?= $state === "VT" ? "selected" : ""; ?>>Vermont</option>
-                        <option value="VA" <?= $state === "VA" ? "selected" : ""; ?>>Virginia</option>
-                        <option value="WA" <?= $state === "WA" ? "selected" : ""; ?>>Washington</option>
-                        <option value="WV" <?= $state === "WV" ? "selected" : ""; ?>>West Virginia</option>
-                        <option value="WI" <?= $state === "WI" ? "selected" : ""; ?>>Wisconsin</option>
-                        <option value="WY" <?= $state === "WY" ? "selected" : ""; ?>>Wyoming</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
                     </select>
+
 
                     <select id="city-dropdown" name="city" required>
                         <option value="">--Select City--</option>
@@ -317,119 +318,118 @@ $conn->close();
             </div>
             <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
 
-<!-- Confirmation Modal -->
-<div id="removeImageModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h2>Remove Image</h2>
-        <p>Are you sure you want to remove this image from the listing?</p>
-        <div class="modal-actions">
-            <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
-            <button id="cancelRemoveImage" class="btn">Cancel</button>
-        </div>
-    </div>
-</div>
+            <!-- Confirmation Modal -->
+            <div id="removeImageModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h2>Remove Image</h2>
+                    <p>Are you sure you want to remove this image from the listing?</p>
+                    <div class="modal-actions">
+                        <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
+                        <button id="cancelRemoveImage" class="btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
 
-<input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
-<input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
+            <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
+            <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
 
 
-<div class="file-upload-container">
-    <!-- File upload button with unique class -->
-    <button type="button" class="file-upload-button choose-files-button"
-        onclick="document.getElementById('images').click();">Choose Files</button>
+            <div class="file-upload-container">
+                <!-- File upload button with unique class -->
+                <button type="button" class="file-upload-button choose-files-button"
+                    onclick="document.getElementById('images').click();">Choose Files</button>
 
-    <!-- Hidden file input -->
-    <input type="file" id="images" name="images[]" class="file-input"
-        accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
+                <!-- Hidden file input -->
+                <input type="file" id="images" name="images[]" class="file-input"
+                    accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
 
-    <!-- Optional text feedback -->
-    <span class="file-upload-text" id="file-upload-text"></span>
-</div>
-<div class="btn-container">
-    <!-- Update button with unique class -->
-    <button type="submit" class="update-button">Create</button>
-</div>
+                <!-- Optional text feedback -->
+                <span class="file-upload-text" id="file-upload-text"></span>
+            </div>
+            <div class="btn-container">
+                <!-- Update button with unique class -->
+                <button type="submit" class="update-button">Create</button>
+            </div>
 
-    <script>
-        // List of cities for each state
-        const statesAndCities = {
-    "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
-    "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
-    "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
-    "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
-    "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
-    "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
-    "CT": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
-    "DE": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
-    "FL": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
-    "GA": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
-    "HI": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
-    "ID": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
-    "IL": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
-    "IN": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
-    "IA": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
-    "KS": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
-    "KY": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
-    "LA": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
-    "ME": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
-    "MD": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
-    "MA": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
-    "MI": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
-    "MN": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
-    "MS": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
-    "MO": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
-    "MT": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
-    "NE": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
-    "NV": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
-    "NH": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
-    "NJ": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
-    "NM": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
-    "NY": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
-    "NC": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
-    "ND": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
-    "OH": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
-    "OK": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
-    "OR": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
-    "PA": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
-    "RI": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
-    "SC": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
-    "SD": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
-    "TN": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
-    "TX": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
-    "UT": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
-    "VT": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
-    "VA": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
-    "WA": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
-    "WV": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
-    "WI": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
-    "WY": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
-};
+            <script>
+                // List of cities for each state
+                const statesAndCities = {
+                    "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+                    "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+                    "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+                    "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+                    "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+                    "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+                    "CT": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
+                    "DE": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+                    "FL": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
+                    "GA": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
+                    "HI": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
+                    "ID": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
+                    "IL": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
+                    "IN": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+                    "IA": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+                    "KS": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+                    "KY": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+                    "LA": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+                    "ME": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+                    "MD": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+                    "MA": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
+                    "MI": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
+                    "MN": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
+                    "MS": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+                    "MO": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+                    "MT": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+                    "NE": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+                    "NV": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+                    "NH": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
+                    "NJ": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+                    "NM": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+                    "NY": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
+                    "NC": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+                    "ND": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+                    "OH": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+                    "OK": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+                    "OR": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
+                    "PA": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+                    "RI": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+                    "SC": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+                    "SD": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+                    "TN": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
+                    "TX": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+                    "UT": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+                    "VT": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
+                    "VA": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
+                    "WA": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+                    "WV": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
+                    "WI": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+                    "WY": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
+                };
 
-        // Function to update city dropdown based on selected state
-        function updateCities() {
-            const stateDropdown = document.getElementById("state");
-            const cityDropdown = document.getElementById("city-dropdown");
+                // Function to update city dropdown based on selected state
+                function updateCities() {
+                    const stateDropdown = document.getElementById("state");
+                    const cityDropdown = document.getElementById("city-dropdown");
 
-            // Clear existing city options
-            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+                    // Clear existing city options
+                    cityDropdown.innerHTML = '<option value="">--Select City--</option>';
 
-            const selectedState = stateDropdown.value;
-            if (selectedState && citiesByState[selectedState]) {
-                citiesByState[selectedState].forEach(city => {
-                    const option = document.createElement("option");
-                    option.value = city;
-                    option.textContent = city;
-                    cityDropdown.appendChild(option);
-                });
-            }
-        }
-    </script>
+                    const selectedState = stateDropdown.value;
+                    if (selectedState && citiesByState[selectedState]) {
+                        citiesByState[selectedState].forEach(city => {
+                            const option = document.createElement("option");
+                            option.value = city;
+                            option.textContent = city;
+                            cityDropdown.appendChild(option);
+                        });
+                    }
+                }
+            </script>
 
 </body>
-   
+
 
 
 <?php include 'footer.php'; ?>
 
 </html>
-
