@@ -22,13 +22,19 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
     <script src="messaging.js"></script>
 </head>
 <body>
-    <div class="sidebar">
-        <ul>
-            <li><a href="messages.php?section=inbox">Inbox</a></li>
-            <li><a href="messages.php?section=sent">Sent</a></li>
-            <li><a href="messages.php?section=trash">Trash</a></li>
-        </ul>
-    </div>
+<div class="sidebar">
+    <ul>
+        <li class="<?= $section === 'inbox' ? 'active' : '' ?>">
+            <a href="messages.php?section=inbox&filter=<?= htmlspecialchars($filter) ?>">Inbox</a>
+        </li>
+        <li class="<?= $section === 'sent' ? 'active' : '' ?>">
+            <a href="messages.php?section=sent&filter=<?= htmlspecialchars($filter) ?>">Sent</a>
+        </li>
+        <li class="<?= $section === 'trash' ? 'active' : '' ?>">
+            <a href="messages.php?section=trash&filter=<?= htmlspecialchars($filter) ?>">Trash</a>
+        </li>
+    </ul>
+</div>
 
     <div class="main-content">
         <?php
@@ -44,5 +50,9 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
         }
         ?>
     </div>
+    <footer>
+    <?php include 'footer.php'; ?>
+  </footer>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 require 'database_connection.php';
 
 if (!isset($userId)) {
@@ -11,13 +11,20 @@ $filter = $_GET['filter'] ?? 'all';
 // Base query for sent messages
 $sentQuery = "
     SELECT m.Message_ID, m.Subject, m.Message_Text, m.Created_At, 
-           u.Name AS Recipient_Name, l.Title AS Listing_Title, i.Image_URL
+           u.Name AS Recipient_Name, l.Title AS Listing_Title, i.Image_URL, m.Read_Status
     FROM messages m
     LEFT JOIN user u ON m.Recipient_ID = u.User_ID
     LEFT JOIN listings l ON m.Listing_ID = l.Listing_ID
     LEFT JOIN images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
     WHERE m.Sender_ID = ? AND m.Deleted_Status = 0
 ";
+
+// Apply filter for read/unread messages
+if ($filter === 'unread') {
+    $sentQuery .= " AND m.Read_Status = 'unread'";
+} elseif ($filter === 'read') {
+    $sentQuery .= " AND m.Read_Status = 'read'";
+}
 
 // Add sorting
 $sentQuery .= " ORDER BY m.Created_At DESC";
@@ -31,6 +38,27 @@ $sentStmt->close();
 ?>
 
 <h2>Sent Messages</h2>
+
+<!-- Filter Dropdown -->
+<label for="filter">Filter by:</label>
+<select id="filter" onchange="applyFilter()">
+    <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
+    <option value="unread" <?= $filter === 'unread' ? 'selected' : '' ?>>Unread</option>
+    <option value="read" <?= $filter === 'read' ? 'selected' : '' ?>>Read</option>
+</select>
+
+<script>
+    function applyFilter() {
+        const filter = document.getElementById('filter').value;
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Set the filter parameter
+        urlParams.set('filter', filter);
+
+        // Reload the page with the updated URL
+        window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+    }
+</script>
 
 <!-- Display Sent Messages -->
 <table class="email-table">

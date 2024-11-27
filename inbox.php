@@ -5,11 +5,11 @@ if (!isset($userId)) {
     die("User ID is not set.");
 }
 
-// Determine filter
+// Filter parameter
 $filter = $_GET['filter'] ?? 'all';
 
-// Base query for received messages
-$receivedQuery = "
+// Base query for inbox messages
+$inboxQuery = "
     SELECT m.Message_ID, m.Subject, m.Message_Text, m.Created_At, m.Read_Status, 
            u.Name AS Sender_Name, l.Title AS Listing_Title, i.Image_URL
     FROM messages m
@@ -19,22 +19,22 @@ $receivedQuery = "
     WHERE m.Recipient_ID = ? AND m.Deleted_Status = 0
 ";
 
-// Apply filter conditions
+// Apply the filter
 if ($filter === 'unread') {
-    $receivedQuery .= " AND m.Read_Status = 'unread'";
+    $inboxQuery .= " AND m.Read_Status = 'unread'";
 } elseif ($filter === 'read') {
-    $receivedQuery .= " AND m.Read_Status = 'read'";
+    $inboxQuery .= " AND m.Read_Status = 'read'";
 }
 
 // Add sorting
-$receivedQuery .= " ORDER BY m.Created_At DESC";
+$inboxQuery .= " ORDER BY m.Created_At DESC";
 
 // Execute the query
-$receivedStmt = $conn->prepare($receivedQuery);
-$receivedStmt->bind_param("i", $userId);
-$receivedStmt->execute();
-$receivedMessages = $receivedStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$receivedStmt->close();
+$inboxStmt = $conn->prepare($inboxQuery);
+$inboxStmt->bind_param("i", $userId);
+$inboxStmt->execute();
+$inboxMessages = $inboxStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$inboxStmt->close();
 ?>
 
 <h2>Inbox</h2>
@@ -50,23 +50,31 @@ $receivedStmt->close();
 <script>
     function applyFilter() {
         const filter = document.getElementById('filter').value;
-        window.location.href = 'messages.php?section=inbox&filter=' + filter;
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Set the filter parameter
+        urlParams.set('filter', filter);
+
+        // Reload the page with the updated URL
+        window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
     }
 </script>
 
-<!-- Display Messages -->
+<!-- Display Inbox Messages -->
 <table class="email-table">
     <thead>
         <tr>
+            <th>Sender</th>
             <th>Listing</th>
             <th>Message</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        <?php if (!empty($receivedMessages)): ?>
-            <?php foreach ($receivedMessages as $message): ?>
+        <?php if (!empty($inboxMessages)): ?>
+            <?php foreach ($inboxMessages as $message): ?>
                 <tr>
+                    <td><?= htmlspecialchars($message['Sender_Name']) ?></td>
                     <td>
                         <div class="email-thumbnail">
                             <?php if (!empty($message['Image_URL'])): ?>
@@ -86,11 +94,12 @@ $receivedStmt->close();
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="3">No messages found.</td>
+                <td colspan="4">No messages found.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
+
 <script src="messaging.js"></script>
 
 </body>
