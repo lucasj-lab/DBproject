@@ -3010,9 +3010,11 @@ background: #0056b3;
 
 .listing-item img {
     max-width: 100%;
-    height: auto;
+    height: 250px;
+    object-fit: cover;
     border-radius: 5px;
 }
+
 
 .listing-item h3 {
     margin: 10px 0;
