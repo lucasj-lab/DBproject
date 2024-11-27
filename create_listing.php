@@ -236,11 +236,14 @@ $conn->close();
 
 <body>
     <?php include 'header.php'; ?>
+   
+   
+   
     <div class="edit-listing-container">
         <h1 class="edit-listing-title">Create New Listing</h1>
         <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
-                <select id="category" name="category" required>
+            <select id="category" name="category" required>
                     <option value="">--Select Category--</option>
                     <option value="Auto">Auto</option>
                     <option value="Electronics">Electronics</option>
@@ -251,8 +254,10 @@ $conn->close();
                 <input type="text" id="title" name="title" placeholder="Title" required>
                 <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+
                 <div class="listing-form-group">
                     <select id="state" name="state" onchange="updateCities()" required>
+                        <option value="">--Select State--</option>
                         <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
                         <option value="AK" <?= $state === "AK" ? "selected" : ""; ?>>Alaska</option>
                         <option value="AZ" <?= $state === "AZ" ? "selected" : ""; ?>>Arizona</option>
@@ -303,166 +308,122 @@ $conn->close();
                         <option value="WV" <?= $state === "WV" ? "selected" : ""; ?>>West Virginia</option>
                         <option value="WI" <?= $state === "WI" ? "selected" : ""; ?>>Wisconsin</option>
                         <option value="WY" <?= $state === "WY" ? "selected" : ""; ?>>Wyoming</option>
-
                     </select>
 
-                    <div class="listing-city-group">
-                        <select id="city-dropdown" name="city" required>
-                            <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?>
-                            </option>
-                        </select>
-                    </div>
-
+                    <select id="city-dropdown" name="city" required>
+                        <option value="">--Select City--</option>
+                    </select>
                 </div>
             </div>
             <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
 
-            <!-- Confirmation Modal -->
-            <div id="removeImageModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <h2>Remove Image</h2>
-                    <p>Are you sure you want to remove this image from the listing?</p>
-                    <div class="modal-actions">
-                        <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
-                        <button id="cancelRemoveImage" class="btn">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
-            <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
-
-
-            <div class="file-upload-container">
-                <!-- File upload button with unique class -->
-                <button type="button" class="file-upload-button choose-files-button"
-                    onclick="document.getElementById('images').click();">Choose Files</button>
-
-                <!-- Hidden file input -->
-                <input type="file" id="images" name="images[]" class="file-input"
-                    accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
-
-                <!-- Optional text feedback -->
-                <span class="file-upload-text" id="file-upload-text"></span>
-            </div>
-            <div class="btn-container">
-                <!-- Update button with unique class -->
-                <button type="submit" class="update-button">Create</button>
-            </div>
-
+<!-- Confirmation Modal -->
+<div id="removeImageModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Remove Image</h2>
+        <p>Are you sure you want to remove this image from the listing?</p>
+        <div class="modal-actions">
+            <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
+            <button id="cancelRemoveImage" class="btn">Cancel</button>
+        </div>
     </div>
-    </div>
-    </div>
-    </form>
-    </div>
-    </div>
-    </form>
+</div>
 
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imageInput = document.querySelector("input[name='images[]']");
-            const previewContainer = document.getElementById("imagePreviewContainer");
-            const fileText = document.getElementById("file-upload-text");
+<input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
+<input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
 
-            imageInput.addEventListener("change", function () {
-                previewContainer.innerHTML = ""; // Clear previous previews
-                fileText.textContent = this.files.length > 0 ? `${this.files.length} files selected` : "No files chosen";
 
-                Array.from(this.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("preview-image"); // Ensure styling for .preview-image is in CSS
-                        previewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
+<div class="file-upload-container">
+    <!-- File upload button with unique class -->
+    <button type="button" class="file-upload-button choose-files-button"
+        onclick="document.getElementById('images').click();">Choose Files</button>
+
+    <!-- Hidden file input -->
+    <input type="file" id="images" name="images[]" class="file-input"
+        accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
+
+    <!-- Optional text feedback -->
+    <span class="file-upload-text" id="file-upload-text"></span>
+</div>
+<div class="btn-container">
+    <!-- Update button with unique class -->
+    <button type="submit" class="update-button">Create</button>
+</div>
+
+    <script>
+        // List of cities for each state
+        const statesAndCities = {
+    "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+    "AK": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+    "AZ": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+    "AR": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+    "CA": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+    "CO": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+    "CT": ["Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury"],
+    "DE": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+    "FL": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
+    "GA": ["Atlanta", "Augusta", "Columbus", "Macon", "Savannah"],
+    "HI": ["Honolulu", "Hilo", "Kailua", "Kapolei", "Kaneohe"],
+    "ID": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
+    "IL": ["Chicago", "Aurora", "Naperville", "Joliet", "Rockford"],
+    "IN": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+    "IA": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+    "KS": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+    "KY": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+    "LA": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+    "ME": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+    "MD": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+    "MA": ["Boston", "Worcester", "Springfield", "Lowell", "Cambridge"],
+    "MI": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
+    "MN": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
+    "MS": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+    "MO": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+    "MT": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+    "NE": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+    "NV": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+    "NH": ["Manchester", "Nashua", "Concord", "Derry", "Dover"],
+    "NJ": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+    "NM": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+    "NY": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
+    "NC": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+    "ND": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+    "OH": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+    "OK": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+    "OR": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
+    "PA": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+    "RI": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+    "SC": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+    "SD": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+    "TN": ["Memphis", "Nashville", "Knoxville", "Chattanooga", "Clarksville"],
+    "TX": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+    "UT": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+    "VT": ["Burlington", "South Burlington", "Rutland", "Barre", "Montpelier"],
+    "VA": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
+    "WA": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+    "WV": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
+    "WI": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+    "WY": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"]
+};
+
+        // Function to update city dropdown based on selected state
+        function updateCities() {
+            const stateDropdown = document.getElementById("state");
+            const cityDropdown = document.getElementById("city-dropdown");
+
+            // Clear existing city options
+            cityDropdown.innerHTML = '<option value="">--Select City--</option>';
+
+            const selectedState = stateDropdown.value;
+            if (selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    cityDropdown.appendChild(option);
                 });
-
-                // Ensure the container respects scrollable behavior
-                previewContainer.scrollLeft = 0; // Reset scroll position when new images are loaded
-            });
-        });
-
-
-        function showSuccessModal() {
-            document.getElementById("successModal").style.display = "block";
+            }
         }
-
-
-        showSuccessModal();
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const imageInput = document.querySelector("input[name='images[]']");
-            const previewContainer = document.getElementById("imagePreviewContainer");
-            const thumbnailInput = document.getElementById("thumbnailInput");
-            const removedImagesInput = document.getElementById("removedImagesInput");
-
-            const modal = document.getElementById("removeImageModal");
-            const confirmRemoveButton = document.getElementById("confirmRemoveImage");
-            const cancelRemoveButton = document.getElementById("cancelRemoveImage");
-            let imageToRemove = null; // Track image to be removed
-
-            imageInput.addEventListener("change", function () {
-                previewContainer.innerHTML = ""; // Clear previous previews
-                Array.from(this.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const imgWrapper = document.createElement("div");
-                        imgWrapper.classList.add("image-wrapper");
-
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("preview-image");
-                        img.dataset.fileName = file.name; // Use filename to track images
-
-                        // Left-click: Designate as thumbnail
-                        img.addEventListener("click", function () {
-                            // Clear previous thumbnail designation
-                            const allImages = previewContainer.querySelectorAll(".preview-image");
-                            allImages.forEach(image => image.classList.remove("thumbnail"));
-
-                            // Highlight as thumbnail
-                            this.classList.add("thumbnail");
-                            thumbnailInput.value = file.name; // Set thumbnail input value
-                        });
-
-                        // Right-click: Remove image
-                        img.addEventListener("contextmenu", function (event) {
-                            event.preventDefault();
-                            imageToRemove = imgWrapper; // Track the wrapper for removal
-                            modal.style.display = "flex"; // Show modal
-                        });
-
-                        imgWrapper.appendChild(img);
-                        previewContainer.appendChild(imgWrapper);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-
-            // Confirm image removal
-            confirmRemoveButton.addEventListener("click", function () {
-                if (imageToRemove) {
-                    const fileName = imageToRemove.querySelector("img").dataset.fileName;
-                    // Add the file to removed images list
-                    const removedImages = removedImagesInput.value ? removedImagesInput.value.split(",") : [];
-                    removedImages.push(fileName);
-                    removedImagesInput.value = removedImages.join(",");
-
-                    // Remove from preview
-                    previewContainer.removeChild(imageToRemove);
-                }
-                modal.style.display = "none"; // Hide modal
-            });
-
-            // Cancel image removal
-            cancelRemoveButton.addEventListener("click", function () {
-                modal.style.display = "none"; // Hide modal
-                imageToRemove = null; // Reset tracked image
-            });
-        });
-        </script>
+    </script>
 
 </body>
    
@@ -471,3 +432,4 @@ $conn->close();
 <?php include 'footer.php'; ?>
 
 </html>
+
