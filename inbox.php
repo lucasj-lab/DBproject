@@ -2,7 +2,7 @@
 require 'database_connection.php';
 
 if (!isset($userId)) {
-    die("User ID is not set.");
+   
 }
 
 // Filter parameter

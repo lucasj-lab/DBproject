@@ -3,7 +3,7 @@ require 'database_connection.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view messages.");
+   
 }
 
 $messageId = intval($_GET['message_id'] ?? 0);
