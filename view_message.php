@@ -11,12 +11,11 @@ if (!$messageId) {
 
 $sql = "SELECT 
             messages.Message_Text, 
-            messages.Subject, 
             messages.Created_At, 
             users.Name AS Sender_Name, 
             users.User_ID AS Sender_ID
         FROM messages
-        JOIN users ON messages.Sender_ID = users.User_ID
+        JOIN users ON messages.Sender_ID = user.User_ID
         WHERE messages.Message_ID = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt) {
