@@ -2028,8 +2028,8 @@ table td {
 
     .dashboard-table,
     .table-container {
-        display: grid;
-        justify-items: center;
+        display: flex;
+        flex-direction: column;
     }
 
     .dashboard-table thead {
