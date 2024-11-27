@@ -1081,6 +1081,7 @@ button.search-btn:hover {
 button.search-btn {
     padding: 10px 30px;
     border-radius: 30px;
+    width: 100px;
 }
 
 
