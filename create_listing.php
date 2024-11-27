@@ -315,7 +315,46 @@ $conn->close();
                         <option value="">--Select City--</option>
                     </select>
 
-                    <script>
+                </div>
+            </div>
+            <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
+
+            <!-- Confirmation Modal -->
+            <div id="removeImageModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h2>Remove Image</h2>
+                    <p>Are you sure you want to remove this image from the listing?</p>
+                    <div class="modal-actions">
+                        <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
+                        <button id="cancelRemoveImage" class="btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
+            <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
+
+
+            <div class="file-upload-container">
+                <!-- File upload button with unique class -->
+                <button type="button" class="file-upload-button choose-files-button"
+                    onclick="document.getElementById('images').click();">Choose Files</button>
+
+                <!-- Hidden file input -->
+                <input type="file" id="images" name="images[]" class="file-input"
+                    accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
+
+                <!-- Optional text feedback -->
+                <span class="file-upload-text" id="file-upload-text"></span>
+            </div>
+            <div class="btn-container">
+                <!-- Update button with unique class -->
+                <button type="submit" class="update-button">Create</button>
+            </div>
+
+</body>
+
+<script>
                 // List of cities for each state
                 const statesAndCities = {
                     "AL": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
@@ -389,48 +428,4 @@ $conn->close();
                     }
                 }
             </script>
-
-
-
-
-                </div>
-            </div>
-            <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
-
-            <!-- Confirmation Modal -->
-            <div id="removeImageModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <h2>Remove Image</h2>
-                    <p>Are you sure you want to remove this image from the listing?</p>
-                    <div class="modal-actions">
-                        <button id="confirmRemoveImage" class="btn btn-danger">Remove</button>
-                        <button id="cancelRemoveImage" class="btn">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
-            <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
-
-
-            <div class="file-upload-container">
-                <!-- File upload button with unique class -->
-                <button type="button" class="file-upload-button choose-files-button"
-                    onclick="document.getElementById('images').click();">Choose Files</button>
-
-                <!-- Hidden file input -->
-                <input type="file" id="images" name="images[]" class="file-input"
-                    accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
-
-                <!-- Optional text feedback -->
-                <span class="file-upload-text" id="file-upload-text"></span>
-            </div>
-            <div class="btn-container">
-                <!-- Update button with unique class -->
-                <button type="submit" class="update-button">Create</button>
-            </div>
-
-</body>
-
-
 </html>
