@@ -1,6 +1,8 @@
 <?php
 session_start();
 require 'database_connection.php';
+
+$user_id = $_SESSION['user_id'];
 if ($stmt->execute()) {
     $_SESSION['message'] = 'Message sent successfully!';
     $_SESSION['message_type'] = 'success';
