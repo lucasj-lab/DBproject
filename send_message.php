@@ -10,13 +10,18 @@ $success_message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $listingID = intval($_POST['listing_id'] ?? 0);
     $recipientID = intval($_POST['recipient_id'] ?? 0);
-    $subject = trim($_POST['subject'] ?? 'No Subject');
+    $subject = trim($_POST['subject'] ?? ''); // Allow empty subject
     $messageText = trim($_POST['message_text'] ?? '');
     $senderID = intval($_SESSION['user_id'] ?? 0);
 
+    // Use default subject if none provided
+    if ($subject === '') {
+        $subject = 'No Subject';
+    }
+
     // Validate input fields
     if (!$messageText || !$senderID || !$recipientID) {
-        $error_message = 'All fields are required.';
+        $error_message = 'Message text, sender, and recipient are required.';
     } else {
         // Check if the recipient exists
         $sql = "SELECT User_ID FROM user WHERE User_ID = ?";
@@ -80,7 +85,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form action="send_message.php" method="POST" class="message-form">
-          
+            <div class="form-group">
+                <label for="subject">Subject (Optional):</label>
+                <input 
+                    type="text" 
+                    name="subject" 
+                    id="subject" 
+                    placeholder="Enter a subject (Optional)" 
+                    value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>">
+            </div>
             <div class="form-group">
                 <label for="message_text">Message:</label>
                 <textarea 
