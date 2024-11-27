@@ -1,43 +1,49 @@
 <?php
 require 'database_connection.php';
 
-session_start();
-
-// Ensure the user is logged in
+// Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view this message.");
+    die("You must be logged in to view messages.");
 }
 
-$userId = intval($_SESSION['user_id']);
 $messageId = intval($_GET['message_id'] ?? 0);
 
-// Fetch the message details
-$query = "
-    SELECT m.Subject, m.Message_Text, m.Created_At, m.Read_Status, u.Name AS Sender_Name
-    FROM messages m
-    JOIN user u ON m.Sender_ID = u.User_ID
-    WHERE m.Message_ID = ?
-      AND (m.Recipient_ID = ? OR m.Sender_ID = ?)
-";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("iii", $messageId, $userId, $userId);
-$stmt->execute();
-$message = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-if (!$message) {
-    echo "<p style='color: red;'>Message not found or you do not have permission to view it.</p>";
+// Validate message ID
+if (!$messageId) {
+    echo "<p>Invalid message ID.</p>";
     exit;
 }
 
-// Update the message to "read" status if the user is the recipient
-if ($message['Read_Status'] === 'unread' && $userId === intval($message['Recipient_ID'])) {
+// Fetch the message
+$query = "
+    SELECT m.Subject, m.Message_Text, m.Created_At, u.Name AS Sender_Name, u.Email AS Sender_Email
+    FROM messages m
+    JOIN user u ON m.Sender_ID = u.User_ID
+    WHERE m.Message_ID = ? AND (m.Recipient_ID = ? OR m.Sender_ID = ?)
+";
+
+$stmt = $conn->prepare($query);
+$userId = intval($_SESSION['user_id']);
+$stmt->bind_param("iii", $messageId, $userId, $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "<p>Message not found or you do not have permission to view this message.</p>";
+    exit;
+}
+
+$message = $result->fetch_assoc();
+
+// Mark the message as read if the user is the recipient
+if ($message['Sender_ID'] !== $userId) {
     $updateQuery = "UPDATE messages SET Read_Status = 'read' WHERE Message_ID = ?";
     $updateStmt = $conn->prepare($updateQuery);
     $updateStmt->bind_param("i", $messageId);
     $updateStmt->execute();
     $updateStmt->close();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
