@@ -1036,7 +1036,6 @@ button[type="submit"] {
     position: relative;
     display: inline-block;
     width: 100%;
-    z-index: -1;
 
     /* Adjust width as needed */
 }
