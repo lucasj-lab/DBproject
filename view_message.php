@@ -140,6 +140,9 @@ if (!$message) {
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Your JavaScript here
+});
         const replyModal = document.getElementById('replyModal');
         const closeReplyModal = document.getElementById('closeReplyModal');
         const replyButton = document.getElementById('replyButton');

@@ -352,7 +352,7 @@ $conn->close();
                 <button type="submit" class="update-button">Create</button>
             </div>
 
-</body>
+
 
 <script>
                 // List of cities for each state
@@ -428,4 +428,5 @@ $conn->close();
                     }
                 }
             </script>
+            </body>
 </html>
