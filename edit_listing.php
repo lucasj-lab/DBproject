@@ -250,10 +250,6 @@ $conn->close();
 
 </style>
     <script>
-        function updateCities() {
-            const stateSelect = document.getElementById('state');
-            const cityDropdown = document.getElementById('city-dropdown');
-            const selectedState = stateSelect.value;
 
             const statesAndCities = {
                 const statesAndCities = {

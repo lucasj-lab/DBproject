@@ -33,26 +33,30 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
         <li class="<?= $section === 'trash' ? 'active' : '' ?>">
             <a href="messages.php?section=trash&filter=<?= htmlspecialchars($filter) ?>">Trash</a>
         </li>
+        <li class="<?= $section === 'drafts' ? 'active' : '' ?>">
+            <a href="messages.php?section=drafts">Drafts</a>
+        </li>
     </ul>
 </div>
 
-    <div class="main-content">
-        <?php
-        // Load the selected section
-        if ($section === 'inbox') {
-            include 'inbox.php';
-        } elseif ($section === 'sent') {
-            include 'sent.php'; // Create and integrate this file later
-        } elseif ($section === 'trash') {
-            include 'trash.php'; // Create and integrate this file later
-        } else {
-            echo "<p>Select a section to view your messages.</p>";
-        }
-        ?>
-    </div>
-    <footer>
+<div class="main-content">
+    <?php
+    // Load the selected section
+    if ($section === 'inbox') {
+        include 'inbox.php';
+    } elseif ($section === 'sent') {
+        include 'sent.php'; 
+    } elseif ($section === 'trash') {
+        include 'trash.php';
+    } elseif ($section === 'drafts') {
+        include 'drafts.php'; // Drafts logic will be in this file
+    } else {
+        echo "<p>Select a section to view your messages.</p>";
+    }
+    ?>
+</div>
+<footer>
     <?php include 'footer.php'; ?>
-  </footer>
+</footer>
 </body>
-
 </html>
