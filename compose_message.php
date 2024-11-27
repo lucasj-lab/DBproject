@@ -142,11 +142,6 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
             <input type="hidden" name="recipient_id" value="<?php echo $recipientID; ?>">
 
             <div class="form-group">
-                <label for="subject" class="form-label">Subject:</label>
-                <input type="text" name="subject" id="subject" class="form-input" placeholder="Enter a subject" required>
-            </div>
-
-            <div class="form-group">
                 <label for="message_text" class="form-label">Message:</label>
                 <textarea name="message_text" id="message_text" class="message-textarea" rows="5" placeholder="Type your message here..." required></textarea>
             </div>
