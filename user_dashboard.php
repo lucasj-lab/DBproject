@@ -130,13 +130,13 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <table class="dashboard-table">
                     <thead>
                         <tr>
+                            <th>Thumbnail</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Price</th>
                             <th>Date Posted</th>
                             <th>City</th>
                             <th>State</th>
-                            <th>Thumbnail</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
