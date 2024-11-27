@@ -118,8 +118,6 @@ if (!$message) {
         <div class="message-container">
             <h2>Message Details</h2>
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-           <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject'] ?: 'No Subject'); ?></p>
-
             <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
             <p><strong>Message:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
