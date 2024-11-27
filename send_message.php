@@ -2,6 +2,8 @@
 require 'database_connection.php';
 include 'header.php';
 
+session_start();
+
 $error_message = '';
 $success_message = '';
 
@@ -10,14 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $listingID = intval($_POST['listing_id'] ?? 0);
     $recipientID = intval($_POST['recipient_id'] ?? 0);
     $subject = trim($_POST['subject'] ?? 'No Subject');
-    $messageText = trim($_POST['message_text'] ?? ''); // Fixed the field name
+    $messageText = trim($_POST['message_text'] ?? '');
     $senderID = intval($_SESSION['user_id'] ?? 0);
 
     // Validate input fields
-    if (!$messageText || !$senderID) {
-        $error_message = 'Message text and logged-in user are required.';
+    if (!$messageText || !$senderID || !$recipientID) {
+        $error_message = 'All fields are required.';
     } else {
-        // Check if the recipient exists in the user table
+        // Check if the recipient exists
         $sql = "SELECT User_ID FROM user WHERE User_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $recipientID);
@@ -37,37 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("iiiss", $listingID, $senderID, $recipientID, $subject, $messageText);
 
             if ($stmt->execute()) {
-                // Check if the listing has a thumbnail and link it in the success message
-                $thumbnailQuery = "
-                    SELECT Image_URL 
-                    FROM images 
-                    WHERE Listing_ID = ? AND Is_Thumbnail = 1 
-                    LIMIT 1
-                ";
-                $thumbStmt = $conn->prepare($thumbnailQuery);
-                $thumbStmt->bind_param("i", $listingID);
-                $thumbStmt->execute();
-                $thumbnail = $thumbStmt->get_result()->fetch_assoc();
-                $thumbStmt->close();
-
-                $thumbnailMessage = '';
-                if (!empty($thumbnail['Image_URL'])) {
-                    $thumbnailMessage = "<img src='" . htmlspecialchars($thumbnail['Image_URL']) . "' alt='Thumbnail' class='thumbnail-preview'>";
-                }
-
-                $success_message = "Message sent successfully! $thumbnailMessage";
+                $success_message = 'Message sent successfully!';
                 header("Location: messages.php?status=success");
                 exit;
             } else {
                 $error_message = 'Failed to send message. Please try again.';
             }
-
             $stmt->close();
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,20 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Message</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .thumbnail-preview {
-            width: 100px;
-            height: 100px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-    </style>
 </head>
 <body>
     <div class="send-message-container">
         <h2>Send a Message</h2>
 
-        <!-- Display error message if form validation fails -->
+        <!-- Display error message -->
         <?php if (!empty($error_message)): ?>
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>
@@ -118,14 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     rows="5" 
                     required><?php echo htmlspecialchars($_POST['message_text'] ?? ''); ?></textarea>
             </div>
-            <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($_GET['listing_id'] ?? ''); ?>">
-            <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($_GET['recipient_id'] ?? ''); ?>">
+            <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($_POST['listing_id'] ?? 0); ?>">
+            <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($_POST['recipient_id'] ?? 0); ?>">
             <div class="form-actions">
                 <button type="submit" class="btn">Send Message</button>
             </div>
         </form>
     </div>
-
-    <?php include 'footer.php'; ?>
 </body>
 </html>
