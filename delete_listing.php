@@ -1,28 +1,48 @@
-<?php
-require 'database_connection.php'; // Ensure this file initializes $conn (MySQLi connection)
+<?php 
+require 'database_connection.php'; // Ensure this initializes $conn (MySQLi connection)
 
-$messageID = intval($_POST['message_id']);
-$action = $_POST['action'] ?? 'delete'; // Default action is 'delete'
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize and validate the input
+    $listingId = intval($_POST['listing_id'] ?? 0);
 
-try {
-    if ($action === 'delete') {
-        $query = "UPDATE messages SET Deleted_Status = 1 WHERE Message_ID = ?";
-    } elseif ($action === 'restore') {
-        $query = "UPDATE messages SET Deleted_Status = 0 WHERE Message_ID = ?";
-    } elseif ($action === 'delete_forever') {
-        $query = "DELETE FROM messages WHERE Message_ID = ?";
+    if ($listingId > 0) {
+        // Check if the listing exists
+        $checkQuery = "SELECT * FROM listings WHERE Listing_ID = ?";
+        $checkStmt = $conn->prepare($checkQuery);
+        if (!$checkStmt) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $conn->error]);
+            exit();
+        }
+        $checkStmt->bind_param("i", $listingId);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
+        $listing = $result->fetch_assoc();
+        $checkStmt->close();
+
+        if (!$listing) {
+            echo json_encode(['success' => false, 'error' => 'Listing not found.']);
+            exit();
+        }
+
+        // Delete the listing
+        $deleteQuery = "DELETE FROM listings WHERE Listing_ID = ?";
+        $deleteStmt = $conn->prepare($deleteQuery);
+        if (!$deleteStmt) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $conn->error]);
+            exit();
+        }
+        $deleteStmt->bind_param("i", $listingId);
+
+        if ($deleteStmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Listing deleted successfully.']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Failed to delete the listing.']);
+        }
+        $deleteStmt->close();
     } else {
-        die("Invalid action");
+        echo json_encode(['success' => false, 'error' => 'Invalid listing ID.']);
     }
-
-    $stmt = $conn->prepare($query); // Use MySQLi instead of PDO
-    $stmt->bind_param("i", $messageID);
-    $stmt->execute();
-
-    echo json_encode(['success' => true, 'message' => ucfirst($action) . " action completed successfully!"]);
-    exit;
-} catch (Exception $e) {
-    echo json_encode(['success' => false, 'error' => "Error handling message: " . $e->getMessage()]);
-    exit;
+} else {
+    echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
 }
 ?>
