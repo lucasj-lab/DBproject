@@ -3010,6 +3010,7 @@ background: #0056b3;
 
 .listing-item img {
     max-width: 100%;
+    height: auto;
     border-radius: 5px;
 }
 
