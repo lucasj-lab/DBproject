@@ -55,7 +55,7 @@ if ($message['Recipient_ID'] === $userId) {
     <title>View Message</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<style>
+
     <div class="message-container">
         <h2>Message Details</h2>
         <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
