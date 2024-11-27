@@ -6,7 +6,7 @@ include 'header.php';
 $listingID = intval($_GET['listing_id'] ?? 0);
 $recipientID = intval($_GET['recipient_id'] ?? 0);
 
-// Fetch listing and recipient details for display
+// Initialize variables
 $listing = [];
 $recipient = [];
 $images = [];
@@ -15,33 +15,41 @@ $images = [];
 if ($listingID) {
     $sql = "SELECT Title FROM listings WHERE Listing_ID = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $listingID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $listing = $result->fetch_assoc();
-    $stmt->close();
+    if ($stmt) {
+        $stmt->bind_param("i", $listingID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $listing = $result->fetch_assoc();
+        $stmt->close();
+    }
+}
 
-    // Fetch listing images
+// Fetch listing images
+if ($listingID) {
     $imagesQuery = "SELECT Image_URL FROM images WHERE Listing_ID = ?";
     $imgStmt = $conn->prepare($imagesQuery);
-    $imgStmt->bind_param("i", $listingID);
-    $imgStmt->execute();
-    $imgResult = $imgStmt->get_result();
-    while ($row = $imgResult->fetch_assoc()) {
-        $images[] = $row['Image_URL'];
+    if ($imgStmt) {
+        $imgStmt->bind_param("i", $listingID);
+        $imgStmt->execute();
+        $imgResult = $imgStmt->get_result();
+        while ($row = $imgResult->fetch_assoc()) {
+            $images[] = $row['Image_URL'];
+        }
+        $imgStmt->close();
     }
-    $imgStmt->close();
 }
 
 // Fetch recipient details
 if ($recipientID) {
     $sql = "SELECT Name FROM user WHERE User_ID = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $recipientID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $recipient = $result->fetch_assoc();
-    $stmt->close();
+    if ($stmt) {
+        $stmt->bind_param("i", $recipientID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $recipient = $result->fetch_assoc();
+        $stmt->close();
+    }
 }
 
 // Handle missing data
@@ -49,7 +57,6 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
     die("Invalid listing or recipient details provided.");
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,16 +65,13 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
     <title>Compose Message</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Add the provided gallery and main image styling */
         img.thumbnail-option {
             width: -webkit-fill-available;
         }
-
         .main-image-container {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .main-image {
             width: 100%;
             max-width: 600px;
@@ -77,39 +81,21 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
             display: block;
             margin: 0 auto;
         }
-
-        @media (max-width: 300px) {
-            .main-image {
-                width: 100%;
-                max-width: 100%;
-                height: auto;
-            }
-        }
-
         .image-gallery {
             display: flex;
             overflow-x: auto;
-            overflow-y: hidden;
             gap: 10px;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 5px;
             background-color: #f9f9f9;
-            max-width: 100%;
-            box-sizing: border-box;
             white-space: nowrap;
-            justify-content: flex-start;
-            align-items: center;
         }
-
         .image-gallery img {
             height: 100px;
-            width: auto;
             object-fit: cover;
             border-radius: 5px;
             cursor: pointer;
         }
-
         .image-gallery img:hover {
             transform: scale(1.1);
         }
@@ -117,11 +103,10 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
 </head>
 <body>
     <div class="compose-message-container">
-        <h1 class="page-title">Send a Message</h1>
-
+        <h1>Send a Message</h1>
         <p><strong>Listing:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Unknown Listing'); ?></p>
         <p><strong>To:</strong> <?php echo htmlspecialchars($recipient['Name'] ?? 'Unknown Recipient'); ?></p>
-
+        
         <!-- Image Gallery -->
         <?php if (!empty($images)): ?>
             <div class="main-image-container">
@@ -137,29 +122,20 @@ if (!$listingID || !$recipientID || !$listing || !$recipient) {
         <?php endif; ?>
 
         <!-- Compose Message Form -->
-        <form action="send_message.php" method="POST" class="compose-message-form">
+        <form action="send_message.php" method="POST">
             <input type="hidden" name="listing_id" value="<?php echo $listingID; ?>">
             <input type="hidden" name="recipient_id" value="<?php echo $recipientID; ?>">
-
-            <div class="form-group">
-                <label for="message_text" class="form-label">Message:</label>
-                <textarea name="message_text" id="message_text" class="message-textarea" rows="5" placeholder="Type your message here..." required></textarea>
+            <div>
+                <label for="message_text">Message:</label>
+                <textarea name="message_text" id="message_text" rows="5" required></textarea>
             </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn send-message-btn">Send Message</button>
-            </div>
+            <button type="submit">Send Message</button>
         </form>
     </div>
-
     <script>
-        // JavaScript for updating the main image when a thumbnail is clicked
         function updateMainImage(imageURL) {
-            const mainImage = document.getElementById('mainImage');
-            mainImage.src = imageURL;
+            document.getElementById('mainImage').src = imageURL;
         }
     </script>
-
-    <?php include 'footer.php'; ?>
 </body>
 </html>

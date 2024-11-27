@@ -1,3 +1,36 @@
+<?php
+require 'database_connection.php';
+include 'header.php';
+
+// Fetch the message details
+$messageId = intval($_GET['message_id'] ?? 0);
+
+if (!$messageId) {
+    die("Invalid message ID.");
+}
+
+$sql = "SELECT 
+            messages.Message_Text, 
+            messages.Subject, 
+            messages.Created_At, 
+            users.Name AS Sender_Name, 
+            users.User_ID AS Sender_ID
+        FROM messages
+        JOIN users ON messages.Sender_ID = users.User_ID
+        WHERE messages.Message_ID = ?";
+$stmt = $conn->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("i", $messageId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $message = $result->fetch_assoc();
+    $stmt->close();
+}
+
+if (!$message) {
+    die("Message not found.");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +59,7 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
+            position: relative;
         }
 
         .close-modal {
@@ -114,17 +148,43 @@
         const sendReplyButton = document.getElementById('sendReply');
         const replyText = document.getElementById('replyText');
 
+        // Open reply modal
         replyButton.addEventListener('click', () => {
             replyModal.style.display = 'flex';
         });
 
+        // Close reply modal
         closeReplyModal.addEventListener('click', () => {
-            saveDraft(); // Save draft when closing the modal
             replyModal.style.display = 'none';
         });
 
-        saveDraftButton.addEventListener('click', saveDraft);
+        // Save draft functionality
+        saveDraftButton.addEventListener('click', () => {
+            const draftText = replyText.value.trim();
+            if (draftText) {
+                fetch('save_draft.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message_text: draftText,
+                        original_message_id: <?php echo $messageId; ?>
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Draft saved successfully!');
+                    } else {
+                        alert(data.error || 'Failed to save draft.');
+                    }
+                })
+                .catch(err => console.error('Error saving draft:', err));
+            } else {
+                alert('Draft cannot be empty.');
+            }
+        });
 
+        // Send reply functionality
         sendReplyButton.addEventListener('click', () => {
             const messageText = replyText.value.trim();
             if (messageText) {
@@ -142,39 +202,16 @@
                     if (data.success) {
                         alert('Reply sent successfully!');
                         replyModal.style.display = 'none';
-                        replyText.value = ''; // Clear the text box
+                        replyText.value = ''; // Clear reply textarea
                     } else {
                         alert(data.error || 'Failed to send reply.');
                     }
                 })
-                .catch(err => console.error('Error:', err));
+                .catch(err => console.error('Error sending reply:', err));
             } else {
-                alert('Message text cannot be empty.');
+                alert('Reply cannot be empty.');
             }
         });
-
-        function saveDraft() {
-            const draftText = replyText.value.trim();
-            if (draftText) {
-                fetch('save_draft.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message_text: draftText,
-                        original_message_id: <?php echo $messageId; ?>
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Draft saved successfully!');
-                    } else {
-                        console.error(data.error);
-                    }
-                })
-                .catch(err => console.error('Error saving draft:', err));
-            }
-        }
     </script>
 </body>
 </html>
