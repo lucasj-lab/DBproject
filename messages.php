@@ -206,7 +206,70 @@ $trashStmt->close();
                 </tbody>
             </table>
         </div>
-        <!-- Repeat for Sent and Trash sections -->
+        <h2>Sent Messages</h2>
+<table class="email-table">
+    <thead>
+        <tr>
+            <th>Listing</th>
+            <th>Message</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($sentMessages as $message): ?>
+            <tr>
+                <td>
+                    <div class="email-thumbnail">
+                        <?php if (!empty($message['Image_URL'])): ?>
+                            <img src="<?php echo htmlspecialchars($message['Image_URL']); ?>" alt="Thumbnail">
+                        <?php else: ?>
+                            <span>No Thumbnail</span>
+                        <?php endif; ?>
+                        <span><?php echo htmlspecialchars($message['Listing_Title'] ?? 'No Title'); ?></span>
+                    </div>
+                </td>
+                <td><?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...</td>
+                <td>
+                    <button onclick="viewMessage(<?php echo $message['Message_ID']; ?>)">View</button>
+                    <button onclick="openWarningModal(<?php echo $message['Message_ID']; ?>, 'delete')">Delete</button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<h2>Trash</h2>
+<table class="email-table">
+    <thead>
+        <tr>
+            <th>Listing</th>
+            <th>Message</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($trashMessages as $message): ?>
+            <tr>
+                <td>
+                    <div class="email-thumbnail">
+                        <?php if (!empty($message['Image_URL'])): ?>
+                            <img src="<?php echo htmlspecialchars($message['Image_URL']); ?>" alt="Thumbnail">
+                        <?php else: ?>
+                            <span>No Thumbnail</span>
+                        <?php endif; ?>
+                        <span><?php echo htmlspecialchars($message['Listing_Title'] ?? 'No Title'); ?></span>
+                    </div>
+                </td>
+                <td><?php echo htmlspecialchars(substr($message['Message_Text'], 0, 50)); ?>...</td>
+                <td>
+                    <button onclick="viewMessage(<?php echo $message['Message_ID']; ?>)">View</button>
+                    <button onclick="openWarningModal(<?php echo $message['Message_ID']; ?>, 'restore')">Restore</button>
+                    <button onclick="openWarningModal(<?php echo $message['Message_ID']; ?>, 'delete_forever')">Delete Forever</button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
     </div>
 
     <!-- Warning Modal -->
