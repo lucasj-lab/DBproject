@@ -470,45 +470,44 @@ $conn->close();
                     <option value="WY" <?= $state === "WY" ? "selected" : ""; ?>>Wyoming</option>
                 </select>
 
-                <div class="listing-city-group">
-                    <select id="city-dropdown" name="city" required>
-                        <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?>
-                        </option>
-                    </select>
-                </div>
-
-                <!-- Display current images as a gallery -->
-                <div class="image-gallery">
-                    <?php foreach ($images as $image): ?>
-                        <div class="image-item">
-                            <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
-                            <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>"
-                                <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
-
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="file-upload-container">
-                    <!-- File upload button with unique class -->
-                    <button type="button" class="file-upload-button choose-files-button"
-                        onclick="document.getElementById('images').click();">Choose Files</button>
-
-                    <!-- Hidden file input -->
-                    <input type="file" id="images" name="images[]" class="file-input"
-                        accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
-
-                    <!-- Optional text feedback -->
-                    <span class="file-upload-text" id="file-upload-text"></span>
-                </div>
-                <div class="btn-container">
-                    <!-- Update button with unique class -->
-                    <button type="submit" class="update-button">Update</button>
-                </div>
-
+                <select id="city-dropdown" name="city" required>
+                    <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
+                </select>
+                </select>
             </div>
 
-        </form>
+            <!-- Display current images as a gallery -->
+            <div class="image-gallery">
+                <?php foreach ($images as $image): ?>
+                    <div class="image-item">
+                        <img src="<?= htmlspecialchars($image['Image_URL']); ?>" alt="Listing Image">
+                        <input type="radio" name="selected_thumbnail" value="<?= $image['Image_ID']; ?>"
+                            <?= $image['Is_Thumbnail'] ? "checked" : ""; ?>>
+
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="file-upload-container">
+                <!-- File upload button with unique class -->
+                <button type="button" class="file-upload-button choose-files-button"
+                    onclick="document.getElementById('images').click();">Choose Files</button>
+
+                <!-- Hidden file input -->
+                <input type="file" id="images" name="images[]" class="file-input"
+                    accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .heic, .heif" multiple hidden>
+
+                <!-- Optional text feedback -->
+                <span class="file-upload-text" id="file-upload-text"></span>
+            </div>
+            <div class="btn-container">
+                <!-- Update button with unique class -->
+                <button type="submit" class="update-button">Update</button>
+            </div>
+
+    </div>
+
+    </form>
     </div>
     <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
 
@@ -526,6 +525,10 @@ $conn->close();
 
     <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
     <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
+
+
+
+    <script src="dynamic_cities.js"></script>
 
 </body>
 
