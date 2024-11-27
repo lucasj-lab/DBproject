@@ -1724,7 +1724,6 @@ table td {
 
     .image-gallery {
         display: flex;
-        flex-wrap: wrap;
         justify-content: center;
     }
 

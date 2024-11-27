@@ -179,8 +179,8 @@ $recipientID = $listing['User_ID'] ?? null;
         </div>
     </div>
 
-    <!-- Popup for Success/Error Messages -->
-    <?php if (isset($successMessage) || isset($errorMessage)): ?>
+     <!-- Popup for Success/Error Messages -->
+     <?php if (isset($successMessage) || isset($errorMessage)): ?>
         <div class="popup-overlay">
             <div class="popup-container">
                 <div class="popup-header">
@@ -199,6 +199,20 @@ $recipientID = $listing['User_ID'] ?? null;
             </div>
         </div>
     <?php endif; ?>
+
+    <!-- Buy Now Modal -->
+    <div id="buyNowModal" class="modal">
+        <div class="modal-content popup-container">
+            <span class="close" id="closeModal">×</span>
+            <h2>Buy Now</h2>
+            <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
+            <form method="POST">
+                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
+                <button type="submit" class="btn">Confirm Purchase</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Change the main image when a thumbnail is clicked
