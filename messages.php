@@ -3,9 +3,7 @@ require 'database_connection.php';
 include 'header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view your messages.");
 }
-
 $userId = intval($_SESSION['user_id']);
 if (isset($_SESSION['message'])) {
     echo "<div class='session-message {$_SESSION['message_type']}'>" . htmlspecialchars($_SESSION['message']) . "</div>";
