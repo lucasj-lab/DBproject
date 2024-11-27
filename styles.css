@@ -274,8 +274,8 @@ main {
 form {
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #f5f9ff;
-    border-radius: 3px;
+    background-color: #062247;
+    border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
@@ -976,6 +976,7 @@ input[type="email"],
 input[type="password"] {
     padding: 10px;
     font-size: 1rem;
+    border-radius: 30px;
 }
 
 button {
@@ -1003,7 +1004,7 @@ button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
@@ -1046,7 +1047,7 @@ button[type="submit"] {
     padding: 10px 25px 10px 15px;
     /* Right padding for the button */
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 30px;
     /* Optional rounded corners */
     outline: none;
 }
@@ -1060,22 +1061,17 @@ form.search-form {
 .search-btn {
 
     position: absolute;
-    top: 48.5%;
-    right: 2.5px;
+    top: 45%;
+    right: 10px;
     transform: translateY(-100%);
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    display: inline-block;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    border-radius: 12px;
+    font-size: 30px;
+    border-radius: 10px;
     padding: 0;
-    width: 50px;
     font: weight 700;
-    /* Makes the button a small square, not a circle */
     font-weight: lighter;
 }
 
@@ -1085,7 +1081,8 @@ button.search-btn:hover {
 }
 
 button.search-btn {
-    padding: 13px 10px;
+    padding: 10px 30px;
+    border-radius: 30px;
 }
 
 
