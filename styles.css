@@ -315,7 +315,6 @@ form.category-item {
 }
 
 
-/* Uniform Input Field Styling */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -324,15 +323,15 @@ textarea,
 select,
 button {
     border-radius: 10px;
-    /* Pill shape */
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
     background-color: #fff;
-    /* margin-top: 20px; */
+    margin-top: 10px;
     margin-bottom: 10px;
     color: #757575;
     font-weight: 600;
+    padding: 10px;
 }
 
 input[type="text"]:focus,
