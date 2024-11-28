@@ -3881,3 +3881,74 @@ textarea#message_text {
         width: auto; /* Keep button size based on content */
     }
 }
+/* General Styles */
+.home-search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px; /* Keeps the form centered on large screens */
+  }
+  
+  .home-search-container {
+    display: flex;
+    width: 100%;
+    gap: 10px; /* Space between input and button */
+  }
+  
+  .home-search-input {
+    flex: 1; /* Takes up the remaining width */
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .home-search-input:focus {
+    border-color: #0078ff; /* Highlighted border color */
+  }
+  
+  .search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0078ff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-btn:hover {
+    background-color: #005bb5; /* Darker blue on hover */
+  }
+  
+  .search-btn label {
+    pointer-events: none; /* Ensures clicking the button triggers the submit */
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 600px) {
+    .home-search-container {
+      flex-direction: column;
+      gap: 15px; /* Increased gap for better usability */
+    }
+  
+    .search-btn {
+      padding: 10px;
+      font-size: 14px;
+    }
+  
+    .home-search-input {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  
