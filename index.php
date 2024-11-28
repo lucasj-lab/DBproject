@@ -27,9 +27,9 @@ require 'database_connection.php';
     </section>
     
 <!-- Search Form -->
-<form action="search_listings.php" method="get" class="search-form">
-  <div class="search-container">
-    <input type="text" id="q" name="q" placeholder="Search" class="search-input" required>
+<form action="search_listings.php" method="get" class="home-search-form">
+  <div class="home-search-container">
+    <input type="text" id="q" name="q" placeholder="Search" class="home-search-input" required>
     <button type="submit" class="search-btn">
       <label>Search</label>
     </button>

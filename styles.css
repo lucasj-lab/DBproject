@@ -531,7 +531,7 @@ section.categories h2 {
 /* Responsive Design */
 @media (max-width: 768px) {
     .category-grid {
-        grid-template-columns: none;
+        display: grid;
     }
 
     .category-wrapper {
@@ -808,7 +808,7 @@ footer p {
 /* 1 column on small screens */
 @media (max-width: 600px) {
     .category-grid {
-        grid-template-columns: 2fr;
+       display: grid;
     }
 }
 
