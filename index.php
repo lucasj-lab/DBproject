@@ -30,7 +30,7 @@ require 'database_connection.php';
 <form action="search_listings.php" method="get" class="home-search-form">
   <div class="home-search-container">
     <input type="text" id="q" name="q" placeholder="Search" class="home-search-input" required>
-    <button type="submit" class="search-btn">
+    <button type="submit" class="home-search-btn">
       <label>Search</label>
     </button>
   </div>
