@@ -1,129 +1,104 @@
 <?php
 require 'database_connection.php';
+session_start();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Retrieve the search query
+$searchQuery = isset($_GET['q']) ? trim($_GET['q']) : '';
 
-// Get the search query from the request
-$searchQuery = $_GET['q'] ?? '';
+// Initialize the listings array
+$listings = [];
 
-try {
-    // Prepare the query to fetch listings
-    $sql = "
-        SELECT 
-            l.Listing_ID, 
-            l.Title, 
-            l.Description, 
-            l.Price, 
-            l.Date_Posted, 
-            l.State, 
-            l.City, 
-            c.Category_Name, 
-            u.Name AS User_Name, 
-            i.Image_URL AS Thumbnail_Image
-        FROM 
-            listings l
-        JOIN 
-            user u ON l.User_ID = u.User_ID
-        JOIN 
-            category c ON l.Category_ID = c.Category_ID
-        LEFT JOIN 
-            images i ON l.Listing_ID = i.Listing_ID AND i.Is_Thumbnail = 1
-        WHERE 
-            l.Title LIKE CONCAT('%', ?, '%') OR 
-            l.Description LIKE CONCAT('%', ?, '%') OR 
-            c.Category_Name LIKE CONCAT('%', ?, '%') OR 
-            l.City LIKE CONCAT('%', ?, '%') OR 
-            l.State LIKE CONCAT('%', ?, '%')
-        ORDER BY 
-            l.Date_Posted DESC
-    ";
+if (!empty($searchQuery)) {
+    try {
+        // Prepare the SQL query to fetch search results
+        $sql = "
+            SELECT 
+                listings.Listing_ID,
+                listings.Title,
+                listings.Description,
+                listings.Price,
+                listings.Date_Posted AS Formatted_Date,
+                listings.City,
+                listings.State,
+                category.Category_Name,
+                user.Name AS User_Name,
+                images.Image_URL AS Thumbnail_Image
+            FROM listings
+            LEFT JOIN category ON listings.Category_ID = category.Category_ID
+            LEFT JOIN user ON listings.User_ID = user.User_ID
+            LEFT JOIN images ON listings.Listing_ID = images.Listing_ID AND images.Is_Thumbnail = 1
+            WHERE listings.Title LIKE ? OR listings.Description LIKE ?
+            ORDER BY listings.Date_Posted DESC
+        ";
 
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL preparation failed: " . $conn->error);
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("SQL query preparation failed: " . $conn->error);
+        }
+
+        // Bind the search query with wildcards
+        $searchTerm = '%' . $searchQuery . '%';
+        $stmt->bind_param('ss', $searchTerm, $searchTerm);
+        $stmt->execute();
+
+        // Fetch the results
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $listings[] = $row;
+        }
+
+        $stmt->close();
+    } catch (Exception $e) {
+        error_log("Error fetching search results: " . $e->getMessage());
     }
-
-    // Bind parameters and execute the query
-    $stmt->bind_param("sssss", $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if (!$result) {
-        throw new Exception("Query execution failed: " . $conn->error);
-    }
-
-    // Fetch the listings
-    $listings = [];
-    while ($row = $result->fetch_assoc()) {
-        $datePosted = $row['Date_Posted'] ? new DateTime($row['Date_Posted']) : null;
-        $row['Formatted_Date'] = $datePosted ? $datePosted->format('F j, Y') : "Date not available";
-        $listings[] = $row;
-    }
-
-    $stmt->close();
-    $conn->close();
-
-} catch (Exception $e) {
-    error_log("Error fetching listings: " . $e->getMessage());
-    $listings = [];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Listings</title>
-    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>"> <!-- Cache-busting technique -->
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+    <title>Search Results</title>
 </head>
 <body>
-    <main>
-        <div class="search-results">
-            <?php if (!empty($searchResults)): ?>
-                <div class="results-container">
-                    <?php foreach ($searchResults as $listing): ?>
-                        <div class="result-item">
-                            <!-- Thumbnail -->
-                            <?php 
-                            $imagePath = $listing['Images'][0] ?? 'images/placeholder.jpg';
-                            $imageSrc = file_exists($imagePath) ? $imagePath : 'images/placeholder.jpg';
-                            ?>
-                            <picture>
-                                <source srcset="<?php echo htmlspecialchars($imageSrc); ?>" type="image/webp">
-                                <img src="<?php echo htmlspecialchars($imageSrc); ?>" alt="Thumbnail" class="result-image">
-                            </picture>
+<?php include 'header.php'; ?>
+<main>
+    <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
+    <div class="listings-container">
+        <?php if (!empty($listings)): ?>
+            <?php foreach ($listings as $listing): ?>
+                <div class="listing-item">
+                    <!-- Thumbnail -->
+                    <?php if (!empty($listing['Thumbnail_Image'])): ?>
+                        <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image']); ?>" alt="<?php echo htmlspecialchars($listing['Title']); ?>">
+                    <?php else: ?>
+                        <img src="uploads/default-thumbnail.jpg" alt="No Image Available">
+                    <?php endif; ?>
 
-                            <!-- Title -->
-                            <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+                    <!-- Title -->
+                    <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
 
-                            <!-- Price -->
-                            <p class="listing-price">
-                            <?php 
-                                if (isset($listing['Price'])) {
-                                    $price = (float)$listing['Price'];
-                                    echo $price === 0.0 
-                                        ? 'Free' 
-                                        : '$' . number_format($price, 2);
-                                } else {
-                                    echo 'N/A';
-                                }
-                            ?>
-                            </p>
+                    <!-- Price -->
+                    <p><strong>Price:</strong> 
+                        <?php 
+                        $price = isset($listing['Price']) ? (float)$listing['Price'] : null;
+                        echo ($price === 0.0) ? 'Free' : ('$' . number_format($price, 2));
+                        ?>
+                    </p>
 
-                            <!-- View Listing Button -->
-                            <button type="button" class="pill-button"
-                                onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
-                                View Listing
-                            </button>
-                        </div>
-                    <?php endforeach; ?>
+                    <!-- View Listing Button -->
+                    <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
+                        View Listing
+                    </button>
                 </div>
-            <?php else: ?>
-                <p>No search results found.</p>
-            <?php endif; ?>
-        </div>
-    </main>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
+        <?php endif; ?>
+    </div>
+</main>
 </body>
 <?php include 'footer.php'; ?>
 </html>
