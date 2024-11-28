@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'database_connection.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -33,7 +32,7 @@ $stmt->close();
                 <p><strong>Subject:</strong> <?= htmlspecialchars($draft['Subject'] ?: 'No Subject') ?></p>
                 <p><strong>Message:</strong> <?= nl2br(htmlspecialchars($draft['Message_Text'])) ?></p>
                 <p><strong>Created:</strong> <?= htmlspecialchars($draft['Created_At']) ?></p>
-                <a href="reply.php?draft_id=<?= $draft['Draft_ID'] ?>">Edit</a>
+                <a href="reply_message.php?draft_id=<?= $draft['Draft_ID'] ?>">Edit</a>
             </li>
         <?php endforeach; ?>
     </ul>
