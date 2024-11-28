@@ -43,7 +43,7 @@ if ($result->num_rows > 0) {
 
             <div class="form-group">
                 <label for="message_text" class="form-label">Your Reply:</label>
-                <textarea name="message_text" id="message_text" class="message-textarea" rows="5" placeholder="Type your reply here..." required></textarea>
+                <textarea name="message_text" id="message_text" class="message-textarea" rows="5" placeholder=" Type your reply here..." required></textarea>
             </div>
 
             <div class="form-actions">

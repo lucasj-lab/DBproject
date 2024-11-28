@@ -119,10 +119,18 @@ if (!$message) {
             <h2>Message Details</h2>
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
             <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
+            <?php 
+                        // Format the Date_Posted
+                        $formattedDate = !empty($message['Created_At']) 
+                            ? (new DateTime($message['Created_At']))->format('F j, Y') 
+                            : "Date not available"; 
+                        ?>
+                        <p><strong>Added:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
+
             <p><strong>Message:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
             <a href="messages.php" class="btn">Back to Messages</a>
-            <button id="replyButton" class="btn">Reply</button>
+            <button id="reply_messaqge.php" class="btn">Reply</button>
         </div>
     </div>
 
@@ -131,7 +139,7 @@ if (!$message) {
         <div class="modal-content">
             <span class="close-modal" id="closeReplyModal">&times;</span>
             <h3>Reply to Message</h3>
-            <textarea id="replyText" class="reply-textarea" placeholder="Type your reply here..."></textarea>
+            <textarea id="replyText" class="reply-textarea" placeholder=" Type your reply here..."></textarea>
             <div class="modal-actions">
                 <button id="saveDraft" class="btn draft-btn">Save Draft</button>
                 <button id="sendReply" class="btn send-btn">Send</button>
