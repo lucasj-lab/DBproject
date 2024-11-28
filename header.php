@@ -56,7 +56,7 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
           <?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="login.php">LogIn</a></li>
+          <li><a href="login.php">Login</a></li>
           <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
       </ul>
@@ -84,7 +84,7 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
           <?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="login.php">LogIn</a></li>
+          <li><a href="login.php">Login</a></li>
           <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
       </ul>
