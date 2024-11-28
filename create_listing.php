@@ -243,7 +243,7 @@ $conn->close();
         <h1 class="edit-listing-title">Create New Listing</h1>
         <form id="create-listing-form" action="create_listing.php" method="POST" enctype="multipart/form-data">
             <div class="listing-form-group">
-                <select id="category" name="category" required>
+                <input type="text" id="title" name="title" placeholder="Title" required=""><input type="number" step="0.01" id="price" name="price" placeholder="Price" required=""><textarea id="description" name="description" rows="4" placeholder="Description" required="" style="height: 50px;max-width: 100%;"></textarea><select id="category" name="category" required="">
                     <option value="">--Select Category--</option>
                     <option value="Auto">Auto</option>
                     <option value="Electronics">Electronics</option>
@@ -251,12 +251,12 @@ $conn->close();
                     <option value="Other">Other</option>
                 </select>
 
-                <input type="text" id="title" name="title" placeholder="Title" required>
-                <textarea id="description" name="description" rows="4" placeholder="Description" required></textarea>
-                <input type="number" step="0.01" id="price" name="price" placeholder="Price" required>
+                
+                
+                
 
-                <div class="listing-form-group">
-                    <select id="state" name="state" onchange="updateCities()" required>
+
+                    <select id="state" name="state" onchange="updateCities()" required="">
                         <option value="">--Select State--</option>
                         <option value="AL">Alabama</option>
                         <option value="AK">Alaska</option>
@@ -311,10 +311,10 @@ $conn->close();
                     </select>
 
 
-                    <select id="city-dropdown" name="city" required>
+                    <select id="city-dropdown" name="city" required="">
                         <option value="">--Select City--</option>
                     </select>
-
+ <div class="listing-form-group">
                 </div>
             </div>
             <div id="imagePreviewContainer" class="image-preview-container"></div> <!-- Image Previews -->
@@ -330,7 +330,6 @@ $conn->close();
                     </div>
                 </div>
             </div>
-
             <input type="hidden" id="thumbnailInput" name="thumbnail" value=""> <!-- Thumbnail designation -->
             <input type="hidden" id="removedImagesInput" name="removedImages" value=""> <!-- Removed images -->
 

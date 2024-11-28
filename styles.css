@@ -329,8 +329,10 @@ button {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0.2rem -0.2rem 0.5rem var(--shadow-color);
     background-color: #fff;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /* margin-top: 20px; */
+    margin-bottom: 10px;
+    color: #757575;
+    font-weight: 600;
 }
 
 input[type="text"]:focus,
@@ -559,7 +561,7 @@ section.categories h2 {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background-color: #fff var(--text-color);
 }
 
@@ -976,7 +978,7 @@ input[type="email"],
 input[type="password"] {
     padding: 10px;
     font-size: 1rem;
-    border-radius: 30px;
+    /* border-radius: 30px; */
 }
 
 button {
@@ -1005,7 +1007,6 @@ button {
     padding: 10px;
     font-size: 16px;
     border-radius: 10px;
-    border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
@@ -1658,10 +1659,10 @@ table td {
 .edit-listing-container input[type="number"],
 .edit-listing-container textarea {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.9rem;
+    /* padding: 8px; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 4px; */
+    /* font-size: 0.9rem; */
     font-weight: 600;
     font-family: inherit;
 }
