@@ -146,7 +146,6 @@ $conn->close();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Listing</title>
 <link rel="stylesheet" href="styles.css">
-  <script src="dynamic_cities.js"></script>
 <style>
     /* Main Thumbnail Section */
     .main-image-container {
@@ -272,10 +271,11 @@ $conn->close();
             <div class="listing-form-group">
                 <input type="text" id="title" name="title" placeholder="Title" value="<?= htmlspecialchars($title); ?>"
                     required>
-                <textarea id="description" name="description" rows="4" placeholder="Description"
-                    required><?= htmlspecialchars($description); ?></textarea>
                 <input type="number" step="0.01" id="price" name="price" placeholder="Price"
                     value="<?= htmlspecialchars($price); ?>" required>
+
+                    <textarea id="description" name="description" rows="4" placeholder="Description"
+                    required><?= htmlspecialchars($description); ?></textarea>
 
                 <select id="state" name="state" onchange="updateCities()" required>
                     <option value="AL" <?= $state === "AL" ? "selected" : ""; ?>>Alabama</option>
@@ -333,9 +333,10 @@ $conn->close();
                 <select id="city-dropdown" name="city" required>
                     <option value="<?= htmlspecialchars($city); ?>" selected><?= htmlspecialchars($city); ?></option>
                 </select>
-                </select>
-            </div>
 
+                <div class="listing-form-group">
+            </div>
+       
             <!-- Display current images as a gallery -->
             <div class="image-gallery">
                 <?php foreach ($images as $image): ?>

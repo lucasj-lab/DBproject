@@ -337,7 +337,7 @@ $conn->close();
             <div class="file-upload-container">
                 <!-- File upload button with unique class -->
                 <button type="button" class="file-upload-button choose-files-button"
-                    onclick="document.getElementById('images').click();">Choose Files</button>
+                    onclick="document.getElementById('images').click();">Upload Images</button>
 
                 <!-- Hidden file input -->
                 <input type="file" id="images" name="images[]" class="file-input"
