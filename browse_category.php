@@ -61,8 +61,8 @@ $conn->close();
                         
                         <!-- Thumbnail Image with Fallback -->
                         <?php 
-                        $imagePath = $listing['Images'][0] ?? 'no_image.png';
-                        $imageSrc = file_exists($imagePath) ? $imagePath : 'no_image.png';
+                        $imagePath = $listing['Images'][0] ?? 'images/placeholder.jpg';
+                        $imageSrc = file_exists($imagePath) ? $imagePath : 'images/placeholder.jpg';
                         ?>
                         <picture>
                             <source srcset="<?php echo htmlspecialchars($imageSrc); ?>" type="image/webp">
