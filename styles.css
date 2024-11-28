@@ -445,7 +445,6 @@ form.category-item {
     border-radius: 15px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: inline-grid;
     max-width: 300px;
     background-color: #eef5ff8f;
 
@@ -3832,3 +3831,53 @@ textarea#message_text {
 }
 
 
+/* General Styles for home-pill-button */
+.home-pill-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px; /* Default font size */
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: #007BFF; /* Primary blue */
+    border: none;
+    border-radius: 50px; /* Rounded edges for pill shape */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Hover and Focus States */
+.home-pill-button:hover,
+.home-pill-button:focus {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight elevation effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+    outline: none;
+}
+
+/* Active State */
+.home-pill-button:active {
+    background-color: #003f7f; /* Even darker blue on click */
+    transform: translateY(1px); /* Slight press effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Reduced shadow on click */
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .home-pill-button {
+        font-size: 14px; /* Slightly smaller font on mobile */
+        padding: 8px 16px; /* Adjust padding for smaller screens */
+        width: 100%; /* Make button span full width */
+    }
+}
+
+/* Desktop Optimization */
+@media (min-width: 769px) {
+    .home-pill-button {
+        font-size: 18px; /* Larger font size on desktop */
+        padding: 12px 24px; /* Adjust padding for larger screens */
+        width: auto; /* Keep button size based on content */
+    }
+}

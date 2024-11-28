@@ -43,7 +43,7 @@ require 'database_connection.php';
         <!-- Category Forms -->
         <form action="browse_category.php" method="GET" class="category-item">
           <input type="hidden" name="category" value="Auto">
-          <button type="submit" class="pill-button">
+          <button type="submit" class="home-pill-buttons">
             <img src="images/auto_image.jpg" alt="Auto Category" class="category-image">
             Auto
           </button>
@@ -51,7 +51,7 @@ require 'database_connection.php';
 
         <form action="browse_category.php" method="GET" class="category-item">
           <input type="hidden" name="category" value="Electronics">
-          <button type="submit" class="pill-button">
+          <button type="submit" class="home-pill-buttons">
             <img src="images/electronics_image.jpg" alt="Electronics Category" class="category-image">
             Electronics
           </button>
@@ -59,7 +59,7 @@ require 'database_connection.php';
 
         <form action="browse_category.php" method="GET" class="category-item">
           <input type="hidden" name="category" value="Furniture">
-          <button type="submit" class="pill-button">
+          <button type="submit" class="home-pill-buttons">
             <img src="images/furniture_image.jpg" alt="Furniture Category" class="category-image">
             Furniture
           </button>
@@ -67,7 +67,7 @@ require 'database_connection.php';
 
         <form action="browse_category.php" method="GET" class="category-item">
           <input type="hidden" name="category" value="Other">
-          <button type="submit" class="pill-button">
+          <button type="submit" class="home-pill-buttons">
             <img src="images/other_image.jpg" alt="Other Category" class="category-image">
             Other
           </button>
