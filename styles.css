@@ -113,11 +113,12 @@ nav ul li a {
     font-weight: bold;
     padding: 0.5rem;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: 12px;
 }
 
 nav ul li a:hover {
     background-color: var(--secondary-color);
-    color: #000;
+    color: #fff;
     border-radius: 5px;
     transform: scale(1.05);
 }
@@ -598,7 +599,7 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: var(--secondary-color);
-    color: #000;
+    color: #ffffff;
     border-radius: 12px;
     transform: scale(1.05);
 }
@@ -1080,8 +1081,8 @@ button.search-btn:hover {
 
 button.search-btn {
     padding: 10px 30px;
-    border-radius: 30px;
-    width: 100px;
+    border-radius: 6px;
+    width: auto;
 }
 
 
