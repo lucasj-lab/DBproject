@@ -69,56 +69,61 @@ try {
     $listings = [];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <title>Search Listings</title>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>"> <!-- Cache-busting technique -->
 </head>
 <body>
-<?php include 'header.php'; ?>
-<main>
-    <h1>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h1>
-    <div class="listings-container">
-        <?php if (!empty($listings)): ?>
-            <?php foreach ($listings as $listing): ?>
-                <div class="listing-item">
-                    <?php if ($listing['Thumbnail_Image']): ?>
-                        <img src="<?php echo htmlspecialchars($listing['Thumbnail_Image']); ?>" alt="<?php echo htmlspecialchars($listing['Title']); ?>">
-                    <?php else: ?>
-                        <img src="uploads/default-thumbnail.jpg" alt="No Image Available">
-                    <?php endif; ?>
-                    <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
-                    <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-                    <p><strong>Price:</strong> 
-    <?php 
-        if (isset($listing['Price'])) {
-            $price = (float)$listing['Price'];
-            echo $price === 0.0 
-                ? 'Free' 
-                : '$' . number_format($price, 2);
-        } else {
-            echo 'N/A';
-        }
-    ?>
-</p>
+    <main>
+        <div class="search-results">
+            <?php if (!empty($searchResults)): ?>
+                <div class="results-container">
+                    <?php foreach ($searchResults as $listing): ?>
+                        <div class="result-item">
+                            <!-- Thumbnail -->
+                            <?php 
+                            $imagePath = $listing['Images'][0] ?? 'images/placeholder.jpg';
+                            $imageSrc = file_exists($imagePath) ? $imagePath : 'images/placeholder.jpg';
+                            ?>
+                            <picture>
+                                <source srcset="<?php echo htmlspecialchars($imageSrc); ?>" type="image/webp">
+                                <img src="<?php echo htmlspecialchars($imageSrc); ?>" alt="Thumbnail" class="result-image">
+                            </picture>
 
-                    <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-                    <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['City']); ?>, <?php echo htmlspecialchars($listing['State']); ?></p>
-                    <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-                    <p><strong>Added:</strong> <?php echo htmlspecialchars($listing['Formatted_Date']); ?></p>
-                    <button class="pill-button" onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
-                        View Listing
-                    </button>
+                            <!-- Title -->
+                            <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
+
+                            <!-- Price -->
+                            <p class="listing-price">
+                            <?php 
+                                if (isset($listing['Price'])) {
+                                    $price = (float)$listing['Price'];
+                                    echo $price === 0.0 
+                                        ? 'Free' 
+                                        : '$' . number_format($price, 2);
+                                } else {
+                                    echo 'N/A';
+                                }
+                            ?>
+                            </p>
+
+                            <!-- View Listing Button -->
+                            <button type="button" class="pill-button"
+                                onclick="window.location.href='listing_details.php?listing_id=<?php echo htmlspecialchars($listing['Listing_ID']); ?>'">
+                                View Listing
+                            </button>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No results found for "<?php echo htmlspecialchars($searchQuery); ?>".</p>
-        <?php endif; ?>
-    </div>
-</main>
+            <?php else: ?>
+                <p>No search results found.</p>
+            <?php endif; ?>
+        </div>
+    </main>
 </body>
 <?php include 'footer.php'; ?>
 </html>

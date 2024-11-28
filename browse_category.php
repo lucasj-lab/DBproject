@@ -58,7 +58,7 @@ $conn->close();
                 <?php foreach ($listings as $listing): ?>
                     <form class="listing-item" action="listing_details.php" method="GET">
                         <input type="hidden" name="listing_id" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
-                        
+
                         <!-- Thumbnail Image with Fallback -->
                         <?php 
                         $imagePath = $listing['Images'][0] ?? 'images/placeholder.jpg';
@@ -72,11 +72,8 @@ $conn->close();
                         <!-- Title -->
                         <h3><?php echo htmlspecialchars($listing['Title']); ?></h3>
 
-                        <!-- Description -->
-                        <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['Description']); ?></p>
-
                         <!-- Price -->
-                        <p><strong>Price:</strong> 
+                        <p class="listing-price">
                          <?php 
                             if (isset($listing['Price'])) {
                                 $price = (float)$listing['Price'];
@@ -89,24 +86,6 @@ $conn->close();
                         ?>
                         </p>
 
-                        <!-- Category -->
-                        <p><strong>Category:</strong> <?php echo htmlspecialchars($listing['Category_Name']); ?></p>
-
-                        <!-- Location -->
-                        <p><strong>Location:</strong> <?php echo htmlspecialchars(($listing['City'] ?? '') . ', ' . ($listing['State'] ?? '')); ?></p>
-
-                        <!-- Posted By -->
-                        <p><strong>Posted:</strong> <?php echo htmlspecialchars($listing['User_Name']); ?></p>
-
-                        <!-- Date Posted -->
-                        <?php 
-                        // Format the Date_Posted
-                        $formattedDate = !empty($listing['Date_Posted']) 
-                            ? (new DateTime($listing['Date_Posted']))->format('F j, Y') 
-                            : "Date not available"; 
-                        ?>
-                        <p><strong>Added:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
-
                         <!-- View Listing Button -->
                         <button type="submit" class="pill-button">View Listing</button>
                     </form>
@@ -117,6 +96,7 @@ $conn->close();
         <?php endif; ?>
     </div>
 </main>
+
 
 <?php include 'footer.php'; ?>
 </body>
