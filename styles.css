@@ -1027,8 +1027,7 @@ button[type="submit"] {
     padding: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    border-radius: 30px;
-    width: 100%;
+    border-radius: 3px;
 }
 
 
@@ -4058,6 +4057,7 @@ textarea#message_text {
   
     .home-search-form {
       padding: 10px; /* Reduce outer padding */
+      width:80%;
     }
   }
   
