@@ -17,7 +17,7 @@ $pageTitles = [
     'user_dashboard' => 'Dashboard',
     'admin_dashboard' => 'Admin Dashboard',
     'create_listing' => 'Create Listing',
-    'login' => 'Log In',
+    'login' => 'Login',
     'signup' => 'Signup'
 ];
 
@@ -56,7 +56,7 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
           <?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="login.php">Log In</a></li>
+          <li><a href="login.php">LogIn</a></li>
           <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
       </ul>
@@ -84,7 +84,7 @@ $logoTitle = $pageTitles[$currentPage] ?? 'Rookielist';
           <?php endif; ?>
           <li><a href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li><a href="login.php">Log In</a></li>
+          <li><a href="login.php">LogIn</a></li>
           <li><a href="signup.php">Signup</a></li>
         <?php endif; ?>
       </ul>

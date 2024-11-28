@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     <div class="login-container">
-        <h2>User Log In</h2>
+        <h2>User Login</h2>
 
         <!-- Display error message if login fails -->
         <?php if (!empty($error_message)): ?>
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="email" name="email" placeholder="Email address"
                     value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Log In</button>
+                <button type="submit">Login</button>
                 <p>Not signed up? <a href="signup.php">Sign up here</a></p>
             </div>
         </form>
