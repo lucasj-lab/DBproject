@@ -56,8 +56,9 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
     }
     ?>
 </div>
+<script src="messaging.js"></script>
+</body>
 <footer>
     <?php include 'footer.php'; ?>
 </footer>
-</body>
 </html>
