@@ -17,7 +17,7 @@ $stmt->execute();
 $stmt->close();
 
 // Fetch the main message
-$messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, 
+$messageQuery = "SELECT messages.Message_Text, messages.Created_At, 
                         sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 
                  FROM messages
                  JOIN user AS sender ON messages.Sender_ID = sender.User_ID
@@ -58,7 +58,6 @@ $stmt->close();
     <?php include 'header.php'; ?>
 
     <div class="container">
-        <!-- Sidebar for navigation -->
         <div class="sidebar">
             <ul>
                 <li><a href="messages.php?section=inbox">Inbox</a></li>
@@ -71,43 +70,35 @@ $stmt->close();
         <div class="main-content">
             <div class="message-container">
                 <h2>Message Details</h2>
-
-                <!-- Display Success or Error Messages -->
-                <?php if (isset($_SESSION['message'])): ?>
-                    <p class="success-message"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
-                    <?php unset($_SESSION['message']); ?>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['error'])): ?>
-                    <p class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
-                    <?php unset($_SESSION['error']); ?>
-                <?php endif; ?>
-
                 <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
                 <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
-                <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
                 <p><strong>Message:</strong></p>
-                <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+                <p class="message-text"><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
 
-                <!-- Action Buttons -->
-                <button id="replyButton" class="btn" 
-                        data-message-id="<?php echo $messageId; ?>" 
-                        data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
-                <button onclick="window.location.href='messages.php?section=inbox';" class="btn">Back to Messages</button>
+                <div class="message-actions">
+                    <button id="replyButton" class="btn" 
+                            data-message-id="<?php echo $messageId; ?>" 
+                            data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
+                    <button onclick="window.location.href='messages.php?section=inbox';" class="btn">Back to Messages</button>
+                </div>
             </div>
 
-            <!-- Conversation Section -->
             <div class="replies-container">
                 <h3>Conversation</h3>
                 <?php if (!empty($replies)): ?>
                     <?php foreach ($replies as $reply): ?>
-                        <div class="reply">
-                            <p><strong><?php echo htmlspecialchars($reply['Sender_Name']); ?>:</strong> 
-                            <?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
-                            <p><em>Sent at: <?php echo htmlspecialchars($reply['Created_At']); ?></em></p>
+                        <div class="reply-card">
+                            <div class="reply-header">
+                                <strong><?php echo htmlspecialchars($reply['Sender_Name']); ?></strong>
+                                <span class="reply-date"><?php echo htmlspecialchars($reply['Created_At']); ?></span>
+                            </div>
+                            <div class="reply-body">
+                                <p><?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>No replies yet.</p>
+                    <p class="no-replies">No replies yet. Be the first to reply!</p>
                 <?php endif; ?>
             </div>
         </div>
