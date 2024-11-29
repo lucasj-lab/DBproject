@@ -4,22 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const replyButton = document.getElementById('replyButton');
     const sendReplyButton = document.getElementById('sendReply');
     const replyText = document.getElementById('replyText');
-    const successIndicator = document.getElementById('successIndicator');
-    const repliesContainer = document.querySelector('.replies-container');
 
-    // Open modal
+    // Open the modal
     replyButton.addEventListener('click', () => {
         replyModal.style.display = 'flex';
     });
 
-    // Close modal
+    // Close the modal
     closeReplyModal.addEventListener('click', () => {
         replyModal.style.display = 'none';
     });
 
-    // Send reply
+    // Send the reply
     sendReplyButton.addEventListener('click', () => {
         const messageText = replyText.value.trim();
+        const messageId = replyButton.dataset.messageId;
+        const senderId = replyButton.dataset.senderId;
+
         if (!messageText) {
             alert('Reply cannot be empty.');
             return;
@@ -29,33 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                original_message_id: replyButton.dataset.messageId,
-                recipient_id: replyButton.dataset.senderId,
+                original_message_id: messageId,
+                recipient_id: senderId,
                 message_text: messageText
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show success indicator
-                successIndicator.style.display = 'block';
-                replyModal.style.display = 'none';
-
-                // Add the new reply to the conversation
-                const newReply = `
-                    <div class="reply">
-                        <p><strong>You:</strong> ${messageText.replace(/\n/g, '<br>')}</p>
-                        <p><em>Just now</em></p>
-                    </div>
-                `;
-                repliesContainer.innerHTML += newReply;
-
-                // Clear the reply text field
-                replyText.value = '';
+                location.reload();
             } else {
                 alert(data.error || 'Failed to send reply.');
             }
         })
-        .catch(err => console.error("Fetch error:", err));
+        .catch(err => console.error('Fetch error:', err));
     });
 });

@@ -2,14 +2,14 @@
 require 'database_connection.php';
 session_start();
 
-// Fetch the message ID
+// Fetch the message ID from the URL
 $messageId = intval($_GET['message_id'] ?? 0);
 
 if (!$messageId) {
     die("Invalid message ID.");
 }
 
-// Fetch message details
+// Fetch the main message
 $messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, 
                         sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 
                  FROM messages
@@ -26,7 +26,7 @@ if (!$message) {
     die("Message not found.");
 }
 
-// Fetch replies
+// Fetch replies for the message
 $repliesQuery = "SELECT replies.Reply_Text, replies.Created_At, sender.Name AS Sender_Name 
                  FROM replies
                  JOIN user AS sender ON replies.Sender_ID = sender.User_ID
@@ -57,7 +57,11 @@ $stmt->close();
             <!-- Display Success or Error Messages -->
             <?php if (isset($_SESSION['message'])): ?>
                 <p class="success-message"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
-                <?php unset($_SESSION['message']); // Clear after displaying ?>
+                <?php unset($_SESSION['message']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['error'])): ?>
+                <p class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+                <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
@@ -67,7 +71,9 @@ $stmt->close();
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
 
             <!-- Reply Button -->
-            <button id="replyButton" class="btn">Reply</button>
+            <button id="replyButton" class="btn" 
+                    data-message-id="<?php echo $messageId; ?>" 
+                    data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
         </div>
 
         <!-- Conversation Section -->

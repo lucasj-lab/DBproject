@@ -6,13 +6,18 @@ header('Content-Type: application/json');
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'error' => 'User not authenticated.']);
+    $_SESSION['error'] = 'You must be logged in to reply.';
     exit;
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Debugging the input
+file_put_contents('debug_log.txt', json_encode($data) . PHP_EOL, FILE_APPEND);
+
 if (!$data || !isset($data['original_message_id'], $data['recipient_id'], $data['message_text'])) {
     echo json_encode(['success' => false, 'error' => 'Invalid input structure.']);
+    $_SESSION['error'] = 'Invalid input structure.';
     exit;
 }
 
@@ -22,6 +27,7 @@ $replyText = $data['message_text'];
 
 if (!$originalMessageId || !$recipientId || !$replyText) {
     echo json_encode(['success' => false, 'error' => 'Missing required fields.']);
+    $_SESSION['error'] = 'Missing required fields.';
     exit;
 }
 
@@ -33,13 +39,14 @@ try {
 
     if (!$stmt->execute()) {
         echo json_encode(['success' => false, 'error' => 'Query execution failed: ' . $stmt->error]);
+        $_SESSION['error'] = 'Could not save reply. Please try again.';
         exit;
     }
 
-    // Set success message in session
     $_SESSION['message'] = 'Reply sent successfully!';
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+    $_SESSION['error'] = 'An error occurred while saving the reply.';
 }
 ?>

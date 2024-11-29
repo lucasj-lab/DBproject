@@ -1,4 +1,4 @@
-<?php 
+<?php
 require 'database_connection.php';
 
 if (!isset($userId)) {
@@ -87,9 +87,10 @@ $sentStmt->close();
                     </td>
                     <td><?= htmlspecialchars(substr($message['Message_Text'], 0, 50)) ?>...</td>
                     <td>
-                        <button onclick="viewMessage(<?= $message['Message_ID'] ?>)">View</button>
+                        <button onclick="viewMessage(<?= $message['Message_ID'] ?>)">View Conversation</button>
                         <button onclick="openWarningModal(<?= $message['Message_ID'] ?>, 'delete')">Delete</button>
                     </td>
+
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
@@ -100,4 +101,4 @@ $sentStmt->close();
     </tbody>
 </table>
 <script src="messaging.js"></script>
-        </body>
+</body>
