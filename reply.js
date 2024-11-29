@@ -7,11 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open modal
     replyButton.addEventListener('click', () => {
+        console.log("Reply button clicked");
         replyModal.style.display = 'flex';
     });
 
     // Close modal
     closeReplyModal.addEventListener('click', () => {
+        console.log("Close modal clicked");
         replyModal.style.display = 'none';
     });
 
@@ -20,28 +22,36 @@ document.addEventListener("DOMContentLoaded", function () {
         const messageText = replyText.value.trim();
         if (!messageText) {
             alert('Reply cannot be empty.');
+            console.log("Empty reply text");
             return;
         }
+
+        console.log("Sending reply:", messageText);
 
         fetch('send_reply.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                original_message_id: messageId, // Use global variable
-                recipient_id: senderId,        // Use global variable
+                original_message_id: messageId, // From global variable or dataset
+                recipient_id: senderId,        // From global variable or dataset
                 message_text: messageText
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log("Fetch response received:", response);
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
+                console.log("Reply sent successfully:", data);
                 alert(data.message);
                 replyModal.style.display = 'none';
                 window.location.reload();
             } else {
+                console.error("Error from server:", data.error);
                 alert(data.error || 'Failed to send reply.');
             }
         })
-        .catch(err => console.error('Error sending reply:', err));
+        .catch(err => console.error("Fetch error:", err));
     });
 });
