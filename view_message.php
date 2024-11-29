@@ -117,7 +117,10 @@ if (!$message) {
     </div>
 
     <!-- Reply Button -->
-    <button id="replyButton" class="btn">Reply</button>
+    <button id="replyButton" class="btn" 
+        data-message-id="<?php echo htmlspecialchars($messageId); ?>" 
+        data-sender-id="<?php echo htmlspecialchars($message['Sender_ID']); ?>">Reply</button>
+
 
     <!-- Reply Modal -->
     <div id="replyModal" class="modal">
