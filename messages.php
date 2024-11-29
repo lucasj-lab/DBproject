@@ -3,21 +3,14 @@ require 'database_connection.php';
 include 'header.php';
 
 if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view your messages.");
+    die("You must be logged in to view messages.");
 }
 
 $userId = intval($_SESSION['user_id']);
-
-// Display session messages (e.g., success or error notifications)
-if (isset($_SESSION['message'])) {
-    echo "<div class='session-message {$_SESSION['message_type']}'>" . htmlspecialchars($_SESSION['message']) . "</div>";
-    unset($_SESSION['message'], $_SESSION['message_type']); // Clear after displaying
-}
-
-// Determine which section and filter to load
 $section = $_GET['section'] ?? 'inbox';
-$filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
+$sidebarType = $_GET['sidebar'] ?? 'collapsible'; // Sidebar type parameter
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,55 +18,49 @@ $filter = $_GET['filter'] ?? 'all'; // Optional filter parameter
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="messaging.js"></script>
 </head>
 <body>
-    <div class="messages-container">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <ul>
-                <li class="<?= $section === 'inbox' ? 'active' : '' ?>">
-                <a href="messages.php?section=inbox&filter=<?= htmlspecialchars($filter) ?>">Inbox</a>
+    <div class="main-container">
+        <!-- Sidebar Type Selection -->
+        <div class="sidebar-selector">
+            <label for="sidebarType">Choose Sidebar:</label>
+            <select id="sidebarType" onchange="changeSidebar()">
+                <option value="collapsible" <?= $sidebarType === 'collapsible' ? 'selected' : '' ?>>Collapsible</option>
+                <option value="fixed" <?= $sidebarType === 'fixed' ? 'selected' : '' ?>>Fixed</option>
+                <option value="offcanvas" <?= $sidebarType === 'offcanvas' ? 'selected' : '' ?>>Off-Canvas</option>
+            </select>
+        </div>
 
-                </li>
-                <li class="<?= $section === 'sent' ? 'active' : '' ?>">
-                    <a href="messages.php?section=sent&filter=<?= htmlspecialchars($filter) ?>">Sent</a>
-                </li>
-                <li class="<?= $section === 'trash' ? 'active' : '' ?>">
-                    <a href="messages.php?section=trash&filter=<?= htmlspecialchars($filter) ?>">Trash</a>
-                </li>
-                <li class="<?= $section === 'drafts' ? 'active' : '' ?>">
-                    <a href="messages.php?section=drafts">Drafts</a>
-                </li>
+        <!-- Sidebar -->
+        <div class="sidebar <?= $sidebarType ?>">
+            <ul>
+                <li><a href="messages.php?section=inbox" class="<?= $section === 'inbox' ? 'active' : '' ?>">Inbox</a></li>
+                <li><a href="messages.php?section=sent" class="<?= $section === 'sent' ? 'active' : '' ?>">Sent</a></li>
+                <li><a href="messages.php?section=drafts" class="<?= $section === 'drafts' ? 'active' : '' ?>">Drafts</a></li>
+                <li><a href="messages.php?section=trash" class="<?= $section === 'trash' ? 'active' : '' ?>">Trash</a></li>
             </ul>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="main-content">
+        <!-- Main Content -->
+        <div class="content">
             <?php
-            // Include the selected section
-            switch ($section) {
-                case 'inbox':
-                    include 'inbox.php';
-                    break;
-                case 'sent':
-                    include 'sent.php';
-                    break;
-                case 'trash':
-                    include 'trash.php';
-                    break;
-                case 'drafts':
-                    include 'drafts.php';
-                    break;
-                default:
-                    echo "<p>Select a section to view your messages.</p>";
+            // Load the selected section
+            if ($section === 'inbox') {
+                include 'inbox.php';
+            } elseif ($section === 'sent') {
+                include 'sent.php';
+            } elseif ($section === 'drafts') {
+                include 'drafts.php';
+            } elseif ($section === 'trash') {
+                include 'trash.php';
+            } else {
+                echo "<p>Select a section to view your messages.</p>";
             }
             ?>
         </div>
     </div>
 
-    <footer>
-        <?php include 'footer.php'; ?>
-    </footer>
+    <?php include 'footer.php'; ?>
+    <script src="messaging.js" defer></script>
 </body>
 </html>

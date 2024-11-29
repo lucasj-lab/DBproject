@@ -167,3 +167,12 @@ document.querySelectorAll('.save-draft-btn').forEach(button => {
             .catch(error => console.error('Error:', error));
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.querySelector(".sidebar");
+    const toggleBtn = document.getElementById("toggleSidebar");
+
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+    });
+});
