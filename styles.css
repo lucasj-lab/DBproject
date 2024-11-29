@@ -4181,19 +4181,27 @@ body {
 .container {
     display: flex;
 }
-
-.sidebar {
-    width: 200px;
-    background-color: #f4f4f4;
-    padding: 15px;
-    height: 100vh; /* Full height */
-    position: fixed; /* Fixed position */
+.sidebar ul {
+    list-style-type: none; /* Removes bullets */
+    padding: 0;           /* Removes default padding */
+    margin: 0;            /* Removes default margin */
 }
 
-.sidebar ul {
-    list-style-type: none; 
-    padding: 0;           
-    margin: 0;            
+.sidebar ul li {
+    margin: 10px 0;       /* Adds spacing between items */
+}
+
+.sidebar ul li a {
+    text-decoration: none; /* Removes underline from links */
+    color: #333;           /* Sets link color */
+    display: block;        /* Makes the entire line clickable */
+    padding: 10px;         /* Adds padding for better click area */
+    background-color: #f4f4f4; /* Light gray background */
+    border-radius: 4px;    /* Rounds corners */
+}
+
+.sidebar ul li a:hover {
+    background-color: #ddd; /* Changes background on hover */
 }
 
 
