@@ -6,7 +6,6 @@ try {
     $userId = $_SESSION['user_id']; // Replace with actual session variable for logged-in user
     $query = "SELECT 
                   messages.Message_ID, 
-                  messages.Subject, 
                   messages.Message_Text, 
                   messages.Created_At, 
                   user.Name AS Sender_Name
