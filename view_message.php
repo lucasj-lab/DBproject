@@ -2,14 +2,14 @@
 require 'database_connection.php';
 session_start();
 
-// Fetch the message ID from the URL
+// Fetch the message ID
 $messageId = intval($_GET['message_id'] ?? 0);
 
 if (!$messageId) {
     die("Invalid message ID.");
 }
 
-// Fetch the message details
+// Fetch message details
 $messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, 
                         sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 
                  FROM messages
@@ -26,7 +26,7 @@ if (!$message) {
     die("Message not found.");
 }
 
-// Fetch replies for the message
+// Fetch replies
 $repliesQuery = "SELECT replies.Reply_Text, replies.Created_At, sender.Name AS Sender_Name 
                  FROM replies
                  JOIN user AS sender ON replies.Sender_ID = sender.User_ID
@@ -53,16 +53,18 @@ $stmt->close();
     <div class="container">
         <div class="message-container">
             <h2>Message Details</h2>
+
+            <!-- Display Success or Error Messages -->
+            <?php if (isset($_SESSION['message'])): ?>
+                <p class="success-message"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
+                <?php unset($_SESSION['message']); // Clear after displaying ?>
+            <?php endif; ?>
+
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
             <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
             <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
             <p><strong>Message:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
-
-            <!-- Success Message Placeholder -->
-            <div id="successIndicator" class="success-message" style="display: none;">
-                Reply sent successfully!
-            </div>
 
             <!-- Reply Button -->
             <button id="replyButton" class="btn">Reply</button>
@@ -98,7 +100,6 @@ $stmt->close();
     </div>
 
     <?php include 'footer.php'; ?>
-
     <script src="reply.js" defer></script>
 </body>
 </html>
