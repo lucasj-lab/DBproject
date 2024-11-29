@@ -1,6 +1,6 @@
 <?php
 require 'database_connection.php';
-session_start();
+
 
 // Fetch the message ID from the URL
 $messageId = intval($_GET['message_id'] ?? 0);
