@@ -141,96 +141,93 @@ try {
     </style>
 </head>
 <body>
-    <div class="message-container-holder">
-        <div class="message-container">
-            <h2>Message Details</h2>
-            <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-            <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
-            <p><strong>Message:</strong></p>
-            <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
-            <a href="messages.php" class="btn">Back to Messages</a>
-            <button id="replyButton" class="btn">Reply</button>
-        </div>
+    <div class="message-container">
+        <h2>Message Details</h2>
+        <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
+        <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
+        <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
+        <p><strong>Message:</strong></p>
+        <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
     </div>
 
-   <!-- Reply Modal -->
-<div id="replyModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" id="closeReplyModal">&times;</span>
-        <h3>Reply to Message</h3>
-        <textarea id="replyText" class="reply-textarea" placeholder="Type your reply here..."></textarea>
-        <div class="modal-actions">
-            <button id="sendReply" class="btn send-btn">Send</button>
+    <div class="replies-container">
+        <h3>Replies</h3>
+        <?php if (!empty($replies)): ?>
+            <?php foreach ($replies as $reply): ?>
+                <div class="reply">
+                    <p><strong><?php echo htmlspecialchars($reply['Sender_Name']); ?>:</strong> 
+                    <?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
+                    <p><em>Sent at: <?php echo htmlspecialchars($reply['Created_At']); ?></em></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No replies yet.</p>
+        <?php endif; ?>
+    </div>
+
+    <!-- Reply Button -->
+    <button id="replyButton" class="btn">Reply</button>
+
+    <!-- Reply Modal -->
+    <div id="replyModal" class="modal">
+        <div class="modal-content">
+            <span id="closeReplyModal" class="close-modal">&times;</span>
+            <h3>Reply to Message</h3>
+            <textarea id="replyText" class="reply-textarea" placeholder="Type your reply here..."></textarea>
+            <div class="modal-actions">
+                <button id="sendReply" class="btn send-btn">Send</button>
+            </div>
         </div>
     </div>
-</div>
-
 
     <script>
-       document.addEventListener("DOMContentLoaded", function () {
-    const replyModal = document.getElementById('replyModal');
-    const closeReplyModal = document.getElementById('closeReplyModal');
-    const replyButton = document.getElementById('replyButton'); // Button to open modal
-    const sendReplyButton = document.getElementById('sendReply'); // Button to send reply
-    const replyText = document.getElementById('replyText'); // Textarea for the reply
+        document.addEventListener("DOMContentLoaded", function () {
+            const replyModal = document.getElementById('replyModal');
+            const closeReplyModal = document.getElementById('closeReplyModal');
+            const replyButton = document.getElementById('replyButton'); // Button to open modal
+            const sendReplyButton = document.getElementById('sendReply'); // Button to send reply
+            const replyText = document.getElementById('replyText'); // Textarea for the reply
 
-    // Open the reply modal
-    replyButton.addEventListener('click', () => {
-        replyModal.style.display = 'flex';
+            // Open the reply modal
+            replyButton.addEventListener('click', () => {
+                replyModal.style.display = 'flex';
+            });
 
-        // Mark the message as read and handle draft logic
-        fetch('mark_notification_read.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message_id: <?php echo $messageId; ?> })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) {
-                console.error('Error marking message as read:', data.error);
-            }
-        })
-        .catch(err => console.error('Fetch error:', err));
-    });
-
-    // Close the reply modal
-    closeReplyModal.addEventListener('click', () => {
-        replyModal.style.display = 'none';
-    });
-
-    // Send reply logic
-    sendReplyButton.addEventListener('click', () => {
-        const messageText = replyText.value.trim();
-        if (!messageText) {
-            alert('Reply cannot be empty.');
-            return;
-        }
-
-        fetch('send_reply.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                original_message_id: <?php echo $messageId; ?>,
-                recipient_id: <?php echo $message['Sender_ID']; ?>,
-                message_text: messageText
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
+            // Close the reply modal
+            closeReplyModal.addEventListener('click', () => {
                 replyModal.style.display = 'none';
+            });
 
-                // Optionally reload the page or navigate back to messages
-                window.location.reload();
-            } else {
-                alert(data.error || 'Failed to send reply.');
-            }
-        })
-        .catch(err => console.error('Error sending reply:', err));
-    });
-});
+            // Send reply logic
+            sendReplyButton.addEventListener('click', () => {
+                const messageText = replyText.value.trim();
+                if (!messageText) {
+                    alert('Reply cannot be empty.');
+                    return;
+                }
 
+                fetch('send_reply.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        original_message_id: <?php echo $messageId; ?>,
+                        recipient_id: <?php echo $message['Sender_ID']; ?>,
+                        message_text: messageText
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        replyModal.style.display = 'none';
+                        window.location.reload();
+                    } else {
+                        alert(data.error || 'Failed to send reply.');
+                    }
+                })
+                .catch(err => console.error('Error sending reply:', err));
+            });
+        });
     </script>
 </body>
 </html>
