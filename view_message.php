@@ -57,8 +57,8 @@ $stmt->close();
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="main-container">
-        <!-- Sidebar -->
+    <div class="container">
+        <!-- Sidebar for navigation -->
         <div class="sidebar">
             <ul>
                 <li><a href="messages.php?section=inbox">Inbox</a></li>
@@ -68,8 +68,7 @@ $stmt->close();
             </ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="content-container">
+        <div class="main-content">
             <div class="message-container">
                 <h2>Message Details</h2>
 
@@ -89,13 +88,11 @@ $stmt->close();
                 <p><strong>Message:</strong></p>
                 <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
 
-                <!-- Reply and Back to Messages Buttons -->
-                <div class="message-actions">
-                    <button id="replyButton" class="btn" 
-                            data-message-id="<?php echo $messageId; ?>" 
-                            data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
-                    <button onclick="window.location.href='messages.php?section=inbox'" class="btn back-btn">Back to Messages</button>
-                </div>
+                <!-- Action Buttons -->
+                <button id="replyButton" class="btn" 
+                        data-message-id="<?php echo $messageId; ?>" 
+                        data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
+                <button onclick="window.location.href='messages.php?section=inbox';" class="btn">Back to Messages</button>
             </div>
 
             <!-- Conversation Section -->
