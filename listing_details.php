@@ -66,48 +66,6 @@ $recipientID = $listing['User_ID'] ?? null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($listing['Title'] ?? 'Listing Details'); ?></title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Main Thumbnail Section */
-        .main-image-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .main-image {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            object-fit: cover;
-            border-radius: 5px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* Image Gallery */
-        .image-gallery {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        .thumbnail-image {
-            height: 100px;
-            width: auto;
-            object-fit: cover;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .thumbnail-image:hover {
-            transform: scale(1.1);
-            border-color: lightgray;
-        }
-    </style>
 </head>
 <body>
     <?php include 'header.php'; ?>
@@ -127,47 +85,44 @@ $recipientID = $listing['User_ID'] ?? null;
 
         <!-- Listing Details -->
         <div class="listing-details-wrapper">
-            <div class="form-group">
-       <table border="1" style="border-collapse: collapse; width: 100%;">
-    <thead>
-        <tr>
-            <th>Field</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>Title</strong></td>
-            <td>Dresser</td>
-        </tr>
-        <tr>
-            <td><strong>Description</strong></td>
-            <td>Hard Wood Dresser</td>
-        </tr>
-        <tr>
-            <td><strong>Price</strong></td>
-            <td>$300.00</td>
-        </tr>
-        <tr>
-            <td><strong>Category</strong></td>
-            <td>Furniture</td>
-        </tr>
-        <tr>
-            <td><strong>Location</strong></td>
-            <td>Fort Collins, CO</td>
-        </tr>
-        <tr>
-            <td><strong>Posted</strong></td>
-            <td>spooky</td>
-        </tr>
-        <tr>
-            <td><strong>Added</strong></td>
-            <td>November 25, 2024</td>
-        </tr>
-    </tbody>
-</table>
-
-            </div>
+            <table border="1" style="border-collapse: collapse; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Title</strong></td>
+                        <td><?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description</strong></td>
+                        <td><?php echo nl2br(htmlspecialchars($listing['Description'] ?? 'Not Available')); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price</strong></td>
+                        <td>$<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Category</strong></td>
+                        <td><?php echo htmlspecialchars($listing['Category_Name'] ?? 'Not Available'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Location</strong></td>
+                        <td><?php echo htmlspecialchars($listing['City'] . ', ' . $listing['State'] ?? 'Not Available'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date Posted</strong></td>
+                        <td><?php echo htmlspecialchars($listing['Date_Posted'] ?? 'Not Available'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seller</strong></td>
+                        <td><?php echo htmlspecialchars($listing['User_Name'] ?? 'Not Available'); ?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- Action Buttons -->
@@ -178,27 +133,6 @@ $recipientID = $listing['User_ID'] ?? null;
             <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
         </div>
     </div>
-
-     <!-- Popup for Success/Error Messages -->
-     <?php if (isset($successMessage) || isset($errorMessage)): ?>
-        <div class="popup-overlay">
-            <div class="popup-container">
-                <div class="popup-header">
-                    <h1 class="popup-title">
-                        <?php echo isset($successMessage) ? "Thank You!" : "Error"; ?>
-                    </h1>
-                </div>
-                <div class="popup-body">
-                    <p class="popup-message">
-                        <?php echo isset($successMessage) ? htmlspecialchars($successMessage) : htmlspecialchars($errorMessage); ?>
-                    </p>
-                </div>
-                <div class="popup-footer">
-                    <button class="close-popup" onclick="closePopup()">Close</button>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
 
     <!-- Buy Now Modal -->
     <div id="buyNowModal" class="modal">
@@ -240,12 +174,6 @@ $recipientID = $listing['User_ID'] ?? null;
                 modal.style.display = "none";
             }
         };
-
-        // Close Popup
-        function closePopup() {
-            const popup = document.querySelector('.popup-overlay');
-            if (popup) popup.style.display = 'none';
-        }
     </script>
 </body>
 </html>
