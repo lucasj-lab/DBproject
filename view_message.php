@@ -9,6 +9,13 @@ if (!$messageId) {
     die("Invalid message ID.");
 }
 
+// Mark the message as read
+$updateQuery = "UPDATE messages SET Read_Status = 1 WHERE Message_ID = ?";
+$stmt = $conn->prepare($updateQuery);
+$stmt->bind_param("i", $messageId);
+$stmt->execute();
+$stmt->close();
+
 // Fetch the main message
 $messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, 
                         sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 

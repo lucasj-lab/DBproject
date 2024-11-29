@@ -1,9 +1,13 @@
 <?php
 require 'database_connection.php';
 
-if (!isset($userId)) {
-   
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    die("You must be logged in to view your inbox.");
 }
+
+$userId = intval($_SESSION['user_id']);
 
 // Filter parameter
 $filter = $_GET['filter'] ?? 'all';
@@ -19,11 +23,11 @@ $inboxQuery = "
     WHERE m.Recipient_ID = ? AND m.Deleted_Status = 0
 ";
 
-// Apply the filter
+// Apply the filter based on `Read_Status`
 if ($filter === 'unread') {
-    $inboxQuery .= " AND m.Read_Status = 'unread'";
+    $inboxQuery .= " AND m.Read_Status = 0"; // Unread messages
 } elseif ($filter === 'read') {
-    $inboxQuery .= " AND m.Read_Status = 'read'";
+    $inboxQuery .= " AND m.Read_Status = 1"; // Read messages
 }
 
 // Add sorting
@@ -101,6 +105,3 @@ $inboxStmt->close();
 </table>
 
 <script src="messaging.js"></script>
-
-</body>
-</html>
