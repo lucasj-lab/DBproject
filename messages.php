@@ -1,32 +1,3 @@
-<?php
-require 'database_connection.php';
-include 'header.php';
-
-if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view messages.");
-}
-
-$userId = intval($_SESSION['user_id']);
-$section = $_GET['section'] ?? 'inbox';
-
-// Verify if 'Has_Attachment' exists in the database schema.
-$messagesQuery = "
-    SELECT m.Message_ID, m.Message_Text, m.Created_At, m.Read_Status, 
-           IFNULL(m.Has_Attachment, 0) AS Has_Attachment, -- Ensure default if column is missing
-           u.Name AS Sender_Name 
-    FROM messages m
-    JOIN user u ON m.Sender_ID = u.User_ID
-    WHERE m.Recipient_ID = ? AND m.Deleted_Status = 0
-    ORDER BY m.Created_At DESC
-";
-
-$stmt = $conn->prepare($messagesQuery);
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$messages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +31,10 @@ $stmt->close();
                 <table class="message-table" role="grid">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>
+                                <!-- Select All Checkbox -->
+                                <input type="checkbox" id="selectAllCheckbox" title="Select All">
+                            </th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -73,9 +47,10 @@ $stmt->close();
                     <tbody>
                         <?php foreach ($messages as $message): ?>
                             <tr class="zA <?= $message['Read_Status'] ? 'read' : 'unread' ?>" tabindex="-1" role="row">
+                                <!-- Selection Checkbox -->
                                 <td class="select-cell">
                                     <div role="checkbox" aria-checked="false" tabindex="-1" class="checkbox-container">
-                                        <input type="checkbox" name="selectMessage[]" value="<?= $message['Message_ID'] ?>">
+                                        <input type="checkbox" name="selectMessage[]" value="<?= $message['Message_ID'] ?>" class="messageCheckbox">
                                     </div>
                                 </td>
                                 

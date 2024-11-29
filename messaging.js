@@ -213,3 +213,27 @@ function performAction(action, messageId) {
         }, 500);
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    const messageCheckboxes = document.querySelectorAll('.messageCheckbox');
+
+    // Toggle all checkboxes when "Select All" is clicked
+    selectAllCheckbox.addEventListener('change', () => {
+        const isChecked = selectAllCheckbox.checked;
+        messageCheckboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    });
+
+    // Update "Select All" checkbox if a single checkbox is unchecked
+    messageCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            if (!checkbox.checked) {
+                selectAllCheckbox.checked = false;
+            } else if (Array.from(messageCheckboxes).every(cb => cb.checked)) {
+                selectAllCheckbox.checked = true;
+            }
+        });
+    });
+});
