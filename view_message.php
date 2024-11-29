@@ -1,6 +1,8 @@
 <?php
 require 'database_connection.php';
+session_start();
 
+// Fetch the message ID from the URL
 $messageId = intval($_GET['message_id'] ?? 0);
 
 if (!$messageId) {
@@ -8,7 +10,8 @@ if (!$messageId) {
 }
 
 // Fetch the message details
-$messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, sender.Name AS Sender_Name, sender.User_ID AS Sender_ID
+$messageQuery = "SELECT messages.Subject, messages.Message_Text, messages.Created_At, 
+                        sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 
                  FROM messages
                  JOIN user AS sender ON messages.Sender_ID = sender.User_ID
                  WHERE messages.Message_ID = ?";
@@ -22,6 +25,18 @@ $stmt->close();
 if (!$message) {
     die("Message not found.");
 }
+
+// Fetch replies for the message
+$repliesQuery = "SELECT replies.Reply_Text, replies.Created_At, sender.Name AS Sender_Name 
+                 FROM replies
+                 JOIN user AS sender ON replies.Sender_ID = sender.User_ID
+                 WHERE replies.Message_ID = ?
+                 ORDER BY replies.Created_At ASC";
+$stmt = $conn->prepare($repliesQuery);
+$stmt->bind_param("i", $messageId);
+$stmt->execute();
+$replies = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -31,96 +46,44 @@ if (!$message) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Message</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 1.5rem;
-            color: #333;
-            cursor: pointer;
-        }
-
-        .reply-textarea {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: none;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .modal-actions .btn {
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            border: none;
-        }
-
-        .send-btn {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        .send-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .draft-btn {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        .draft-btn:hover {
-            background-color: #5a6268;
-        }
-    </style>
 </head>
 <body>
-    <div class="message-container">
-        <h2>Message Details</h2>
-        <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-        <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
-        <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
-        <p><strong>Message:</strong></p>
-        <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+    <?php include 'header.php'; ?>
+
+    <div class="container">
+        <div class="message-container">
+            <h2>Message Details</h2>
+            <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
+            <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
+            <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
+            <p><strong>Message:</strong></p>
+            <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+
+            <!-- Success Message Placeholder -->
+            <div id="successIndicator" class="success-message" style="display: none;">
+                Reply sent successfully!
+            </div>
+
+            <!-- Reply Button -->
+            <button id="replyButton" class="btn">Reply</button>
+        </div>
+
+        <!-- Conversation Section -->
+        <div class="replies-container">
+            <h3>Conversation</h3>
+            <?php if (!empty($replies)): ?>
+                <?php foreach ($replies as $reply): ?>
+                    <div class="reply">
+                        <p><strong><?php echo htmlspecialchars($reply['Sender_Name']); ?>:</strong> 
+                        <?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
+                        <p><em>Sent at: <?php echo htmlspecialchars($reply['Created_At']); ?></em></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No replies yet.</p>
+            <?php endif; ?>
+        </div>
     </div>
-
-    <!-- Reply Button -->
-    <button id="replyButton" class="btn" 
-        data-message-id="<?php echo htmlspecialchars($messageId); ?>" 
-        data-sender-id="<?php echo htmlspecialchars($message['Sender_ID']); ?>">Reply</button>
-
 
     <!-- Reply Modal -->
     <div id="replyModal" class="modal">
@@ -133,6 +96,8 @@ if (!$message) {
             </div>
         </div>
     </div>
+
+    <?php include 'footer.php'; ?>
 
     <script src="reply.js" defer></script>
 </body>
