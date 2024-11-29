@@ -316,3 +316,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const messageRows = document.querySelectorAll(".message-row");
+    const messageViewer = document.querySelector(".message-viewer .message-content");
+
+    messageRows.forEach((row) => {
+        row.addEventListener("click", () => {
+            const messageId = row.getAttribute("data-id");
+
+            // Make an AJAX request to fetch the message details
+            fetch(`view_message.php?message_id=${messageId}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch message.");
+                    }
+                    return response.text(); // Assume the PHP script returns raw HTML for the message
+                })
+                .then((data) => {
+                    // Update the message viewer
+                    messageViewer.innerHTML = data;
+                })
+                .catch((error) => {
+                    console.error(error);
+                    messageViewer.innerHTML = "<p>Error loading message. Please try again.</p>";
+                });
+        });
+    });
+});

@@ -4308,3 +4308,87 @@ body {
     font-size: 16px;
     color: #333;
 }
+/* General container styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Message container: flexbox layout for messages and viewer */
+.message-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Message table styles */
+.message-table-container {
+    flex: 2; /* Take up 2/3 of the space */
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+.message-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.message-table th,
+.message-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.message-table th {
+    background-color: #f4f4f4;
+}
+
+.message-row:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+/* Message viewer styles */
+.message-viewer {
+    flex: 3; /* Take up 1/3 of the space */
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+}
+
+.message-viewer h2 {
+    margin-top: 0;
+}
+
+.message-viewer .message-content {
+    font-size: 1rem;
+    color: #555;
+}

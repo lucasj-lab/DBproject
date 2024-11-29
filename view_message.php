@@ -1,8 +1,7 @@
 <?php
 require 'database_connection.php';
-session_start();
 
-// Fetch the message ID from the URL or return an error for invalid requests
+// Fetch the message ID from the URL or handle invalid requests
 $messageId = intval($_GET['message_id'] ?? 0);
 if (!$messageId) {
     if ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
@@ -19,12 +18,13 @@ $stmt->bind_param("i", $messageId);
 $stmt->execute();
 $stmt->close();
 
-// Fetch the main message
-$messageQuery = "SELECT messages.Message_Text, messages.Created_At, 
-                        sender.Name AS Sender_Name, sender.User_ID AS Sender_ID 
-                 FROM messages
-                 JOIN user AS sender ON messages.Sender_ID = sender.User_ID
-                 WHERE messages.Message_ID = ?";
+// Fetch the main message details
+$messageQuery = "
+    SELECT messages.Message_Text, messages.Created_At, 
+           sender.Name AS Sender_Name 
+    FROM messages
+    JOIN user AS sender ON messages.Sender_ID = sender.User_ID
+    WHERE messages.Message_ID = ?";
 $stmt = $conn->prepare($messageQuery);
 $stmt->bind_param("i", $messageId);
 $stmt->execute();
@@ -37,22 +37,24 @@ if (!$message) {
         echo json_encode(['success' => false, 'error' => 'Message not found.']);
         exit;
     }
-    die("Message not found.");
+    echo "<p>Message not found.</p>";
+    exit;
 }
 
 // Fetch replies for the message
-$repliesQuery = "SELECT replies.Reply_Text, replies.Created_At, sender.Name AS Sender_Name 
-                 FROM replies
-                 JOIN user AS sender ON replies.Sender_ID = sender.User_ID
-                 WHERE replies.Message_ID = ?
-                 ORDER BY replies.Created_At ASC";
+$repliesQuery = "
+    SELECT replies.Reply_Text, replies.Created_At, sender.Name AS Sender_Name 
+    FROM replies
+    JOIN user AS sender ON replies.Sender_ID = sender.User_ID
+    WHERE replies.Message_ID = ?
+    ORDER BY replies.Created_At ASC";
 $stmt = $conn->prepare($repliesQuery);
 $stmt->bind_param("i", $messageId);
 $stmt->execute();
 $replies = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Return JSON if the request is made via AJAX
+// Handle AJAX requests: Return JSON data
 if ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     echo json_encode([
         'success' => true,
@@ -72,6 +74,6 @@ if ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     exit;
 }
 
-// For non-AJAX requests, render the standard HTML page (existing behavior)
+// Include the template for rendering the message view
 include 'message_view_template.php';
 ?>
