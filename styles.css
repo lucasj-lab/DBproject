@@ -4191,10 +4191,11 @@ body {
 }
 
 .sidebar ul {
-   
-::contentReference[oaicite:0]{index=0}
- 
+    list-style-type: none; 
+    padding: 0;           
+    margin: 0;            
 }
+
 
 /* Replies Container */
 .replies-container {
