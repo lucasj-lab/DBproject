@@ -237,3 +237,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const messageRows = document.querySelectorAll(".message-row");
+    const messageViewer = document.querySelector(".message-viewer .message-content");
+
+    // Event listener for each row
+    messageRows.forEach((row) => {
+        row.addEventListener("click", () => {
+            const messageId = row.getAttribute("data-id");
+
+            // Highlight the selected row
+            messageRows.forEach(r => r.classList.remove("active"));
+            row.classList.add("active");
+
+            // Fetch the message content
+            fetch(`view_messages.php?message_id=${messageId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        messageViewer.innerHTML = `
+                            <strong>From:</strong> ${data.message.Sender_Name}<br>
+                            <strong>Date:</strong> ${data.message.Created_At}<br><br>
+                            ${data.message.Message_Text}
+                        `;
+                    } else {
+                        messageViewer.textContent = "Error loading message.";
+                    }
+                })
+                .catch(() => {
+                    messageViewer.textContent = "Error fetching the message.";
+                });
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const messageRows = document.querySelectorAll(".message-row");
+    const messageViewer = document.querySelector(".message-viewer .message-content");
+
+    // Event listener for each row
+    messageRows.forEach((row) => {
+        row.addEventListener("click", () => {
+            const messageId = row.getAttribute("data-id");
+
+            // Highlight the selected row
+            messageRows.forEach(r => r.classList.remove("active"));
+            row.classList.add("active");
+
+            // Fetch the message content
+            fetch(`view_messages.php?message_id=${messageId}`, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const { Message_Text, Created_At, Sender_Name, Replies } = data.message;
+
+                        messageViewer.innerHTML = `
+                            <strong>From:</strong> ${Sender_Name}<br>
+                            <strong>Date:</strong> ${Created_At}<br><br>
+                            <p>${Message_Text}</p>
+                            <h3>Replies:</h3>
+                            ${Replies.length > 0 
+                                ? Replies.map(reply => `
+                                    <div class="reply">
+                                        <strong>${reply.Sender_Name}</strong> (${reply.Created_At}):
+                                        <p>${reply.Reply_Text}</p>
+                                    </div>
+                                `).join("") 
+                                : "<p>No replies yet.</p>"}
+                        `;
+                    } else {
+                        messageViewer.textContent = "Error loading message.";
+                    }
+                })
+                .catch(() => {
+                    messageViewer.textContent = "Error fetching the message.";
+                });
+        });
+    });
+});

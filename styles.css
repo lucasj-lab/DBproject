@@ -4288,3 +4288,23 @@ body {
     color: #757575;
     font-size: 12px;
 }
+
+/* Highlight the selected row */
+.message-row.active {
+    background-color: #e8f0fe;
+    font-weight: bold;
+}
+
+/* Message Viewer Styling */
+.message-viewer {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.message-viewer .message-content {
+    font-size: 16px;
+    color: #333;
+}
