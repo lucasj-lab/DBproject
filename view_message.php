@@ -1,6 +1,6 @@
 <?php
 require 'database_connection.php';
-
+session_start();
 
 // Fetch the message ID from the URL
 $messageId = intval($_GET['message_id'] ?? 0);
@@ -57,46 +57,62 @@ $stmt->close();
 <body>
     <?php include 'header.php'; ?>
 
-    <div class="container">
-        <div class="message-container">
-            <h2>Message Details</h2>
-
-            <!-- Display Success or Error Messages -->
-            <?php if (isset($_SESSION['message'])): ?>
-                <p class="success-message"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
-                <?php unset($_SESSION['message']); ?>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['error'])): ?>
-                <p class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
-                <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
-
-            <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
-            <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
-            <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
-            <p><strong>Message:</strong></p>
-            <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
-
-            <!-- Reply Button -->
-            <button id="replyButton" class="btn" 
-                    data-message-id="<?php echo $messageId; ?>" 
-                    data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul>
+                <li><a href="messages.php?section=inbox">Inbox</a></li>
+                <li><a href="messages.php?section=sent">Sent</a></li>
+                <li><a href="messages.php?section=drafts">Drafts</a></li>
+                <li><a href="messages.php?section=trash">Trash</a></li>
+            </ul>
         </div>
 
-        <!-- Conversation Section -->
-        <div class="replies-container">
-            <h3>Conversation</h3>
-            <?php if (!empty($replies)): ?>
-                <?php foreach ($replies as $reply): ?>
-                    <div class="reply">
-                        <p><strong><?php echo htmlspecialchars($reply['Sender_Name']); ?>:</strong> 
-                        <?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
-                        <p><em>Sent at: <?php echo htmlspecialchars($reply['Created_At']); ?></em></p>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No replies yet.</p>
-            <?php endif; ?>
+        <!-- Main Content -->
+        <div class="content-container">
+            <div class="message-container">
+                <h2>Message Details</h2>
+
+                <!-- Display Success or Error Messages -->
+                <?php if (isset($_SESSION['message'])): ?>
+                    <p class="success-message"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
+                    <?php unset($_SESSION['message']); ?>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <p class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
+                <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
+                <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
+                <p><strong>Subject:</strong> <?php echo htmlspecialchars($message['Subject']); ?></p>
+                <p><strong>Message:</strong></p>
+                <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
+
+                <!-- Reply and Back to Messages Buttons -->
+                <div class="message-actions">
+                    <button id="replyButton" class="btn" 
+                            data-message-id="<?php echo $messageId; ?>" 
+                            data-sender-id="<?php echo $message['Sender_ID']; ?>">Reply</button>
+                    <button onclick="window.location.href='messages.php?section=inbox'" class="btn back-btn">Back to Messages</button>
+                </div>
+            </div>
+
+            <!-- Conversation Section -->
+            <div class="replies-container">
+                <h3>Conversation</h3>
+                <?php if (!empty($replies)): ?>
+                    <?php foreach ($replies as $reply): ?>
+                        <div class="reply">
+                            <p><strong><?php echo htmlspecialchars($reply['Sender_Name']); ?>:</strong> 
+                            <?php echo nl2br(htmlspecialchars($reply['Reply_Text'])); ?></p>
+                            <p><em>Sent at: <?php echo htmlspecialchars($reply['Created_At']); ?></em></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No replies yet.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
