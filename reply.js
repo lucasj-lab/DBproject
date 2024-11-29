@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                original_message_id: <?php echo json_encode($messageId); ?>,
-                recipient_id: <?php echo json_encode($message['Sender_ID']); ?>,
+                original_message_id: messageId, // Use global variable
+                recipient_id: senderId,        // Use global variable
                 message_text: messageText
             })
         })
