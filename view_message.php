@@ -202,7 +202,7 @@ try {
             sendReplyButton.addEventListener('click', () => {
                 const messageText = replyText.value.trim();
                 if (!messageText) {
-                    alert('Reply cannot be empty.');
+                    alert('Reply cannot be empty.');A
                     return;
                 }
 

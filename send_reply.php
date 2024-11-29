@@ -1,39 +1,26 @@
 <?php
 require 'database_connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true);
 
-    $originalMessageId = intval($data['original_message_id'] ?? 0);
-    $recipientId = intval($data['recipient_id'] ?? 0);
-    $messageText = $data['message_text'] ?? '';
+$originalMessageId = intval($data['original_message_id'] ?? 0);
+$recipientId = intval($data['recipient_id'] ?? 0);
+$replyText = $data['message_text'] ?? '';
 
-    if (!$originalMessageId || !$recipientId || !$messageText) {
-        echo json_encode(['success' => false, 'error' => 'Invalid input data.']);
-        exit;
-    }
+if (!$originalMessageId || !$recipientId || !$replyText) {
+    echo json_encode(['success' => false, 'error' => 'Invalid input data.']);
+    exit;
+}
 
-    try {
-        // Insert the reply
-        $insertReplyQuery = "INSERT INTO replies (Message_ID, Recipient_ID, Reply_Text, Created_At) 
-                             VALUES (?, ?, ?, NOW())";
-        $stmt = $conn->prepare($insertReplyQuery);
-        $stmt->bind_param("iis", $originalMessageId, $recipientId, $messageText);
-        $stmt->execute();
-        $stmt->close();
+try {
+    $query = "INSERT INTO replies (Message_ID, Sender_ID, Recipient_ID, Reply_Text, Created_At)
+              VALUES (?, ?, ?, ?, NOW())";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("iiis", $originalMessageId, $_SESSION['user_id'], $recipientId, $replyText);
+    $stmt->execute();
 
-        // Update the original message
-        $updateMessageQuery = "UPDATE messages 
-                               SET Draft_Status = 0, Read_Status = 1 
-                               WHERE Message_ID = ?";
-        $stmt = $conn->prepare($updateMessageQuery);
-        $stmt->bind_param("i", $originalMessageId);
-        $stmt->execute();
-        $stmt->close();
-
-        echo json_encode(['success' => true, 'message' => 'Reply sent successfully.']);
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'error' => 'Error sending reply: ' . $e->getMessage()]);
-    }
+    echo json_encode(['success' => true, 'message' => 'Reply sent successfully.']);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
 }
 ?>
