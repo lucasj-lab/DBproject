@@ -69,7 +69,43 @@ $sentStmt->close();
             <th>Message</th>
             <th>Actions</th>
         </tr>
-    </thead>
+    </thead><?php
+require 'database_connection.php';
+
+$sentQuery = "
+    SELECT m.Message_ID, m.Message_Text, m.Created_At, 
+           u.Name AS Recipient_Name 
+    FROM messages m
+    JOIN user u ON m.Recipient_ID = u.User_ID
+    WHERE m.Sender_ID = ? AND m.Deleted_Status = 0
+    ORDER BY m.Created_At DESC
+";
+
+$stmt = $conn->prepare($sentQuery);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$messages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+?>
+
+<div class="sent-container">
+    <header class="sent-header">
+        <h2>Sent</h2>
+    </header>
+
+    <ul class="message-list">
+        <?php foreach ($messages as $message): ?>
+            <li class="message-item">
+                <a href="view_message.php?message_id=<?= $message['Message_ID'] ?>" class="message-link">
+                    <p><strong>To:</strong> <?= htmlspecialchars($message['Recipient_Name']) ?></p>
+                    <p><strong>Message:</strong> <?= htmlspecialchars(substr($message['Message_Text'], 0, 50)) ?>...</p>
+                    <p><small>Sent: <?= htmlspecialchars($message['Created_At']) ?></small></p>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
     <tbody>
         <?php if (!empty($sentMessages)): ?>
             <?php foreach ($sentMessages as $message): ?>

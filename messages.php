@@ -19,48 +19,55 @@ $section = $_GET['section'] ?? 'inbox';
     <title>Messages</title>
 </head>
 <body>
-    <div class="gb_Vc"> <!-- Main container -->
-        <div class="gb_Qc"> <!-- Sidebar container -->
-            <div class="gb_hd gb_id"> <!-- Sidebar header -->
-                <h2 class="gb_qe">Messages</h2>
-            </div>
-            <ul class="sidebar-list">
-                <li class="sidebar-item <?= $section === 'inbox' ? 'active' : '' ?>">
-                    <a href="messages.php?section=inbox" class="gb_re">Inbox</a>
-                </li>
-                <li class="sidebar-item <?= $section === 'sent' ? 'active' : '' ?>">
-                    <a href="messages.php?section=sent" class="gb_re">Sent</a>
-                </li>
-                <li class="sidebar-item <?= $section === 'drafts' ? 'active' : '' ?>">
-                    <a href="messages.php?section=drafts" class="gb_re">Drafts</a>
-                </li>
-                <li class="sidebar-item <?= $section === 'trash' ? 'active' : '' ?>">
-                    <a href="messages.php?section=trash" class="gb_re">Trash</a>
-                </li>
-            </ul>
-        </div>
-        <div class="gb_Ha"> <!-- Content container -->
-            <div class="content-header">
-                <button id="toggleSidebar" class="gb_Da">☰</button>
-                <h2><?php echo ucfirst($section); ?></h2>
-            </div>
-            <div class="content-body">
+    <div class="main-container"> <!-- Main container -->
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <h2>Messages</h2>
+            </header>
+            <nav>
+                <ul class="sidebar-menu">
+                    <li class="<?= $section === 'inbox' ? 'active' : '' ?>">
+                        <a href="messages.php?section=inbox">Inbox</a>
+                    </li>
+                    <li class="<?= $section === 'sent' ? 'active' : '' ?>">
+                        <a href="messages.php?section=sent">Sent</a>
+                    </li>
+                    <li class="<?= $section === 'drafts' ? 'active' : '' ?>">
+                        <a href="messages.php?section=drafts">Drafts</a>
+                    </li>
+                    <li class="<?= $section === 'trash' ? 'active' : '' ?>">
+                        <a href="messages.php?section=trash">Trash</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="content-header">
+                <button id="toggleSidebar" class="menu-toggle">☰</button>
+                <h1><?= ucfirst($section) ?></h1>
+            </header>
+            <section class="content-body">
                 <?php
-                // Load the selected section
-                if ($section === 'inbox') {
-                    include 'inbox.php';
-                } elseif ($section === 'sent') {
-                    include 'sent.php';
-                } elseif ($section === 'drafts') {
-                    include 'drafts.php';
-                } elseif ($section === 'trash') {
-                    include 'trash.php';
-                } else {
-                    echo "<p>Select a section to view your messages.</p>";
+                switch ($section) {
+                    case 'inbox':
+                        include 'inbox.php';
+                        break;
+                    case 'sent':
+                        include 'sent.php';
+                        break;
+                    case 'drafts':
+                        include 'drafts.php';
+                        break;
+                    case 'trash':
+                        include 'trash.php';
+                        break;
+                    default:
+                        echo "<p>Please select a section to view messages.</p>";
                 }
                 ?>
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
     <?php include 'footer.php'; ?>
     <script src="messaging.js" defer></script>

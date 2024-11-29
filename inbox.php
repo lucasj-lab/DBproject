@@ -3,7 +3,6 @@ require 'database_connection.php';
 
 $filter = $_GET['filter'] ?? 'all';
 
-// Base query for inbox messages
 $inboxQuery = "
     SELECT m.Message_ID, m.Message_Text, m.Created_At, m.Read_Status, 
            u.Name AS Sender_Name 
@@ -12,7 +11,6 @@ $inboxQuery = "
     WHERE m.Recipient_ID = ? AND m.Deleted_Status = 0
 ";
 
-// Apply the filter
 if ($filter === 'unread') {
     $inboxQuery .= " AND m.Read_Status = 0";
 } elseif ($filter === 'read') {
@@ -28,15 +26,29 @@ $messages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
 
-<h2>Inbox</h2>
+<div class="inbox-container">
+    <header class="inbox-header">
+        <h2>Inbox</h2>
+        <label for="filter">Filter by:</label>
+        <select id="filter" onchange="applyFilter()">
+            <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
+            <option value="unread" <?= $filter === 'unread' ? 'selected' : '' ?>>Unread</option>
+            <option value="read" <?= $filter === 'read' ? 'selected' : '' ?>>Read</option>
+        </select>
+    </header>
 
-<!-- Filter Dropdown -->
-<label for="filter">Filter by:</label>
-<select id="filter" onchange="applyFilter()">
-    <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
-    <option value="unread" <?= $filter === 'unread' ? 'selected' : '' ?>>Unread</option>
-    <option value="read" <?= $filter === 'read' ? 'selected' : '' ?>>Read</option>
-</select>
+    <ul class="message-list">
+        <?php foreach ($messages as $message): ?>
+            <li class="message-item <?= $message['Read_Status'] ? 'read' : 'unread' ?>">
+                <a href="view_message.php?message_id=<?= $message['Message_ID'] ?>" class="message-link">
+                    <p><strong>From:</strong> <?= htmlspecialchars($message['Sender_Name']) ?></p>
+                    <p><strong>Message:</strong> <?= htmlspecialchars(substr($message['Message_Text'], 0, 50)) ?>...</p>
+                    <p><small>Sent: <?= htmlspecialchars($message['Created_At']) ?></small></p>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
 
 <script>
     function applyFilter() {
@@ -46,16 +58,3 @@ $stmt->close();
         window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
     }
 </script>
-
-<!-- Display Messages -->
-<ul class="message-list">
-    <?php foreach ($messages as $message): ?>
-        <li class="<?= $message['Read_Status'] ? 'read' : 'unread' ?>">
-            <a href="view_message.php?message_id=<?= $message['Message_ID'] ?>">
-                <p><strong>From:</strong> <?= htmlspecialchars($message['Sender_Name']) ?></p>
-                <p><strong>Message:</strong> <?= htmlspecialchars(substr($message['Message_Text'], 0, 50)) ?>...</p>
-                <p><small>Sent: <?= htmlspecialchars($message['Created_At']) ?></small></p>
-            </a>
-        </li>
-    <?php endforeach; ?>
-</ul>
