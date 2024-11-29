@@ -31,6 +31,80 @@ if (!$message) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Message</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .reply-textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-actions .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+        }
+
+        .send-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .send-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .draft-btn {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .draft-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
     <div class="message-container">
