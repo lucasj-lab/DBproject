@@ -55,6 +55,11 @@ if (!$listing) {
     exit;
 }
 
+// Format the Date_Posted
+$formattedDatePosted = !empty($listing['Date_Posted']) 
+    ? (new DateTime($listing['Date_Posted']))->format('F, j, Y') 
+    : "Date not available";
+
 // Get the owner ID for messaging
 $listingID = $listing['Listing_ID'] ?? null;
 $recipientID = $listing['User_ID'] ?? null;
@@ -115,7 +120,7 @@ $recipientID = $listing['User_ID'] ?? null;
                     </tr>
                     <tr>
                         <td><strong>Date Posted</strong></td>
-                        <td><?php echo htmlspecialchars($listing['Date_Posted'] ?? 'Not Available'); ?></td>
+                        <td><?php echo htmlspecialchars($formattedDatePosted); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Seller</strong></td>
@@ -131,20 +136,6 @@ $recipientID = $listing['User_ID'] ?? null;
             <button onclick="location.href='listings.php';" class="btn">All Listings</button>
             <button onclick="history.back()" class="btn">Go Back</button>
             <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
-        </div>
-    </div>
-
-    <!-- Buy Now Modal -->
-    <div id="buyNowModal" class="modal">
-        <div class="modal-content popup-container">
-            <span class="close" id="closeModal">×</span>
-            <h2>Buy Now</h2>
-            <p><strong>Title:</strong> <?php echo htmlspecialchars($listing['Title'] ?? 'Not Available'); ?></p>
-            <p><strong>Price:</strong> $<?php echo htmlspecialchars($listing['Price'] ?? 'Not Available'); ?></p>
-            <form method="POST">
-                <input type="hidden" name="listingId" value="<?php echo htmlspecialchars($listing['Listing_ID']); ?>">
-                <button type="submit" class="btn">Confirm Purchase</button>
-            </form>
         </div>
     </div>
 

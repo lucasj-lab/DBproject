@@ -500,6 +500,7 @@ $conn->close();
 
 
             </script>
+              <script src="image_preview.js" defer></script>
 </body>
 
 </html>
