@@ -9,9 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 $userId = intval($_SESSION['user_id']);
 $section = $_GET['section'] ?? 'inbox';
 
-// Example query for demonstration. Adjust based on your database schema.
+// Verify if 'Has_Attachment' exists in the database schema.
 $messagesQuery = "
-    SELECT m.Message_ID, m.Message_Text, m.Created_At, m.Read_Status, m.Has_Attachment,
+    SELECT m.Message_ID, m.Message_Text, m.Created_At, m.Read_Status, 
+           IFNULL(m.Has_Attachment, 0) AS Has_Attachment, -- Ensure default if column is missing
            u.Name AS Sender_Name 
     FROM messages m
     JOIN user u ON m.Sender_ID = u.User_ID
@@ -72,31 +73,26 @@ $stmt->close();
                     <tbody>
                         <?php foreach ($messages as $message): ?>
                             <tr class="zA <?= $message['Read_Status'] ? 'read' : 'unread' ?>" tabindex="-1" role="row">
-                                <!-- Selection Checkbox -->
                                 <td class="select-cell">
                                     <div role="checkbox" aria-checked="false" tabindex="-1" class="checkbox-container">
                                         <input type="checkbox" name="selectMessage[]" value="<?= $message['Message_ID'] ?>">
                                     </div>
                                 </td>
                                 
-                                <!-- Starred -->
                                 <td class="starred-cell">
                                     <span class="star-icon" role="button" title="Not starred">
                                         <img src="images/cleardot.gif" alt="Star">
                                     </span>
                                 </td>
 
-                                <!-- Importance -->
                                 <td class="importance-cell">
                                     <div role="switch" aria-checked="false" title="Mark as important" class="importance-icon"></div>
                                 </td>
 
-                                <!-- Sender -->
                                 <td class="sender-cell">
                                     <?= htmlspecialchars($message['Sender_Name']) ?>
                                 </td>
 
-                                <!-- Message Preview -->
                                 <td class="message-preview-cell">
                                     <div>
                                         <span class="message-title"><?= htmlspecialchars(substr($message['Message_Text'], 0, 50)) ?></span>
@@ -104,12 +100,10 @@ $stmt->close();
                                     </div>
                                 </td>
 
-                                <!-- Timestamp -->
                                 <td class="timestamp-cell">
                                     <?= date('M d', strtotime($message['Created_At'])) ?>
                                 </td>
 
-                                <!-- Attachment Icon -->
                                 <td class="attachment-cell">
                                     <?php if ($message['Has_Attachment']): ?>
                                         <span class="attachment-icon" title="Has attachment">
@@ -118,7 +112,6 @@ $stmt->close();
                                     <?php endif; ?>
                                 </td>
                                 
-                                <!-- Actions -->
                                 <td class="actions-cell">
                                     <ul class="action-menu">
                                         <li><button title="Archive">🗄️</button></li>
