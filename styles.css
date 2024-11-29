@@ -4249,33 +4249,20 @@ body {
     font-style: italic;
 }
 
-/* General Styles for Message Text */
-.message-text {
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.5;
-    background-color: #f4f4f4;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-/* Main Container */
-.main-container {
-    display: flex;
-    position: relative;
-}
-
-/* Sidebar Styles */
+/* Sidebar Base Styles */
 .sidebar {
-    width: 200px;
-    height: 100vh;
-    background-color: #f4f4f4;
     position: fixed;
     top: 0;
-    left: -200px; /* Hidden by default */
-    transition: left 0.3s ease;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar ul {
@@ -4285,45 +4272,51 @@ body {
 }
 
 .sidebar ul li {
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
 .sidebar ul li a {
+    color: white;
     text-decoration: none;
-    color: #333;
     display: block;
+    font-size: 16px;
 }
 
-.sidebar ul li a:hover {
-    background-color: #ddd;
+.sidebar ul li:hover {
+    background-color: #575757;
 }
 
-.sidebar.active {
+.sidebar ul li.active {
+    background-color: #444;
+}
+
+/* Sidebar toggleable for smaller screens */
+.sidebar.collapsible {
+    left: -250px;
+    transition: left 0.3s ease-in-out;
+}
+
+.sidebar.collapsible.active {
     left: 0;
 }
 
-/* Content */
+/* Content adjusts based on sidebar */
 .content {
-    margin-left: 200px;
-    padding: 20px;
-    transition: margin-left 0.3s;
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
 }
 
-.sidebar:not(.active) + .content {
+.sidebar.collapsible:not(.active) + .content {
     margin-left: 0;
 }
 
-/* Toggle Button */
-.toggle-btn {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1100;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
+/* Mobile view */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80%;
+    }
+    .content {
+        margin-left: 0;
+    }
 }
