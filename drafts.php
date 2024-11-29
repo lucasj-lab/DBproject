@@ -1,6 +1,5 @@
 <?php
 require 'database_connection.php';
-include 'header.php';
 
 try {
     // Fetch all drafts for the logged-in user (assuming `Recipient_ID` is the user ID)

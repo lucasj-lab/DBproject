@@ -1,34 +1,61 @@
 <?php
 require 'database_connection.php';
-include 'header.php';
 
-// Fetch the message details
 $messageId = intval($_GET['message_id'] ?? 0);
 
 if (!$messageId) {
     die("Invalid message ID.");
 }
 
-// Correct the table name to `user` instead of `users`
-$sql = "SELECT 
-            messages.Message_Text, 
-            messages.Created_At, 
-            user.Name AS Sender_Name, 
-            user.User_ID AS Sender_ID
-        FROM messages
-        JOIN user ON messages.Sender_ID = user.User_ID
-        WHERE messages.Message_ID = ?";
-$stmt = $conn->prepare($sql);
-if ($stmt) {
+// Fetch the message details
+try {
+    $messageQuery = "SELECT 
+                         messages.Subject, 
+                         messages.Message_Text, 
+                         messages.Created_At, 
+                         sender.Name AS Sender_Name 
+                     FROM messages
+                     JOIN user AS sender ON messages.Sender_ID = sender.User_ID
+                     WHERE messages.Message_ID = ?";
+    $stmt = $conn->prepare($messageQuery);
     $stmt->bind_param("i", $messageId);
     $stmt->execute();
     $result = $stmt->get_result();
     $message = $result->fetch_assoc();
     $stmt->close();
+
+    if (!$message) {
+        die("Message not found.");
+    }
+} catch (Exception $e) {
+    die("Error fetching message: " . htmlspecialchars($e->getMessage()));
 }
 
-if (!$message) {
-    die("Message not found.");
+// Fetch replies (your provided code snippet)
+try {
+    $query = "SELECT 
+                  replies.Reply_ID, 
+                  replies.Reply_Text, 
+                  replies.Created_At, 
+                  sender.Name AS Sender_Name 
+              FROM replies
+              JOIN user AS sender ON replies.Sender_ID = sender.User_ID
+              WHERE replies.Message_ID = ?
+              ORDER BY replies.Created_At ASC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $messageId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $replies = [];
+    while ($row = $result->fetch_assoc()) {
+        $replies[] = $row;
+    }
+
+    $stmt->close();
+} catch (Exception $e) {
+    echo "<p>Error fetching replies: " . htmlspecialchars($e->getMessage()) . "</p>";
+    exit;
 }
 ?>
 <!DOCTYPE html>
