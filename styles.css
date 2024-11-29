@@ -4061,3 +4061,47 @@ textarea#message_text {
     }
   }
   
+  .drafts-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.drafts-list {
+    list-style: none;
+    padding: 0;
+}
+
+.draft-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.draft-item h3 {
+    margin: 0 0 10px;
+}
+
+.draft-item p {
+    margin: 5px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}

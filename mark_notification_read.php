@@ -3,30 +3,41 @@ require 'database_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $messageId = intval($_POST['message_id'] ?? 0);
-    $action = $_POST['action'] ?? '';
 
-    if (!$messageId || !$action) {
-        echo json_encode(['success' => false, 'error' => 'Invalid request.']);
+    if (!$messageId) {
+        echo json_encode(['success' => false, 'error' => 'Invalid message ID.']);
         exit;
     }
 
     try {
-        if ($action === 'restore') {
-            $query = "UPDATE messages SET Deleted_Status = 0 WHERE Message_ID = ?";
-        } elseif ($action === 'delete_forever') {
-            $query = "DELETE FROM messages WHERE Message_ID = ?";
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Unknown action.']);
-            exit;
-        }
-
-        $stmt = $conn->prepare($query);
+        // Mark the message as read
+        $markReadQuery = "UPDATE messages SET Read_Status = 1 WHERE Message_ID = ?";
+        $stmt = $conn->prepare($markReadQuery);
         $stmt->bind_param("i", $messageId);
         $stmt->execute();
+        $stmt->close();
 
-        echo json_encode(['success' => true, 'message' => 'Action completed successfully.']);
+        // Check if a reply exists
+        $checkReplyQuery = "SELECT COUNT(*) AS Reply_Count FROM replies WHERE Message_ID = ?";
+        $stmt = $conn->prepare($checkReplyQuery);
+        $stmt->bind_param("i", $messageId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $replyData = $result->fetch_assoc();
+        $stmt->close();
+
+        // If no reply exists, mark as draft
+        if ($replyData['Reply_Count'] == 0) {
+            $markDraftQuery = "UPDATE messages SET Draft_Status = 1 WHERE Message_ID = ?";
+            $stmt = $conn->prepare($markDraftQuery);
+            $stmt->bind_param("i", $messageId);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        echo json_encode(['success' => true, 'message' => 'Message updated successfully.']);
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'error' => 'Error processing request: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'error' => 'Error updating message: ' . $e->getMessage()]);
     }
 }
 ?>

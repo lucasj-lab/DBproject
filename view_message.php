@@ -119,18 +119,10 @@ if (!$message) {
             <h2>Message Details</h2>
             <p><strong>From:</strong> <?php echo htmlspecialchars($message['Sender_Name']); ?></p>
             <p><strong>Date:</strong> <?php echo htmlspecialchars($message['Created_At']); ?></p>
-            <?php 
-                        // Format the Date_Posted
-                        $formattedDate = !empty($message['Created_At']) 
-                            ? (new DateTime($message['Created_At']))->format('F j, Y') 
-                            : "Date not available"; 
-                        ?>
-                        <p><strong>Added:</strong> <?php echo htmlspecialchars($formattedDate); ?></p>
-
             <p><strong>Message:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($message['Message_Text'])); ?></p>
             <a href="messages.php" class="btn">Back to Messages</a>
-            <button id="reply_messaqge.php" class="btn">Reply</button>
+            <button id="replyButton" class="btn">Reply</button>
         </div>
     </div>
 
@@ -139,7 +131,7 @@ if (!$message) {
         <div class="modal-content">
             <span class="close-modal" id="closeReplyModal">&times;</span>
             <h3>Reply to Message</h3>
-            <textarea id="replyText" class="reply-textarea" placeholder=" Type your reply here..."></textarea>
+            <textarea id="replyText" class="reply-textarea" placeholder="Type your reply here..."></textarea>
             <div class="modal-actions">
                 <button id="saveDraft" class="btn draft-btn">Save Draft</button>
                 <button id="sendReply" class="btn send-btn">Send</button>
@@ -149,85 +141,80 @@ if (!$message) {
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-    // Your JavaScript here
-});
-        const replyModal = document.getElementById('replyModal');
-        const closeReplyModal = document.getElementById('closeReplyModal');
-        const replyButton = document.getElementById('replyButton');
-        const saveDraftButton = document.getElementById('saveDraft');
-        const sendReplyButton = document.getElementById('sendReply');
-        const replyText = document.getElementById('replyText');
+            const replyModal = document.getElementById('replyModal');
+            const closeReplyModal = document.getElementById('closeReplyModal');
+            const replyButton = document.getElementById('replyButton');
+            const saveDraftButton = document.getElementById('saveDraft');
+            const sendReplyButton = document.getElementById('sendReply');
+            const replyText = document.getElementById('replyText');
 
-        // Open reply modal
-        replyButton.addEventListener('click', () => {
-            replyModal.style.display = 'flex';
-        });
+            // Open reply modal
+            replyButton.addEventListener('click', () => {
+                replyModal.style.display = 'flex';
+            });
 
-        // Close reply modal
-        closeReplyModal.addEventListener('click', () => {
-            replyModal.style.display = 'none';
-        });
+            // Close reply modal
+            closeReplyModal.addEventListener('click', () => {
+                replyModal.style.display = 'none';
+            });
 
-        <script>
-    // Save Draft
-    document.getElementById('saveDraft').addEventListener('click', () => {
-        const messageText = document.getElementById('replyText').value.trim();
-        if (!messageText) {
-            alert('Draft cannot be empty.');
-            return;
-        }
-
-        fetch('saved_drafts.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                original_message_id: <?php echo $messageId; ?>,
-                recipient_id: <?php echo $message['Sender_ID']; ?>,
-                message_text: messageText
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                } else {
-                    alert(data.error || 'Failed to save draft.');
+            // Save Draft
+            saveDraftButton.addEventListener('click', () => {
+                const messageText = replyText.value.trim();
+                if (!messageText) {
+                    alert('Draft cannot be empty.');
+                    return;
                 }
-            })
-            .catch(err => console.error('Error saving draft:', err));
-    });
 
-    // Send Reply
-    document.getElementById('sendReply').addEventListener('click', () => {
-        const messageText = document.getElementById('replyText').value.trim();
-        if (!messageText) {
-            alert('Reply cannot be empty.');
-            return;
-        }
+                fetch('saved_drafts.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        original_message_id: <?php echo $messageId; ?>,
+                        recipient_id: <?php echo $message['Sender_ID']; ?>,
+                        message_text: messageText
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                    } else {
+                        alert(data.error || 'Failed to save draft.');
+                    }
+                })
+                .catch(err => console.error('Error saving draft:', err));
+            });
 
-        fetch('send_reply.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                original_message_id: <?php echo $messageId; ?>,
-                recipient_id: <?php echo $message['Sender_ID']; ?>,
-                message_text: messageText
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    document.getElementById('replyModal').style.display = 'none';
-                } else {
-                    alert(data.error || 'Failed to send reply.');
+            // Send Reply
+            sendReplyButton.addEventListener('click', () => {
+                const messageText = replyText.value.trim();
+                if (!messageText) {
+                    alert('Reply cannot be empty.');
+                    return;
                 }
-            })
-            .catch(err => console.error('Error sending reply:', err));
-    });
-</script>
 
+                fetch('send_reply.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        original_message_id: <?php echo $messageId; ?>,
+                        recipient_id: <?php echo $message['Sender_ID']; ?>,
+                        message_text: messageText
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        replyModal.style.display = 'none';
+                    } else {
+                        alert(data.error || 'Failed to send reply.');
+                    }
+                })
+                .catch(err => console.error('Error sending reply:', err));
+            });
+        });
+    </script>
 </body>
 </html>
-
-
