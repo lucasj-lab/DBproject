@@ -117,6 +117,6 @@ $stmt->close();
     </div>
 
     <?php include 'footer.php'; ?>
-    <script src="reply.js" defer></script>
+    <script src="messaging.js" defer></script>
 </body>
 </html>

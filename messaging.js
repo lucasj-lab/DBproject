@@ -147,33 +147,69 @@ document.querySelectorAll('.send-reply-btn').forEach(button => {
     });
 });
 
-document.querySelectorAll('.save-draft-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        const form = button.closest('form');
-        const formData = new FormData(form);
-
-        fetch('saved_drafts.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Draft saved successfully!');
-                } else {
-                    alert('Failed to save draft.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-});
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Sidebar toggle
+    const toggleSidebar = document.getElementById("toggleSidebar");
     const sidebar = document.querySelector(".sidebar");
-    const toggleBtn = document.getElementById("toggleSidebar");
+    toggleSidebar.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+    });
 
-    // Toggle Sidebar
-    toggleBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("active");
+    // Select/Deselect All Checkboxes
+    const masterCheckbox = document.querySelector("thead .checkbox-container input");
+    const messageCheckboxes = document.querySelectorAll("tbody .checkbox-container input");
+
+    if (masterCheckbox) {
+        masterCheckbox.addEventListener("change", (e) => {
+            const isChecked = e.target.checked;
+            messageCheckboxes.forEach((checkbox) => {
+                checkbox.checked = isChecked;
+            });
+        });
+    }
+
+    // Individual message actions (archive, delete, mark unread)
+    const actionButtons = document.querySelectorAll(".actions-cell button");
+    actionButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            const action = button.title.toLowerCase(); // e.g., 'archive', 'delete'
+            const messageRow = button.closest("tr");
+            const messageId = messageRow.querySelector(".checkbox-container input").value;
+
+            // Perform action via AJAX (if backend integration is needed)
+            performAction(action, messageId).then((response) => {
+                if (response.success) {
+                    if (action === "delete") {
+                        messageRow.remove(); // Remove row on successful delete
+                    } else {
+                        messageRow.classList.toggle("unread", action === "mark as unread");
+                        messageRow.classList.toggle("read", action === "mark as read");
+                    }
+                } else {
+                    console.error("Action failed:", response.message);
+                }
+            });
+        });
+    });
+
+    // Mark messages as important
+    const importanceIcons = document.querySelectorAll(".importance-cell div");
+    importanceIcons.forEach((icon) => {
+        icon.addEventListener("click", () => {
+            const isImportant = icon.getAttribute("aria-checked") === "true";
+            icon.setAttribute("aria-checked", !isImportant);
+            icon.title = isImportant ? "Mark as important" : "Unmark as important";
+        });
     });
 });
+
+// Function to simulate AJAX calls to the backend (replace with actual AJAX logic)
+function performAction(action, messageId) {
+    return new Promise((resolve) => {
+        console.log(`Performing action: ${action} on message ID: ${messageId}`);
+        setTimeout(() => {
+            resolve({ success: true }); // Simulate successful response
+        }, 500);
+    });
+}
