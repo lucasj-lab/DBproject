@@ -1,7 +1,6 @@
 <?php
 require 'database_connection.php';
 
-session_start();
 
 if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to view your inbox.");
