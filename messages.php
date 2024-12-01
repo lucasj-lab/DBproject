@@ -100,7 +100,7 @@ $section = $_GET['section'] ?? 'inbox';
             </div>
         </div>
     </div>
-    <?php include 'footer.php'; ?>
+   
     <script src="messaging.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
@@ -274,5 +274,7 @@ $section = $_GET['section'] ?? 'inbox';
         </div>
     </div>
     <script src="messaging.js"></script>
+
+    <?php include 'footer.php'; ?>
 </body>
 </html>
