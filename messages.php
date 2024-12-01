@@ -18,47 +18,32 @@ $section = $_GET['section'] ?? 'inbox';
     <title>Messages</title>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
-<body>
-    <header class="main-header">
-      
-        
-    
-        <!-- Search Bar -->
-        <div class="messages-search-container">
-            <form class="messages-search-form" role="search" aria-label="Search mail">
-                <div class="search-input-container">
-                    <input type="text" class="search-input" placeholder="Search mail" aria-label="Search mail">
-
-                </div>
-            </form>
-        </div>
-    
+<body>        
+           
         <!-- Right: Icons -->
-        <svg class="support-icon" viewBox="0 0 24 24" aria-label="Support">
+        <svg class="messages-support-icon" viewBox="0 0 24 24" aria-label="Support">
             <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
         </svg>
     
-        <svg class="waffle-icon" viewBox="0 0 24 24" aria-label="Google apps">
+        <svg class="messages-waffle-icon" viewBox="0 0 24 24" aria-label="Google apps">
             <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path>
         </svg>
     
-       
-    </header>
     
         <!-- Search Bar -->
         <div class="messages-search-container">
             <form class="messages-search-form" role="search" aria-label="Search mail">
-                <div class="search-input-container">
+                <div class="messages-search-input-container">
                     <input type="text" class="search-input" placeholder="Search mail" aria-label="Search mail">
 
                 </div>
             </form>
         </div>
-        
-    <div class="main-content">
-        <div class="navigation-container">
-            <div class="nav-bar-wrapper">
-                <nav class="nav-bar collapsed" aria-label="Main Navigation">
+
+    <div class="messages-main-content">
+        <div class="messages-navigation-container">
+            <div class="messages-nav-bar-wrapper">
+                <nav class="messages-nav-bar collapsed" aria-label="Main Navigation">
                     <table>
                         <tbody>
                             <tr>
@@ -100,36 +85,36 @@ $section = $_GET['section'] ?? 'inbox';
                     </table>
                 </nav>
             </div>
-            <div class="form-container">
-                <div class="form-content">
-                    <div class="sticky-headers">
-                        <div class="header-actions">
-                            <div class="filter-container">
+            <div class="messages-form-container">
+                <div class="messages-form-content">
+                    <div class="messages-sticky-headers">
+                        <div class="messages-header-actions">
+                            <div class="messages-filter-container">
                                 <input type="checkbox" id="select-all">
                                 <label for="select-all" class="filter-label">
                                     <span>▼</span>
                                 </label>
                             </div>
-                            <div class="bulk-actions">
+                            <div class="messages-bulk-actions">
                                 <span class="icon trash" title="Delete">🗑️</span>
                                 <span class="icon mark-read" title="Mark as Read">✓</span>
                             </div>
                         </div>
-                        <div class="header-table">
+                        <div class="messages-header-table">
                             <table>
                                 <tr>
-                                    <td class="tab active" id="primary-tab">Primary</td>
-                                    <td class="tab" id="promotions-tab">Promotions</td>
-                                    <td class="tab" id="social-tab">Social</td>
-                                    <td class="tab" id="updates-tab">Updates</td>
+                                    <td class="messages-tab active" id="messages-primary-tab">Primary</td>
+                                    <td class="messages-tab" id="promotions-tab">Promotions</td>
+                                    <td class="messages-tab" id="social-tab">Social</td>
+                                    <td class="messages-tab" id="updates-tab">Updates</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <div class="scroll-zone">
-                        <div class="resizable-container">
-                            <div class="messages-section">
-                                <table class="messages-table">
+                    <div class="messages-scroll-zone">
+                        <div class="messages-resizable-container">
+                            <div class="messages-messages-section">
+                                <table class="messages-messages-table">
                                     <thead>
                                         <tr>
                                             <th>Select</th>
@@ -140,7 +125,7 @@ $section = $_GET['section'] ?? 'inbox';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="unread">
+                                        <tr class="messages-unread">
                                             <td><input type="checkbox" class="message-select"></td>
                                             <td>
                                                 <input type="checkbox" id="star1" class="star-checkbox">
@@ -150,7 +135,7 @@ $section = $_GET['section'] ?? 'inbox';
                                             <td>Meeting Reminder</td>
                                             <td>2024-11-30</td>
                                         </tr>
-                                        <tr class="read">
+                                        <tr class="messages-read">
                                             <td><input type="checkbox" class="message-select"></td>
                                             <td>
                                                 <input type="checkbox" id="star2" class="star-checkbox">
@@ -160,7 +145,7 @@ $section = $_GET['section'] ?? 'inbox';
                                             <td>Project Update</td>
                                             <td>2024-11-29</td>
                                         </tr>
-                                        <tr class="unread">
+                                        <tr class="messages-unread">
                                             <td><input type="checkbox" class="message-select"></td>
                                             <td>
                                                 <input type="checkbox" id="star3" class="star-checkbox">
@@ -173,12 +158,12 @@ $section = $_GET['section'] ?? 'inbox';
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="resizable-divider"></div>
-                            <div class="message-view-section">
+                            <div class="messages-resizable-divider"></div>
+                            <div class="messages-message-view-section">
                                 <div class="message-view-header">
                                     <h2>Message View</h2>
                                 </div>
-                                <div class="message-view-content">
+                                <div class="messages-message-view-content">
                                     <p>Select a message to view its content.</p>
                                 </div>
                             </div>

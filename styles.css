@@ -4168,198 +4168,665 @@ textarea#message_text {
 .send-btn:hover {
     background-color: #0056b3;
 }
-
-/* Message table styles */
-.message-table-container {
-    flex: 2; /* Take up 2/3 of the space */
-    overflow-y: auto;
-    border-right: 1px solid #ddd;
-    padding: 10px;
+.message-body {
+    margin: 0;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
 }
 
-.message-table {
+.message-body {
+    background-color: #626675;
+}
+
+/* General Header Styling */
+.messages-main-header {
+    display: flex;
+    padding: 10px 20px;
+    color: rgb(0 0 0 / 87%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    align-items: center;
+}
+
+/* Hamburger Menu */
+.messages-hamburger-menu {
+    margin-left: -10px; /* Position 20px from the left border */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.hamburger-menu:hover .hamburger-icon {
+    transform: scale(1.2);
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 24px;
+    fill: #000000;
+}
+
+/* Search Bar Container */
+.messages-search-container {
+    flex: 1;
+    display: flex;
+    margin-left: 230px;
+    align-items: center;
+}
+
+.messages-search-input-container {
+    display: flex;
+    width: 100%;
+    border: 1px solid #444746;
+    border-radius: 30px;
+    background-color: #f9f9f959;
+    padding: 8px 8px;
+    align-items: center;
+}
+
+.messages-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #e3e3e3;
+    outline: none;
+    padding: 8px 12px;
+    font-size: 1rem;
+}
+
+.messages-search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.messages-search-button:hover svg {
+    transform: scale(1.2);
+}
+
+.messages-search-button svg {
+    width: 24px;
+    height: 24px;
+    fill: rgba(255, 255, 255, 0.87);
+}
+
+/* Icons Group */
+.messages-icons-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 10px spacing between icons */
+}
+
+/* Individual Icons */
+.messages-support-icon,
+.messages-waffle-icon,
+.messages-user-icon {
+    margin-left: o; 
+    cursor: pointer;
+    transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+/* Support and Waffle Icons */
+.messages-support-icon,
+.messages-waffle-icon {
+    width: 24px;
+    height: 24px;
+    fill: rgba(0, 0, 0, 0.87);
+}
+
+.support-icon:hover,
+.waffle-icon:hover {
+    transform: scale(1.2);
+    fill: #ffffff85;
+}
+
+/* User Icon (Image) */
+.user-icon {
+    margin-left: auto; /* Push to the far right */
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Main content layout */
+.messages-main-content {
+    display: flex;
+    height: calc(100vh - 64px); /* Adjust for header height */
+    flex-direction: column-reverse;
+}
+
+
+/* Navigation container */
+.messages-navigation-container {
+    position: relative;
+    height: 100%;
+    display: flex;
+}
+
+/* Nav bar */
+.messages-nav-bar {
+    background-color: #00000000; /* Surface color */
+    /* color: #f9f9f9; */ /* On-surface color */
+    overflow: hidden;
+    transition: width 0.3s ease;
+    display: flex;
+    min-height: 100%;
+    z-index: 2;
+    margin-right: 2px;
+    margin-top: 20px;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+/* Expanded nav bar */
+.messages-nav-bar.expanded {
+    width: 240px;
+    /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); */
+    background-color: #626675;
+    /* border-radius: 15px; */
+}
+
+/* Table inside nav bar */
+.messages-nav-bar table {
+    width: 100%; 
+    height: 100%; 
+}
+
+.messages-nav-bar .icon {
+    font-size: 1.5em;
+    padding-right: 10px;
+    text-align: center;
+}
+
+/* Labels and counts visibility */
+.messages-nav-bar .label,
+.messages-nav-bar .count {
+    display: none; /* Default hidden */
+}
+
+.messages-nav-bar.expanded .label,
+.messages-nav-bar.expanded .count {
+    display: table-cell; /* Show only when expanded */
+    vertical-align: middle;
+    background-color: #f9f9f94a;
+    /* border-radius: 30px; */
+    max-width: 184px;
+}
+
+/* Hover effect */
+.messages-nav-bar:not(.toggled):hover {
+    width: 240px; /* Temporary expand on hover */
+    position: absolute; /* Overlaps form container */
+}
+
+.messages-nav-bar:not(.toggled):hover .label,
+.messages-nav-bar:not(.toggled):hover .count {
+    display: table-cell; /* Show labels and counts on hover */
+    background-color:#ffffff57;
+    margin-left: 10px;
+}
+/* Form container styling */
+/* Main form container */
+.messages-form-container {
+    /* margin-left: 25px; */
+    width: 100%; /* Fixed width for the form container */
+    background: rgba(255, 255, 255, 0.8); /* Transparent background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds depth with shadow */
+    border-radius: 15px; /* Rounded corners */
+    overflow-y: hidden;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+
+
+.messages-form-content {
+ 
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+}
+
+/* Header 1 Styling */
+.messages-sticky-headers h1 {
+    width: 100%; /* Expand header to full width of container */
+    font-size: 2.5rem; /* Large font size for emphasis */
+    color: #000000; /* Dark gray for header text */
+    text-align: center; /* Center align header text */
+    text-transform: uppercase; /* Uppercase styling */
+    /* margin-bottom: 15px; */
+    /* border-bottom: 2px solid #ccc; */ /* Adds a bottom border */
+    padding-bottom: 10px;
+}
+
+/* Header 2 Styling */
+.messages-sticky-headers h2 {
+    width: 100%; /* Expand header to full width of container */
+    font-size: 1.8rem; /* Slightly smaller than Header 1 */
+    color: #555; /* Slightly lighter gray for contrast */
+    text-align: center; /* Center align header text */
+    margin-top: 15px;
+    border-top: 2px solid #ccc; /* Adds a top border */
+    padding-top: 10px;
+}
+/* Scroll Zone Container */
+.messages-scroll-zone {
+    max-height: calc(var(--row-height, 40px) * 50); /* Limit to 50 rows */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 20px 0;
+    scrollbar-width: thin; /* For Firefox */
+    align-items: center;
+}
+
+/* Scrollable Body */
+.messages-scrollable-body {
+    max-height: inherit; /* Inherit max height from the parent container */
+    overflow-y: inherit; /* Follow the scroll zone behavior */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Scroll Table */
+.messages-scroll-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.message-table th,
-.message-table td {
+.messages-scroll-table th,
+.messages-scroll-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.message-table th {
-    background-color: #f4f4f4;
+.messages-scroll-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
 }
 
-.message-row:hover {
+.messages-scroll-table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.scroll-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Custom Scrollbar */
+.scroll-zone::-webkit-scrollbar {
+     width: 8px; 
+}
+
+.scroll-zone::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.scroll-zone::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.scroll-zone::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dynamic Row Height */
+:root {
+    --row-height: 10px; /* Default row height */
+}
+
+@media (min-width: 768px) {
+    :root {
+       --row-height: 50px;
+    }
+}
+
+/* Style for the nav-bar table (converted to ul/li) */
+.nav-bar ul {
+    list-style: none; /* Remove default bullets */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    height: 100%; /* Full height to fit nav-bar */
+}
+
+/* Individual list items */
+.nav-bar li {
+    display: flex; /* Align icon and label inline */
+    align-items: center; /* Center vertically */
+    justify-content: flex-start; /* Align items to the left */
+    padding: 12px 16px; /* Add spacing */
+    cursor: pointer; /* Show pointer cursor */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effect */
+    font-size: 1rem; /* Improve readability */
+    font-weight: 500; /* Slightly bold for better visibility */
+    color: #333; /* Default text color */
+    border-radius: 8px; /* Add subtle rounding for a modern look */
+}
+
+/* Hover effect for list items */
+.messages-nav-bar li:hover {
+    background-color: #e0e0e0; /* Light gray hover background */
+    color: #000; /* Darken text color on hover */
+}
+
+/* Active state for the current section */
+.messages-nav-bar li.active {
+    background-color: #c0c0c0; /* Highlight active section */
+    color: #000; /* Ensure contrast for active text */
+    font-weight: bold; /* Make active item stand out */
+    border-left: 4px solid royalblue; /* Add an accent border */
+}
+
+/* Icon styling */
+.messages-nav-bar .icon {
+    font-size: 1.5rem; /* Increase icon size */
+    margin-right: 12px; /* Space between icon and label */
+    color: #666; /* Subtle gray color for icons */
+}
+
+/* Label styling */
+.messages-nav-bar .label {
+    /* font-size: 1rem; */ /* Keep labels consistent with list item size */
+    /* color: inherit; */ /* Inherit text color */
+}
+
+/* Adjust padding and alignment for smaller screens */
+@media (max-width: 768px) {
+    .nav-bar li {
+        font-size: 0.9rem; /* Slightly smaller font size */
+        padding: 10px 12px; /* Adjust padding */
+    }
+    .nav-bar .icon {
+        font-size: 1.2rem; /* Adjust icon size */
+    }
+}
+
+/* Remove underline from nav links */
+.messages-nav-bar a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit text color from parent (list item) */
+    display: flex; /* Align links with flex items */
+     /* Center vertically with icons */
+    width: 100%; /* Ensure clickable area spans the entire list item */
+    /* padding: 1px; */ /* Add padding for clickable area */
+    /* border-radius: 30px; */ /* Match list item rounding */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover */
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* Hover effect for links */
+.messages-nav-bar a:hover {
+    background-color: #e0e0e0; /* Light gray hover background */
+    color: #000000; /* Darken text color on hover */
+    border-radius: 0px;
+}
+
+/* Active link styling */
+.messages-nav-bar a.active {
+    background-color: #c0c0c0; /* Highlight active link */
+    color: #000; /* Ensure contrast for active link text */
+    font-weight: bold; /* Emphasize active link */
+    border-left: 4px solid royalblue; /* Add an accent border */
+}
+/* Messages Section */
+.messages-section {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* Messages Table */
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.messages-table th,
+.messages-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.messages-table tr:hover {
+    background-color: rgba(0, 0, 255, 0.1); /* Light blue hover effect */
+    cursor: pointer;
+    position: relative;
+}
+
+.messages-table tr:hover::after {
+    content: 'Click to view';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+
+.message-view-section {
+    flex: 2;
+    overflow-y: auto;
+    background-color: #ffffff;
+    padding: 10px;
+    height: 100%;
+}
+
+.message-view-content {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 500px;
+    min-width: 300px;
+}
+
+/* Resizable Container */
+.messages-resizable-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Messages Section */
+.messages-section {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ddd;
+}
+
+/* Message View Section */
+.message-view-section {
+    flex-grow: 2;
+    flex-shrink: 1;
+    min-width: 300px;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+/* Resizable Divider */
+.resizable-divider {
+    width: 5px;
+    background-color: #ccc;
+    cursor: col-resize;
+}
+
+/* Messages Table */
+.messages-messages-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.messages-messages-table th,
+.messages-messages-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.messages-messages-table tr:hover {
+    background-color: rgba(0, 0, 255, 0.1);
     cursor: pointer;
 }
 
-/* Message viewer styles */
-.message-viewer {
-    flex: 3; /* Take up 1/3 of the space */
-    padding: 20px;
-    overflow-y: auto;
-    background-color: #fff;
-    border-left: 1px solid #ddd;
+
+/* Message Header Controls */
+.messages-message-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.message-viewer h2 {
-    margin-top: 0;
+.messages-message-controls input[type="checkbox"] {
+    margin-right: 5px;
 }
 
-.message-viewer .message-content {
+.messages-message-controls select {
+    margin-left: 10px;
+    padding: 5px;
+}
+/* Messages Table */
+.messages-messages-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.messages-messages-table th,
+.messages-messages-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Star Styling */
+.messages-star-checkbox {
+    display: none; /* Hide the checkbox itself */
+}
+
+.messages-star-label {
+    /* font-size: 1.5rem; */
+    cursor: pointer;
+    color: gray;
+    transition: color 0.2s ease;
+}
+
+.messages-star-checkbox:checked + .star-label {
+    color: gold; /* Highlight the star when checked */
+}
+
+/* Checkbox Styling */
+.message-select {
+    cursor: pointer;
+}
+
+/* Sticky Headers */
+.sticky-headers {
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.sticky-headers h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: #333;
+}
+
+/* Header 2 Table */
+.header-table {
+    margin-top: 10px;
+}
+
+.header-table table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.header-table td {
+    padding: 10px;
+    cursor: pointer;
     font-size: 1rem;
-    color: #555;
+    font-weight: bold;
+    color: #666;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-
-/* Responsive Design for Navigation and Main Layout */
-@media (max-width: 1024px) {
-    .navigation-container {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .nav-bar {
-        width: 100%;
-        order: 1; /* Move below the header on smaller screens */
-    }
-
-    .nav-bar.expanded {
-        width: 100%;
-    }
-
-    .form-container {
-        margin-left: 0;
-    }
+.header-table .tab.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000;
 }
 
-@media (max-width: 768px) {
-    .main-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .hamburger-menu {
-        margin-left: 0;
-        margin-bottom: 10px;
-    }
-
-    .search-container {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .search-input-container {
-        width: 100%;
-    }
-
-    .navigation-container {
-        flex-direction: column;
-    }
-
-    .nav-bar {
-        display: none; /* Hide the nav-bar initially */
-        width: 100%;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        background-color: #626675;
-        z-index: 1000;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .nav-bar.expanded {
-        display: flex; /* Show the nav-bar when expanded */
-    }
-
-    .form-container {
-        margin: 0;
-        width: 100%;
-    }
-
-    .messages-section {
-        min-width: unset;
-    }
-
-    .message-view-section {
-        min-width: unset;
-    }
+/* Messages Table */
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-@media (max-width: 480px) {
-    .main-header {
-        padding: 10px;
-    }
-
-    .hamburger-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .search-input {
-        font-size: 0.9rem;
-    }
-
-    .messages-table th,
-    .messages-table td {
-        font-size: 0.85rem;
-        padding: 6px;
-    }
-
-    .sticky-headers h1 {
-        font-size: 1.5rem;
-    }
+.messages-table th,
+.messages-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-/* Responsive Adjustments for the Scroll Zone */
-.scroll-zone {
-    padding: 5px;
-    margin: 10px 0;
+/* Read and Unread Styling */
+.messages-unread {
+    font-weight: bold;
 }
 
-.scroll-table th,
-.scroll-table td {
-    font-size: 0.9rem;
-    padding: 5px;
+.messages-read {
+    opacity: 0.7;
+    font-weight: normal;
 }
 
-/* Ensure Resizable Sections Work Well in Smaller Screens */
-@media (max-width: 768px) {
-    .resizable-container {
-        flex-direction: column;
-    }
-
-    .resizable-divider {
-        width: 100%;
-        height: 5px;
-        cursor: row-resize;
-    }
-
-    .messages-section {
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .message-view-section {
-        padding: 5px;
-    }
+/* Selected Row Styling */
+.messages-selected {
+    background-color: rgba(0, 0, 255, 0.1);
 }
 
-/* Responsive Adjustments for Navigation Items */
-@media (max-width: 480px) {
-    .nav-bar li {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-    }
+/* Star Styling */
+.messages-star-checkbox {
+    display: none;
+}
 
-    .nav-bar .icon {
-        font-size: 1rem;
-        margin-right: 8px;
-    }
+.messages-star-label {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: gray;
+    transition: color 0.2s ease;
+}
+
+.messages-star-checkbox:checked + .star-label {
+    color: gold;
 }
 
