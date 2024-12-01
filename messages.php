@@ -20,12 +20,12 @@ $section = $_GET['section'] ?? 'inbox';
 </head>
 <body>
     <header class="main-header">
-        <!-- Hamburger Menu -->
+      
         
     
         <!-- Search Bar -->
-        <div class="search-container">
-            <form class="search-form" role="search" aria-label="Search mail">
+        <div class="messages-search-container">
+            <form class="messages-search-form" role="search" aria-label="Search mail">
                 <div class="search-input-container">
                     <input type="text" class="search-input" placeholder="Search mail" aria-label="Search mail">
 
@@ -35,15 +35,26 @@ $section = $_GET['section'] ?? 'inbox';
     
         <!-- Right: Icons -->
         <svg class="support-icon" viewBox="0 0 24 24" aria-label="Support">
+            <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
         </svg>
     
         <svg class="waffle-icon" viewBox="0 0 24 24" aria-label="Google apps">
-          
+            <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path>
         </svg>
     
        
     </header>
+    
+        <!-- Search Bar -->
+        <div class="messages-search-container">
+            <form class="messages-search-form" role="search" aria-label="Search mail">
+                <div class="search-input-container">
+                    <input type="text" class="search-input" placeholder="Search mail" aria-label="Search mail">
 
+                </div>
+            </form>
+        </div>
+        
     <div class="main-content">
         <div class="navigation-container">
             <div class="nav-bar-wrapper">
