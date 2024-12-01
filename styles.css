@@ -3852,7 +3852,7 @@ textarea#message_text {
     transform: translateY(-2px); /* Slight elevation effect */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
     outline: none;
-}
+} 
 
 /* Active State */
 .home-pill-button:active {
