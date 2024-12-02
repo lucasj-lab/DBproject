@@ -80,8 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div>
         <h1>Send Message</h1>
         <?php if ($error_message): ?>
-            <p style="color: red;"><?php echo htmlspecialchars($error_message); ?></p>
-        <?php endif; ?>
+            <p style="color: white; background-color: red; border: 2px solid red; padding: 10px; font-size: xxx-large; font-weight: bold; text-align: center;">
+    <?php echo htmlspecialchars($error_message); ?>
+</p>
+<?php endif; ?>
+
         <?php if (isset($_SESSION['message'])): ?>
             <p style="color: green;"><?php echo htmlspecialchars($_SESSION['message']); ?></p>
             <?php unset($_SESSION['message']); // Clear after displaying ?>
