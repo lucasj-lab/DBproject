@@ -146,30 +146,30 @@ $section = $_GET['section'] ?? 'inbox';
                                     </thead>
                                     <tbody>
                                         <tr class="messages-unread">
-                                            <td><input type="checkbox" class="message-select"></td>
+                                            <td><input type="checkbox" class="messages-message-select"></td>
                                             <td>
-                                                <input type="checkbox" id="star1" class="star-checkbox">
-                                                <label for="star1" class="star-label">⭐</label>
+                                                <input type="checkbox" id="star1" class="messages-star-checkbox">
+                                                <label for="star1" class="messages-star-label">⭐</label>
                                             </td>
                                             <td>John Doe</td>
                                             <td>Meeting Reminder</td>
                                             <td>2024-11-30</td>
                                         </tr>
                                         <tr class="messages-read">
-                                            <td><input type="checkbox" class="message-select"></td>
+                                            <td><input type="checkbox" class="messages-message-select"></td>
                                             <td>
-                                                <input type="checkbox" id="star2" class="star-checkbox">
-                                                <label for="star2" class="star-label">⭐</label>
+                                                <input type="checkbox" id="star2" class="messages-star-checkbox">
+                                                <label for="star2" class="messages-star-label">⭐</label>
                                             </td>
                                             <td>Jane Smith</td>
                                             <td>Project Update</td>
                                             <td>2024-11-29</td>
                                         </tr>
                                         <tr class="messages-unread">
-                                            <td><input type="checkbox" class="message-select"></td>
+                                            <td><input type="checkbox" class="messages-message-select"></td>
                                             <td>
-                                                <input type="checkbox" id="star3" class="star-checkbox">
-                                                <label for="star3" class="star-label">⭐</label>
+                                                <input type="checkbox" id="star3" class="messages-star-checkbox">
+                                                <label for="star3" class="messages-star-label">⭐</label>
                                             </td>
                                             <td>Alex Johnson</td>
                                             <td>Invoice Details</td>

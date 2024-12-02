@@ -3493,7 +3493,7 @@ body {
 }
 
 /* Main Content Styles */
-.main-content {
+.messages-main-content {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
@@ -4196,7 +4196,7 @@ textarea#message_text {
     transition: transform 0.2s ease;
 }
 
-.hamburger-menu:hover .hamburger-icon {
+.messages-hamburger-menu:hover hamburger-icon {
     transform: scale(1.2);
 }
 
@@ -4458,25 +4458,25 @@ textarea#message_text {
     background-color: #f9f9f9;
 }
 
-.scroll-table tr:hover {
+.messages-scroll-table tr:hover {
     background-color: #f1f1f1;
 }
 
 /* Custom Scrollbar */
-.scroll-zone::-webkit-scrollbar {
+.messages-scroll-zone::-webkit-scrollbar {
      width: 8px; 
 }
 
-.scroll-zone::-webkit-scrollbar-thumb {
+.messages-scroll-zone::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
 
-.scroll-zone::-webkit-scrollbar-thumb:hover {
+.messages-scroll-zone::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.scroll-zone::-webkit-scrollbar-track {
+.messages-scroll-zone::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -4492,7 +4492,7 @@ textarea#message_text {
 }
 
 /* Style for the nav-bar table (converted to ul/li) */
-.nav-bar ul {
+.messages-nav-bar ul {
     list-style: none; /* Remove default bullets */
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
@@ -4502,7 +4502,7 @@ textarea#message_text {
 }
 
 /* Individual list items */
-.nav-bar li {
+.messages-nav-bar li {
     display: flex; /* Align icon and label inline */
     align-items: center; /* Center vertically */
     justify-content: flex-start; /* Align items to the left */
@@ -4583,7 +4583,7 @@ textarea#message_text {
     border-left: 4px solid royalblue; /* Add an accent border */
 }
 /* Messages Section */
-.messages-section {
+.messages-messages-section {
     flex: 1;
     overflow-y: auto;
     background-color: #f9f9f9;
@@ -4592,13 +4592,13 @@ textarea#message_text {
 }
 
 /* Messages Table */
-.messages-table {
+.messages-messages-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.messages-table th,
-.messages-table td {
+.messages-messages-table th,
+.messages-messages-table td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
@@ -4610,7 +4610,7 @@ textarea#message_text {
     position: relative;
 }
 
-.messages-table tr:hover::after {
+.messages-messages-table tr:hover::after {
     content: 'Click to view';
     position: absolute;
     top: 50%;
