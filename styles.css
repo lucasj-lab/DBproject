@@ -4377,7 +4377,7 @@ textarea#message_text {
 .messages-form-container {
     /* margin-left: 25px; */
     width: 100%; /* Fixed width for the form container */
-    background: rgba(255, 255, 255, 0.8); /* Transparent background */
+    background: rgba(0, 0, 0, 0.8); /* Transparent background */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds depth with shadow */
     border-radius: 15px; /* Rounded corners */
     overflow-y: hidden;
