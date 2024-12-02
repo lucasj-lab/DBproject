@@ -25,7 +25,7 @@ $section = $_GET['section'] ?? 'inbox';
 <div class="messages-main-header">
     <!-- Hamburger Menu -->
     <div class="messages-hamburger-menu" id="main-menu" aria-expanded="false" aria-label="Main menu" role="button" tabindex="0">
-        <svg focusable="false" viewBox="0 0 24 24" class="hamburger-icon">
+        <svg focusable="false" viewBox="0 0 24 24" class="messages-hamburger-icon">
             <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
         </svg>
     </div>
