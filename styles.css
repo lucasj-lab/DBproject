@@ -4824,7 +4824,7 @@ textarea#message_text {
     transition: color 0.2s ease;
 }
 
-.messages-star-checkbox:checked + .star-label {
+.messages-star-checkbox:checked + .messages-star-label {
     color: gold;
 }
 
