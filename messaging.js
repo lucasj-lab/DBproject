@@ -347,7 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Hamburger Menu Toggle
 document.querySelector(".hamburger-menu").addEventListener("click", function () {
     const messagesNavBar = document.querySelector('.messages-nav-bar');
-    const formContainer = document.querySelector('form-container');
+    const messagesformContainer = document.querySelector('.messages-form-container');
     const isExpanded = messagesNavBar.classList.toggle('expanded'); // Toggle expanded class
 
     if (isExpanded) {
@@ -359,9 +359,9 @@ document.querySelector(".hamburger-menu").addEventListener("click", function () 
 
 // Hover effect to expand messages-nav bar temporarily
 document.querySelector('.messages-nav-bar').addEventListener('mouseover', () => {
-    const navBar = document.querySelector('.messages-nav-bar');
-    if (!navBar.classList.contains('toggled')) {
-        navBar.classList.add('expanded'); // Temporarily expand on hover
+    const messageNavBar = document.querySelector('.messages-nav-bar');
+    if (!messagesNavBar.classList.contains('toggled')) {
+        messagesNavBar.classList.add('expanded'); // Temporarily expand on hover
     }
 });
 
@@ -587,10 +587,10 @@ document.querySelector('.messages-hamburger-menu').addEventListener('click', fun
     const isExpanded = messagesNavBar.classList.toggle('expanded'); // Toggle expanded class
 
     if (isExpanded) {
-        messages.navBar.classList.add('toggled'); // Lock in expanded state
+        messagesNavBar.classList.add('toggled'); // Lock in expanded state
         messagesFormContainer.style.marginLeft = '240px'; // Adjust form container margin
     } else {
-        navBar.classList.remove('toggled'); // Allow hover functionality
+        messagesNavBar.classList.remove('toggled'); // Allow hover functionality
         messagesFormContainer.style.marginLeft = '60px'; // Reset form container margin
     }
 });
