@@ -23,7 +23,6 @@ if (!$user_id) {
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                margin: 0;
                 background-color: #f4f4f9;
             }
             .redirect-message-container {
