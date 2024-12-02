@@ -31,16 +31,16 @@ function fetchMessages(senderId, receiverId, listingId = null) {
 
     fetch(`fetch_messages.php?${params.toString()}`)
         .then(response => response.json())
-        .then(messages => {
+        .then(message => {
             const container = document.getElementById('messagesContainer');
             container.innerHTML = ''; // Clear previous messages
 
-            if (messages.length === 0) {
+            if (message.length === 0) {
                 container.innerHTML = `<p>No messages found.</p>`;
                 return;
             }
 
-            messages.forEach(message => {
+            message.forEach(message => {
                 const messageElement = document.createElement('div');
                 messageElement.className = 'message-item';
                 messageElement.innerHTML = `
@@ -52,7 +52,7 @@ function fetchMessages(senderId, receiverId, listingId = null) {
         })
         .catch(error => {
             console.error('Error fetching messages:', error);
-            const container = document.getElementById('messagesContainer');
+            const container = document.getElementById('messageContainer');
             container.innerHTML = `<p class="error">An error occurred while fetching messages. Please try again later.</p>`;
         });
 }
@@ -158,12 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Select/Deselect All Checkboxes
     const masterCheckbox = document.querySelector("thead .checkbox-container input");
-    const messageCheckboxes = document.querySelectorAll("tbody .checkbox-container input");
+    const messagesCheckboxes = document.querySelectorAll("tbody .messages-checkbox-container input");
 
     if (masterCheckbox) {
         masterCheckbox.addEventListener("change", (e) => {
             const isChecked = e.target.checked;
-            messageCheckboxes.forEach((checkbox) => {
+            messagesCheckboxes.forEach((messagesCheckbox) => {
                 checkbox.checked = isChecked;
             });
         });
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", (e) => {
             const action = button.title.toLowerCase(); // e.g., 'archive', 'delete'
             const messageRow = button.closest("tr");
-            const messageId = messageRow.querySelector(".checkbox-container input").value;
+            const messageId = messageRow.querySelector(".messages-checkbox-container input").value;
 
             // Perform action via AJAX (if backend integration is needed)
             performAction(action, messageId).then((response) => {
