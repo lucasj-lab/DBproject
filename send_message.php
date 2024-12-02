@@ -10,9 +10,12 @@ $success_message = '';
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
     $error_message = 'You must be logged in to send a message.';
-    echo "<p style='color: red;'>$error_message</p>";
+    echo "<p style='color: white; background-color: red; border: 2px solid red; padding: 10px; font-size: xxx-large; font-weight: bold; text-align: center;'>"
+         . htmlspecialchars($error_message) .
+         "</p>";
     exit;
 }
+
 
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

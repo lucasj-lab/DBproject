@@ -4606,7 +4606,7 @@ textarea#message_text {
     text-align: left;
 }
 
-.messages-table tr:hover {
+.messages-messages-table tr:hover {
     background-color: rgba(0, 0, 255, 0.1); /* Light blue hover effect */
     cursor: pointer;
     position: relative;
@@ -4627,7 +4627,7 @@ textarea#message_text {
 }
 
 
-.message-view-section {
+.messages-message-view-section {
     flex: 2;
     overflow-y: auto;
     background-color: #ffffff;
@@ -4635,7 +4635,7 @@ textarea#message_text {
     height: 100%;
 }
 
-.message-view-content {
+.messages-message-view-content {
     padding: 10px;
     background-color: #f5f5f5;
     border: 1px solid #ddd;
@@ -4652,7 +4652,7 @@ textarea#message_text {
 }
 
 /* Messages Section */
-.messages-section {
+.messages-messages-section {
     flex-grow: 1;
     flex-shrink: 1;
     min-width: 300px;
@@ -4662,7 +4662,7 @@ textarea#message_text {
 }
 
 /* Message View Section */
-.message-view-section {
+.messages-message-view-section {
     flex-grow: 2;
     flex-shrink: 1;
     min-width: 300px;
@@ -4671,7 +4671,7 @@ textarea#message_text {
 }
 
 /* Resizable Divider */
-.resizable-divider {
+.messages-resizable-divider {
     width: 5px;
     background-color: #ccc;
     cursor: col-resize;
@@ -4741,12 +4741,12 @@ textarea#message_text {
 }
 
 /* Checkbox Styling */
-.message-select {
+.messages-message-select {
     cursor: pointer;
 }
 
 /* Sticky Headers */
-.sticky-headers {
+.messages-sticky-headers {
     background-color: #ffffff;
     padding: 10px;
     border-bottom: 1px solid #ddd;
@@ -4755,18 +4755,18 @@ textarea#message_text {
     z-index: 1;
 }
 
-.sticky-headers h1 {
+.messages-sticky-headers h1 {
     font-size: 2rem;
     margin: 0;
     color: #333;
 }
 
 /* Header 2 Table */
-.header-table {
+.messages-header-table {
     margin-top: 10px;
 }
 
-.header-table table {
+.messages-header-table table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;

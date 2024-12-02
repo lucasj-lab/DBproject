@@ -160,7 +160,7 @@ $section = $_GET['section'] ?? 'inbox';
                             </div>
                             <div class="messages-resizable-divider"></div>
                             <div class="messages-message-view-section">
-                                <div class="message-view-header">
+                                <div class="messages-message-view-header">
                                     <h2>Message View</h2>
                                 </div>
                                 <div class="messages-message-view-content">
