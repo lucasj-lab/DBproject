@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Hamburger Menu Toggle
 document.querySelector(".hamburger-menu").addEventListener("click", function () {
-    const navBar = document.querySelector('.nav-bar');
+    const navBar = document.querySelector('.messages-nav-bar');
     const formContainer = document.querySelector('.form-container');
     const isExpanded = navBar.classList.toggle('expanded'); // Toggle expanded class
 
@@ -357,26 +357,26 @@ document.querySelector(".hamburger-menu").addEventListener("click", function () 
     }
 });
 
-// Hover effect to expand nav bar temporarily
-document.querySelector('.nav-bar').addEventListener('mouseover', () => {
-    const navBar = document.querySelector('.nav-bar');
+// Hover effect to expand messages-nav bar temporarily
+document.querySelector('.messages-nav-bar').addEventListener('mouseover', () => {
+    const navBar = document.querySelector('.messages-nav-bar');
     if (!navBar.classList.contains('toggled')) {
         navBar.classList.add('expanded'); // Temporarily expand on hover
     }
 });
 
-// Collapse nav bar when the mouse leaves
-document.querySelector('.nav-bar').addEventListener('mouseleave', () => {
-    const navBar = document.querySelector('.nav-bar');
+// Collapse messages-nav bar when the mouse leaves
+document.querySelector('.messages-nav-bar').addEventListener('mouseleave', () => {
+    const messagesNavBar = document.querySelector('.messages-nav-bar');
     if (!navBar.classList.contains('toggled')) {
         navBar.classList.remove('expanded'); // Collapse if not permanently toggled
     }
 });
 
-const divider = document.querySelector('.resizable-divider');
-const leftPane = document.querySelector('.messages-section');
-const rightPane = document.querySelector('.message-view-section');
-const container = document.querySelector('.resizable-container');
+const divider = document.querySelector('.messages-resizable-divider');
+const leftPane = document.querySelector('.messages-messages-section');
+const rightPane = document.querySelector('.messages-message-view-section');
+const container = document.querySelector('.messages-resizable-container');
 
 let isDragging = false;
 
@@ -434,15 +434,15 @@ function renderMessages(filter = 'all') {
         .filter((message) => {
             if (filter === 'all') return true;
             if (filter === 'none') return false;
-            if (filter === 'read') return message.read;
-            if (filter === 'unread') return !message.read;
-            if (filter === 'starred') return message.starred;
-            if (filter === 'unstarred') return !message.starred;
+            if (filter === 'read') return message.messages-read;
+            if (filter === 'unread') return !message.messages-read;
+            if (filter === 'starred') return message.messsages-starred;
+            if (filter === 'unstarred') return !message.messages-starred;
         })
         .map(
             (message) => `
             <tr>
-                <td><input type="checkbox" class="message-select"></td>
+                <td><input type="checkbox" class="messages-message-select"></td>
                 <td>
                     <span class="star-icon ${
                         message.starred ? 'active' : ''
@@ -459,7 +459,7 @@ function renderMessages(filter = 'all') {
 
 // Toggle Star Status
 tbody.addEventListener('click', (e) => {
-    if (e.target.classList.contains('star-icon')) {
+    if (e.target.classList.contains('messages-star-icon')) {
         const id = e.target.dataset.id;
         const message = sampleMessages.find((msg) => msg.id === Number(id));
         message.starred = !message.starred;
@@ -470,7 +470,7 @@ tbody.addEventListener('click', (e) => {
 // Handle Select All Checkbox
 selectAllCheckbox.addEventListener('change', (e) => {
     document
-        .querySelectorAll('.message-select')
+        .querySelectorAll('.messages-message-select')
         .forEach((checkbox) => (checkbox.checked = e.target.checked));
 });
 
@@ -483,7 +483,7 @@ filterOptions.addEventListener('change', (e) => {
 renderMessages();
 
 // Add event listeners to all message checkboxes
-document.querySelectorAll('.message-select').forEach((checkbox) => {
+document.querySelectorAll('.messages-message-select').forEach((checkbox) => {
     checkbox.addEventListener('change', (e) => {
         const row = e.target.closest('tr'); // Get the parent row
         if (e.target.checked) {
@@ -509,10 +509,10 @@ document.querySelectorAll('.tab').forEach((tab) => {
 
 
 // Add event listeners to tabs for dynamic highlighting
-document.querySelectorAll('.header-table .tab').forEach((tab) => {
+document.querySelectorAll('.messages-header-table .tab').forEach((tab) => {
     tab.addEventListener('click', (e) => {
         // Remove active class from all tabs
-        document.querySelectorAll('.header-table .tab').forEach((t) => t.classList.remove('active'));
+        document.querySelectorAll('.messages-header-table .tab').forEach((t) => t.classList.remove('active'));
 
         // Add active class to the clicked tab
         e.target.classList.add('active');
@@ -559,10 +559,10 @@ function loadSectionData(section) {
         row.className = message.status;
 
         row.innerHTML = `
-            <td><input type="checkbox" class="message-select"></td>
+            <td><input type="checkbox" class="messages-message-select"></td>
             <td>
-                <input type="checkbox" id="star-${Math.random()}" class="star-checkbox">
-                <label for="star-${Math.random()}" class="star-label">⭐</label>
+                <input type="checkbox" id="star-${Math.random()}" class="messages-star-checkbox">
+                <label for="star-${Math.random()}" class="messages-star-label">⭐</label>
             </td>
             <td>${message.from}</td>
             <td>${message.subject}</td>
@@ -575,43 +575,43 @@ function loadSectionData(section) {
 
 // Load the default section (Primary) on page load
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('primary-tab').classList.add('active');
-    loadSectionData('primary-tab');
+    document.getElementById('messages-primary-tab').classList.add('active');
+    loadSectionData('messages-primary-tab');
 });
 
 
 // Hamburger Menu Toggle
-document.querySelector('.hamburger-menu').addEventListener('click', function () {
-    const navBar = document.querySelector('.nav-bar');
-    const formContainer = document.querySelector('.form-container');
+document.querySelector('.messages-hamburger-menu').addEventListener('click', function () {
+    const messagesNavBar = document.querySelector('.messages-nav-bar');
+    const messagesFormContainer = document.querySelector('.messages-form-container');
     const isExpanded = navBar.classList.toggle('expanded'); // Toggle expanded class
 
     if (isExpanded) {
-        navBar.classList.add('toggled'); // Lock in expanded state
-        formContainer.style.marginLeft = '240px'; // Adjust form container margin
+        messages.navBar.classList.add('toggled'); // Lock in expanded state
+        messages.formContainer.style.marginLeft = '240px'; // Adjust form container margin
     } else {
         navBar.classList.remove('toggled'); // Allow hover functionality
-        formContainer.style.marginLeft = '60px'; // Reset form container margin
+        messages.formContainer.style.marginLeft = '60px'; // Reset form container margin
     }
 });
 
-// Hover effect to expand nav bar temporarily
-document.querySelector('.nav-bar').addEventListener('mouseover', () => {
-    const navBar = document.querySelector('.nav-bar');
-    const formContainer = document.querySelector('.form-container');
+// Hover effect to expand messages-nav bar temporarily
+document.querySelector('.messages-messages-nav-bar').addEventListener('mouseover', () => {
+    const messagesNavBar = document.querySelector('.messages-nav-bar');
+    const messagesFormContainer = document.querySelector('.messages-form-container');
     if (!navBar.classList.contains('toggled')) {
-        navBar.classList.add('expanded'); // Temporarily expand on hover
-        formContainer.style.marginLeft = '240px'; // Temporarily adjust margin
+        messagesNavBar.classList.add('expanded'); // Temporarily expand on hover
+        messagesFormContainer.style.marginLeft = '240px'; // Temporarily adjust margin
     }
 });
 
-// Collapse nav bar when the mouse leaves
-document.querySelector('.nav-bar').addEventListener('mouseleave', () => {
-    const navBar = document.querySelector('.nav-bar');
-    const formContainer = document.querySelector('.form-container');
+// Collapse messages-nav bar when the mouse leaves
+document.querySelector('.messages-nav-bar').addEventListener('mouseleave', () => {
+    const messagesNavBar = document.querySelector('.messages-nav-bar');
+    const messagesFormContainer = document.querySelector('.messages-form-container');
     if (!navBar.classList.contains('toggled')) {
-        navBar.classList.remove('expanded'); // Collapse if not permanently toggled
-        formContainer.style.marginLeft = '60px'; // Reset margin
+        messagesNavBar.classList.remove('expanded'); // Collapse if not permanently toggled
+        messagesFormContainer.style.marginLeft = '60px'; // Reset margin
     }
 });
 
