@@ -130,13 +130,20 @@ $recipientID = $listing['User_ID'] ?? null;
             </table>
         </div>
 
-        <!-- Action Buttons -->
-        <div style="text-align: center; margin-top: 20px;">
-            <button id="buyNowBtn" class="btn">Buy Now</button>
-            <button onclick="location.href='listings.php';" class="btn">All Listings</button>
-            <button onclick="history.back()" class="btn">Go Back</button>
-            <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
-        </div>
+        <div style="text-align: center; margin-top: 20px;"> 
+    <button id="buyNowBtn" class="btn">Buy Now</button>
+    <button onclick="location.href='listings.php';" class="btn">All Listings</button>
+    <button onclick="history.back()" class="btn">Go Back</button>
+    
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <!-- User is logged in, allow navigation to compose_message.php -->
+        <button onclick="location.href='compose_message.php?listing_id=<?php echo $listingID; ?>&recipient_id=<?php echo $recipientID; ?>'" class="btn">Message Owner</button>
+    <?php else: ?>
+        <!-- User is not logged in, show the 'Not Logged In' message -->
+        <button onclick="location.href='not_logged_in.php'" class="btn">Message Owner</button>
+    <?php endif; ?>
+</div>
+
     </div>
 
     <script>
