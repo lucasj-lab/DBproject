@@ -2,8 +2,6 @@
 session_start();
 require 'database_connection.php';
 
-<?php
-// Initialize variables
 $error_message = '';
 $success_message = '';
 
