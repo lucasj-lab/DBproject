@@ -346,14 +346,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Hamburger Menu Toggle
 document.querySelector(".hamburger-menu").addEventListener("click", function () {
-    const navBar = document.querySelector('.messages-nav-bar');
-    const formContainer = document.querySelector('.form-container');
-    const isExpanded = navBar.classList.toggle('expanded'); // Toggle expanded class
+    const messagesNavBar = document.querySelector('.messages-nav-bar');
+    const formContainer = document.querySelector('form-container');
+    const isExpanded = messagesNavBar.classList.toggle('expanded'); // Toggle expanded class
 
     if (isExpanded) {
-        navBar.classList.add('toggled'); // Lock in expanded state
+        messagesNavBar.classList.add('toggled'); // Lock in expanded state
     } else {
-        navBar.classList.remove('toggled'); // Allow hover functionality
+        messagesNavBar.classList.remove('toggled'); // Allow hover functionality
     }
 });
 
@@ -368,8 +368,8 @@ document.querySelector('.messages-nav-bar').addEventListener('mouseover', () => 
 // Collapse messages-nav bar when the mouse leaves
 document.querySelector('.messages-nav-bar').addEventListener('mouseleave', () => {
     const messagesNavBar = document.querySelector('.messages-nav-bar');
-    if (!navBar.classList.contains('toggled')) {
-        navBar.classList.remove('expanded'); // Collapse if not permanently toggled
+    if (!messagesNavBar.classList.contains('toggled')) {
+        messagesNavBar.classList.remove('expanded'); // Collapse if not permanently toggled
     }
 });
 
@@ -461,8 +461,8 @@ function renderMessages(filter = 'all') {
 tbody.addEventListener('click', (e) => {
     if (e.target.classList.contains('messages-star-icon')) {
         const id = e.target.dataset.id;
-        const message = sampleMessages.find((msg) => msg.id === Number(id));
-        message.starred = !message.starred;
+        const messages = sampleMessages.find((msg) => msg.id === Number(id));
+        messages.starred = !messages.starred;
         renderMessages(filterOptions.value);
     }
 });
@@ -584,24 +584,24 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelector('.messages-hamburger-menu').addEventListener('click', function () {
     const messagesNavBar = document.querySelector('.messages-nav-bar');
     const messagesFormContainer = document.querySelector('.messages-form-container');
-    const isExpanded = navBar.classList.toggle('expanded'); // Toggle expanded class
+    const isExpanded = messagesNavBar.classList.toggle('expanded'); // Toggle expanded class
 
     if (isExpanded) {
         messages.navBar.classList.add('toggled'); // Lock in expanded state
-        messages.formContainer.style.marginLeft = '240px'; // Adjust form container margin
+        messagesFormContainer.style.marginLeft = '240px'; // Adjust form container margin
     } else {
         navBar.classList.remove('toggled'); // Allow hover functionality
-        messages.formContainer.style.marginLeft = '60px'; // Reset form container margin
+        messagesFormContainer.style.marginLeft = '60px'; // Reset form container margin
     }
 });
 
 // Hover effect to expand messages-nav bar temporarily
 document.querySelector('.messages-messages-nav-bar').addEventListener('mouseover', () => {
-    const messagesNavBar = document.querySelector('.messages-nav-bar');
-    const messagesFormContainer = document.querySelector('.messages-form-container');
+    const messagesMessagesNavBar = document.querySelector('.messages-nav-bar');
+    const messagesMessagesFormContainer = document.querySelector('.messages-form-container');
     if (!navBar.classList.contains('toggled')) {
-        messagesNavBar.classList.add('expanded'); // Temporarily expand on hover
-        messagesFormContainer.style.marginLeft = '240px'; // Temporarily adjust margin
+        messagesMessagesNavBar.classList.add('expanded'); // Temporarily expand on hover
+        messagesMessagesFormContainer.style.marginLeft = '240px'; // Temporarily adjust margin
     }
 });
 
