@@ -4275,8 +4275,8 @@ textarea#message_text {
     fill: rgba(0, 0, 0, 0.87);
 }
 
-.support-icon:hover,
-.waffle-icon:hover {
+.messages-support-icon:hover,
+.messages-waffle-icon:hover {
     transform: scale(1.2);
     fill: #ffffff85;
 }
@@ -4544,11 +4544,11 @@ textarea#message_text {
 
 /* Adjust padding and alignment for smaller screens */
 @media (max-width: 768px) {
-    .nav-bar li {
+    .messages-nav-bar li {
         font-size: 0.9rem; /* Slightly smaller font size */
         padding: 10px 12px; /* Adjust padding */
     }
-    .nav-bar .icon {
+    .messages-nav-bar .messages-icon {
         font-size: 1.2rem; /* Adjust icon size */
     }
 }
