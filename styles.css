@@ -1148,7 +1148,6 @@ input[type=number] {
 /* Add this to your styles.css */
 .redirect-message {
     text-align: center;
-    margin-top: 50px;
 }
 
 .redirect-message h2 {
@@ -1508,7 +1507,6 @@ table td {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     /* Adds a subtle overlay */
     margin: 0;
