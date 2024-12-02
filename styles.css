@@ -4312,8 +4312,8 @@ textarea#message_text {
 
 /* Nav bar */
 .messages-nav-bar {
-    background-color: #00000000; /* Surface color */
-    /* color: #f9f9f9; */ /* On-surface color */
+    background-color: #ffffff; /* Surface color */
+    color: #000000; 
     overflow: hidden;
     transition: width 0.3s ease;
     display: flex;
@@ -4329,7 +4329,7 @@ textarea#message_text {
 .messages-nav-bar.expanded {
     width: 240px;
     /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); */
-    background-color: #626675;
+    background-color: #ffffff;
     /* border-radius: 15px; */
 }
 
