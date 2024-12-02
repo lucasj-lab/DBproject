@@ -4166,7 +4166,7 @@ textarea#message_text {
 .send-btn:hover {
     background-color: #0056b3;
 }
-.message-body {
+.messages-body {
     margin: 0;
     font-family: "Google Sans", Roboto, Arial, sans-serif;
 }
@@ -4200,7 +4200,7 @@ textarea#message_text {
     transform: scale(1.2);
 }
 
-.hamburger-icon {
+.messages-hamburger-icon {
     width: 24px;
     height: 24px;
     fill: #000000;

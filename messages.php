@@ -22,43 +22,40 @@ $section = $_GET['section'] ?? 'inbox';
 
 <body>
 
-    <div class="messages-main-header">
-        <!-- Hamburger Menu -->
-        <div class="messages-hamburger-menu" id="main-menu" aria-expanded="false" aria-label="Main menu" role="button"
-            tabindex="0">
-            <svg focusable="false" viewBox="0 0 24 24" class="hamburger-icon">
-                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
-            </svg>
-        </div>
+<div class="messages-main-header">
+    <!-- Hamburger Menu -->
+    <div class="messages-hamburger-menu" id="main-menu" aria-expanded="false" aria-label="Main menu" role="button" tabindex="0">
+        <svg focusable="false" viewBox="0 0 24 24" class="hamburger-icon">
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+        </svg>
+    </div>
 
-        <!-- Search Bar -->
-        <div class="search-container">
-            <form class="search-form" role="search" aria-label="Search mail">
-                <div class="search-input-container">
-                    <input type="text" class="search-input" placeholder="Search mail" aria-label="Search mail">
-                    <button type="submit" class="search-button" aria-label="Search">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M20.49,19l-5.73-5.73C15.53,12.2,16,10.91,16,9.5C16,5.91,13.09,3,9.5,3S3,5.91,3,9.5C3,13.09,5.91,16,9.5,16c1.41,0,2.7-0.47,3.77-1.24L19,20.49L20.49,19z M5,9.5C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5S11.99,14,9.5,14S5,11.99,5,9.5z">
-                            </path>
-                        </svg>
-                    </button>
-                    <!-- Right: Icons -->
-                    <svg class="messages-support-icon" viewBox="0 0 24 24" aria-label="Support">
-                        <path
-                            d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z">
-                        </path>
+    <!-- Search Bar -->
+    <div class="messages-search-container">
+        <form class="messages-search-form" role="search" aria-label="Search mail">
+            <div class="messages-search-input-container">
+                <input type="text" class="messages-search-input" placeholder="Search mail" aria-label="Search mail">
+                <button type="submit" class="messages-search-button" aria-label="Search">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.49,19l-5.73-5.73C15.53,12.2,16,10.91,16,9.5C16,5.91,13.09,3,9.5,3S3,5.91,3,9.5C3,13.09,5.91,16,9.5,16c1.41,0,2.7-0.47,3.77-1.24L19,20.49L20.49,19z M5,9.5C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5S11.99,14,9.5,14S5,11.99,5,9.5z"></path>
                     </svg>
-
-                    <svg class="messages-waffle-icon" viewBox="0 0 24 24" aria-label="Google apps">
-                        <path
-                            d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z">
-                        </path>
-                    </svg>
-                </div>
-        </div>
+                </button>
+                <!-- Right: Icons -->
+            </div>
         </form>
     </div>
+
+    <!-- Support Icon -->
+    <svg class="messages-support-icon" viewBox="0 0 24 24" aria-label="Support">
+        <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
+    </svg>
+
+    <!-- Waffle Icon -->
+    <svg class="messages-waffle-icon" viewBox="0 0 24 24" aria-label="Google apps">
+        <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path>
+    </svg>
+</div>
+
 
     <div class="messages-main-content">
         <div class="messages-navigation-container">
